@@ -1533,7 +1533,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Documentation",
     "title": "Documentation",
     "category": "section",
-    "text": "Julia enables package developers and users to document functions, types and other objects easily via a built-in documentation system since Julia 0.4.The basic syntax is simple: any string appearing at the top-level right before an object (function, macro, type or instance) will be interpreted as documenting it (these are called docstrings). Note that no blank lines or comments may intervene between a docstring and the documented object. Here is a basic example:\"Tell whether there are too foo items in the array.\"\nfoo(xs::Array) = ...Documentation is interpreted as Markdown, so you can use indentation and code fences to delimit code examples from text. Technically, any object can be associated with any other as metadata; Markdown happens to be the default, but one can construct other string macros and pass them to the @doc macro just as well.Here is a more complex example, still using Markdown:\"\"\"\n    bar(x[, y])\n\nCompute the Bar index between `x` and `y`. If `y` is missing, compute\nthe Bar index between all pairs of columns of `x`.\n\n# Examples\n```julia-repl\njulia> bar([1, 2], [1, 2])\n1\n```\n\"\"\"\nfunction bar(x, y) ...As in the example above, we recommend following some simple conventions when writing documentation:Always show the signature of a function at the top of the documentation, with a four-space indent so that it is printed as Julia code.\nThis can be identical to the signature present in the Julia code (like mean(x::AbstractArray)), or a simplified form. Optional arguments should be represented with their default values (i.e. f(x, y=1)) when possible, following the actual Julia syntax. Optional arguments which do not have a default value should be put in brackets (i.e. f(x[, y]) and f(x[, y[, z]])). An alternative solution is to use several lines: one without optional arguments, the other(s) with them. This solution can also be used to document several related methods of a given function. When a function accepts many keyword arguments, only include a <keyword arguments> placeholder in the signature (i.e. f(x; <keyword arguments>)), and give the complete list under an # Arguments section (see point 4 below).\nInclude a single one-line sentence describing what the function does or what the object represents after the simplified signature block. If needed, provide more details in a second paragraph, after a blank line.\nThe one-line sentence should use the imperative form (\"Do this\", \"Return that\") instead of the third person (do not write \"Returns the length...\") when documenting functions. It should end with a period. If the meaning of a function cannot be summarized easily, splitting it into separate composable parts could be beneficial (this should not be taken as an absolute requirement for every single case though).\nDo not repeat yourself.\nSince the function name is given by the signature, there is no need to start the documentation with \"The function bar...\": go straight to the point. Similarly, if the signature specifies the types of the arguments, mentioning them in the description is redundant.\nOnly provide an argument list when really necessary.\nFor simple functions, it is often clearer to mention the role of the arguments directly in the description of the function\'s purpose. An argument list would only repeat information already provided elsewhere. However, providing an argument list can be a good idea for complex functions with many arguments (in particular keyword arguments). In that case, insert it after the general description of the function, under an # Arguments header, with one - bullet for each argument. The list should mention the types and default values (if any) of the arguments:\n\"\"\"\n...\n# Arguments\n- `n::Integer`: the number of elements to compute.\n- `dim::Integer=1`: the dimensions along which to perform the computation.\n...\n\"\"\"\nProvide hints to related functions.\nSometimes there are functions of related functionality. To increase discoverability please provide a short list of these in a See also: paragraph.\nSee also: [`bar!`](@ref), [`baz`](@ref), [`baaz`](@ref)\nInclude any code examples in an # Examples section.\nExamples should, whenever possible, be written as doctests. A doctest is a fenced code block (see Code blocks) starting with ```jldoctest and contains any number of julia> prompts together with inputs and expected outputs that mimic the Julia REPL.\nFor example in the following docstring a variable a is defined and the expected result, as printed in a Julia REPL, appears afterwards:\n\"\"\"\nSome nice documentation here.\n\n# Examples\n```jldoctest\njulia> a = [1 2; 3 4]\n2×2 Array{Int64,2}:\n 1  2\n 3  4\n```\n\"\"\"\nwarning: Warning\nCalling rand and other RNG-related functions should be avoided in doctests since they will not produce consistent outputs during different Julia sessions. If you would like to show some random number generation related functionality, one option is to explicitly construct and seed your own MersenneTwister (or other pseudorandom number generator) and pass it to the functions you are doctesting.Operating system word size (Int32 or Int64) as well as path separator differences (/ or \\) will also affect the reproducibility of some doctests.Note that whitespace in your doctest is significant! The doctest will fail if you misalign the output of pretty-printing an array, for example.\nYou can then run make -C doc doctest=true to run all the doctests in the Julia Manual and API documentation, which will ensure that your example works.\nTo indicate that the output result is truncated, you may write [...] at the line where checking should stop. This is useful to hide a stacktrace (which contains non-permanent references to lines of julia code) when the doctest shows that an exception is thrown, for example:\n```jldoctest\njulia> div(1, 0)\nERROR: DivideError: integer division error\n[...]\n```\nExamples that are untestable should be written within fenced code blocks starting with ```julia so that they are highlighted correctly in the generated documentation.\ntip: Tip\nWherever possible examples should be self-contained and runnable so that readers are able to try them out without having to include any dependencies.\nUse backticks to identify code and equations.\nJulia identifiers and code excerpts should always appear between backticks ` to enable highlighting. Equations in the LaTeX syntax can be inserted between double backticks ``. Use Unicode characters rather than their LaTeX escape sequence, i.e. ``α = 1`` rather than ``\\\\alpha = 1``.\nPlace the starting and ending \"\"\" characters on lines by themselves.\nThat is, write:\n\"\"\"\n...\n\n...\n\"\"\"\nf(x, y) = ...\nrather than:\n\"\"\"...\n\n...\"\"\"\nf(x, y) = ...\nThis makes it more clear where docstrings start and end.\nRespect the line length limit used in the surrounding code.\nDocstrings are edited using the same tools as code. Therefore, the same conventions should apply. It is advised to add line breaks after 92 characters.\nProvide information allowing custom types to implement the function in an # Implementation section. These implementation details intended for developers rather than users, explaining e.g. which functions should be overridden and which functions automatically use appropriate fallbacks, are better kept separate from the main description of the function\'s behavior."
+    "text": "Julia enables package developers and users to document functions, types and other objects easily via a built-in documentation system since Julia 0.4.The basic syntax is simple: any string appearing at the top-level right before an object (function, macro, type or instance) will be interpreted as documenting it (these are called docstrings). Note that no blank lines or comments may intervene between a docstring and the documented object. Here is a basic example:\"Tell whether there are too foo items in the array.\"\nfoo(xs::Array) = ...Documentation is interpreted as Markdown, so you can use indentation and code fences to delimit code examples from text. Technically, any object can be associated with any other as metadata; Markdown happens to be the default, but one can construct other string macros and pass them to the @doc macro just as well.note: Note\nMarkdown support is implemented in the Markdown standard library and for a full list of supported syntax see the documentation.Here is a more complex example, still using Markdown:\"\"\"\n    bar(x[, y])\n\nCompute the Bar index between `x` and `y`. If `y` is missing, compute\nthe Bar index between all pairs of columns of `x`.\n\n# Examples\n```julia-repl\njulia> bar([1, 2], [1, 2])\n1\n```\n\"\"\"\nfunction bar(x, y) ...As in the example above, we recommend following some simple conventions when writing documentation:Always show the signature of a function at the top of the documentation, with a four-space indent so that it is printed as Julia code.\nThis can be identical to the signature present in the Julia code (like mean(x::AbstractArray)), or a simplified form. Optional arguments should be represented with their default values (i.e. f(x, y=1)) when possible, following the actual Julia syntax. Optional arguments which do not have a default value should be put in brackets (i.e. f(x[, y]) and f(x[, y[, z]])). An alternative solution is to use several lines: one without optional arguments, the other(s) with them. This solution can also be used to document several related methods of a given function. When a function accepts many keyword arguments, only include a <keyword arguments> placeholder in the signature (i.e. f(x; <keyword arguments>)), and give the complete list under an # Arguments section (see point 4 below).\nInclude a single one-line sentence describing what the function does or what the object represents after the simplified signature block. If needed, provide more details in a second paragraph, after a blank line.\nThe one-line sentence should use the imperative form (\"Do this\", \"Return that\") instead of the third person (do not write \"Returns the length...\") when documenting functions. It should end with a period. If the meaning of a function cannot be summarized easily, splitting it into separate composable parts could be beneficial (this should not be taken as an absolute requirement for every single case though).\nDo not repeat yourself.\nSince the function name is given by the signature, there is no need to start the documentation with \"The function bar...\": go straight to the point. Similarly, if the signature specifies the types of the arguments, mentioning them in the description is redundant.\nOnly provide an argument list when really necessary.\nFor simple functions, it is often clearer to mention the role of the arguments directly in the description of the function\'s purpose. An argument list would only repeat information already provided elsewhere. However, providing an argument list can be a good idea for complex functions with many arguments (in particular keyword arguments). In that case, insert it after the general description of the function, under an # Arguments header, with one - bullet for each argument. The list should mention the types and default values (if any) of the arguments:\n\"\"\"\n...\n# Arguments\n- `n::Integer`: the number of elements to compute.\n- `dim::Integer=1`: the dimensions along which to perform the computation.\n...\n\"\"\"\nProvide hints to related functions.\nSometimes there are functions of related functionality. To increase discoverability please provide a short list of these in a See also: paragraph.\nSee also: [`bar!`](@ref), [`baz`](@ref), [`baaz`](@ref)\nInclude any code examples in an # Examples section.\nExamples should, whenever possible, be written as doctests. A doctest is a fenced code block (see Code blocks) starting with ```jldoctest and contains any number of julia> prompts together with inputs and expected outputs that mimic the Julia REPL.\nnote: Note\nDoctests are enabled by Documenter.jl. For more detailed documentation see Documenter\'s manual.\nFor example in the following docstring a variable a is defined and the expected result, as printed in a Julia REPL, appears afterwards:\n\"\"\"\nSome nice documentation here.\n\n# Examples\n```jldoctest\njulia> a = [1 2; 3 4]\n2×2 Array{Int64,2}:\n 1  2\n 3  4\n```\n\"\"\"\nwarning: Warning\nCalling rand and other RNG-related functions should be avoided in doctests since they will not produce consistent outputs during different Julia sessions. If you would like to show some random number generation related functionality, one option is to explicitly construct and seed your own MersenneTwister (or other pseudorandom number generator) and pass it to the functions you are doctesting.Operating system word size (Int32 or Int64) as well as path separator differences (/ or \\) will also affect the reproducibility of some doctests.Note that whitespace in your doctest is significant! The doctest will fail if you misalign the output of pretty-printing an array, for example.\nYou can then run make -C doc doctest=true to run all the doctests in the Julia Manual and API documentation, which will ensure that your example works.\nTo indicate that the output result is truncated, you may write [...] at the line where checking should stop. This is useful to hide a stacktrace (which contains non-permanent references to lines of julia code) when the doctest shows that an exception is thrown, for example:\n```jldoctest\njulia> div(1, 0)\nERROR: DivideError: integer division error\n[...]\n```\nExamples that are untestable should be written within fenced code blocks starting with ```julia so that they are highlighted correctly in the generated documentation.\ntip: Tip\nWherever possible examples should be self-contained and runnable so that readers are able to try them out without having to include any dependencies.\nUse backticks to identify code and equations.\nJulia identifiers and code excerpts should always appear between backticks ` to enable highlighting. Equations in the LaTeX syntax can be inserted between double backticks ``. Use Unicode characters rather than their LaTeX escape sequence, i.e. ``α = 1`` rather than ``\\\\alpha = 1``.\nPlace the starting and ending \"\"\" characters on lines by themselves.\nThat is, write:\n\"\"\"\n...\n\n...\n\"\"\"\nf(x, y) = ...\nrather than:\n\"\"\"...\n\n...\"\"\"\nf(x, y) = ...\nThis makes it more clear where docstrings start and end.\nRespect the line length limit used in the surrounding code.\nDocstrings are edited using the same tools as code. Therefore, the same conventions should apply. It is advised to add line breaks after 92 characters.\nProvide information allowing custom types to implement the function in an # Implementation section. These implementation details intended for developers rather than users, explaining e.g. which functions should be overridden and which functions automatically use appropriate fallbacks, are better kept separate from the main description of the function\'s behavior."
 },
 
 {
@@ -1638,174 +1638,6 @@ var documenterSearchIndex = {"docs": [
     "title": "Macro-generated code",
     "category": "section",
     "text": "\"...\"\n@m expressionAdds docstring \"...\" to expression generated by expanding @m expression. This allows for expressions decorated with @inline, @noinline, @generated, or any other macro to be documented in the same way as undecorated expressions.Macro authors should take note that only macros that generate a single expression will automatically support docstrings. If a macro returns a block containing multiple subexpressions then the subexpression that should be documented must be marked using the @__doc__ macro.The @enum macro makes use of @__doc__ to allow for documenting Enums. Examining its definition should serve as an example of how to use @__doc__ correctly.Core.@__doc__"
-},
-
-{
-    "location": "manual/documentation/#Markdown-syntax-1",
-    "page": "Documentation",
-    "title": "Markdown syntax",
-    "category": "section",
-    "text": "The following markdown syntax is supported in Julia."
-},
-
-{
-    "location": "manual/documentation/#Inline-elements-1",
-    "page": "Documentation",
-    "title": "Inline elements",
-    "category": "section",
-    "text": "Here \"inline\" refers to elements that can be found within blocks of text, i.e. paragraphs. These include the following elements."
-},
-
-{
-    "location": "manual/documentation/#Bold-1",
-    "page": "Documentation",
-    "title": "Bold",
-    "category": "section",
-    "text": "Surround words with two asterisks, **, to display the enclosed text in boldface.A paragraph containing a **bold** word."
-},
-
-{
-    "location": "manual/documentation/#Italics-1",
-    "page": "Documentation",
-    "title": "Italics",
-    "category": "section",
-    "text": "Surround words with one asterisk, *, to display the enclosed text in italics.A paragraph containing an *emphasized* word."
-},
-
-{
-    "location": "manual/documentation/#Literals-1",
-    "page": "Documentation",
-    "title": "Literals",
-    "category": "section",
-    "text": "Surround text that should be displayed exactly as written with single backticks, ` .A paragraph containing a `literal` word.Literals should be used when writing text that refers to names of variables, functions, or other parts of a Julia program.tip: Tip\nTo include a backtick character within literal text use three backticks rather than one to enclose the text.A paragraph containing a ``` `backtick` character ```.By extension any odd number of backticks may be used to enclose a lesser number of backticks."
-},
-
-{
-    "location": "manual/documentation/#\\LaTeX-1",
-    "page": "Documentation",
-    "title": "LaTeX",
-    "category": "section",
-    "text": "Surround text that should be displayed as mathematics using LaTeX syntax with double backticks, `` .A paragraph containing some ``\\LaTeX`` markup.tip: Tip\nAs with literals in the previous section, if literal backticks need to be written within double backticks use an even number greater than two. Note that if a single literal backtick needs to be included within LaTeX markup then two enclosing backticks is sufficient.note: Note\nThe \\ character should be escaped appropriately if the text is embedded in a Julia source code, for example, \"``\\\\LaTeX`` syntax in a docstring.\", since it is interpreted as a string literal."
-},
-
-{
-    "location": "manual/documentation/#Links-1",
-    "page": "Documentation",
-    "title": "Links",
-    "category": "section",
-    "text": "Links to either external or internal addresses can be written using the following syntax, where the text enclosed in square brackets, [ ], is the name of the link and the text enclosed in parentheses, ( ), is the URL.A paragraph containing a link to [Julia](http://www.julialang.org).It\'s also possible to add cross-references to other documented functions/methods/variables within the Julia documentation itself. For example:\"\"\"\n    tryparse(type, str; base)\n\nLike [`parse`](@ref), but returns either a value of the requested type,\nor [`nothing`](@ref) if the string does not contain a valid number.\n\"\"\"This will create a link in the generated docs to the parse documentation (which has more information about what this function actually does), and to the nothing documentation. It\'s good to include cross references to mutating/non-mutating versions of a function, or to highlight a difference between two similar-seeming functions.note: Note\nThe above cross referencing is not a Markdown feature, and relies on Documenter.jl, which is used to build base Julia\'s documentation."
-},
-
-{
-    "location": "manual/documentation/#Footnote-references-1",
-    "page": "Documentation",
-    "title": "Footnote references",
-    "category": "section",
-    "text": "Named and numbered footnote references can be written using the following syntax. A footnote name must be a single alphanumeric word containing no punctuation.A paragraph containing a numbered footnote [^1] and a named one [^named].note: Note\nThe text associated with a footnote can be written anywhere within the same page as the footnote reference. The syntax used to define the footnote text is discussed in the Footnotes section below."
-},
-
-{
-    "location": "manual/documentation/#Toplevel-elements-1",
-    "page": "Documentation",
-    "title": "Toplevel elements",
-    "category": "section",
-    "text": "The following elements can be written either at the \"toplevel\" of a document or within another \"toplevel\" element."
-},
-
-{
-    "location": "manual/documentation/#Paragraphs-1",
-    "page": "Documentation",
-    "title": "Paragraphs",
-    "category": "section",
-    "text": "A paragraph is a block of plain text, possibly containing any number of inline elements defined in the Inline elements section above, with one or more blank lines above and below it.This is a paragraph.\n\nAnd this is *another* one containing some emphasized text.\nA new line, but still part of the same paragraph."
-},
-
-{
-    "location": "manual/documentation/#Headers-1",
-    "page": "Documentation",
-    "title": "Headers",
-    "category": "section",
-    "text": "A document can be split up into different sections using headers. Headers use the following syntax:# Level One\n## Level Two\n### Level Three\n#### Level Four\n##### Level Five\n###### Level SixA header line can contain any inline syntax in the same way as a paragraph can.tip: Tip\nTry to avoid using too many levels of header within a single document. A heavily nested document may be indicative of a need to restructure it or split it into several pages covering separate topics."
-},
-
-{
-    "location": "manual/documentation/#Code-blocks-1",
-    "page": "Documentation",
-    "title": "Code blocks",
-    "category": "section",
-    "text": "Source code can be displayed as a literal block using an indent of four spaces as shown in the following example.This is a paragraph.\n\n    function func(x)\n        # ...\n    end\n\nAnother paragraph.Additionally, code blocks can be enclosed using triple backticks with an optional \"language\" to specify how a block of code should be highlighted.A code block without a \"language\":\n\n```\nfunction func(x)\n    # ...\nend\n```\n\nand another one with the \"language\" specified as `julia`:\n\n```julia\nfunction func(x)\n    # ...\nend\n```note: Note\n\"Fenced\" code blocks, as shown in the last example, should be preferred over indented code blocks since there is no way to specify what language an indented code block is written in."
-},
-
-{
-    "location": "manual/documentation/#Block-quotes-1",
-    "page": "Documentation",
-    "title": "Block quotes",
-    "category": "section",
-    "text": "Text from external sources, such as quotations from books or websites, can be quoted using > characters prepended to each line of the quote as follows.Here\'s a quote:\n\n> Julia is a high-level, high-performance dynamic programming language for\n> technical computing, with syntax that is familiar to users of other\n> technical computing environments.Note that a single space must appear after the > character on each line. Quoted blocks may themselves contain other toplevel or inline elements."
-},
-
-{
-    "location": "manual/documentation/#Images-1",
-    "page": "Documentation",
-    "title": "Images",
-    "category": "section",
-    "text": "The syntax for images is similar to the link syntax mentioned above. Prepending a ! character to a link will display an image from the specified URL rather than a link to it.![alternative text](link/to/image.png)"
-},
-
-{
-    "location": "manual/documentation/#Lists-1",
-    "page": "Documentation",
-    "title": "Lists",
-    "category": "section",
-    "text": "Unordered lists can be written by prepending each item in a list with either *, +, or -.A list of items:\n\n  * item one\n  * item two\n  * item threeNote the two spaces before each * and the single space after each one.Lists can contain other nested toplevel elements such as lists, code blocks, or quoteblocks. A blank line should be left between each list item when including any toplevel elements within a list.Another list:\n\n  * item one\n\n  * item two\n\n    ```\n    f(x) = x\n    ```\n\n  * And a sublist:\n\n      + sub-item one\n      + sub-item twonote: Note\nThe contents of each item in the list must line up with the first line of the item. In the above example the fenced code block must be indented by four spaces to align with the i in item two.Ordered lists are written by replacing the \"bullet\" character, either *, +, or -, with a positive integer followed by either . or ).Two ordered lists:\n\n 1. item one\n 2. item two\n 3. item three\n\n 5) item five\n 6) item six\n 7) item sevenAn ordered list may start from a number other than one, as in the second list of the above example, where it is numbered from five. As with unordered lists, ordered lists can contain nested toplevel elements."
-},
-
-{
-    "location": "manual/documentation/#Display-equations-1",
-    "page": "Documentation",
-    "title": "Display equations",
-    "category": "section",
-    "text": "Large LaTeX equations that do not fit inline within a paragraph may be written as display equations using a fenced code block with the \"language\" math as in the example below.```math\nf(a) = \\frac{1}{2\\pi}\\int_{0}^{2\\pi} (\\alpha+R\\cos(\\theta))d\\theta\n```"
-},
-
-{
-    "location": "manual/documentation/#Footnotes-1",
-    "page": "Documentation",
-    "title": "Footnotes",
-    "category": "section",
-    "text": "This syntax is paired with the inline syntax for Footnote references. Make sure to read that section as well.Footnote text is defined using the following syntax, which is similar to footnote reference syntax, aside from the : character that is appended to the footnote label.[^1]: Numbered footnote text.\n\n[^note]:\n\n    Named footnote text containing several toplevel elements.\n\n      * item one\n      * item two\n      * item three\n\n    ```julia\n    function func(x)\n        # ...\n    end\n    ```note: Note\nNo checks are done during parsing to make sure that all footnote references have matching footnotes."
-},
-
-{
-    "location": "manual/documentation/#Horizontal-rules-1",
-    "page": "Documentation",
-    "title": "Horizontal rules",
-    "category": "section",
-    "text": "The equivalent of an <hr> HTML tag can be written using the following syntax:Text above the line.\n\n---\n\nAnd text below the line."
-},
-
-{
-    "location": "manual/documentation/#Tables-1",
-    "page": "Documentation",
-    "title": "Tables",
-    "category": "section",
-    "text": "Basic tables can be written using the syntax described below. Note that markdown tables have limited features and cannot contain nested toplevel elements unlike other elements discussed above – only inline elements are allowed. Tables must always contain a header row with column names. Cells cannot span multiple rows or columns of the table.| Column One | Column Two | Column Three |\n|:---------- | ---------- |:------------:|\n| Row `1`    | Column `2` |              |\n| *Row* 2    | **Row** 2  | Column ``3`` |note: Note\nAs illustrated in the above example each column of | characters must be aligned vertically.A : character on either end of a column\'s header separator (the row containing - characters) specifies whether the row is left-aligned, right-aligned, or (when : appears on both ends) center-aligned. Providing no : characters will default to right-aligning the column."
-},
-
-{
-    "location": "manual/documentation/#Admonitions-1",
-    "page": "Documentation",
-    "title": "Admonitions",
-    "category": "section",
-    "text": "Specially formatted blocks, known as admonitions, can be used to highlight particular remarks. They can be defined using the following !!! syntax:!!! note\n\n    This is the content of the note.\n\n!!! warning \"Beware!\"\n\n    And this is another one.\n\n    This warning admonition has a custom title: `\"Beware!\"`.The type of the admonition can be any word, but some types produce special styling, namely (in order of decreasing severity): danger, warning, info/note, and tip.A custom title for the box can be provided as a string (in double quotes) after the admonition type. If no title text is specified after the admonition type, then the title used will be the type of the block, i.e. \"Note\" in the case of the note admonition.Admonitions, like most other toplevel elements, can contain other toplevel elements."
-},
-
-{
-    "location": "manual/documentation/#Markdown-Syntax-Extensions-1",
-    "page": "Documentation",
-    "title": "Markdown Syntax Extensions",
-    "category": "section",
-    "text": "Julia\'s markdown supports interpolation in a very similar way to basic string literals, with the difference that it will store the object itself in the Markdown tree (as opposed to converting it to a string). When the Markdown content is rendered the usual show methods will be called, and these can be overridden as usual. This design allows the Markdown to be extended with arbitrarily complex features (such as references) without cluttering the basic syntax.In principle, the Markdown parser itself can also be arbitrarily extended by packages, or an entirely custom flavour of Markdown can be used, but this should generally be unnecessary."
 },
 
 {
@@ -7141,7 +6973,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Collections and Data Structures",
     "title": "Base.pairs",
     "category": "function",
-    "text": "pairs(collection)\n\nReturn an iterator over key => value pairs for any collection that maps a set of keys to a set of values. This includes arrays, where the keys are the array indices.\n\n\n\n\n\npairs(IndexLinear(), A)\npairs(IndexCartesian(), A)\npairs(IndexStyle(A), A)\n\nAn iterator that accesses each element of the array A, returning i => x, where i is the index for the element and x = A[i]. Identical to pairs(A), except that the style of index can be selected. Also similar to enumerate(A), except i will be a valid index for A, while enumerate always counts from 1 regardless of the indices of A.\n\nSpecifying IndexLinear() ensures that i will be an integer; specifying IndexCartesian() ensures that i will be a CartesianIndex; specifying IndexStyle(A) chooses whichever has been defined as the native indexing style for array A.\n\nMutation of the bounds of the underlying array will invalidate this iterator.\n\nExamples\n\njulia> A = [\"a\" \"d\"; \"b\" \"e\"; \"c\" \"f\"];\n\njulia> for (index, value) in pairs(IndexStyle(A), A)\n           println(\"$index $value\")\n       end\n1 a\n2 b\n3 c\n4 d\n5 e\n6 f\n\njulia> S = view(A, 1:2, :);\n\njulia> for (index, value) in pairs(IndexStyle(S), S)\n           println(\"$index $value\")\n       end\nCartesianIndex(1, 1) a\nCartesianIndex(2, 1) b\nCartesianIndex(1, 2) d\nCartesianIndex(2, 2) e\n\nSee also: IndexStyle, axes.\n\n\n\n\n\n"
+    "text": "pairs(IndexLinear(), A)\npairs(IndexCartesian(), A)\npairs(IndexStyle(A), A)\n\nAn iterator that accesses each element of the array A, returning i => x, where i is the index for the element and x = A[i]. Identical to pairs(A), except that the style of index can be selected. Also similar to enumerate(A), except i will be a valid index for A, while enumerate always counts from 1 regardless of the indices of A.\n\nSpecifying IndexLinear() ensures that i will be an integer; specifying IndexCartesian() ensures that i will be a CartesianIndex; specifying IndexStyle(A) chooses whichever has been defined as the native indexing style for array A.\n\nMutation of the bounds of the underlying array will invalidate this iterator.\n\nExamples\n\njulia> A = [\"a\" \"d\"; \"b\" \"e\"; \"c\" \"f\"];\n\njulia> for (index, value) in pairs(IndexStyle(A), A)\n           println(\"$index $value\")\n       end\n1 a\n2 b\n3 c\n4 d\n5 e\n6 f\n\njulia> S = view(A, 1:2, :);\n\njulia> for (index, value) in pairs(IndexStyle(S), S)\n           println(\"$index $value\")\n       end\nCartesianIndex(1, 1) a\nCartesianIndex(2, 1) b\nCartesianIndex(1, 2) d\nCartesianIndex(2, 2) e\n\nSee also: IndexStyle, axes.\n\n\n\n\n\npairs(collection)\n\nReturn an iterator over key => value pairs for any collection that maps a set of keys to a set of values. This includes arrays, where the keys are the array indices.\n\n\n\n\n\n"
 },
 
 {
@@ -15173,7 +15005,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Distributed Computing",
     "title": "Base.wait",
     "category": "function",
-    "text": "wait([x])\n\nBlock the current task until some event occurs, depending on the type of the argument:\n\nChannel: Wait for a value to be appended to the channel.\nCondition: Wait for notify on a condition.\nProcess: Wait for a process or process chain to exit. The exitcode field of a process can be used to determine success or failure.\nTask: Wait for a Task to finish. If the task fails with an exception, the exception is propagated (re-thrown in the task that called wait).\nRawFD: Wait for changes on a file descriptor (see the FileWatching package).\n\nIf no argument is passed, the task blocks for an undefined period. A task can only be restarted by an explicit call to schedule or yieldto.\n\nOften wait is called within a while loop to ensure a waited-for condition is met before proceeding.\n\n\n\n\n\nwait(r::Future)\n\nWait for a value to become available for the specified Future.\n\n\n\n\n\nwait(r::RemoteChannel, args...)\n\nWait for a value to become available on the specified RemoteChannel.\n\n\n\n\n\n"
+    "text": "wait(r::Future)\n\nWait for a value to become available for the specified Future.\n\n\n\n\n\nwait(r::RemoteChannel, args...)\n\nWait for a value to become available on the specified RemoteChannel.\n\n\n\n\n\nwait([x])\n\nBlock the current task until some event occurs, depending on the type of the argument:\n\nChannel: Wait for a value to be appended to the channel.\nCondition: Wait for notify on a condition.\nProcess: Wait for a process or process chain to exit. The exitcode field of a process can be used to determine success or failure.\nTask: Wait for a Task to finish. If the task fails with an exception, the exception is propagated (re-thrown in the task that called wait).\nRawFD: Wait for changes on a file descriptor (see the FileWatching package).\n\nIf no argument is passed, the task blocks for an undefined period. A task can only be restarted by an explicit call to schedule or yieldto.\n\nOften wait is called within a while loop to ensure a waited-for condition is met before proceeding.\n\n\n\n\n\n"
 },
 
 {
@@ -19405,7 +19237,167 @@ var documenterSearchIndex = {"docs": [
     "page": "Markdown",
     "title": "Markdown",
     "category": "section",
-    "text": ""
+    "text": "This section describes Julia\'s markdown syntax, which is enabled by the Markdown standard library. The following Markdown elements are supported:"
+},
+
+{
+    "location": "stdlib/Markdown/#Inline-elements-1",
+    "page": "Markdown",
+    "title": "Inline elements",
+    "category": "section",
+    "text": "Here \"inline\" refers to elements that can be found within blocks of text, i.e. paragraphs. These include the following elements."
+},
+
+{
+    "location": "stdlib/Markdown/#Bold-1",
+    "page": "Markdown",
+    "title": "Bold",
+    "category": "section",
+    "text": "Surround words with two asterisks, **, to display the enclosed text in boldface.A paragraph containing a **bold** word."
+},
+
+{
+    "location": "stdlib/Markdown/#Italics-1",
+    "page": "Markdown",
+    "title": "Italics",
+    "category": "section",
+    "text": "Surround words with one asterisk, *, to display the enclosed text in italics.A paragraph containing an *emphasized* word."
+},
+
+{
+    "location": "stdlib/Markdown/#Literals-1",
+    "page": "Markdown",
+    "title": "Literals",
+    "category": "section",
+    "text": "Surround text that should be displayed exactly as written with single backticks, ` .A paragraph containing a `literal` word.Literals should be used when writing text that refers to names of variables, functions, or other parts of a Julia program.tip: Tip\nTo include a backtick character within literal text use three backticks rather than one to enclose the text.A paragraph containing a ``` `backtick` character ```.By extension any odd number of backticks may be used to enclose a lesser number of backticks."
+},
+
+{
+    "location": "stdlib/Markdown/#\\LaTeX-1",
+    "page": "Markdown",
+    "title": "LaTeX",
+    "category": "section",
+    "text": "Surround text that should be displayed as mathematics using LaTeX syntax with double backticks, `` .A paragraph containing some ``\\LaTeX`` markup.tip: Tip\nAs with literals in the previous section, if literal backticks need to be written within double backticks use an even number greater than two. Note that if a single literal backtick needs to be included within LaTeX markup then two enclosing backticks is sufficient.note: Note\nThe \\ character should be escaped appropriately if the text is embedded in a Julia source code, for example, \"``\\\\LaTeX`` syntax in a docstring.\", since it is interpreted as a string literal. Alternatively, in order to avoid escaping, it is possible to use the raw string macro together with the @doc macro:@doc raw\"``\\LaTeX`` syntax in a docstring.\" functionname"
+},
+
+{
+    "location": "stdlib/Markdown/#Links-1",
+    "page": "Markdown",
+    "title": "Links",
+    "category": "section",
+    "text": "Links to either external or internal addresses can be written using the following syntax, where the text enclosed in square brackets, [ ], is the name of the link and the text enclosed in parentheses, ( ), is the URL.A paragraph containing a link to [Julia](http://www.julialang.org).It\'s also possible to add cross-references to other documented functions/methods/variables within the Julia documentation itself. For example:\"\"\"\n    tryparse(type, str; base)\n\nLike [`parse`](@ref), but returns either a value of the requested type,\nor [`nothing`](@ref) if the string does not contain a valid number.\n\"\"\"This will create a link in the generated docs to the parse documentation (which has more information about what this function actually does), and to the nothing documentation. It\'s good to include cross references to mutating/non-mutating versions of a function, or to highlight a difference between two similar-seeming functions.note: Note\nThe above cross referencing is not a Markdown feature, and relies on Documenter.jl, which is used to build base Julia\'s documentation."
+},
+
+{
+    "location": "stdlib/Markdown/#Footnote-references-1",
+    "page": "Markdown",
+    "title": "Footnote references",
+    "category": "section",
+    "text": "Named and numbered footnote references can be written using the following syntax. A footnote name must be a single alphanumeric word containing no punctuation.A paragraph containing a numbered footnote [^1] and a named one [^named].note: Note\nThe text associated with a footnote can be written anywhere within the same page as the footnote reference. The syntax used to define the footnote text is discussed in the Footnotes section below."
+},
+
+{
+    "location": "stdlib/Markdown/#Toplevel-elements-1",
+    "page": "Markdown",
+    "title": "Toplevel elements",
+    "category": "section",
+    "text": "The following elements can be written either at the \"toplevel\" of a document or within another \"toplevel\" element."
+},
+
+{
+    "location": "stdlib/Markdown/#Paragraphs-1",
+    "page": "Markdown",
+    "title": "Paragraphs",
+    "category": "section",
+    "text": "A paragraph is a block of plain text, possibly containing any number of inline elements defined in the Inline elements section above, with one or more blank lines above and below it.This is a paragraph.\n\nAnd this is *another* one containing some emphasized text.\nA new line, but still part of the same paragraph."
+},
+
+{
+    "location": "stdlib/Markdown/#Headers-1",
+    "page": "Markdown",
+    "title": "Headers",
+    "category": "section",
+    "text": "A document can be split up into different sections using headers. Headers use the following syntax:# Level One\n## Level Two\n### Level Three\n#### Level Four\n##### Level Five\n###### Level SixA header line can contain any inline syntax in the same way as a paragraph can.tip: Tip\nTry to avoid using too many levels of header within a single document. A heavily nested document may be indicative of a need to restructure it or split it into several pages covering separate topics."
+},
+
+{
+    "location": "stdlib/Markdown/#Code-blocks-1",
+    "page": "Markdown",
+    "title": "Code blocks",
+    "category": "section",
+    "text": "Source code can be displayed as a literal block using an indent of four spaces as shown in the following example.This is a paragraph.\n\n    function func(x)\n        # ...\n    end\n\nAnother paragraph.Additionally, code blocks can be enclosed using triple backticks with an optional \"language\" to specify how a block of code should be highlighted.A code block without a \"language\":\n\n```\nfunction func(x)\n    # ...\nend\n```\n\nand another one with the \"language\" specified as `julia`:\n\n```julia\nfunction func(x)\n    # ...\nend\n```note: Note\n\"Fenced\" code blocks, as shown in the last example, should be preferred over indented code blocks since there is no way to specify what language an indented code block is written in."
+},
+
+{
+    "location": "stdlib/Markdown/#Block-quotes-1",
+    "page": "Markdown",
+    "title": "Block quotes",
+    "category": "section",
+    "text": "Text from external sources, such as quotations from books or websites, can be quoted using > characters prepended to each line of the quote as follows.Here\'s a quote:\n\n> Julia is a high-level, high-performance dynamic programming language for\n> technical computing, with syntax that is familiar to users of other\n> technical computing environments.Note that a single space must appear after the > character on each line. Quoted blocks may themselves contain other toplevel or inline elements."
+},
+
+{
+    "location": "stdlib/Markdown/#Images-1",
+    "page": "Markdown",
+    "title": "Images",
+    "category": "section",
+    "text": "The syntax for images is similar to the link syntax mentioned above. Prepending a ! character to a link will display an image from the specified URL rather than a link to it.![alternative text](link/to/image.png)"
+},
+
+{
+    "location": "stdlib/Markdown/#Lists-1",
+    "page": "Markdown",
+    "title": "Lists",
+    "category": "section",
+    "text": "Unordered lists can be written by prepending each item in a list with either *, +, or -.A list of items:\n\n  * item one\n  * item two\n  * item threeNote the two spaces before each * and the single space after each one.Lists can contain other nested toplevel elements such as lists, code blocks, or quoteblocks. A blank line should be left between each list item when including any toplevel elements within a list.Another list:\n\n  * item one\n\n  * item two\n\n    ```\n    f(x) = x\n    ```\n\n  * And a sublist:\n\n      + sub-item one\n      + sub-item twonote: Note\nThe contents of each item in the list must line up with the first line of the item. In the above example the fenced code block must be indented by four spaces to align with the i in item two.Ordered lists are written by replacing the \"bullet\" character, either *, +, or -, with a positive integer followed by either . or ).Two ordered lists:\n\n 1. item one\n 2. item two\n 3. item three\n\n 5) item five\n 6) item six\n 7) item sevenAn ordered list may start from a number other than one, as in the second list of the above example, where it is numbered from five. As with unordered lists, ordered lists can contain nested toplevel elements."
+},
+
+{
+    "location": "stdlib/Markdown/#Display-equations-1",
+    "page": "Markdown",
+    "title": "Display equations",
+    "category": "section",
+    "text": "Large LaTeX equations that do not fit inline within a paragraph may be written as display equations using a fenced code block with the \"language\" math as in the example below.```math\nf(a) = \\frac{1}{2\\pi}\\int_{0}^{2\\pi} (\\alpha+R\\cos(\\theta))d\\theta\n```"
+},
+
+{
+    "location": "stdlib/Markdown/#Footnotes-1",
+    "page": "Markdown",
+    "title": "Footnotes",
+    "category": "section",
+    "text": "This syntax is paired with the inline syntax for Footnote references. Make sure to read that section as well.Footnote text is defined using the following syntax, which is similar to footnote reference syntax, aside from the : character that is appended to the footnote label.[^1]: Numbered footnote text.\n\n[^note]:\n\n    Named footnote text containing several toplevel elements.\n\n      * item one\n      * item two\n      * item three\n\n    ```julia\n    function func(x)\n        # ...\n    end\n    ```note: Note\nNo checks are done during parsing to make sure that all footnote references have matching footnotes."
+},
+
+{
+    "location": "stdlib/Markdown/#Horizontal-rules-1",
+    "page": "Markdown",
+    "title": "Horizontal rules",
+    "category": "section",
+    "text": "The equivalent of an <hr> HTML tag can be written using the following syntax:Text above the line.\n\n---\n\nAnd text below the line."
+},
+
+{
+    "location": "stdlib/Markdown/#Tables-1",
+    "page": "Markdown",
+    "title": "Tables",
+    "category": "section",
+    "text": "Basic tables can be written using the syntax described below. Note that markdown tables have limited features and cannot contain nested toplevel elements unlike other elements discussed above – only inline elements are allowed. Tables must always contain a header row with column names. Cells cannot span multiple rows or columns of the table.| Column One | Column Two | Column Three |\n|:---------- | ---------- |:------------:|\n| Row `1`    | Column `2` |              |\n| *Row* 2    | **Row** 2  | Column ``3`` |note: Note\nAs illustrated in the above example each column of | characters must be aligned vertically.A : character on either end of a column\'s header separator (the row containing - characters) specifies whether the row is left-aligned, right-aligned, or (when : appears on both ends) center-aligned. Providing no : characters will default to right-aligning the column."
+},
+
+{
+    "location": "stdlib/Markdown/#Admonitions-1",
+    "page": "Markdown",
+    "title": "Admonitions",
+    "category": "section",
+    "text": "Specially formatted blocks, known as admonitions, can be used to highlight particular remarks. They can be defined using the following !!! syntax:!!! note\n\n    This is the content of the note.\n\n!!! warning \"Beware!\"\n\n    And this is another one.\n\n    This warning admonition has a custom title: `\"Beware!\"`.The type of the admonition can be any word, but some types produce special styling, namely (in order of decreasing severity): danger, warning, info/note, and tip.A custom title for the box can be provided as a string (in double quotes) after the admonition type. If no title text is specified after the admonition type, then the title used will be the type of the block, i.e. \"Note\" in the case of the note admonition.Admonitions, like most other toplevel elements, can contain other toplevel elements."
+},
+
+{
+    "location": "stdlib/Markdown/#Markdown-Syntax-Extensions-1",
+    "page": "Markdown",
+    "title": "Markdown Syntax Extensions",
+    "category": "section",
+    "text": "Julia\'s markdown supports interpolation in a very similar way to basic string literals, with the difference that it will store the object itself in the Markdown tree (as opposed to converting it to a string). When the Markdown content is rendered the usual show methods will be called, and these can be overridden as usual. This design allows the Markdown to be extended with arbitrarily complex features (such as references) without cluttering the basic syntax.In principle, the Markdown parser itself can also be arbitrarily extended by packages, or an entirely custom flavour of Markdown can be used, but this should generally be unnecessary."
 },
 
 {
@@ -20613,7 +20605,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Sockets",
     "title": "Base.bind",
     "category": "function",
-    "text": "bind(chnl::Channel, task::Task)\n\nAssociate the lifetime of chnl with a task. Channel chnl is automatically closed when the task terminates. Any uncaught exception in the task is propagated to all waiters on chnl.\n\nThe chnl object can be explicitly closed independent of task termination. Terminating tasks have no effect on already closed Channel objects.\n\nWhen a channel is bound to multiple tasks, the first task to terminate will close the channel. When multiple channels are bound to the same task, termination of the task will close all of the bound channels.\n\nExamples\n\njulia> c = Channel(0);\n\njulia> task = @async foreach(i->put!(c, i), 1:4);\n\njulia> bind(c,task);\n\njulia> for i in c\n           @show i\n       end;\ni = 1\ni = 2\ni = 3\ni = 4\n\njulia> isopen(c)\nfalse\n\njulia> c = Channel(0);\n\njulia> task = @async (put!(c,1);error(\"foo\"));\n\njulia> bind(c,task);\n\njulia> take!(c)\n1\n\njulia> put!(c,1);\nERROR: foo\nStacktrace:\n[...]\n\n\n\n\n\nbind(socket::Union{UDPSocket, TCPSocket}, host::IPAddr, port::Integer; ipv6only=false, reuseaddr=false, kws...)\n\nBind socket to the given host:port. Note that 0.0.0.0 will listen on all devices.\n\nThe ipv6only parameter disables dual stack mode. If ipv6only=true, only an IPv6 stack is created.\nIf reuseaddr=true, multiple threads or processes can bind to the same address without error if they all set reuseaddr=true, but only the last to bind will receive any traffic.\n\n\n\n\n\n"
+    "text": "bind(socket::Union{UDPSocket, TCPSocket}, host::IPAddr, port::Integer; ipv6only=false, reuseaddr=false, kws...)\n\nBind socket to the given host:port. Note that 0.0.0.0 will listen on all devices.\n\nThe ipv6only parameter disables dual stack mode. If ipv6only=true, only an IPv6 stack is created.\nIf reuseaddr=true, multiple threads or processes can bind to the same address without error if they all set reuseaddr=true, but only the last to bind will receive any traffic.\n\n\n\n\n\nbind(chnl::Channel, task::Task)\n\nAssociate the lifetime of chnl with a task. Channel chnl is automatically closed when the task terminates. Any uncaught exception in the task is propagated to all waiters on chnl.\n\nThe chnl object can be explicitly closed independent of task termination. Terminating tasks have no effect on already closed Channel objects.\n\nWhen a channel is bound to multiple tasks, the first task to terminate will close the channel. When multiple channels are bound to the same task, termination of the task will close all of the bound channels.\n\nExamples\n\njulia> c = Channel(0);\n\njulia> task = @async foreach(i->put!(c, i), 1:4);\n\njulia> bind(c,task);\n\njulia> for i in c\n           @show i\n       end;\ni = 1\ni = 2\ni = 3\ni = 4\n\njulia> isopen(c)\nfalse\n\njulia> c = Channel(0);\n\njulia> task = @async (put!(c,1);error(\"foo\"));\n\njulia> bind(c,task);\n\njulia> take!(c)\n1\n\njulia> put!(c,1);\nERROR: foo\nStacktrace:\n[...]\n\n\n\n\n\n"
 },
 
 {
