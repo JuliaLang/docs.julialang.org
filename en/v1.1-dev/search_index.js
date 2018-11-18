@@ -5557,7 +5557,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Essentials",
     "title": "Base.Libc.getpid",
     "category": "function",
-    "text": "getpid() -> Int32\n\nGet Julia\'s process ID.\n\n\n\n\n\n"
+    "text": "getpid() -> Int32\n\nGet Julia\'s process ID.\n\n\n\n\n\ngetpid(process) -> Int32\n\nGet the child process ID, if it still exists.\n\n\n\n\n\n"
 },
 
 {
