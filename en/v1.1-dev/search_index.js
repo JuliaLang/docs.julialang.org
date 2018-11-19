@@ -5557,7 +5557,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Essentials",
     "title": "Base.Libc.getpid",
     "category": "function",
-    "text": "getpid(process) -> Int32\n\nGet the child process ID, if it still exists.\n\n\n\n\n\ngetpid() -> Int32\n\nGet Julia\'s process ID.\n\n\n\n\n\n"
+    "text": "getpid() -> Int32\n\nGet Julia\'s process ID.\n\n\n\n\n\ngetpid(process) -> Int32\n\nGet the child process ID, if it still exists.\n\n\n\n\n\n"
 },
 
 {
@@ -9369,11 +9369,11 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "base/numbers/#Base.MPFR.BigFloat-Tuple{Any}",
+    "location": "base/numbers/#Base.MPFR.BigFloat-Tuple{Any,RoundingMode}",
     "page": "Numbers",
     "title": "Base.MPFR.BigFloat",
     "category": "method",
-    "text": "BigFloat(x)\n\nCreate an arbitrary precision floating point number. x may be an Integer, a Float64 or a BigInt. The usual mathematical operators are defined for this type, and results are promoted to a BigFloat.\n\nNote that because decimal literals are converted to floating point numbers when parsed, BigFloat(2.1) may not yield what you expect. You may instead prefer to initialize constants from strings via parse, or using the big string literal.\n\njulia> BigFloat(2.1)\n2.100000000000000088817841970012523233890533447265625\n\njulia> big\"2.1\"\n2.099999999999999999999999999999999999999999999999999999999999999999999999999986\n\n\n\n\n\n"
+    "text": "BigFloat(x::Union{Real, AbstractString} [, rounding::RoundingMode=rounding(BigFloat)]; [precision::Integer=precision(BigFloat)])\n\nCreate an arbitrary precision floating point number from x, with precision precision. The rounding argument specifies the direction in which the result should be rounded if the conversion cannot be done exactly. If not provided, these are set by the current global values.\n\nBigFloat(x::Real) is the same as convert(BigFloat,x), except if x itself is already BigFloat, in which case it will return a value with the precision set to the current global precision; convert will always return x.\n\nBigFloat(x::AbstractString) is identical to parse. This is provided for convenience since decimal literals are converted to Float64 when parsed, so BigFloat(2.1) may not yield what you expect.\n\njulia> BigFloat(2.1) # 2.1 here is a Float64\n2.100000000000000088817841970012523233890533447265625\n\njulia> BigFloat(\"2.1\") # the closest BigFloat to 2.1\n2.099999999999999999999999999999999999999999999999999999999999999999999999999986\n\njulia> BigFloat(\"2.1\", RoundUp)\n2.100000000000000000000000000000000000000000000000000000000000000000000000000021\n\njulia> BigFloat(\"2.1\", RoundUp, precision=128)\n2.100000000000000000000000000000000000007\n\nSee also\n\n@big_str\nrounding and setrounding\nprecision and setprecision\n\n\n\n\n\n"
 },
 
 {
@@ -9401,30 +9401,6 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "base/numbers/#Base.MPFR.BigFloat-Tuple{Any,Int64}",
-    "page": "Numbers",
-    "title": "Base.MPFR.BigFloat",
-    "category": "method",
-    "text": "BigFloat(x, prec::Int)\n\nCreate a representation of x as a BigFloat with precision prec.\n\n\n\n\n\n"
-},
-
-{
-    "location": "base/numbers/#Base.MPFR.BigFloat-Tuple{Union{AbstractFloat, Integer, String},RoundingMode}",
-    "page": "Numbers",
-    "title": "Base.MPFR.BigFloat",
-    "category": "method",
-    "text": "BigFloat(x, rounding::RoundingMode)\n\nCreate a representation of x as a BigFloat with the current global precision and Rounding Mode rounding.\n\n\n\n\n\n"
-},
-
-{
-    "location": "base/numbers/#Base.MPFR.BigFloat-Tuple{Any,Int64,RoundingMode}",
-    "page": "Numbers",
-    "title": "Base.MPFR.BigFloat",
-    "category": "method",
-    "text": "BigFloat(x, prec::Int, rounding::RoundingMode)\n\nCreate a representation of x as a BigFloat with precision prec and Rounding Mode rounding.\n\n\n\n\n\n"
-},
-
-{
     "location": "base/numbers/#Base.GMP.BigInt-Tuple{Any}",
     "page": "Numbers",
     "title": "Base.GMP.BigInt",
@@ -9445,7 +9421,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Numbers",
     "title": "BigFloats and BigInts",
     "category": "section",
-    "text": "The BigFloat and BigInt types implements arbitrary-precision floating point and integer arithmetic, respectively. For BigFloat the GNU MPFR library is used, and for BigInt the GNU Multiple Precision Arithmetic Library (GMP) is used.Base.MPFR.BigFloat(::Any)\nBase.precision\nBase.MPFR.precision(::Type{BigFloat})\nBase.MPFR.setprecision\nBase.MPFR.BigFloat(x, prec::Int)\nBase.MPFR.BigFloat(x::Union{Integer, AbstractFloat, String}, rounding::RoundingMode)\nBase.MPFR.BigFloat(x, prec::Int, rounding::RoundingMode)\nBase.GMP.BigInt(::Any)\nBase.@big_str"
+    "text": "The BigFloat and BigInt types implements arbitrary-precision floating point and integer arithmetic, respectively. For BigFloat the GNU MPFR library is used, and for BigInt the GNU Multiple Precision Arithmetic Library (GMP) is used.Base.MPFR.BigFloat(::Any, rounding::RoundingMode)\nBase.precision\nBase.MPFR.precision(::Type{BigFloat})\nBase.MPFR.setprecision\nBase.GMP.BigInt(::Any)\nBase.@big_str"
 },
 
 {
@@ -15005,7 +14981,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Distributed Computing",
     "title": "Base.wait",
     "category": "function",
-    "text": "wait([x])\n\nBlock the current task until some event occurs, depending on the type of the argument:\n\nChannel: Wait for a value to be appended to the channel.\nCondition: Wait for notify on a condition.\nProcess: Wait for a process or process chain to exit. The exitcode field of a process can be used to determine success or failure.\nTask: Wait for a Task to finish. If the task fails with an exception, the exception is propagated (re-thrown in the task that called wait).\nRawFD: Wait for changes on a file descriptor (see the FileWatching package).\n\nIf no argument is passed, the task blocks for an undefined period. A task can only be restarted by an explicit call to schedule or yieldto.\n\nOften wait is called within a while loop to ensure a waited-for condition is met before proceeding.\n\n\n\n\n\nwait(r::Future)\n\nWait for a value to become available for the specified Future.\n\n\n\n\n\nwait(r::RemoteChannel, args...)\n\nWait for a value to become available on the specified RemoteChannel.\n\n\n\n\n\n"
+    "text": "wait(r::Future)\n\nWait for a value to become available for the specified Future.\n\n\n\n\n\nwait(r::RemoteChannel, args...)\n\nWait for a value to become available on the specified RemoteChannel.\n\n\n\n\n\nwait([x])\n\nBlock the current task until some event occurs, depending on the type of the argument:\n\nChannel: Wait for a value to be appended to the channel.\nCondition: Wait for notify on a condition.\nProcess: Wait for a process or process chain to exit. The exitcode field of a process can be used to determine success or failure.\nTask: Wait for a Task to finish. If the task fails with an exception, the exception is propagated (re-thrown in the task that called wait).\nRawFD: Wait for changes on a file descriptor (see the FileWatching package).\n\nIf no argument is passed, the task blocks for an undefined period. A task can only be restarted by an explicit call to schedule or yieldto.\n\nOften wait is called within a while loop to ensure a waited-for condition is met before proceeding.\n\n\n\n\n\n"
 },
 
 {
