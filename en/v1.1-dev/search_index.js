@@ -5557,7 +5557,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Essentials",
     "title": "Base.Libc.getpid",
     "category": "function",
-    "text": "getpid() -> Int32\n\nGet Julia\'s process ID.\n\n\n\n\n\ngetpid(process) -> Int32\n\nGet the child process ID, if it still exists.\n\n\n\n\n\n"
+    "text": "getpid(process) -> Int32\n\nGet the child process ID, if it still exists.\n\n\n\n\n\ngetpid() -> Int32\n\nGet Julia\'s process ID.\n\n\n\n\n\n"
 },
 
 {
@@ -7293,7 +7293,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Mathematics",
     "title": "Base.:+",
     "category": "function",
-    "text": "+(x, y...)\n\nAddition operator. x+y+z+... calls this function with all arguments, i.e. +(x, y, z, ...).\n\nExamples\n\njulia> 1 + 20 + 4\n25\n\njulia> +(1, 20, 4)\n25\n\n\n\n\n\ndt::Date + t::Time -> DateTime\n\nThe addition of a Date with a Time produces a DateTime. The hour, minute, second, and millisecond parts of the Time are used along with the year, month, and day of the Date to create the new DateTime. Non-zero microseconds or nanoseconds in the Time type will result in an InexactError being thrown.\n\n\n\n\n\n"
+    "text": "dt::Date + t::Time -> DateTime\n\nThe addition of a Date with a Time produces a DateTime. The hour, minute, second, and millisecond parts of the Time are used along with the year, month, and day of the Date to create the new DateTime. Non-zero microseconds or nanoseconds in the Time type will result in an InexactError being thrown.\n\n\n\n\n\n+(x, y...)\n\nAddition operator. x+y+z+... calls this function with all arguments, i.e. +(x, y, z, ...).\n\nExamples\n\njulia> 1 + 20 + 4\n25\n\njulia> +(1, 20, 4)\n25\n\n\n\n\n\n"
 },
 
 {
@@ -14981,7 +14981,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Distributed Computing",
     "title": "Base.wait",
     "category": "function",
-    "text": "wait(r::Future)\n\nWait for a value to become available for the specified Future.\n\n\n\n\n\nwait(r::RemoteChannel, args...)\n\nWait for a value to become available on the specified RemoteChannel.\n\n\n\n\n\nwait([x])\n\nBlock the current task until some event occurs, depending on the type of the argument:\n\nChannel: Wait for a value to be appended to the channel.\nCondition: Wait for notify on a condition.\nProcess: Wait for a process or process chain to exit. The exitcode field of a process can be used to determine success or failure.\nTask: Wait for a Task to finish. If the task fails with an exception, the exception is propagated (re-thrown in the task that called wait).\nRawFD: Wait for changes on a file descriptor (see the FileWatching package).\n\nIf no argument is passed, the task blocks for an undefined period. A task can only be restarted by an explicit call to schedule or yieldto.\n\nOften wait is called within a while loop to ensure a waited-for condition is met before proceeding.\n\n\n\n\n\n"
+    "text": "wait([x])\n\nBlock the current task until some event occurs, depending on the type of the argument:\n\nChannel: Wait for a value to be appended to the channel.\nCondition: Wait for notify on a condition.\nProcess: Wait for a process or process chain to exit. The exitcode field of a process can be used to determine success or failure.\nTask: Wait for a Task to finish. If the task fails with an exception, the exception is propagated (re-thrown in the task that called wait).\nRawFD: Wait for changes on a file descriptor (see the FileWatching package).\n\nIf no argument is passed, the task blocks for an undefined period. A task can only be restarted by an explicit call to schedule or yieldto.\n\nOften wait is called within a while loop to ensure a waited-for condition is met before proceeding.\n\n\n\n\n\nwait(r::Future)\n\nWait for a value to become available for the specified Future.\n\n\n\n\n\nwait(r::RemoteChannel, args...)\n\nWait for a value to become available on the specified RemoteChannel.\n\n\n\n\n\n"
 },
 
 {
@@ -20781,7 +20781,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Sparse Arrays",
     "title": "SparseArrays.sprandn",
     "category": "function",
-    "text": "sprandn([rng], m[,n],p::AbstractFloat)\n\nCreate a random sparse vector of length m or sparse matrix of size m by n with the specified (independent) probability p of any entry being nonzero, where nonzero values are sampled from the normal distribution. The optional rng argument specifies a random number generator, see Random Numbers.\n\nExamples\n\njulia> sprandn(2, 2, 0.75)\n2×2 SparseMatrixCSC{Float64,Int64} with 2 stored entries:\n  [1, 1]  =  0.586617\n  [1, 2]  =  0.297336\n\n\n\n\n\n"
+    "text": "sprandn([rng][,Type],m[,n],p::AbstractFloat)\n\nCreate a random sparse vector of length m or sparse matrix of size m by n with the specified (independent) probability p of any entry being nonzero, where nonzero values are sampled from the normal distribution. The optional rng argument specifies a random number generator, see Random Numbers.\n\nExamples\n\njulia> sprandn(2, 2, 0.75)\n2×2 SparseMatrixCSC{Float64,Int64} with 2 stored entries:\n  [1, 1]  =  0.586617\n  [1, 2]  =  0.297336\n\n\n\n\n\n"
 },
 
 {
