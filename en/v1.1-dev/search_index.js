@@ -7293,7 +7293,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Mathematics",
     "title": "Base.:+",
     "category": "function",
-    "text": "+(x, y...)\n\nAddition operator. x+y+z+... calls this function with all arguments, i.e. +(x, y, z, ...).\n\nExamples\n\njulia> 1 + 20 + 4\n25\n\njulia> +(1, 20, 4)\n25\n\n\n\n\n\ndt::Date + t::Time -> DateTime\n\nThe addition of a Date with a Time produces a DateTime. The hour, minute, second, and millisecond parts of the Time are used along with the year, month, and day of the Date to create the new DateTime. Non-zero microseconds or nanoseconds in the Time type will result in an InexactError being thrown.\n\n\n\n\n\n"
+    "text": "dt::Date + t::Time -> DateTime\n\nThe addition of a Date with a Time produces a DateTime. The hour, minute, second, and millisecond parts of the Time are used along with the year, month, and day of the Date to create the new DateTime. Non-zero microseconds or nanoseconds in the Time type will result in an InexactError being thrown.\n\n\n\n\n\n+(x, y...)\n\nAddition operator. x+y+z+... calls this function with all arguments, i.e. +(x, y, z, ...).\n\nExamples\n\njulia> 1 + 20 + 4\n25\n\njulia> +(1, 20, 4)\n25\n\n\n\n\n\n"
 },
 
 {
@@ -20181,7 +20181,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Random Numbers",
     "title": "Random.randperm",
     "category": "function",
-    "text": "randperm([rng=GLOBAL_RNG,] n::Integer)\n\nConstruct a random permutation of length n. The optional rng argument specifies a random number generator (see Random Numbers). To randomly permute an arbitrary vector, see shuffle or shuffle!.\n\nExamples\n\njulia> randperm(MersenneTwister(1234), 4)\n4-element Array{Int64,1}:\n 2\n 1\n 4\n 3\n\n\n\n\n\n"
+    "text": "randperm([rng=GLOBAL_RNG,] n::Integer)\n\nConstruct a random permutation of length n. The optional rng argument specifies a random number generator (see Random Numbers). The element type of the result is the same as the type of n.\n\nTo randomly permute an arbitrary vector, see shuffle or shuffle!.\n\nExamples\n\njulia> randperm(MersenneTwister(1234), 4)\n4-element Array{Int64,1}:\n 2\n 1\n 4\n 3\n\n\n\n\n\n"
 },
 
 {
@@ -20197,7 +20197,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Random Numbers",
     "title": "Random.randcycle",
     "category": "function",
-    "text": "randcycle([rng=GLOBAL_RNG,] n::Integer)\n\nConstruct a random cyclic permutation of length n. The optional rng argument specifies a random number generator, see Random Numbers.\n\nExamples\n\njulia> randcycle(MersenneTwister(1234), 6)\n6-element Array{Int64,1}:\n 3\n 5\n 4\n 6\n 1\n 2\n\n\n\n\n\n"
+    "text": "randcycle([rng=GLOBAL_RNG,] n::Integer)\n\nConstruct a random cyclic permutation of length n. The optional rng argument specifies a random number generator, see Random Numbers. The element type of the result is the same as the type of n.\n\nExamples\n\njulia> randcycle(MersenneTwister(1234), 6)\n6-element Array{Int64,1}:\n 3\n 5\n 4\n 6\n 1\n 2\n\n\n\n\n\n"
 },
 
 {
