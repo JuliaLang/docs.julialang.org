@@ -9345,17 +9345,17 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "base/numbers/#Base.@int128_str",
+    "location": "base/numbers/#Core.@int128_str",
     "page": "Numbers",
-    "title": "Base.@int128_str",
+    "title": "Core.@int128_str",
     "category": "macro",
     "text": "@int128_str str\n@int128_str(str)\n\n@int128_str parses a string into a Int128 Throws an ArgumentError if the string is not a valid integer\n\n\n\n\n\n"
 },
 
 {
-    "location": "base/numbers/#Base.@uint128_str",
+    "location": "base/numbers/#Core.@uint128_str",
     "page": "Numbers",
-    "title": "Base.@uint128_str",
+    "title": "Core.@uint128_str",
     "category": "macro",
     "text": "@uint128_str str\n@uint128_str(str)\n\n@uint128_str parses a string into a UInt128 Throws an ArgumentError if the string is not a valid integer\n\n\n\n\n\n"
 },
@@ -9409,9 +9409,9 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "base/numbers/#Base.@big_str",
+    "location": "base/numbers/#Core.@big_str",
     "page": "Numbers",
-    "title": "Base.@big_str",
+    "title": "Core.@big_str",
     "category": "macro",
     "text": "@big_str str\n@big_str(str)\n\nParse a string into a BigInt or BigFloat, and throw an ArgumentError if the string is not a valid number. For integers _ is allowed in the string as a separator.\n\nExamples\n\njulia> big\"123_456\"\n123456\n\njulia> big\"7891.5\"\n7.8915e+03\n\n\n\n\n\n"
 },
@@ -14981,7 +14981,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Distributed Computing",
     "title": "Base.wait",
     "category": "function",
-    "text": "wait([x])\n\nBlock the current task until some event occurs, depending on the type of the argument:\n\nChannel: Wait for a value to be appended to the channel.\nCondition: Wait for notify on a condition.\nProcess: Wait for a process or process chain to exit. The exitcode field of a process can be used to determine success or failure.\nTask: Wait for a Task to finish. If the task fails with an exception, the exception is propagated (re-thrown in the task that called wait).\nRawFD: Wait for changes on a file descriptor (see the FileWatching package).\n\nIf no argument is passed, the task blocks for an undefined period. A task can only be restarted by an explicit call to schedule or yieldto.\n\nOften wait is called within a while loop to ensure a waited-for condition is met before proceeding.\n\n\n\n\n\nwait(r::Future)\n\nWait for a value to become available for the specified Future.\n\n\n\n\n\nwait(r::RemoteChannel, args...)\n\nWait for a value to become available on the specified RemoteChannel.\n\n\n\n\n\n"
+    "text": "wait(r::Future)\n\nWait for a value to become available for the specified Future.\n\n\n\n\n\nwait(r::RemoteChannel, args...)\n\nWait for a value to become available on the specified RemoteChannel.\n\n\n\n\n\nwait([x])\n\nBlock the current task until some event occurs, depending on the type of the argument:\n\nChannel: Wait for a value to be appended to the channel.\nCondition: Wait for notify on a condition.\nProcess: Wait for a process or process chain to exit. The exitcode field of a process can be used to determine success or failure.\nTask: Wait for a Task to finish. If the task fails with an exception, the exception is propagated (re-thrown in the task that called wait).\nRawFD: Wait for changes on a file descriptor (see the FileWatching package).\n\nIf no argument is passed, the task blocks for an undefined period. A task can only be restarted by an explicit call to schedule or yieldto.\n\nOften wait is called within a while loop to ensure a waited-for condition is met before proceeding.\n\n\n\n\n\n"
 },
 
 {
