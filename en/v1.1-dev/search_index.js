@@ -5557,7 +5557,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Essentials",
     "title": "Base.Libc.getpid",
     "category": "function",
-    "text": "getpid() -> Int32\n\nGet Julia\'s process ID.\n\n\n\n\n\ngetpid(process) -> Int32\n\nGet the child process ID, if it still exists.\n\n\n\n\n\n"
+    "text": "getpid(process) -> Int32\n\nGet the child process ID, if it still exists.\n\n\n\n\n\ngetpid() -> Int32\n\nGet Julia\'s process ID.\n\n\n\n\n\n"
 },
 
 {
@@ -6245,7 +6245,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Essentials",
     "title": "Base.code_lowered",
     "category": "function",
-    "text": "code_lowered(f, types; generated = true)\n\nReturn an array of the lowered forms (IR) for the methods matching the given generic function and type signature.\n\nIf generated is false, the returned CodeInfo instances will correspond to fallback implementations. An error is thrown if no fallback implementation exists. If generated is true, these CodeInfo instances will correspond to the method bodies yielded by expanding the generators.\n\nNote that an error will be thrown if types are not leaf types when generated is true and the corresponding method is a @generated method.\n\n\n\n\n\n"
+    "text": "code_lowered(f, types; generated=true, debuginfo=:default)\n\nReturn an array of the lowered forms (IR) for the methods matching the given generic function and type signature.\n\nIf generated is false, the returned CodeInfo instances will correspond to fallback implementations. An error is thrown if no fallback implementation exists. If generated is true, these CodeInfo instances will correspond to the method bodies yielded by expanding the generators.\n\nThe keyword debuginfo controls the amount of code metadata present in the output.\n\nNote that an error will be thrown if types are not leaf types when generated is true and any of the corresponding methods are an @generated method.\n\n\n\n\n\n"
 },
 
 {
@@ -6253,7 +6253,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Essentials",
     "title": "Base.code_typed",
     "category": "function",
-    "text": "code_typed(f, types; optimize=true)\n\nReturns an array of type-inferred lowered form (IR) for the methods matching the given generic function and type signature. The keyword argument optimize controls whether additional optimizations, such as inlining, are also applied.\n\n\n\n\n\n"
+    "text": "code_typed(f, types; optimize=true, debuginfo=:default)\n\nReturns an array of type-inferred lowered form (IR) for the methods matching the given generic function and type signature. The keyword argument optimize controls whether additional optimizations, such as inlining, are also applied. The keyword debuginfo controls the amount of code metadata present in the output.\n\n\n\n\n\n"
 },
 
 {
@@ -6973,7 +6973,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Collections and Data Structures",
     "title": "Base.pairs",
     "category": "function",
-    "text": "pairs(IndexLinear(), A)\npairs(IndexCartesian(), A)\npairs(IndexStyle(A), A)\n\nAn iterator that accesses each element of the array A, returning i => x, where i is the index for the element and x = A[i]. Identical to pairs(A), except that the style of index can be selected. Also similar to enumerate(A), except i will be a valid index for A, while enumerate always counts from 1 regardless of the indices of A.\n\nSpecifying IndexLinear() ensures that i will be an integer; specifying IndexCartesian() ensures that i will be a CartesianIndex; specifying IndexStyle(A) chooses whichever has been defined as the native indexing style for array A.\n\nMutation of the bounds of the underlying array will invalidate this iterator.\n\nExamples\n\njulia> A = [\"a\" \"d\"; \"b\" \"e\"; \"c\" \"f\"];\n\njulia> for (index, value) in pairs(IndexStyle(A), A)\n           println(\"$index $value\")\n       end\n1 a\n2 b\n3 c\n4 d\n5 e\n6 f\n\njulia> S = view(A, 1:2, :);\n\njulia> for (index, value) in pairs(IndexStyle(S), S)\n           println(\"$index $value\")\n       end\nCartesianIndex(1, 1) a\nCartesianIndex(2, 1) b\nCartesianIndex(1, 2) d\nCartesianIndex(2, 2) e\n\nSee also: IndexStyle, axes.\n\n\n\n\n\npairs(collection)\n\nReturn an iterator over key => value pairs for any collection that maps a set of keys to a set of values. This includes arrays, where the keys are the array indices.\n\n\n\n\n\n"
+    "text": "pairs(collection)\n\nReturn an iterator over key => value pairs for any collection that maps a set of keys to a set of values. This includes arrays, where the keys are the array indices.\n\n\n\n\n\npairs(IndexLinear(), A)\npairs(IndexCartesian(), A)\npairs(IndexStyle(A), A)\n\nAn iterator that accesses each element of the array A, returning i => x, where i is the index for the element and x = A[i]. Identical to pairs(A), except that the style of index can be selected. Also similar to enumerate(A), except i will be a valid index for A, while enumerate always counts from 1 regardless of the indices of A.\n\nSpecifying IndexLinear() ensures that i will be an integer; specifying IndexCartesian() ensures that i will be a CartesianIndex; specifying IndexStyle(A) chooses whichever has been defined as the native indexing style for array A.\n\nMutation of the bounds of the underlying array will invalidate this iterator.\n\nExamples\n\njulia> A = [\"a\" \"d\"; \"b\" \"e\"; \"c\" \"f\"];\n\njulia> for (index, value) in pairs(IndexStyle(A), A)\n           println(\"$index $value\")\n       end\n1 a\n2 b\n3 c\n4 d\n5 e\n6 f\n\njulia> S = view(A, 1:2, :);\n\njulia> for (index, value) in pairs(IndexStyle(S), S)\n           println(\"$index $value\")\n       end\nCartesianIndex(1, 1) a\nCartesianIndex(2, 1) b\nCartesianIndex(1, 2) d\nCartesianIndex(2, 2) e\n\nSee also: IndexStyle, axes.\n\n\n\n\n\n"
 },
 
 {
@@ -7293,7 +7293,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Mathematics",
     "title": "Base.:+",
     "category": "function",
-    "text": "+(x, y...)\n\nAddition operator. x+y+z+... calls this function with all arguments, i.e. +(x, y, z, ...).\n\nExamples\n\njulia> 1 + 20 + 4\n25\n\njulia> +(1, 20, 4)\n25\n\n\n\n\n\ndt::Date + t::Time -> DateTime\n\nThe addition of a Date with a Time produces a DateTime. The hour, minute, second, and millisecond parts of the Time are used along with the year, month, and day of the Date to create the new DateTime. Non-zero microseconds or nanoseconds in the Time type will result in an InexactError being thrown.\n\n\n\n\n\n"
+    "text": "dt::Date + t::Time -> DateTime\n\nThe addition of a Date with a Time produces a DateTime. The hour, minute, second, and millisecond parts of the Time are used along with the year, month, and day of the Date to create the new DateTime. Non-zero microseconds or nanoseconds in the Time type will result in an InexactError being thrown.\n\n\n\n\n\n+(x, y...)\n\nAddition operator. x+y+z+... calls this function with all arguments, i.e. +(x, y, z, ...).\n\nExamples\n\njulia> 1 + 20 + 4\n25\n\njulia> +(1, 20, 4)\n25\n\n\n\n\n\n"
 },
 
 {
@@ -14981,7 +14981,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Distributed Computing",
     "title": "Base.wait",
     "category": "function",
-    "text": "wait(r::Future)\n\nWait for a value to become available for the specified Future.\n\n\n\n\n\nwait(r::RemoteChannel, args...)\n\nWait for a value to become available on the specified RemoteChannel.\n\n\n\n\n\nwait([x])\n\nBlock the current task until some event occurs, depending on the type of the argument:\n\nChannel: Wait for a value to be appended to the channel.\nCondition: Wait for notify on a condition.\nProcess: Wait for a process or process chain to exit. The exitcode field of a process can be used to determine success or failure.\nTask: Wait for a Task to finish. If the task fails with an exception, the exception is propagated (re-thrown in the task that called wait).\nRawFD: Wait for changes on a file descriptor (see the FileWatching package).\n\nIf no argument is passed, the task blocks for an undefined period. A task can only be restarted by an explicit call to schedule or yieldto.\n\nOften wait is called within a while loop to ensure a waited-for condition is met before proceeding.\n\n\n\n\n\n"
+    "text": "wait([x])\n\nBlock the current task until some event occurs, depending on the type of the argument:\n\nChannel: Wait for a value to be appended to the channel.\nCondition: Wait for notify on a condition.\nProcess: Wait for a process or process chain to exit. The exitcode field of a process can be used to determine success or failure.\nTask: Wait for a Task to finish. If the task fails with an exception, the exception is propagated (re-thrown in the task that called wait).\nRawFD: Wait for changes on a file descriptor (see the FileWatching package).\n\nIf no argument is passed, the task blocks for an undefined period. A task can only be restarted by an explicit call to schedule or yieldto.\n\nOften wait is called within a while loop to ensure a waited-for condition is met before proceeding.\n\n\n\n\n\nwait(r::Future)\n\nWait for a value to become available for the specified Future.\n\n\n\n\n\nwait(r::RemoteChannel, args...)\n\nWait for a value to become available on the specified RemoteChannel.\n\n\n\n\n\n"
 },
 
 {
@@ -15517,7 +15517,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Interactive Utilities",
     "title": "InteractiveUtils.code_warntype",
     "category": "function",
-    "text": "code_warntype([io::IO], f, types; verbose_linetable=false)\n\nPrints lowered and type-inferred ASTs for the methods matching the given generic function and type signature to io which defaults to stdout. The ASTs are annotated in such a way as to cause \"non-leaf\" types to be emphasized (if color is available, displayed in red). This serves as a warning of potential type instability. Not all non-leaf types are particularly problematic for performance, so the results need to be used judiciously. In particular, unions containing either missing or nothing are displayed in yellow, since these are often intentional. If the verbose_linetable keyword is set, the linetable will be printed in verbose mode, showing all available information (rather than applying the usual heuristics). See @code_warntype for more information.\n\n\n\n\n\n"
+    "text": "code_warntype([io::IO], f, types; debuginfo=:default)\n\nPrints lowered and type-inferred ASTs for the methods matching the given generic function and type signature to io which defaults to stdout. The ASTs are annotated in such a way as to cause \"non-leaf\" types to be emphasized (if color is available, displayed in red). This serves as a warning of potential type instability. Not all non-leaf types are particularly problematic for performance, so the results need to be used judiciously. In particular, unions containing either missing or nothing are displayed in yellow, since these are often intentional.\n\nKeyword argument debuginfo may be one of source or none (default), to specify the verbosity of code comments.\n\nSee @code_warntype for more information.\n\n\n\n\n\n"
 },
 
 {
@@ -15533,7 +15533,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Interactive Utilities",
     "title": "InteractiveUtils.code_llvm",
     "category": "function",
-    "text": "code_llvm([io=stdout,], f, types)\n\nPrints the LLVM bitcodes generated for running the method matching the given generic function and type signature to io.\n\nIf the optimize keyword is unset, the code will be shown before LLVM optimizations. All metadata and dbg.* calls are removed from the printed bitcode. Set the raw keyword for the full IR. To dump the entire module that encapsulates the function, with debug info and metadata, set the dump_module keyword.\n\n\n\n\n\n"
+    "text": "code_llvm([io=stdout,], f, types; raw=false, dump_module=false, optimize=true, debuginfo=:default)\n\nPrints the LLVM bitcodes generated for running the method matching the given generic function and type signature to io.\n\nIf the optimize keyword is unset, the code will be shown before LLVM optimizations. All metadata and dbg.* calls are removed from the printed bitcode. For the full IR, set the raw keyword to true. To dump the entire module that encapsulates the function (with declarations), set the dump_module keyword to true. Keyword argument debuginfo may be one of source (default) or none, to specify the verbosity of code comments.\n\n\n\n\n\n"
 },
 
 {
@@ -15541,7 +15541,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Interactive Utilities",
     "title": "InteractiveUtils.@code_llvm",
     "category": "macro",
-    "text": "@code_llvm\n\nEvaluates the arguments to the function or macro call, determines their types, and calls code_llvm on the resulting expression. Set the optional keyword arguments raw, dump_module and optimize by putting them and their value before the function call, like this:\n\n@code_llvm raw=true dump_module=true f(x)\n@code_llvm optimize=false f(x)\n\noptimize controls whether additional optimizations, such as inlining, are also applied. raw makes all metadata and dbg.* calls visible. dump_module prints the entire module that encapsulates the function, with debug info and metadata.\n\n\n\n\n\n"
+    "text": "@code_llvm\n\nEvaluates the arguments to the function or macro call, determines their types, and calls code_llvm on the resulting expression. Set the optional keyword arguments raw, dump_module, debuginfo, optimize by putting them and their value before the function call, like this:\n\n@code_llvm raw=true dump_module=true debuginfo=:default f(x)\n@code_llvm optimize=false f(x)\n\noptimize controls whether additional optimizations, such as inlining, are also applied. raw makes all metadata and dbg.* calls visible. debuginfo may be one of full, source (default), none, to specify the verbosity of code comments. dump_module prints the entire module that encapsulates the function.\n\n\n\n\n\n"
 },
 
 {
@@ -15549,7 +15549,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Interactive Utilities",
     "title": "InteractiveUtils.code_native",
     "category": "function",
-    "text": "code_native([io=stdout,], f, types; syntax = :att)\n\nPrints the native assembly instructions generated for running the method matching the given generic function and type signature to io. Switch assembly syntax using syntax symbol parameter set to :att for AT&T syntax or :intel for Intel syntax.\n\n\n\n\n\n"
+    "text": "code_native([io=stdout,], f, types; syntax=:att, debuginfo=:default)\n\nPrints the native assembly instructions generated for running the method matching the given generic function and type signature to io. Switch assembly syntax using syntax symbol parameter set to :att for AT&T syntax or :intel for Intel syntax. Keyword argument debuginfo may be one of source (default) or none, to specify the verbosity of code comments.\n\n\n\n\n\n"
 },
 
 {
@@ -15557,7 +15557,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Interactive Utilities",
     "title": "InteractiveUtils.@code_native",
     "category": "macro",
-    "text": "@code_native\n\nEvaluates the arguments to the function or macro call, determines their types, and calls code_native on the resulting expression.\n\n\n\n\n\n"
+    "text": "@code_native\n\nEvaluates the arguments to the function or macro call, determines their types, and calls code_native on the resulting expression.\n\nSet the optional keyword argument debuginfo by putting it before the function call, like this:\n\n@code_native debuginfo=:default f(x)\n\ndebuginfo may be one of source (default) or none, to specify the verbosity of code comments.\n\n\n\n\n\n"
 },
 
 {
@@ -20589,7 +20589,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Sockets",
     "title": "Base.bind",
     "category": "function",
-    "text": "bind(socket::Union{UDPSocket, TCPSocket}, host::IPAddr, port::Integer; ipv6only=false, reuseaddr=false, kws...)\n\nBind socket to the given host:port. Note that 0.0.0.0 will listen on all devices.\n\nThe ipv6only parameter disables dual stack mode. If ipv6only=true, only an IPv6 stack is created.\nIf reuseaddr=true, multiple threads or processes can bind to the same address without error if they all set reuseaddr=true, but only the last to bind will receive any traffic.\n\n\n\n\n\nbind(chnl::Channel, task::Task)\n\nAssociate the lifetime of chnl with a task. Channel chnl is automatically closed when the task terminates. Any uncaught exception in the task is propagated to all waiters on chnl.\n\nThe chnl object can be explicitly closed independent of task termination. Terminating tasks have no effect on already closed Channel objects.\n\nWhen a channel is bound to multiple tasks, the first task to terminate will close the channel. When multiple channels are bound to the same task, termination of the task will close all of the bound channels.\n\nExamples\n\njulia> c = Channel(0);\n\njulia> task = @async foreach(i->put!(c, i), 1:4);\n\njulia> bind(c,task);\n\njulia> for i in c\n           @show i\n       end;\ni = 1\ni = 2\ni = 3\ni = 4\n\njulia> isopen(c)\nfalse\n\njulia> c = Channel(0);\n\njulia> task = @async (put!(c,1);error(\"foo\"));\n\njulia> bind(c,task);\n\njulia> take!(c)\n1\n\njulia> put!(c,1);\nERROR: foo\nStacktrace:\n[...]\n\n\n\n\n\n"
+    "text": "bind(chnl::Channel, task::Task)\n\nAssociate the lifetime of chnl with a task. Channel chnl is automatically closed when the task terminates. Any uncaught exception in the task is propagated to all waiters on chnl.\n\nThe chnl object can be explicitly closed independent of task termination. Terminating tasks have no effect on already closed Channel objects.\n\nWhen a channel is bound to multiple tasks, the first task to terminate will close the channel. When multiple channels are bound to the same task, termination of the task will close all of the bound channels.\n\nExamples\n\njulia> c = Channel(0);\n\njulia> task = @async foreach(i->put!(c, i), 1:4);\n\njulia> bind(c,task);\n\njulia> for i in c\n           @show i\n       end;\ni = 1\ni = 2\ni = 3\ni = 4\n\njulia> isopen(c)\nfalse\n\njulia> c = Channel(0);\n\njulia> task = @async (put!(c,1);error(\"foo\"));\n\njulia> bind(c,task);\n\njulia> take!(c)\n1\n\njulia> put!(c,1);\nERROR: foo\nStacktrace:\n[...]\n\n\n\n\n\nbind(socket::Union{UDPSocket, TCPSocket}, host::IPAddr, port::Integer; ipv6only=false, reuseaddr=false, kws...)\n\nBind socket to the given host:port. Note that 0.0.0.0 will listen on all devices.\n\nThe ipv6only parameter disables dual stack mode. If ipv6only=true, only an IPv6 stack is created.\nIf reuseaddr=true, multiple threads or processes can bind to the same address without error if they all set reuseaddr=true, but only the last to bind will receive any traffic.\n\n\n\n\n\n"
 },
 
 {
@@ -21045,7 +21045,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Unit Testing",
     "title": "Test.@inferred",
     "category": "macro",
-    "text": "@inferred f(x)\n\nTests that the call expression f(x) returns a value of the same type inferred by the compiler. It is useful to check for type stability.\n\nf(x) can be any call expression. Returns the result of f(x) if the types match, and an Error Result if it finds different types.\n\njulia> f(a, b, c) = b > 1 ? 1 : 1.0\nf (generic function with 1 method)\n\njulia> typeof(f(1, 2, 3))\nInt64\n\njulia> @code_warntype f(1, 2, 3)\nBody::UNION{FLOAT64, INT64}\n1 1 ─ %1 = (Base.slt_int)(1, b)::Bool\n  └──      goto #3 if not %1\n  2 ─      return 1\n  3 ─      return 1.0\n\njulia> @inferred f(1, 2, 3)\nERROR: return type Int64 does not match inferred return type Union{Float64, Int64}\nStacktrace:\n[...]\n\njulia> @inferred max(1, 2)\n2\n\n\n\n\n\n"
+    "text": "@inferred f(x)\n\nTests that the call expression f(x) returns a value of the same type inferred by the compiler. It is useful to check for type stability.\n\nf(x) can be any call expression. Returns the result of f(x) if the types match, and an Error Result if it finds different types.\n\njulia> f(a, b, c) = b > 1 ? 1 : 1.0\nf (generic function with 1 method)\n\njulia> typeof(f(1, 2, 3))\nInt64\n\njulia> @code_warntype f(1, 2, 3)\nBody::UNION{FLOAT64, INT64}\n1 ─ %1 = (Base.slt_int)(1, b)::Bool\n└──      goto #3 if not %1\n2 ─      return 1\n3 ─      return 1.0\n\njulia> @inferred f(1, 2, 3)\nERROR: return type Int64 does not match inferred return type Union{Float64, Int64}\nStacktrace:\n[...]\n\njulia> @inferred max(1, 2)\n2\n\n\n\n\n\n"
 },
 
 {
@@ -21301,7 +21301,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Reflection and introspection",
     "title": "Expansion and lowering",
     "category": "section",
-    "text": "As discussed in the Metaprogramming section, the macroexpand function gives the unquoted and interpolated expression (Expr) form for a given macro. To use macroexpand, quote the expression block itself (otherwise, the macro will be evaluated and the result will be passed instead!). For example:julia> macroexpand(@__MODULE__, :(@edit println(\"\")) )\n:((InteractiveUtils.edit)(println, (Base.typesof)(\"\")))The functions Base.Meta.show_sexpr and dump are used to display S-expr style views and depth-nested detail views for any expression.Finally, the Meta.lower function gives the lowered form of any expression and is of particular interest for understanding how language constructs map to primitive operations such as assignments, branches, and calls:julia> Meta.lower(@__MODULE__, :([1+2, sin(0.5)]) )\n:($(Expr(:thunk, CodeInfo(\n 1 ─ %1 = 1 + 2\n │   %2 = sin(0.5)\n │   %3 = (Base.vect)(%1, %2)\n └──      return %3\n))))"
+    "text": "As discussed in the Metaprogramming section, the macroexpand function gives the unquoted and interpolated expression (Expr) form for a given macro. To use macroexpand, quote the expression block itself (otherwise, the macro will be evaluated and the result will be passed instead!). For example:julia> macroexpand(@__MODULE__, :(@edit println(\"\")) )\n:((InteractiveUtils.edit)(println, (Base.typesof)(\"\")))The functions Base.Meta.show_sexpr and dump are used to display S-expr style views and depth-nested detail views for any expression.Finally, the Meta.lower function gives the lowered form of any expression and is of particular interest for understanding how language constructs map to primitive operations such as assignments, branches, and calls:julia> Meta.lower(@__MODULE__, :( [1+2, sin(0.5)] ))\n:($(Expr(:thunk, CodeInfo(\n1 ─ %1 = 1 + 2\n│   %2 = sin(0.5)\n│   %3 = (Base.vect)(%1, %2)\n└──      return %3\n))))"
 },
 
 {
@@ -21309,7 +21309,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Reflection and introspection",
     "title": "Intermediate and compiled representations",
     "category": "section",
-    "text": "Inspecting the lowered form for functions requires selection of the specific method to display, because generic functions may have many methods with different type signatures. For this purpose, method-specific code-lowering is available using code_lowered, and the type-inferred form is available using code_typed. code_warntype adds highlighting to the output of code_typed.Closer to the machine, the LLVM intermediate representation of a function may be printed using by code_llvm, and finally the compiled machine code is available using code_native (this will trigger JIT compilation/code generation for any function which has not previously been called).For convenience, there are macro versions of the above functions which take standard function calls and expand argument types automatically:julia> @code_llvm +(1,1)\n\n; Function Attrs: sspreq\ndefine i64 @\"julia_+_130862\"(i64, i64) #0 {\ntop:\n    %2 = add i64 %1, %0, !dbg !8\n    ret i64 %2, !dbg !8\n}See @code_lowered, @code_typed, @code_warntype, @code_llvm, and @code_native."
+    "text": "Inspecting the lowered form for functions requires selection of the specific method to display, because generic functions may have many methods with different type signatures. For this purpose, method-specific code-lowering is available using code_lowered, and the type-inferred form is available using code_typed. code_warntype adds highlighting to the output of code_typed.Closer to the machine, the LLVM intermediate representation of a function may be printed using by code_llvm, and finally the compiled machine code is available using code_native (this will trigger JIT compilation/code generation for any function which has not previously been called).For convenience, there are macro versions of the above functions which take standard function calls and expand argument types automatically:julia> @code_llvm +(1,1)\n\n;  @ int.jl:53 within `+\'\ndefine i64 @\"julia_+_130862\"(i64, i64) {\ntop:\n    %2 = add i64 %1, %0\n    ret i64 %2\n}See @code_lowered, @code_typed, @code_warntype, @code_llvm, and @code_native."
 },
 
 {
