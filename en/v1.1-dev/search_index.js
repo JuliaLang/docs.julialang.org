@@ -5,7 +5,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Home",
     "title": "Home",
     "category": "page",
-    "text": "io = IOBuffer()\nrelease = isempty(VERSION.prerelease)\nv = \"$(VERSION.major).$(VERSION.minor)\"\n!release && (v = v*\"-$(first(VERSION.prerelease))\")\nprint(io, \"\"\"\n    # Julia $(v) Documentation\n\n    Welcome to the documentation for Julia $(v).\n\n    \"\"\")\nif !release\n    print(io,\"\"\"\n        !!! warning \"Work in progress!\"\n            This documentation is for an unreleased, in-development, version of Julia.\n        \"\"\")\nend\nimport Markdown\nMarkdown.parse(String(take!(io)))Please read the release blog post for a general overview of the language and many of the changes since Julia v0.6. Note that version 0.7 was released alongside 1.0 to provide an upgrade path for packages and code that predates the 1.0 release. The only difference between 0.7 and 1.0 is the removal of deprecation warnings. For a complete list of all the changes since 0.6, see the release notes for version 0.7"
+    "text": "io = IOBuffer()\nrelease = isempty(VERSION.prerelease)\nv = \"$(VERSION.major).$(VERSION.minor)\"\n!release && (v = v*\"-$(first(VERSION.prerelease))\")\nprint(io, \"\"\"\n    # Julia $(v) Documentation\n\n    Welcome to the documentation for Julia $(v).\n\n    \"\"\")\nif !release\n    print(io,\"\"\"\n        !!! warning \"Work in progress!\"\n            This documentation is for an unreleased, in-development, version of Julia.\n        \"\"\")\nend\nimport Markdown\nMarkdown.parse(String(take!(io)))Please read the release notes to see what has changed since the last release."
 },
 
 {
@@ -14,6 +14,126 @@ var documenterSearchIndex = {"docs": [
     "title": "Introduction",
     "category": "section",
     "text": "Scientific computing has traditionally required the highest performance, yet domain experts have largely moved to slower dynamic languages for daily work. We believe there are many good reasons to prefer dynamic languages for these applications, and we do not expect their use to diminish. Fortunately, modern language design and compiler techniques make it possible to mostly eliminate the performance trade-off and provide a single environment productive enough for prototyping and efficient enough for deploying performance-intensive applications. The Julia programming language fills this role: it is a flexible dynamic language, appropriate for scientific and numerical computing, with performance comparable to traditional statically-typed languages.Because Julia\'s compiler is different from the interpreters used for languages like Python or R, you may find that Julia\'s performance is unintuitive at first. If you find that something is slow, we highly recommend reading through the Performance Tips section before trying anything else. Once you understand how Julia works, it\'s easy to write code that\'s nearly as fast as C.Julia features optional typing, multiple dispatch, and good performance, achieved using type inference and just-in-time (JIT) compilation, implemented using LLVM. It is multi-paradigm, combining features of imperative, functional, and object-oriented programming. Julia provides ease and expressiveness for high-level numerical computing, in the same way as languages such as R, MATLAB, and Python, but also supports general programming. To achieve this, Julia builds upon the lineage of mathematical programming languages, but also borrows much from popular dynamic languages, including Lisp, Perl, Python, Lua, and Ruby.The most significant departures of Julia from typical dynamic languages are:The core language imposes very little; Julia Base and the standard library is written in Julia itself, including primitive operations like integer arithmetic\nA rich language of types for constructing and describing objects, that can also optionally be used to make type declarations\nThe ability to define function behavior across many combinations of argument types via multiple dispatch\nAutomatic generation of efficient, specialized code for different argument types\nGood performance, approaching that of statically-compiled languages like CAlthough one sometimes speaks of dynamic languages as being \"typeless\", they are definitely not: every object, whether primitive or user-defined, has a type. The lack of type declarations in most dynamic languages, however, means that one cannot instruct the compiler about the types of values, and often cannot explicitly talk about types at all. In static languages, on the other hand, while one can – and usually must – annotate types for the compiler, types exist only at compile time and cannot be manipulated or expressed at run time. In Julia, types are themselves run-time objects, and can also be used to convey information to the compiler.While the casual programmer need not explicitly use types or multiple dispatch, they are the core unifying features of Julia: functions are defined on different combinations of argument types, and applied by dispatching to the most specific matching definition. This model is a good fit for mathematical programming, where it is unnatural for the first argument to \"own\" an operation as in traditional object-oriented dispatch. Operators are just functions with special notation – to extend addition to new user-defined data types, you define new methods for the + function. Existing code then seamlessly applies to the new data types.Partly because of run-time type inference (augmented by optional type annotations), and partly because of a strong focus on performance from the inception of the project, Julia\'s computational efficiency exceeds that of other dynamic languages, and even rivals that of statically-compiled languages. For large scale numerical problems, speed always has been, continues to be, and probably always will be crucial: the amount of data being processed has easily kept pace with Moore\'s Law over the past decades.Julia aims to create an unprecedented combination of ease-of-use, power, and efficiency in a single language. In addition to the above, some advantages of Julia over comparable systems include:Free and open source (MIT licensed)\nUser-defined types are as fast and compact as built-ins\nNo need to vectorize code for performance; devectorized code is fast\nDesigned for parallelism and distributed computation\nLightweight \"green\" threading (coroutines)\nUnobtrusive yet powerful type system\nElegant and extensible conversions and promotions for numeric and other types\nEfficient support for Unicode, including but not limited to UTF-8\nCall C functions directly (no wrappers or special APIs needed)\nPowerful shell-like capabilities for managing other processes\nLisp-like macros and other metaprogramming facilities"
+},
+
+{
+    "location": "NEWS/#",
+    "page": "Julia v1.1 Release Notes",
+    "title": "Julia v1.1 Release Notes",
+    "category": "page",
+    "text": ""
+},
+
+{
+    "location": "NEWS/#Julia-v1.1-Release-Notes-1",
+    "page": "Julia v1.1 Release Notes",
+    "title": "Julia v1.1 Release Notes",
+    "category": "section",
+    "text": ""
+},
+
+{
+    "location": "NEWS/#New-language-features-1",
+    "page": "Julia v1.1 Release Notes",
+    "title": "New language features",
+    "category": "section",
+    "text": "An exception stack is maintained on each task to make exception handling more robust and enable root cause analysis using catch_stack (#28878).\nThe experimental macro Base.@locals returns a dictionary of current local variable names and values (#29733)."
+},
+
+{
+    "location": "NEWS/#Language-changes-1",
+    "page": "Julia v1.1 Release Notes",
+    "title": "Language changes",
+    "category": "section",
+    "text": "Parser inputs ending with a comma are now consistently treated as incomplete. Previously they were sometimes parsed as tuples, depending on whitespace (#28506).\nSpaces were accidentally allowed in broadcast call syntax, e.g. f. (x). They are now disallowed, consistent with normal function call syntax (#29781).\nBig integer literals and command syntax (backticks) are now parsed with the name of the macro (@int128_str, @uint128_str, @big_str, @cmd) qualified to refer to the Core module (#29968).\nUsing the same name for both a local variable and a static parameter is now an error instead of a warning (#29429).\nMethod signatures such as f(::Type{T}, ::T) where {T <: X} and f(::Type{X}, ::Any) are now considered ambiguous. Previously a bug caused the first one to be considered more specific (#30160)."
+},
+
+{
+    "location": "NEWS/#Command-line-option-changes-1",
+    "page": "Julia v1.1 Release Notes",
+    "title": "Command-line option changes",
+    "category": "section",
+    "text": "When a script run in interactive mode (-i) throws an error, the REPL now starts after the error is displayed. Previously the REPL only started if the script completed without error (#21233)."
+},
+
+{
+    "location": "NEWS/#New-library-functions-1",
+    "page": "Julia v1.1 Release Notes",
+    "title": "New library functions",
+    "category": "section",
+    "text": "splitpath(p::String) function, which is the opposite of joinpath(parts...): it splits a filepath into its components (#28156).\nisnothing(::Any) function, to check whether something is a Nothing, returns a Bool (#29679).\ngetpid(::Process) method (#24064).\neachrow, eachcol and eachslice functions provide efficient iterators over slices of arrays (#29749).\nfieldtypes(T::Type) which return the declared types of the field in type T (#29600).\nuuid5 has been added to the UUIDs standard library (#28761).\nPredicate functions Sys.isfreebsd, Sys.isopenbsd, Sys.isnetbsd, and Sys.isdragonfly for detecting BSD systems have been added (#30249)."
+},
+
+{
+    "location": "NEWS/#Standard-library-changes-1",
+    "page": "Julia v1.1 Release Notes",
+    "title": "Standard library changes",
+    "category": "section",
+    "text": "CartesianIndices can now be constructed from two CartesianIndexes I and J with I:J (#29440).\nCartesianIndices support broadcasting arithmetic (+ and -) with a CartesianIndex (#29890).\ncopy! support for arrays, dicts, and sets has been moved to Base from the Future package (#29173).\nChannels now convert inserted values (like containers) instead of requiring types to match (#29092).\nrange can accept the stop value as a positional argument, e.g. range(1,10,step=2) (#28708).\ndiff now supports arrays of arbitrary dimensionality and can operate over any dimension (#29827).\nThe constructor BigFloat(::BigFloat) now respects the global precision setting and always returns a BigFloat with precision equal to precision(BigFloat) (#29127). The optional precision argument to override the global setting is now a keyword instead of positional argument (#29157).\nThe use of scientific notation when printing BigFloat values is now consistent with other floating point types (#29211).\nRegex now behave like a scalar when used in broadcasting (#29913).\nChar now behaves like a read-only 0-dimensional array (#29819).\nparse now allows strings representing integer 0 and 1 for type Bool (#29980).\nBase.tail now works on named tuples (#29595).\nThe process id is appended to malloc log files in order to track memory allocations of multiple processes (#29969).\nBase.julia_cmd now propagates the --inline=(yes|no) flag (#29858).\nBase.@kwdef can now be used for parametric structs, and for structs with supertypes (#29316).\nmerge(::NamedTuple, ::NamedTuple...) can now be used with more than 2 NamedTuples (#29259).\nFuture.copy! has been moved to Base (#29178).\nNew ncodeunits(c::Char) method as a fast equivalent to ncodeunits(string(c)) (#29153).\nNew sort!(::AbstractArray; dims) method that can sort the array along the dims dimension (#28902).\nrange now accept stop as a positional argument (#28708).\nparse(Bool, str) is now supported (#29997).\ncopyto!(::AbstractMatrix, ::UniformScaling) supports rectangular matrices now (#28790).\nIn put!(c::Channel{T}, v), v now gets converted to T as put! is being called (#29092).\ncurrent_project() now searches the parent directories of a Git repository for a Project.toml file. This also affects the behavior of the --project command line option when using the default --project=@. (#29108)."
+},
+
+{
+    "location": "NEWS/#Dates-1",
+    "page": "Julia v1.1 Release Notes",
+    "title": "Dates",
+    "category": "section",
+    "text": "New DateTime(::Date, ::Time) constructor (#29754).\nTimeZone now behave like a scalar when used in broadcasting (#30159)."
+},
+
+{
+    "location": "NEWS/#InteractiveUtils-1",
+    "page": "Julia v1.1 Release Notes",
+    "title": "InteractiveUtils",
+    "category": "section",
+    "text": "edit can now be called on a module to edit the file that defines it (#29636).\nAll compiler-reflection tools (i.e. the code_ class of functions and macros) now print accurate line number and inlining information in a common style, and take an optional parameter (debuginfo=:default) to control the verbosity of the metadata shown (#29893)."
+},
+
+{
+    "location": "NEWS/#LinearAlgebra-1",
+    "page": "Julia v1.1 Release Notes",
+    "title": "LinearAlgebra",
+    "category": "section",
+    "text": "isdiag and isposdef for Diagonal and UniformScaling (#29638).\nmul!, rmul! and lmul! methods for UniformScaling (#29506).\nSymmetric and Hermitian matrices now preserve the wrapper when scaled with a number (#29469).\nExponentiation operator ^ now supports raising a Irrational to an AbstractMatrix power (#29782)."
+},
+
+{
+    "location": "NEWS/#Random-1",
+    "page": "Julia v1.1 Release Notes",
+    "title": "Random",
+    "category": "section",
+    "text": "randperm and randcycle now use the type of their argument to determine the element type of the returned array (#29670).\nA new method rand(::Tuple) implements sampling from the values of a tuple (#25278).\nserialize and deserialize now accept a filename argument, like write and read (#30151)."
+},
+
+{
+    "location": "NEWS/#SparseArrays-1",
+    "page": "Julia v1.1 Release Notes",
+    "title": "SparseArrays",
+    "category": "section",
+    "text": "sprandn now supports specifying the output element type (#30083)."
+},
+
+{
+    "location": "NEWS/#Statistics-1",
+    "page": "Julia v1.1 Release Notes",
+    "title": "Statistics",
+    "category": "section",
+    "text": "mean and var now handles the empty case (#29033)."
+},
+
+{
+    "location": "NEWS/#External-dependencies-1",
+    "page": "Julia v1.1 Release Notes",
+    "title": "External dependencies",
+    "category": "section",
+    "text": "7zip (bundled with Julia on Windows) has been upgraded from version 16.04 to 18.05 (#30035).\nBusybox is no longer bundled with Julia on Windows (#30022).\nOpenBLAS has been upgraded from 0.3.2 to 0.3.3 (#29845).\nThe source code for Pkg is no longer included in JuliaLang/julia. Pkg is instead downloaded during the build process (#29615).\nLLVM has been upgraded to 6.0.1 and support for LLVM < 6.0 has been dropped (#28745, #28696)."
+},
+
+{
+    "location": "NEWS/#Deprecated-or-removed-1",
+    "page": "Julia v1.1 Release Notes",
+    "title": "Deprecated or removed",
+    "category": "section",
+    "text": "one(i::CartesianIndex) should be replaced with oneunit(i::CartesianIndex) (#29442).\nThe internal array Base.Grisu.DIGITS is deprecated; new code should use Base.Grisu.getbuf() to get an appropriate task-local buffer and pass it to grisu() instead (#29907).\nThe internal function Base._default_type(T) has been removed. Calls to it should be replaced with just the argument T (#29739).\npeakflops has been scheduled to move from InteractiveUtils to LinearAlgebra but is already now available as LinearAlgebra.peakflops (#29978)."
 },
 
 {
@@ -7005,7 +7125,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Collections and Data Structures",
     "title": "Base.pairs",
     "category": "function",
-    "text": "pairs(collection)\n\nReturn an iterator over key => value pairs for any collection that maps a set of keys to a set of values. This includes arrays, where the keys are the array indices.\n\n\n\n\n\npairs(IndexLinear(), A)\npairs(IndexCartesian(), A)\npairs(IndexStyle(A), A)\n\nAn iterator that accesses each element of the array A, returning i => x, where i is the index for the element and x = A[i]. Identical to pairs(A), except that the style of index can be selected. Also similar to enumerate(A), except i will be a valid index for A, while enumerate always counts from 1 regardless of the indices of A.\n\nSpecifying IndexLinear() ensures that i will be an integer; specifying IndexCartesian() ensures that i will be a CartesianIndex; specifying IndexStyle(A) chooses whichever has been defined as the native indexing style for array A.\n\nMutation of the bounds of the underlying array will invalidate this iterator.\n\nExamples\n\njulia> A = [\"a\" \"d\"; \"b\" \"e\"; \"c\" \"f\"];\n\njulia> for (index, value) in pairs(IndexStyle(A), A)\n           println(\"$index $value\")\n       end\n1 a\n2 b\n3 c\n4 d\n5 e\n6 f\n\njulia> S = view(A, 1:2, :);\n\njulia> for (index, value) in pairs(IndexStyle(S), S)\n           println(\"$index $value\")\n       end\nCartesianIndex(1, 1) a\nCartesianIndex(2, 1) b\nCartesianIndex(1, 2) d\nCartesianIndex(2, 2) e\n\nSee also: IndexStyle, axes.\n\n\n\n\n\n"
+    "text": "pairs(IndexLinear(), A)\npairs(IndexCartesian(), A)\npairs(IndexStyle(A), A)\n\nAn iterator that accesses each element of the array A, returning i => x, where i is the index for the element and x = A[i]. Identical to pairs(A), except that the style of index can be selected. Also similar to enumerate(A), except i will be a valid index for A, while enumerate always counts from 1 regardless of the indices of A.\n\nSpecifying IndexLinear() ensures that i will be an integer; specifying IndexCartesian() ensures that i will be a CartesianIndex; specifying IndexStyle(A) chooses whichever has been defined as the native indexing style for array A.\n\nMutation of the bounds of the underlying array will invalidate this iterator.\n\nExamples\n\njulia> A = [\"a\" \"d\"; \"b\" \"e\"; \"c\" \"f\"];\n\njulia> for (index, value) in pairs(IndexStyle(A), A)\n           println(\"$index $value\")\n       end\n1 a\n2 b\n3 c\n4 d\n5 e\n6 f\n\njulia> S = view(A, 1:2, :);\n\njulia> for (index, value) in pairs(IndexStyle(S), S)\n           println(\"$index $value\")\n       end\nCartesianIndex(1, 1) a\nCartesianIndex(2, 1) b\nCartesianIndex(1, 2) d\nCartesianIndex(2, 2) e\n\nSee also: IndexStyle, axes.\n\n\n\n\n\npairs(collection)\n\nReturn an iterator over key => value pairs for any collection that maps a set of keys to a set of values. This includes arrays, where the keys are the array indices.\n\n\n\n\n\n"
 },
 
 {
@@ -15013,7 +15133,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Distributed Computing",
     "title": "Base.wait",
     "category": "function",
-    "text": "wait(r::Future)\n\nWait for a value to become available for the specified Future.\n\n\n\n\n\nwait(r::RemoteChannel, args...)\n\nWait for a value to become available on the specified RemoteChannel.\n\n\n\n\n\nwait([x])\n\nBlock the current task until some event occurs, depending on the type of the argument:\n\nChannel: Wait for a value to be appended to the channel.\nCondition: Wait for notify on a condition.\nProcess: Wait for a process or process chain to exit. The exitcode field of a process can be used to determine success or failure.\nTask: Wait for a Task to finish. If the task fails with an exception, the exception is propagated (re-thrown in the task that called wait).\nRawFD: Wait for changes on a file descriptor (see the FileWatching package).\n\nIf no argument is passed, the task blocks for an undefined period. A task can only be restarted by an explicit call to schedule or yieldto.\n\nOften wait is called within a while loop to ensure a waited-for condition is met before proceeding.\n\n\n\n\n\n"
+    "text": "wait([x])\n\nBlock the current task until some event occurs, depending on the type of the argument:\n\nChannel: Wait for a value to be appended to the channel.\nCondition: Wait for notify on a condition.\nProcess: Wait for a process or process chain to exit. The exitcode field of a process can be used to determine success or failure.\nTask: Wait for a Task to finish. If the task fails with an exception, the exception is propagated (re-thrown in the task that called wait).\nRawFD: Wait for changes on a file descriptor (see the FileWatching package).\n\nIf no argument is passed, the task blocks for an undefined period. A task can only be restarted by an explicit call to schedule or yieldto.\n\nOften wait is called within a while loop to ensure a waited-for condition is met before proceeding.\n\n\n\n\n\nwait(r::Future)\n\nWait for a value to become available for the specified Future.\n\n\n\n\n\nwait(r::RemoteChannel, args...)\n\nWait for a value to become available on the specified RemoteChannel.\n\n\n\n\n\n"
 },
 
 {
@@ -20277,7 +20397,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Sockets",
     "title": "Base.bind",
     "category": "function",
-    "text": "bind(socket::Union{UDPSocket, TCPSocket}, host::IPAddr, port::Integer; ipv6only=false, reuseaddr=false, kws...)\n\nBind socket to the given host:port. Note that 0.0.0.0 will listen on all devices.\n\nThe ipv6only parameter disables dual stack mode. If ipv6only=true, only an IPv6 stack is created.\nIf reuseaddr=true, multiple threads or processes can bind to the same address without error if they all set reuseaddr=true, but only the last to bind will receive any traffic.\n\n\n\n\n\nbind(chnl::Channel, task::Task)\n\nAssociate the lifetime of chnl with a task. Channel chnl is automatically closed when the task terminates. Any uncaught exception in the task is propagated to all waiters on chnl.\n\nThe chnl object can be explicitly closed independent of task termination. Terminating tasks have no effect on already closed Channel objects.\n\nWhen a channel is bound to multiple tasks, the first task to terminate will close the channel. When multiple channels are bound to the same task, termination of the task will close all of the bound channels.\n\nExamples\n\njulia> c = Channel(0);\n\njulia> task = @async foreach(i->put!(c, i), 1:4);\n\njulia> bind(c,task);\n\njulia> for i in c\n           @show i\n       end;\ni = 1\ni = 2\ni = 3\ni = 4\n\njulia> isopen(c)\nfalse\n\njulia> c = Channel(0);\n\njulia> task = @async (put!(c,1);error(\"foo\"));\n\njulia> bind(c,task);\n\njulia> take!(c)\n1\n\njulia> put!(c,1);\nERROR: foo\nStacktrace:\n[...]\n\n\n\n\n\n"
+    "text": "bind(chnl::Channel, task::Task)\n\nAssociate the lifetime of chnl with a task. Channel chnl is automatically closed when the task terminates. Any uncaught exception in the task is propagated to all waiters on chnl.\n\nThe chnl object can be explicitly closed independent of task termination. Terminating tasks have no effect on already closed Channel objects.\n\nWhen a channel is bound to multiple tasks, the first task to terminate will close the channel. When multiple channels are bound to the same task, termination of the task will close all of the bound channels.\n\nExamples\n\njulia> c = Channel(0);\n\njulia> task = @async foreach(i->put!(c, i), 1:4);\n\njulia> bind(c,task);\n\njulia> for i in c\n           @show i\n       end;\ni = 1\ni = 2\ni = 3\ni = 4\n\njulia> isopen(c)\nfalse\n\njulia> c = Channel(0);\n\njulia> task = @async (put!(c,1);error(\"foo\"));\n\njulia> bind(c,task);\n\njulia> take!(c)\n1\n\njulia> put!(c,1);\nERROR: foo\nStacktrace:\n[...]\n\n\n\n\n\nbind(socket::Union{UDPSocket, TCPSocket}, host::IPAddr, port::Integer; ipv6only=false, reuseaddr=false, kws...)\n\nBind socket to the given host:port. Note that 0.0.0.0 will listen on all devices.\n\nThe ipv6only parameter disables dual stack mode. If ipv6only=true, only an IPv6 stack is created.\nIf reuseaddr=true, multiple threads or processes can bind to the same address without error if they all set reuseaddr=true, but only the last to bind will receive any traffic.\n\n\n\n\n\n"
 },
 
 {
