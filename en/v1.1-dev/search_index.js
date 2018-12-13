@@ -18,122 +18,82 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "NEWS/#",
-    "page": "Julia v1.1 Release Notes",
-    "title": "Julia v1.1 Release Notes",
+    "page": "Julia v1.2 Release Notes",
+    "title": "Julia v1.2 Release Notes",
     "category": "page",
     "text": ""
 },
 
 {
-    "location": "NEWS/#Julia-v1.1-Release-Notes-1",
-    "page": "Julia v1.1 Release Notes",
-    "title": "Julia v1.1 Release Notes",
+    "location": "NEWS/#Julia-v1.2-Release-Notes-1",
+    "page": "Julia v1.2 Release Notes",
+    "title": "Julia v1.2 Release Notes",
     "category": "section",
     "text": ""
 },
 
 {
     "location": "NEWS/#New-language-features-1",
-    "page": "Julia v1.1 Release Notes",
+    "page": "Julia v1.2 Release Notes",
     "title": "New language features",
     "category": "section",
-    "text": "An exception stack is maintained on each task to make exception handling more robust and enable root cause analysis. The stack may be accessed using the experimental function Base.catch_stack (#28878).\nThe experimental macro Base.@locals returns a dictionary of current local variable names and values (#29733).\nBinary ~ can now be dotted, as in x .~ y (#30341)."
+    "text": ""
 },
 
 {
     "location": "NEWS/#Language-changes-1",
-    "page": "Julia v1.1 Release Notes",
+    "page": "Julia v1.2 Release Notes",
     "title": "Language changes",
     "category": "section",
-    "text": "Parser inputs ending with a comma are now consistently treated as incomplete. Previously they were sometimes parsed as tuples, depending on whitespace (#28506).\nSpaces were accidentally allowed in broadcast call syntax, e.g. f. (x). They are now disallowed, consistent with normal function call syntax (#29781).\nBig integer literals and command syntax (backticks) are now parsed with the name of the macro (@int128_str, @uint128_str, @big_str, @cmd) qualified to refer to the Core module (#29968).\nUsing the same name for both a local variable and a static parameter is now an error instead of a warning (#29429).\nfindall(in(b), a) now returns a CartesianIndex when a is a matrix or a higher-dimensional array, for consistency with other findall methods. Use LinearIndices(a)[findall(in(b), a)] to get the old behavior, or CartesianIndices(a)[findall(in(b), a)] to get the new behavior on previous Julia versions (#30226).\nfindmin(::BitArray) and findmax(::BitArray) now return a CartesianIndex when a is a matrix or a higher-dimensional array, for consistency with other array types. Use LinearIndices(a)[findmin(a)[2]] to get the old behavior, or CartesianIndices(a)[findmin(a)[2]] to get the new behavior on previous Julia versions (#30102).\nMethod signatures such as f(::Type{T}, ::T) where {T <: X} and f(::Type{X}, ::Any) are now considered ambiguous. Previously a bug caused the first one to be considered more specific in some cases (#30160)."
+    "text": ""
 },
 
 {
     "location": "NEWS/#Command-line-option-changes-1",
-    "page": "Julia v1.1 Release Notes",
+    "page": "Julia v1.2 Release Notes",
     "title": "Command-line option changes",
     "category": "section",
-    "text": "When a script run in interactive mode (-i) throws an error, the REPL now starts after the error is displayed. Previously the REPL only started if the script completed without error (#21233)."
+    "text": ""
 },
 
 {
     "location": "NEWS/#New-library-functions-1",
-    "page": "Julia v1.1 Release Notes",
+    "page": "Julia v1.2 Release Notes",
     "title": "New library functions",
     "category": "section",
-    "text": "splitpath(p::String) function, which is the opposite of joinpath(parts...): it splits a filepath into its components (#28156).\nisnothing(::Any) predicate, to check whether the argument is nothing. (#29679).\ngetpid(::Process) method (#24064).\neachrow, eachcol and eachslice functions provide efficient iterators over slices of arrays (#29749).\nfieldtypes(T::Type) which returns the declared types of the field in type T (#29600).\nuuid5 has been added to the UUIDs standard library (#28761).\nPredicates Sys.isfreebsd, Sys.isopenbsd, Sys.isnetbsd, and Sys.isdragonfly for detecting BSD systems have been added (#30249).\nInternal Base.disable_library_threading that sets libraries to use one thread. It executes function hooks that have been registered with Base.at_disable_library_threading (#30004)."
+    "text": ""
 },
 
 {
     "location": "NEWS/#Standard-library-changes-1",
-    "page": "Julia v1.1 Release Notes",
+    "page": "Julia v1.2 Release Notes",
     "title": "Standard library changes",
     "category": "section",
-    "text": "CartesianIndices can now be constructed from two CartesianIndexes I and J with I:J (#29440).\nCartesianIndices support broadcasting arithmetic (+ and -) with a CartesianIndex (#29890).\ncopy! support for arrays, dicts, and sets has been moved to Base from the Future package (#29173).\nChannels now convert inserted values (like containers) instead of requiring types to match (#29092).\nrange can accept the stop value as a positional argument, e.g. range(1,10,step=2) (#28708).\ndiff now supports arrays of arbitrary dimensionality and can operate over any dimension (#29827).\nThe constructor BigFloat(::BigFloat) now respects the global precision setting and always returns a BigFloat with precision equal to precision(BigFloat) (#29127). The optional precision argument to override the global setting is now a keyword instead of positional argument (#29157).\nThe use of scientific notation when printing BigFloat values is now consistent with other floating point types (#29211).\nRegex now behaves like a scalar when used in broadcasting (#29913).\nChar now behaves like a read-only 0-dimensional array (#29819).\nparse now allows strings representing integer 0 and 1 for type Bool (#29980).\nBase.tail now works on named tuples (#29595).\nThe process id is appended to malloc log files in order to track memory allocations of multiple processes (#29969).\nBase.julia_cmd now propagates the --inline=(yes|no) flag (#29858).\nBase.@kwdef can now be used for parametric structs, and for structs with supertypes (#29316).\nmerge(::NamedTuple, ::NamedTuple...) can now be used with more than 2 NamedTuples (#29259).\nNew ncodeunits(c::Char) method as a fast equivalent to ncodeunits(string(c)) (#29153).\nNew sort!(::AbstractArray; dims) method that can sort the array along the dims dimension (#28902).\nrange now accepts stop as a positional argument (#28708).\nget(A::AbstractArray, (), default) now returns A[] instead of an empty array (#30270).\nparse(Bool, str) is now supported (#29997).\ncopyto!(::AbstractMatrix, ::UniformScaling) now supports rectangular matrices (#28790).\ncurrent_project() now searches the parent directories of a Git repository for a Project.toml file. This also affects the behavior of the --project command line option when using the default --project=@. (#29108).\nThe spawn API is now more flexible and supports taking IOBuffer directly as an I/O stream, converting to a system pipe as needed (#30278)."
-},
-
-{
-    "location": "NEWS/#Dates-1",
-    "page": "Julia v1.1 Release Notes",
-    "title": "Dates",
-    "category": "section",
-    "text": "New DateTime(::Date, ::Time) constructor (#29754).\nTimeZone now behaves like a scalar when used in broadcasting (#30159)."
-},
-
-{
-    "location": "NEWS/#InteractiveUtils-1",
-    "page": "Julia v1.1 Release Notes",
-    "title": "InteractiveUtils",
-    "category": "section",
-    "text": "edit can now be called on a module to edit the file that defines it (#29636).\nAll compiler-reflection tools (i.e. the code_ class of functions and macros) now print accurate line number and inlining information in a common style, and take an optional parameter (debuginfo=:default) to control the verbosity of the metadata shown (#29893)."
+    "text": ""
 },
 
 {
     "location": "NEWS/#LinearAlgebra-1",
-    "page": "Julia v1.1 Release Notes",
+    "page": "Julia v1.2 Release Notes",
     "title": "LinearAlgebra",
     "category": "section",
-    "text": "isdiag and isposdef for Diagonal and UniformScaling (#29638).\nmul!, rmul! and lmul! methods for UniformScaling (#29506).\nSymmetric and Hermitian matrices now preserve the wrapper when scaled with a number (#29469).\nExponentiation operator ^ now supports raising an Irrational to an AbstractMatrix power (#29782).\nAdded keyword arguments rtol, atol to pinv, nullspace and rank (#29998, #29926)."
-},
-
-{
-    "location": "NEWS/#Random-1",
-    "page": "Julia v1.1 Release Notes",
-    "title": "Random",
-    "category": "section",
-    "text": "randperm and randcycle now use the type of their argument to determine the element type of the returned array (#29670).\nA new method rand(::Tuple) implements sampling from the values of a tuple (#25278).\nserialize and deserialize now accept a filename argument, like write and read (#30151)."
-},
-
-{
-    "location": "NEWS/#SparseArrays-1",
-    "page": "Julia v1.1 Release Notes",
-    "title": "SparseArrays",
-    "category": "section",
-    "text": "sprandn now supports specifying the output element type (#30083)."
-},
-
-{
-    "location": "NEWS/#Statistics-1",
-    "page": "Julia v1.1 Release Notes",
-    "title": "Statistics",
-    "category": "section",
-    "text": "mean and var now handle more kinds of empty inputs (#29033)."
+    "text": "Added keyword arguments rtol, atol to pinv and nullspace (#29998)."
 },
 
 {
     "location": "NEWS/#External-dependencies-1",
-    "page": "Julia v1.1 Release Notes",
+    "page": "Julia v1.2 Release Notes",
     "title": "External dependencies",
     "category": "section",
-    "text": "7zip (bundled with Julia on Windows) has been upgraded from version 16.04 to 18.05 (#30035).\nBusybox is no longer bundled with Julia on Windows (#30022).\nOpenBLAS has been upgraded from 0.3.2 to 0.3.3 (#29845).\nThe source code for Pkg is no longer included in JuliaLang/julia. Pkg is instead downloaded during the build process (#29615).\nLLVM has been upgraded to 6.0.1 and support for LLVM < 6.0 has been dropped (#28745, #28696).\nPkg has been upgraded to version 1.1 (#30342)."
+    "text": ""
 },
 
 {
     "location": "NEWS/#Deprecated-or-removed-1",
-    "page": "Julia v1.1 Release Notes",
+    "page": "Julia v1.2 Release Notes",
     "title": "Deprecated or removed",
     "category": "section",
-    "text": "one(i::CartesianIndex) should be replaced with oneunit(i::CartesianIndex) (#29442).\nThe internal array Base.Grisu.DIGITS is deprecated; new code should use Base.Grisu.getbuf() to get an appropriate task-local buffer and pass it to grisu() instead (#29907).\nThe internal function Base._default_type(T) has been removed. Calls to it should be replaced with just the argument T (#29739).\npeakflops has been scheduled to move from InteractiveUtils to LinearAlgebra but is already now available as LinearAlgebra.peakflops (#29978)."
+    "text": ""
 },
 
 {
@@ -2773,7 +2733,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Environment Variables",
     "title": "Environment Variables",
     "category": "section",
-    "text": "Julia may be configured with a number of environment variables, either in the usual way of the operating system, or in a portable way from within Julia. Suppose you want to set the environment variable JULIA_EDITOR to vim, then either type ENV[\"JULIA_EDITOR\"] = \"vim\" for instance in the REPL to make this change on a case by case basis, or add the same to the user configuration file ~/.julia/config/startup.jl in the user\'s home directory to have a permanent effect. The current value of the same environment variable is determined by evaluating ENV[\"JULIA_EDITOR\"].The environment variables that Julia uses generally start with JULIA. If InteractiveUtils.versioninfo is called with verbose equal to true, then the output will list defined environment variables relevant for Julia, including those for which JULIA appears in the name.note: Note\nSome variables, such as JULIA_NUM_THREADS and JULIA_PROJECT need to be set before Julia starts, therefore adding these to ~/.julia/config/startup.jl is too late in the startup process. These must either be set manually before launching Julia through bash with export JULIA_NUM_THREADS=4 etc. or added to -/.bashrc and/or ~/.bash_profile to achieve persistence."
+    "text": "Julia can be configured with a number of environment variables, set either in the usual way for each operating system, or in a portable way from within Julia. Supposing that you want to set the environment variable JULIA_EDITOR to vim, you can type ENV[\"JULIA_EDITOR\"] = \"vim\" (for instance, in the REPL) to make this change on a case by case basis, or add the same to the user configuration file ~/.julia/config/startup.jl in the user\'s home directory to have a permanent effect. The current value of the same environment variable can be determined by evaluating ENV[\"JULIA_EDITOR\"].The environment variables that Julia uses generally start with JULIA. If InteractiveUtils.versioninfo is called with the keyword verbose=true, then the output will list defined environment variables relevant for Julia, including those for which JULIA appears in the name.note: Note\nSome variables, such as JULIA_NUM_THREADS and JULIA_PROJECT, need to be set before Julia starts, therefore adding these to ~/.julia/config/startup.jl is too late in the startup process. In Bash, environment variables can either be set manually by running, e.g., export JULIA_NUM_THREADS=4 before starting Julia, or by adding the same command to -/.bashrc or ~/.bash_profile to set the variable each time Bash is started."
 },
 
 {
@@ -2797,7 +2757,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Environment Variables",
     "title": "JULIA_PROJECT",
     "category": "section",
-    "text": "A directory path that points to the current Julia project. Setting this environment variable has the same effect as specifying the --project start-up option, but --project has higher precedence.  If the variable is set to @., Julia tries to find a project directory that contains Project.toml or JuliaProject.toml file from the current directory and its parents.  See also the chapter on Code Loading.note: Note\nJULIA_PROJECT must be defined before starting julia; defining it in startup.jl is too late in the startup process."
+    "text": "A directory path that points to the current Julia project. Setting this environment variable has the same effect as specifying the --project start-up option, but --project has higher precedence.  If the variable is set to @. then Julia tries to find a project directory that contains Project.toml or JuliaProject.toml file from the current directory and its parents.  See also the chapter on Code Loading.note: Note\nJULIA_PROJECT must be defined before starting julia; defining it in startup.jl is too late in the startup process."
 },
 
 {
@@ -2805,7 +2765,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Environment Variables",
     "title": "JULIA_LOAD_PATH",
     "category": "section",
-    "text": "A separated list of absolute paths that are to be appended to the variable LOAD_PATH. (In Unix-like systems, the path separator is :; in Windows systems, the path separator is ;.) The LOAD_PATH variable is where Base.require and Base.load_in_path() look for code; it defaults to the absolute path $JULIA_HOME/../share/julia/stdlib/v$(VERSION.major).$(VERSION.minor) so that, e.g., version 0.7 of Julia on a Linux system with a Julia executable at /bin/julia will have a default LOAD_PATH of /share/julia/stdlib/v0.7."
+    "text": "A separated list of absolute paths that are to be appended to the variable LOAD_PATH. (In Unix-like systems, : is the path separator; in Windows systems, ; is the path separator.) The LOAD_PATH variable is where Base.require and Base.load_in_path() look for code; it defaults to the absolute path $JULIA_HOME/../share/julia/stdlib/v$(VERSION.major).$(VERSION.minor) so that, e.g., version 0.7 of Julia on a Linux system with a Julia executable at /bin/julia will have a default LOAD_PATH of /share/julia/stdlib/v0.7."
 },
 
 {
@@ -2901,7 +2861,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Environment Variables",
     "title": "REPL formatting",
     "category": "section",
-    "text": "Environment variables that determine how REPL output should be formatted at the terminal. Generally, these variables should be set to ANSI terminal escape sequences. Julia provides a high-level interface with much of the same functionality: see the section on The Julia REPL."
+    "text": "Environment variables that determine how REPL output should be formatted at the terminal. Generally, these variables should be set to ANSI terminal escape sequences. Julia provides a high-level interface with much of the same functionality; see the section on The Julia REPL."
 },
 
 {
@@ -2997,7 +2957,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Environment Variables",
     "title": "ENABLE_JITPROFILING",
     "category": "section",
-    "text": "If set to anything besides 0, then the compiler will create and register an event listener for just-in-time (JIT) profiling.note: Note\nThis environment variable only has an effect if Julia was compiled with JIT profiling support, using eitherIntel\'s VTune™ Amplifier   (USE_INTEL_JITEVENTS set to 1 in the build configuration), or\nOProfile (USE_OPROFILE_JITEVENTS set to 1   in the build configuration)."
+    "text": "If set to anything besides 0, then the compiler will create and register an event listener for just-in-time (JIT) profiling.note: Note\nThis environment variable only has an effect if Julia was compiled with JIT profiling support, using eitherIntel\'s VTune™ Amplifier (USE_INTEL_JITEVENTS set to 1 in the build configuration), or\nOProfile (USE_OPROFILE_JITEVENTS set to 1 in the build configuration)."
 },
 
 {
@@ -7453,7 +7413,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Mathematics",
     "title": "Base.:+",
     "category": "function",
-    "text": "+(x, y...)\n\nAddition operator. x+y+z+... calls this function with all arguments, i.e. +(x, y, z, ...).\n\nExamples\n\njulia> 1 + 20 + 4\n25\n\njulia> +(1, 20, 4)\n25\n\n\n\n\n\ndt::Date + t::Time -> DateTime\n\nThe addition of a Date with a Time produces a DateTime. The hour, minute, second, and millisecond parts of the Time are used along with the year, month, and day of the Date to create the new DateTime. Non-zero microseconds or nanoseconds in the Time type will result in an InexactError being thrown.\n\n\n\n\n\n"
+    "text": "dt::Date + t::Time -> DateTime\n\nThe addition of a Date with a Time produces a DateTime. The hour, minute, second, and millisecond parts of the Time are used along with the year, month, and day of the Date to create the new DateTime. Non-zero microseconds or nanoseconds in the Time type will result in an InexactError being thrown.\n\n\n\n\n\n+(x, y...)\n\nAddition operator. x+y+z+... calls this function with all arguments, i.e. +(x, y, z, ...).\n\nExamples\n\njulia> 1 + 20 + 4\n25\n\njulia> +(1, 20, 4)\n25\n\n\n\n\n\n"
 },
 
 {
@@ -7677,7 +7637,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Mathematics",
     "title": "Base.::",
     "category": "function",
-    "text": "(:)(I::CartesianIndex, J::CartesianIndex)\n\nConstruct CartesianIndices from two CartesianIndex.\n\ncompat: Julia 1.1\nThis method requires at least Julia 1.1.\n\nExamples\n\njulia> I = CartesianIndex(2,1);\n\njulia> J = CartesianIndex(3,3);\n\njulia> I:J\n2×3 CartesianIndices{2,Tuple{UnitRange{Int64},UnitRange{Int64}}}:\n CartesianIndex(2, 1)  CartesianIndex(2, 2)  CartesianIndex(2, 3)\n CartesianIndex(3, 1)  CartesianIndex(3, 2)  CartesianIndex(3, 3)\n\n\n\n\n\n(:)(start, [step], stop)\n\nRange operator. a:b constructs a range from a to b with a step size of 1 (a UnitRange) , and a:s:b is similar but uses a step size of s (a StepRange).\n\n: is also used in indexing to select whole dimensions.\n\n\n\n\n\n"
+    "text": "(:)(start, [step], stop)\n\nRange operator. a:b constructs a range from a to b with a step size of 1 (a UnitRange) , and a:s:b is similar but uses a step size of s (a StepRange).\n\n: is also used in indexing to select whole dimensions.\n\n\n\n\n\n(:)(I::CartesianIndex, J::CartesianIndex)\n\nConstruct CartesianIndices from two CartesianIndex.\n\ncompat: Julia 1.1\nThis method requires at least Julia 1.1.\n\nExamples\n\njulia> I = CartesianIndex(2,1);\n\njulia> J = CartesianIndex(3,3);\n\njulia> I:J\n2×3 CartesianIndices{2,Tuple{UnitRange{Int64},UnitRange{Int64}}}:\n CartesianIndex(2, 1)  CartesianIndex(2, 2)  CartesianIndex(2, 3)\n CartesianIndex(3, 1)  CartesianIndex(3, 2)  CartesianIndex(3, 3)\n\n\n\n\n\n"
 },
 
 {
@@ -13413,7 +13373,7 @@ var documenterSearchIndex = {"docs": [
     "page": "C Interface",
     "title": "Base.copyto!",
     "category": "function",
-    "text": "copyto!(dest::AbstractMatrix, src::UniformScaling)\n\nCopies a UniformScaling onto a matrix.\n\ncompat: Julia 1.1\nIn Julia 1.0 this method only supported a square destination matrix. Julia 1.1. added support for a rectangular matrix.\n\n\n\n\n\ncopyto!(dest, do, src, so, N)\n\nCopy N elements from collection src starting at offset so, to array dest starting at offset do. Return dest.\n\n\n\n\n\ncopyto!(dest::AbstractArray, src) -> dest\n\nCopy all elements from collection src to array dest, whose length must be greater than or equal to the length n of src. The first n elements of dest are overwritten, the other elements are left untouched.\n\nExamples\n\njulia> x = [1., 0., 3., 0., 5.];\n\njulia> y = zeros(7);\n\njulia> copyto!(y, x);\n\njulia> y\n7-element Array{Float64,1}:\n 1.0\n 0.0\n 3.0\n 0.0\n 5.0\n 0.0\n 0.0\n\n\n\n\n\ncopyto!(dest, Rdest::CartesianIndices, src, Rsrc::CartesianIndices) -> dest\n\nCopy the block of src in the range of Rsrc to the block of dest in the range of Rdest. The sizes of the two regions must match.\n\n\n\n\n\n"
+    "text": "copyto!(dest, do, src, so, N)\n\nCopy N elements from collection src starting at offset so, to array dest starting at offset do. Return dest.\n\n\n\n\n\ncopyto!(dest::AbstractArray, src) -> dest\n\nCopy all elements from collection src to array dest, whose length must be greater than or equal to the length n of src. The first n elements of dest are overwritten, the other elements are left untouched.\n\nExamples\n\njulia> x = [1., 0., 3., 0., 5.];\n\njulia> y = zeros(7);\n\njulia> copyto!(y, x);\n\njulia> y\n7-element Array{Float64,1}:\n 1.0\n 0.0\n 3.0\n 0.0\n 5.0\n 0.0\n 0.0\n\n\n\n\n\ncopyto!(dest, Rdest::CartesianIndices, src, Rsrc::CartesianIndices) -> dest\n\nCopy the block of src in the range of Rsrc to the block of dest in the range of Rdest. The sizes of the two regions must match.\n\n\n\n\n\ncopyto!(dest::AbstractMatrix, src::UniformScaling)\n\nCopies a UniformScaling onto a matrix.\n\ncompat: Julia 1.1\nIn Julia 1.0 this method only supported a square destination matrix. Julia 1.1. added support for a rectangular matrix.\n\n\n\n\n\n"
 },
 
 {
@@ -20405,7 +20365,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Sockets",
     "title": "Base.bind",
     "category": "function",
-    "text": "bind(socket::Union{UDPSocket, TCPSocket}, host::IPAddr, port::Integer; ipv6only=false, reuseaddr=false, kws...)\n\nBind socket to the given host:port. Note that 0.0.0.0 will listen on all devices.\n\nThe ipv6only parameter disables dual stack mode. If ipv6only=true, only an IPv6 stack is created.\nIf reuseaddr=true, multiple threads or processes can bind to the same address without error if they all set reuseaddr=true, but only the last to bind will receive any traffic.\n\n\n\n\n\nbind(chnl::Channel, task::Task)\n\nAssociate the lifetime of chnl with a task. Channel chnl is automatically closed when the task terminates. Any uncaught exception in the task is propagated to all waiters on chnl.\n\nThe chnl object can be explicitly closed independent of task termination. Terminating tasks have no effect on already closed Channel objects.\n\nWhen a channel is bound to multiple tasks, the first task to terminate will close the channel. When multiple channels are bound to the same task, termination of the task will close all of the bound channels.\n\nExamples\n\njulia> c = Channel(0);\n\njulia> task = @async foreach(i->put!(c, i), 1:4);\n\njulia> bind(c,task);\n\njulia> for i in c\n           @show i\n       end;\ni = 1\ni = 2\ni = 3\ni = 4\n\njulia> isopen(c)\nfalse\n\njulia> c = Channel(0);\n\njulia> task = @async (put!(c,1);error(\"foo\"));\n\njulia> bind(c,task);\n\njulia> take!(c)\n1\n\njulia> put!(c,1);\nERROR: foo\nStacktrace:\n[...]\n\n\n\n\n\n"
+    "text": "bind(chnl::Channel, task::Task)\n\nAssociate the lifetime of chnl with a task. Channel chnl is automatically closed when the task terminates. Any uncaught exception in the task is propagated to all waiters on chnl.\n\nThe chnl object can be explicitly closed independent of task termination. Terminating tasks have no effect on already closed Channel objects.\n\nWhen a channel is bound to multiple tasks, the first task to terminate will close the channel. When multiple channels are bound to the same task, termination of the task will close all of the bound channels.\n\nExamples\n\njulia> c = Channel(0);\n\njulia> task = @async foreach(i->put!(c, i), 1:4);\n\njulia> bind(c,task);\n\njulia> for i in c\n           @show i\n       end;\ni = 1\ni = 2\ni = 3\ni = 4\n\njulia> isopen(c)\nfalse\n\njulia> c = Channel(0);\n\njulia> task = @async (put!(c,1);error(\"foo\"));\n\njulia> bind(c,task);\n\njulia> take!(c)\n1\n\njulia> put!(c,1);\nERROR: foo\nStacktrace:\n[...]\n\n\n\n\n\nbind(socket::Union{UDPSocket, TCPSocket}, host::IPAddr, port::Integer; ipv6only=false, reuseaddr=false, kws...)\n\nBind socket to the given host:port. Note that 0.0.0.0 will listen on all devices.\n\nThe ipv6only parameter disables dual stack mode. If ipv6only=true, only an IPv6 stack is created.\nIf reuseaddr=true, multiple threads or processes can bind to the same address without error if they all set reuseaddr=true, but only the last to bind will receive any traffic.\n\n\n\n\n\n"
 },
 
 {
