@@ -36,6 +36,34 @@ function download_nightly()
     return julia_exec, commit
 end
 
+function makedocs(julia_exec)
+    @sync begin
+        builder = @async begin
+            withenv("TRAVIS_REPO_SLUG" => nothing, # workaround Documenter bugs and julia#26314
+                    "BUILDROOT" => nothing) do
+                run(`make -C $(JULIA_SOURCE)/doc pdf texplatform=docker JULIA_EXECUTABLE=$(julia_exec)`)
+            end
+        end
+        @async begin
+            while !istaskdone(builder)
+                sleep(60)
+                @info "building pdf ..."
+            end
+        end
+    end
+end
+
+function copydocs(path)
+    output = "$(JULIA_SOURCE)/doc/_build/pdf/en"
+    for f in readdir(output)
+        if startswith(f, "TheJuliaLanguage") && endswith(f, ".pdf")
+            cp("$(output)/$(f)", path; force=true)
+            @info "finished, output file copied to $(path)."
+            break
+        end
+    end
+end
+
 function build_release_pdf(v::VersionNumber)
     x, y, z = v.major, v.minor, v.patch
     @info "building PDF for Julia v$(x).$(y).$(z)."
@@ -53,24 +81,15 @@ function build_release_pdf(v::VersionNumber)
     @info "downloading release tarball."
     julia_exec = download_release(v)
 
-    # checkout relevant tag and build the PDF
+    # checkout relevant tag and clean repo
     run(`git -C $(JULIA_SOURCE) checkout v$(x).$(y).$(z)`)
     run(`git -C $(JULIA_SOURCE) clean -fdx`)
-    withenv("DOCUMENTER_VERBOSE" => "true",
-            "TRAVIS_REPO_SLUG" => nothing, # workaround Documenter bugs and julia#26314
-            "BUILDROOT" => nothing) do
-        run(`make -C $(JULIA_SOURCE)/doc pdf texplatform=docker JULIA_EXECUTABLE=$(julia_exec)`)
-    end
+
+    # invoke makedocs
+    makedocs(julia_exec)
 
     # copy built PDF to JULIA_DOCS
-    output = "$(JULIA_SOURCE)/doc/_build/pdf/en"
-    for f in readdir(output)
-        if startswith(f, "TheJuliaLanguage") && endswith(f, ".pdf")
-            cp("$(output)/$(f)", path)
-            @info "finished, output file copied to $(path)."
-            break
-        end
-    end
+    copydocs(path)
 end
 
 function build_nightly_pdf()
@@ -79,25 +98,19 @@ function build_nightly_pdf()
     # output is "julia version 1.1.0-DEV"
     _, _, v = split(readchomp(`$(julia_exec) --version`))
     @info "commit determined to $(commit) and version determined to $(v)."
+
     file = "julia-$(v).pdf"
     path = "$JULIA_DOCS/$file"
+
+    # checkout correct commit and clean repo
     run(`git -C $(JULIA_SOURCE) checkout $(commit)`)
     run(`git -C $(JULIA_SOURCE) clean -fdx`)
-    withenv("DOCUMENTER_VERBOSE" => "true",
-            "TRAVIS_REPO_SLUG" => nothing, # workaround Documenter bugs and julia#26314
-            "BUILDROOT" => nothing) do
-        run(`make -C $(JULIA_SOURCE)/doc pdf texplatform=docker JULIA_EXECUTABLE=$(julia_exec)`)
-    end
+
+    # invoke makedocs
+    makedocs(julia_exec)
 
     # copy the built PDF to JULIA_DOCS
-    output = "$(JULIA_SOURCE)/doc/_build/pdf/en"
-    for f in readdir(output)
-        if startswith(f, "TheJuliaLanguage") && endswith(f, ".pdf")
-            cp("$(output)/$(f)", path)
-            @info "finished, output file copied to $(path)."
-            break
-        end
-    end
+    copydocs(path)
 end
 
 # find all tags in the julia repo
