@@ -293,8 +293,7 @@ end</code></pre><p>After a call like <code>x = 5; y = power_by_squaring(x, 4)</c
        end
 1 Foo  Bar
 2 Foo  Bar
-3 Foo  Bar</code></pre><p>You can lock your writes with a <code>ReentrantLock</code> like this:</p><pre><code class="language-julia-repl">julia&gt; l = ReentrantLock()
-ReentrantLock(nothing, Condition(Any[]), 0)
+3 Foo  Bar</code></pre><p>You can lock your writes with a <code>ReentrantLock</code> like this:</p><pre><code class="language-julia-repl">julia&gt; l = ReentrantLock();
 
 julia&gt; @sync for i in 1:3
            @async begin

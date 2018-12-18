@@ -41,6 +41,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "NEWS/#Multi-threading-changes-1",
+    "page": "Julia v1.2 Release Notes",
+    "title": "Multi-threading changes",
+    "category": "section",
+    "text": "The Condition type now has a thread-safe replacement, accessed as Threads.Condition. With that addition, task scheduling primitives such as ReentrantLock are now thread-safe (#30061)."
+},
+
+{
     "location": "NEWS/#Language-changes-1",
     "page": "Julia v1.2 Release Notes",
     "title": "Language changes",
@@ -3997,7 +4005,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Frequently Asked Questions",
     "title": "Why do concurrent writes to the same stream result in inter-mixed output?",
     "category": "section",
-    "text": "While the streaming I/O API is synchronous, the underlying implementation is fully asynchronous.Consider the printed output from the following:julia> @sync for i in 1:3\n           @async write(stdout, string(i), \" Foo \", \" Bar \")\n       end\n123 Foo  Foo  Foo  Bar  Bar  BarThis is happening because, while the write call is synchronous, the writing of each argument yields to other tasks while waiting for that part of the I/O to complete.print and println \"lock\" the stream during a call. Consequently changing write to println in the above example results in:julia> @sync for i in 1:3\n           @async println(stdout, string(i), \" Foo \", \" Bar \")\n       end\n1 Foo  Bar\n2 Foo  Bar\n3 Foo  BarYou can lock your writes with a ReentrantLock like this:julia> l = ReentrantLock()\nReentrantLock(nothing, Condition(Any[]), 0)\n\njulia> @sync for i in 1:3\n           @async begin\n               lock(l)\n               try\n                   write(stdout, string(i), \" Foo \", \" Bar \")\n               finally\n                   unlock(l)\n               end\n           end\n       end\n1 Foo  Bar 2 Foo  Bar 3 Foo  Bar"
+    "text": "While the streaming I/O API is synchronous, the underlying implementation is fully asynchronous.Consider the printed output from the following:julia> @sync for i in 1:3\n           @async write(stdout, string(i), \" Foo \", \" Bar \")\n       end\n123 Foo  Foo  Foo  Bar  Bar  BarThis is happening because, while the write call is synchronous, the writing of each argument yields to other tasks while waiting for that part of the I/O to complete.print and println \"lock\" the stream during a call. Consequently changing write to println in the above example results in:julia> @sync for i in 1:3\n           @async println(stdout, string(i), \" Foo \", \" Bar \")\n       end\n1 Foo  Bar\n2 Foo  Bar\n3 Foo  BarYou can lock your writes with a ReentrantLock like this:julia> l = ReentrantLock();\n\njulia> @sync for i in 1:3\n           @async begin\n               lock(l)\n               try\n                   write(stdout, string(i), \" Foo \", \" Bar \")\n               finally\n                   unlock(l)\n               end\n           end\n       end\n1 Foo  Bar 2 Foo  Bar 3 Foo  Bar"
 },
 
 {
@@ -5653,7 +5661,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Essentials",
     "title": "Base.Libc.getpid",
     "category": "function",
-    "text": "getpid() -> Int32\n\nGet Julia\'s process ID.\n\n\n\n\n\ngetpid(process) -> Int32\n\nGet the child process ID, if it still exists.\n\ncompat: Julia 1.1\nThis function requires at least Julia 1.1.\n\n\n\n\n\n"
+    "text": "getpid(process) -> Int32\n\nGet the child process ID, if it still exists.\n\ncompat: Julia 1.1\nThis function requires at least Julia 1.1.\n\n\n\n\n\ngetpid() -> Int32\n\nGet Julia\'s process ID.\n\n\n\n\n\n"
 },
 
 {
@@ -6509,7 +6517,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Collections and Data Structures",
     "title": "Base.isempty",
     "category": "function",
-    "text": "isempty(collection) -> Bool\n\nDetermine whether a collection is empty (has no elements).\n\nExamples\n\njulia> isempty([])\ntrue\n\njulia> isempty([1 2 3])\nfalse\n\n\n\n\n\n"
+    "text": "isempty(collection) -> Bool\n\nDetermine whether a collection is empty (has no elements).\n\nExamples\n\njulia> isempty([])\ntrue\n\njulia> isempty([1 2 3])\nfalse\n\n\n\n\n\nisempty(condition)\n\nReturn true if no tasks are waiting on the condition, false otherwise.\n\n\n\n\n\n"
 },
 
 {
@@ -7101,7 +7109,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Collections and Data Structures",
     "title": "Base.pairs",
     "category": "function",
-    "text": "pairs(IndexLinear(), A)\npairs(IndexCartesian(), A)\npairs(IndexStyle(A), A)\n\nAn iterator that accesses each element of the array A, returning i => x, where i is the index for the element and x = A[i]. Identical to pairs(A), except that the style of index can be selected. Also similar to enumerate(A), except i will be a valid index for A, while enumerate always counts from 1 regardless of the indices of A.\n\nSpecifying IndexLinear() ensures that i will be an integer; specifying IndexCartesian() ensures that i will be a CartesianIndex; specifying IndexStyle(A) chooses whichever has been defined as the native indexing style for array A.\n\nMutation of the bounds of the underlying array will invalidate this iterator.\n\nExamples\n\njulia> A = [\"a\" \"d\"; \"b\" \"e\"; \"c\" \"f\"];\n\njulia> for (index, value) in pairs(IndexStyle(A), A)\n           println(\"$index $value\")\n       end\n1 a\n2 b\n3 c\n4 d\n5 e\n6 f\n\njulia> S = view(A, 1:2, :);\n\njulia> for (index, value) in pairs(IndexStyle(S), S)\n           println(\"$index $value\")\n       end\nCartesianIndex(1, 1) a\nCartesianIndex(2, 1) b\nCartesianIndex(1, 2) d\nCartesianIndex(2, 2) e\n\nSee also: IndexStyle, axes.\n\n\n\n\n\npairs(collection)\n\nReturn an iterator over key => value pairs for any collection that maps a set of keys to a set of values. This includes arrays, where the keys are the array indices.\n\n\n\n\n\n"
+    "text": "pairs(collection)\n\nReturn an iterator over key => value pairs for any collection that maps a set of keys to a set of values. This includes arrays, where the keys are the array indices.\n\n\n\n\n\npairs(IndexLinear(), A)\npairs(IndexCartesian(), A)\npairs(IndexStyle(A), A)\n\nAn iterator that accesses each element of the array A, returning i => x, where i is the index for the element and x = A[i]. Identical to pairs(A), except that the style of index can be selected. Also similar to enumerate(A), except i will be a valid index for A, while enumerate always counts from 1 regardless of the indices of A.\n\nSpecifying IndexLinear() ensures that i will be an integer; specifying IndexCartesian() ensures that i will be a CartesianIndex; specifying IndexStyle(A) chooses whichever has been defined as the native indexing style for array A.\n\nMutation of the bounds of the underlying array will invalidate this iterator.\n\nExamples\n\njulia> A = [\"a\" \"d\"; \"b\" \"e\"; \"c\" \"f\"];\n\njulia> for (index, value) in pairs(IndexStyle(A), A)\n           println(\"$index $value\")\n       end\n1 a\n2 b\n3 c\n4 d\n5 e\n6 f\n\njulia> S = view(A, 1:2, :);\n\njulia> for (index, value) in pairs(IndexStyle(S), S)\n           println(\"$index $value\")\n       end\nCartesianIndex(1, 1) a\nCartesianIndex(2, 1) b\nCartesianIndex(1, 2) d\nCartesianIndex(2, 2) e\n\nSee also: IndexStyle, axes.\n\n\n\n\n\n"
 },
 
 {
@@ -7645,7 +7653,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Mathematics",
     "title": "Base.::",
     "category": "function",
-    "text": "(:)(I::CartesianIndex, J::CartesianIndex)\n\nConstruct CartesianIndices from two CartesianIndex.\n\ncompat: Julia 1.1\nThis method requires at least Julia 1.1.\n\nExamples\n\njulia> I = CartesianIndex(2,1);\n\njulia> J = CartesianIndex(3,3);\n\njulia> I:J\n2×3 CartesianIndices{2,Tuple{UnitRange{Int64},UnitRange{Int64}}}:\n CartesianIndex(2, 1)  CartesianIndex(2, 2)  CartesianIndex(2, 3)\n CartesianIndex(3, 1)  CartesianIndex(3, 2)  CartesianIndex(3, 3)\n\n\n\n\n\n(:)(start, [step], stop)\n\nRange operator. a:b constructs a range from a to b with a step size of 1 (a UnitRange) , and a:s:b is similar but uses a step size of s (a StepRange).\n\n: is also used in indexing to select whole dimensions.\n\n\n\n\n\n"
+    "text": "(:)(start, [step], stop)\n\nRange operator. a:b constructs a range from a to b with a step size of 1 (a UnitRange) , and a:s:b is similar but uses a step size of s (a StepRange).\n\n: is also used in indexing to select whole dimensions.\n\n\n\n\n\n(:)(I::CartesianIndex, J::CartesianIndex)\n\nConstruct CartesianIndices from two CartesianIndex.\n\ncompat: Julia 1.1\nThis method requires at least Julia 1.1.\n\nExamples\n\njulia> I = CartesianIndex(2,1);\n\njulia> J = CartesianIndex(3,3);\n\njulia> I:J\n2×3 CartesianIndices{2,Tuple{UnitRange{Int64},UnitRange{Int64}}}:\n CartesianIndex(2, 1)  CartesianIndex(2, 2)  CartesianIndex(2, 3)\n CartesianIndex(3, 1)  CartesianIndex(3, 2)  CartesianIndex(3, 3)\n\n\n\n\n\n"
 },
 
 {
@@ -11249,6 +11257,54 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "base/parallel/#Base.@task",
+    "page": "Tasks",
+    "title": "Base.@task",
+    "category": "macro",
+    "text": "@task\n\nWrap an expression in a Task without executing it, and return the Task. This only creates a task, and does not run it.\n\nExamples\n\njulia> a1() = sum(i for i in 1:1000);\n\njulia> b = @task a1();\n\njulia> istaskstarted(b)\nfalse\n\njulia> schedule(b);\n\njulia> yield();\n\njulia> istaskdone(b)\ntrue\n\n\n\n\n\n"
+},
+
+{
+    "location": "base/parallel/#Base.@async",
+    "page": "Tasks",
+    "title": "Base.@async",
+    "category": "macro",
+    "text": "@async\n\nWrap an expression in a Task and add it to the local machine\'s scheduler queue.\n\n\n\n\n\n"
+},
+
+{
+    "location": "base/parallel/#Base.@sync",
+    "page": "Tasks",
+    "title": "Base.@sync",
+    "category": "macro",
+    "text": "@sync\n\nWait until all lexically-enclosed uses of @async, @spawn, @spawnat and @distributed are complete. All exceptions thrown by enclosed async operations are collected and thrown as a CompositeException.\n\n\n\n\n\n"
+},
+
+{
+    "location": "base/parallel/#Base.asyncmap",
+    "page": "Tasks",
+    "title": "Base.asyncmap",
+    "category": "function",
+    "text": "asyncmap(f, c...; ntasks=0, batch_size=nothing)\n\nUses multiple concurrent tasks to map f over a collection (or multiple equal length collections). For multiple collection arguments, f is applied elementwise.\n\nntasks specifies the number of tasks to run concurrently. Depending on the length of the collections, if ntasks is unspecified, up to 100 tasks will be used for concurrent mapping.\n\nntasks can also be specified as a zero-arg function. In this case, the number of tasks to run in parallel is checked before processing every element and a new task started if the value of ntasks_func is less than the current number of tasks.\n\nIf batch_size is specified, the collection is processed in batch mode. f must then be a function that must accept a Vector of argument tuples and must return a vector of results. The input vector will have a length of batch_size or less.\n\nThe following examples highlight execution in different tasks by returning the objectid of the tasks in which the mapping function is executed.\n\nFirst, with ntasks undefined, each element is processed in a different task.\n\njulia> tskoid() = objectid(current_task());\n\njulia> asyncmap(x->tskoid(), 1:5)\n5-element Array{UInt64,1}:\n 0x6e15e66c75c75853\n 0x440f8819a1baa682\n 0x9fb3eeadd0c83985\n 0xebd3e35fe90d4050\n 0x29efc93edce2b961\n\njulia> length(unique(asyncmap(x->tskoid(), 1:5)))\n5\n\nWith ntasks=2 all elements are processed in 2 tasks.\n\njulia> asyncmap(x->tskoid(), 1:5; ntasks=2)\n5-element Array{UInt64,1}:\n 0x027ab1680df7ae94\n 0xa23d2f80cd7cf157\n 0x027ab1680df7ae94\n 0xa23d2f80cd7cf157\n 0x027ab1680df7ae94\n\njulia> length(unique(asyncmap(x->tskoid(), 1:5; ntasks=2)))\n2\n\nWith batch_size defined, the mapping function needs to be changed to accept an array of argument tuples and return an array of results. map is used in the modified mapping function to achieve this.\n\njulia> batch_func(input) = map(x->string(\"args_tuple: \", x, \", element_val: \", x[1], \", task: \", tskoid()), input)\nbatch_func (generic function with 1 method)\n\njulia> asyncmap(batch_func, 1:5; ntasks=2, batch_size=2)\n5-element Array{String,1}:\n \"args_tuple: (1,), element_val: 1, task: 9118321258196414413\"\n \"args_tuple: (2,), element_val: 2, task: 4904288162898683522\"\n \"args_tuple: (3,), element_val: 3, task: 9118321258196414413\"\n \"args_tuple: (4,), element_val: 4, task: 4904288162898683522\"\n \"args_tuple: (5,), element_val: 5, task: 9118321258196414413\"\n\nnote: Note\nCurrently, all tasks in Julia are executed in a single OS thread co-operatively. Consequently, asyncmap is beneficial only when the mapping function involves any I/O - disk, network, remote worker invocation, etc.\n\n\n\n\n\n"
+},
+
+{
+    "location": "base/parallel/#Base.asyncmap!",
+    "page": "Tasks",
+    "title": "Base.asyncmap!",
+    "category": "function",
+    "text": "asyncmap!(f, results, c...; ntasks=0, batch_size=nothing)\n\nLike asyncmap, but stores output in results rather than returning a collection.\n\n\n\n\n\n"
+},
+
+{
+    "location": "base/parallel/#Base.fetch-Tuple{Task}",
+    "page": "Tasks",
+    "title": "Base.fetch",
+    "category": "method",
+    "text": "fetch(t::Task)\n\nWait for a Task to finish, then return its result value. If the task fails with an exception, the exception is propagated (re-thrown in the task that called fetch).\n\n\n\n\n\n"
+},
+
+{
     "location": "base/parallel/#Base.current_task",
     "page": "Tasks",
     "title": "Base.current_task",
@@ -11270,22 +11326,6 @@ var documenterSearchIndex = {"docs": [
     "title": "Base.istaskstarted",
     "category": "function",
     "text": "istaskstarted(t::Task) -> Bool\n\nDetermine whether a task has started executing.\n\nExamples\n\njulia> a3() = sum(i for i in 1:1000);\n\njulia> b = Task(a3);\n\njulia> istaskstarted(b)\nfalse\n\n\n\n\n\n"
-},
-
-{
-    "location": "base/parallel/#Base.yield",
-    "page": "Tasks",
-    "title": "Base.yield",
-    "category": "function",
-    "text": "yield()\n\nSwitch to the scheduler to allow another scheduled task to run. A task that calls this function is still runnable, and will be restarted immediately if there are no other runnable tasks.\n\n\n\n\n\nyield(t::Task, arg = nothing)\n\nA fast, unfair-scheduling version of schedule(t, arg); yield() which immediately yields to t before calling the scheduler.\n\n\n\n\n\n"
-},
-
-{
-    "location": "base/parallel/#Base.yieldto",
-    "page": "Tasks",
-    "title": "Base.yieldto",
-    "category": "function",
-    "text": "yieldto(t::Task, arg = nothing)\n\nSwitch to the given task. The first time a task is switched to, the task\'s function is called with no arguments. On subsequent switches, arg is returned from the task\'s last call to yieldto. This is a low-level call that only switches tasks, not considering states or scheduling in any way. Its use is discouraged.\n\n\n\n\n\n"
 },
 
 {
@@ -11313,11 +11353,67 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "base/parallel/#Tasks-1",
+    "page": "Tasks",
+    "title": "Tasks",
+    "category": "section",
+    "text": "Core.Task\nBase.@task\nBase.@async\nBase.@sync\nBase.asyncmap\nBase.asyncmap!\nBase.fetch(t::Task)\nBase.current_task\nBase.istaskdone\nBase.istaskstarted\nBase.task_local_storage(::Any)\nBase.task_local_storage(::Any, ::Any)\nBase.task_local_storage(::Function, ::Any, ::Any)"
+},
+
+{
+    "location": "base/parallel/#Base.yield",
+    "page": "Tasks",
+    "title": "Base.yield",
+    "category": "function",
+    "text": "yield()\n\nSwitch to the scheduler to allow another scheduled task to run. A task that calls this function is still runnable, and will be restarted immediately if there are no other runnable tasks.\n\n\n\n\n\nyield(t::Task, arg = nothing)\n\nA fast, unfair-scheduling version of schedule(t, arg); yield() which immediately yields to t before calling the scheduler.\n\n\n\n\n\n"
+},
+
+{
+    "location": "base/parallel/#Base.yieldto",
+    "page": "Tasks",
+    "title": "Base.yieldto",
+    "category": "function",
+    "text": "yieldto(t::Task, arg = nothing)\n\nSwitch to the given task. The first time a task is switched to, the task\'s function is called with no arguments. On subsequent switches, arg is returned from the task\'s last call to yieldto. This is a low-level call that only switches tasks, not considering states or scheduling in any way. Its use is discouraged.\n\n\n\n\n\n"
+},
+
+{
+    "location": "base/parallel/#Base.sleep",
+    "page": "Tasks",
+    "title": "Base.sleep",
+    "category": "function",
+    "text": "sleep(seconds)\n\nBlock the current task for a specified number of seconds. The minimum sleep time is 1 millisecond or input of 0.001.\n\n\n\n\n\n"
+},
+
+{
+    "location": "base/parallel/#Base.wait",
+    "page": "Tasks",
+    "title": "Base.wait",
+    "category": "function",
+    "text": "wait(r::Future)\n\nWait for a value to become available for the specified Future.\n\n\n\n\n\nwait(r::RemoteChannel, args...)\n\nWait for a value to become available on the specified RemoteChannel.\n\n\n\n\n\nSpecial note for Threads.Condition:\n\nThe caller must be holding the lock that owns c before calling this method. The calling task will be blocked until some other task wakes it, usually by calling notify` on the same Condition object. The lock will be atomically released when blocking (even if it was locked recursively), and will be reacquired before returning.\n\n\n\n\n\nwait([x])\n\nBlock the current task until some event occurs, depending on the type of the argument:\n\nChannel: Wait for a value to be appended to the channel.\nCondition: Wait for notify on a condition.\nProcess: Wait for a process or process chain to exit. The exitcode field of a process can be used to determine success or failure.\nTask: Wait for a Task to finish. If the task fails with an exception, the exception is propagated (re-thrown in the task that called wait).\nRawFD: Wait for changes on a file descriptor (see the FileWatching package).\n\nIf no argument is passed, the task blocks for an undefined period. A task can only be restarted by an explicit call to schedule or yieldto.\n\nOften wait is called within a while loop to ensure a waited-for condition is met before proceeding.\n\n\n\n\n\n"
+},
+
+{
+    "location": "base/parallel/#Base.timedwait",
+    "page": "Tasks",
+    "title": "Base.timedwait",
+    "category": "function",
+    "text": "timedwait(testcb::Function, secs::Float64; pollint::Float64=0.1)\n\nWaits until testcb returns true or for secs seconds, whichever is earlier. testcb is polled every pollint seconds.\n\n\n\n\n\n"
+},
+
+{
     "location": "base/parallel/#Base.Condition",
     "page": "Tasks",
     "title": "Base.Condition",
     "category": "type",
-    "text": "Condition()\n\nCreate an edge-triggered event source that tasks can wait for. Tasks that call wait on a Condition are suspended and queued. Tasks are woken up when notify is later called on the Condition. Edge triggering means that only tasks waiting at the time notify is called can be woken up. For level-triggered notifications, you must keep extra state to keep track of whether a notification has happened. The Channel type does this, and so can be used for level-triggered events.\n\n\n\n\n\n"
+    "text": "Condition()\n\nCreate an edge-triggered event source that tasks can wait for. Tasks that call wait on a Condition are suspended and queued. Tasks are woken up when notify is later called on the Condition. Edge triggering means that only tasks waiting at the time notify is called can be woken up. For level-triggered notifications, you must keep extra state to keep track of whether a notification has happened. The Channel and Event types do this, and can be used for level-triggered events.\n\nThis object is NOT thread-safe. See Threads.Condition for a thread-safe version.\n\n\n\n\n\n"
+},
+
+{
+    "location": "base/parallel/#Base.Threads.Condition",
+    "page": "Tasks",
+    "title": "Base.Threads.Condition",
+    "category": "type",
+    "text": "Threads.Condition([lock])\n\nA thread-safe version of Base.Condition.\n\ncompat: Julia 1.2\nThis functionality requires at least Julia 1.2.\n\n\n\n\n\n"
 },
 
 {
@@ -11337,19 +11433,83 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "base/parallel/#Base.@task",
+    "location": "base/parallel/#Base.Event",
     "page": "Tasks",
-    "title": "Base.@task",
-    "category": "macro",
-    "text": "@task\n\nWrap an expression in a Task without executing it, and return the Task. This only creates a task, and does not run it.\n\nExamples\n\njulia> a1() = sum(i for i in 1:1000);\n\njulia> b = @task a1();\n\njulia> istaskstarted(b)\nfalse\n\njulia> schedule(b);\n\njulia> yield();\n\njulia> istaskdone(b)\ntrue\n\n\n\n\n\n"
+    "title": "Base.Event",
+    "category": "type",
+    "text": "Event()\n\nCreate a level-triggered event source. Tasks that call wait on an Event are suspended and queued until notify is called on the Event. After notify is called, the Event remains in a signaled state and tasks will no longer block when waiting for it.\n\ncompat: Julia 1.1\nThis functionality requires at least Julia 1.1.\n\n\n\n\n\n"
 },
 
 {
-    "location": "base/parallel/#Base.sleep",
+    "location": "base/parallel/#Base.Semaphore",
     "page": "Tasks",
-    "title": "Base.sleep",
+    "title": "Base.Semaphore",
+    "category": "type",
+    "text": "Semaphore(sem_size)\n\nCreate a counting semaphore that allows at most sem_size acquires to be in use at any time. Each acquire must be matched with a release.\n\n\n\n\n\n"
+},
+
+{
+    "location": "base/parallel/#Base.acquire",
+    "page": "Tasks",
+    "title": "Base.acquire",
     "category": "function",
-    "text": "sleep(seconds)\n\nBlock the current task for a specified number of seconds. The minimum sleep time is 1 millisecond or input of 0.001.\n\n\n\n\n\n"
+    "text": "acquire(s::Semaphore)\n\nWait for one of the sem_size permits to be available, blocking until one can be acquired.\n\n\n\n\n\n"
+},
+
+{
+    "location": "base/parallel/#Base.release",
+    "page": "Tasks",
+    "title": "Base.release",
+    "category": "function",
+    "text": "release(s::Semaphore)\n\nReturn one permit to the pool, possibly allowing another task to acquire it and resume execution.\n\n\n\n\n\n"
+},
+
+{
+    "location": "base/parallel/#Base.AbstractLock",
+    "page": "Tasks",
+    "title": "Base.AbstractLock",
+    "category": "type",
+    "text": "AbstractLock\n\nAbstract supertype describing types that implement the synchronization primitives: lock, trylock, unlock, and islocked.\n\n\n\n\n\n"
+},
+
+{
+    "location": "base/parallel/#Base.lock",
+    "page": "Tasks",
+    "title": "Base.lock",
+    "category": "function",
+    "text": "lock(lock)\n\nAcquire the lock when it becomes available. If the lock is already locked by a different task/thread, wait for it to become available.\n\nEach lock must be matched by an unlock.\n\n\n\n\n\n"
+},
+
+{
+    "location": "base/parallel/#Base.unlock",
+    "page": "Tasks",
+    "title": "Base.unlock",
+    "category": "function",
+    "text": "unlock(lock)\n\nReleases ownership of the lock.\n\nIf this is a recursive lock which has been acquired before, decrement an internal counter and return immediately.\n\n\n\n\n\n"
+},
+
+{
+    "location": "base/parallel/#Base.trylock",
+    "page": "Tasks",
+    "title": "Base.trylock",
+    "category": "function",
+    "text": "trylock(lock) -> Success (Boolean)\n\nAcquire the lock if it is available, and return true if successful. If the lock is already locked by a different task/thread, return false.\n\nEach successful trylock must be matched by an unlock.\n\n\n\n\n\n"
+},
+
+{
+    "location": "base/parallel/#Base.islocked",
+    "page": "Tasks",
+    "title": "Base.islocked",
+    "category": "function",
+    "text": "islocked(lock) -> Status (Boolean)\n\nCheck whether the lock is held by any task/thread. This should not be used for synchronization (see instead trylock).\n\n\n\n\n\n"
+},
+
+{
+    "location": "base/parallel/#Base.ReentrantLock",
+    "page": "Tasks",
+    "title": "Base.ReentrantLock",
+    "category": "type",
+    "text": "ReentrantLock()\n\nCreates a re-entrant lock for synchronizing Tasks. The same task can acquire the lock as many times as required. Each lock must be matched with an unlock.\n\n\n\n\n\n"
 },
 
 {
@@ -11409,27 +11569,11 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "base/parallel/#Base.asyncmap",
+    "location": "base/parallel/#Scheduling-1",
     "page": "Tasks",
-    "title": "Base.asyncmap",
-    "category": "function",
-    "text": "asyncmap(f, c...; ntasks=0, batch_size=nothing)\n\nUses multiple concurrent tasks to map f over a collection (or multiple equal length collections). For multiple collection arguments, f is applied elementwise.\n\nntasks specifies the number of tasks to run concurrently. Depending on the length of the collections, if ntasks is unspecified, up to 100 tasks will be used for concurrent mapping.\n\nntasks can also be specified as a zero-arg function. In this case, the number of tasks to run in parallel is checked before processing every element and a new task started if the value of ntasks_func is less than the current number of tasks.\n\nIf batch_size is specified, the collection is processed in batch mode. f must then be a function that must accept a Vector of argument tuples and must return a vector of results. The input vector will have a length of batch_size or less.\n\nThe following examples highlight execution in different tasks by returning the objectid of the tasks in which the mapping function is executed.\n\nFirst, with ntasks undefined, each element is processed in a different task.\n\njulia> tskoid() = objectid(current_task());\n\njulia> asyncmap(x->tskoid(), 1:5)\n5-element Array{UInt64,1}:\n 0x6e15e66c75c75853\n 0x440f8819a1baa682\n 0x9fb3eeadd0c83985\n 0xebd3e35fe90d4050\n 0x29efc93edce2b961\n\njulia> length(unique(asyncmap(x->tskoid(), 1:5)))\n5\n\nWith ntasks=2 all elements are processed in 2 tasks.\n\njulia> asyncmap(x->tskoid(), 1:5; ntasks=2)\n5-element Array{UInt64,1}:\n 0x027ab1680df7ae94\n 0xa23d2f80cd7cf157\n 0x027ab1680df7ae94\n 0xa23d2f80cd7cf157\n 0x027ab1680df7ae94\n\njulia> length(unique(asyncmap(x->tskoid(), 1:5; ntasks=2)))\n2\n\nWith batch_size defined, the mapping function needs to be changed to accept an array of argument tuples and return an array of results. map is used in the modified mapping function to achieve this.\n\njulia> batch_func(input) = map(x->string(\"args_tuple: \", x, \", element_val: \", x[1], \", task: \", tskoid()), input)\nbatch_func (generic function with 1 method)\n\njulia> asyncmap(batch_func, 1:5; ntasks=2, batch_size=2)\n5-element Array{String,1}:\n \"args_tuple: (1,), element_val: 1, task: 9118321258196414413\"\n \"args_tuple: (2,), element_val: 2, task: 4904288162898683522\"\n \"args_tuple: (3,), element_val: 3, task: 9118321258196414413\"\n \"args_tuple: (4,), element_val: 4, task: 4904288162898683522\"\n \"args_tuple: (5,), element_val: 5, task: 9118321258196414413\"\n\nnote: Note\nCurrently, all tasks in Julia are executed in a single OS thread co-operatively. Consequently, asyncmap is beneficial only when the mapping function involves any I/O - disk, network, remote worker invocation, etc.\n\n\n\n\n\n"
-},
-
-{
-    "location": "base/parallel/#Base.asyncmap!",
-    "page": "Tasks",
-    "title": "Base.asyncmap!",
-    "category": "function",
-    "text": "asyncmap!(f, results, c...; ntasks=0, batch_size=nothing)\n\nLike asyncmap, but stores output in results rather than returning a collection.\n\n\n\n\n\n"
-},
-
-{
-    "location": "base/parallel/#Tasks-1",
-    "page": "Tasks",
-    "title": "Tasks",
+    "title": "Scheduling",
     "category": "section",
-    "text": "Core.Task\nBase.current_task\nBase.istaskdone\nBase.istaskstarted\nBase.yield\nBase.yieldto\nBase.task_local_storage(::Any)\nBase.task_local_storage(::Any, ::Any)\nBase.task_local_storage(::Function, ::Any, ::Any)\nBase.Condition\nBase.notify\nBase.schedule\nBase.@task\nBase.sleep\nBase.Channel\nBase.put!(::Channel, ::Any)\nBase.take!(::Channel)\nBase.isready(::Channel)\nBase.fetch(::Channel)\nBase.close(::Channel)\nBase.bind(c::Channel, task::Task)\nBase.asyncmap\nBase.asyncmap!"
+    "text": "Base.yield\nBase.yieldto\nBase.sleep\nBase.wait\nBase.timedwait\n\nBase.Condition\nBase.Threads.Condition\nBase.notify\nBase.schedule\n\nBase.Event\n\nBase.Semaphore\nBase.acquire\nBase.release\n\nBase.AbstractLock\nBase.lock\nBase.unlock\nBase.trylock\nBase.islocked\nBase.ReentrantLock\n\nBase.Channel\nBase.put!(::Channel, ::Any)\nBase.take!(::Channel)\nBase.isready(::Channel)\nBase.fetch(::Channel)\nBase.close(::Channel)\nBase.bind(c::Channel, task::Task)"
 },
 
 {
@@ -11565,7 +11709,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Multi-Threading",
     "title": "Multi-Threading",
     "category": "section",
-    "text": "This experimental interface supports Julia\'s multi-threading capabilities. Types and functions described here might (and likely will) change in the future.Base.Threads.threadid\nBase.Threads.nthreads\nBase.Threads.@threads\nBase.Threads.Atomic\nBase.Threads.atomic_cas!\nBase.Threads.atomic_xchg!\nBase.Threads.atomic_add!\nBase.Threads.atomic_sub!\nBase.Threads.atomic_and!\nBase.Threads.atomic_nand!\nBase.Threads.atomic_or!\nBase.Threads.atomic_xor!\nBase.Threads.atomic_max!\nBase.Threads.atomic_min!\nBase.Threads.atomic_fence"
+    "text": "This experimental interface supports Julia\'s multi-threading capabilities. Types and functions described here might (and likely will) change in the future.Base.Threads.threadid\nBase.Threads.nthreads\nBase.Threads.@threadsBase.Threads.Atomic\nBase.Threads.atomic_cas!\nBase.Threads.atomic_xchg!\nBase.Threads.atomic_add!\nBase.Threads.atomic_sub!\nBase.Threads.atomic_and!\nBase.Threads.atomic_nand!\nBase.Threads.atomic_or!\nBase.Threads.atomic_xor!\nBase.Threads.atomic_max!\nBase.Threads.atomic_min!\nBase.Threads.atomic_fence"
 },
 
 {
@@ -11585,54 +11729,6 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "base/multi-threading/#Base.Threads.AbstractLock",
-    "page": "Multi-Threading",
-    "title": "Base.Threads.AbstractLock",
-    "category": "type",
-    "text": "AbstractLock\n\nAbstract supertype describing types that implement the thread-safe synchronization primitives: lock, trylock, unlock, and islocked.\n\n\n\n\n\n"
-},
-
-{
-    "location": "base/multi-threading/#Base.lock",
-    "page": "Multi-Threading",
-    "title": "Base.lock",
-    "category": "function",
-    "text": "lock(lock)\n\nAcquire the lock when it becomes available. If the lock is already locked by a different task/thread, wait for it to become available.\n\nEach lock must be matched by an unlock.\n\n\n\n\n\n"
-},
-
-{
-    "location": "base/multi-threading/#Base.unlock",
-    "page": "Multi-Threading",
-    "title": "Base.unlock",
-    "category": "function",
-    "text": "unlock(lock)\n\nReleases ownership of the lock.\n\nIf this is a recursive lock which has been acquired before, decrement an internal counter and return immediately.\n\n\n\n\n\n"
-},
-
-{
-    "location": "base/multi-threading/#Base.trylock",
-    "page": "Multi-Threading",
-    "title": "Base.trylock",
-    "category": "function",
-    "text": "trylock(lock) -> Success (Boolean)\n\nAcquire the lock if it is available, and return true if successful. If the lock is already locked by a different task/thread, return false.\n\nEach successful trylock must be matched by an unlock.\n\n\n\n\n\n"
-},
-
-{
-    "location": "base/multi-threading/#Base.islocked",
-    "page": "Multi-Threading",
-    "title": "Base.islocked",
-    "category": "function",
-    "text": "islocked(lock) -> Status (Boolean)\n\nCheck whether the lock is held by any task/thread. This should not be used for synchronization (see instead trylock).\n\n\n\n\n\n"
-},
-
-{
-    "location": "base/multi-threading/#Base.ReentrantLock",
-    "page": "Multi-Threading",
-    "title": "Base.ReentrantLock",
-    "category": "type",
-    "text": "ReentrantLock()\n\nCreates a reentrant lock for synchronizing Tasks. The same task can acquire the lock as many times as required. Each lock must be matched with an unlock.\n\nThis lock is NOT threadsafe. See Threads.Mutex for a threadsafe lock.\n\n\n\n\n\n"
-},
-
-{
     "location": "base/multi-threading/#Base.Threads.Mutex",
     "page": "Multi-Threading",
     "title": "Base.Threads.Mutex",
@@ -11645,47 +11741,15 @@ var documenterSearchIndex = {"docs": [
     "page": "Multi-Threading",
     "title": "Base.Threads.SpinLock",
     "category": "type",
-    "text": "SpinLock()\n\nCreate a non-reentrant lock. Recursive use will result in a deadlock. Each lock must be matched with an unlock.\n\nTest-and-test-and-set spin locks are quickest up to about 30ish contending threads. If you have more contention than that, perhaps a lock is the wrong way to synchronize.\n\nSee also RecursiveSpinLock for a version that permits recursion.\n\nSee also Mutex for a more efficient version on one core or if the lock may be held for a considerable length of time.\n\n\n\n\n\n"
+    "text": "SpinLock()\n\nCreate a non-reentrant lock. Recursive use will result in a deadlock. Each lock must be matched with an unlock.\n\nTest-and-test-and-set spin locks are quickest up to about 30ish contending threads. If you have more contention than that, perhaps a lock is the wrong way to synchronize.\n\nSee also Mutex for a more efficient version on one core or if the lock may be held for a considerable length of time.\n\n\n\n\n\n"
 },
 
 {
-    "location": "base/multi-threading/#Base.Threads.RecursiveSpinLock",
+    "location": "base/multi-threading/#Low-level-synchronization-primitives-1",
     "page": "Multi-Threading",
-    "title": "Base.Threads.RecursiveSpinLock",
-    "category": "type",
-    "text": "RecursiveSpinLock()\n\nCreates a reentrant lock. The same thread can acquire the lock as many times as required. Each lock must be matched with an unlock.\n\nSee also SpinLock for a slightly faster version.\n\nSee also Mutex for a more efficient version on one core or if the lock may be held for a considerable length of time.\n\n\n\n\n\n"
-},
-
-{
-    "location": "base/multi-threading/#Base.Semaphore",
-    "page": "Multi-Threading",
-    "title": "Base.Semaphore",
-    "category": "type",
-    "text": "Semaphore(sem_size)\n\nCreate a counting semaphore that allows at most sem_size acquires to be in use at any time. Each acquire must be matched with a release.\n\nThis construct is NOT threadsafe.\n\n\n\n\n\n"
-},
-
-{
-    "location": "base/multi-threading/#Base.acquire",
-    "page": "Multi-Threading",
-    "title": "Base.acquire",
-    "category": "function",
-    "text": "acquire(s::Semaphore)\n\nWait for one of the sem_size permits to be available, blocking until one can be acquired.\n\n\n\n\n\n"
-},
-
-{
-    "location": "base/multi-threading/#Base.release",
-    "page": "Multi-Threading",
-    "title": "Base.release",
-    "category": "function",
-    "text": "release(s::Semaphore)\n\nReturn one permit to the pool, possibly allowing another task to acquire it and resume execution.\n\n\n\n\n\n"
-},
-
-{
-    "location": "base/multi-threading/#Synchronization-Primitives-1",
-    "page": "Multi-Threading",
-    "title": "Synchronization Primitives",
+    "title": "Low-level synchronization primitives",
     "category": "section",
-    "text": "Base.Threads.AbstractLock\nBase.lock\nBase.unlock\nBase.trylock\nBase.islocked\nBase.ReentrantLock\nBase.Threads.Mutex\nBase.Threads.SpinLock\nBase.Threads.RecursiveSpinLock\nBase.Semaphore\nBase.acquire\nBase.release"
+    "text": "These building blocks are used to create the regular synchronization objects.Base.Threads.Mutex\nBase.Threads.SpinLock"
 },
 
 {
@@ -15105,14 +15169,6 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "stdlib/Distributed/#Base.wait",
-    "page": "Distributed Computing",
-    "title": "Base.wait",
-    "category": "function",
-    "text": "wait(r::Future)\n\nWait for a value to become available for the specified Future.\n\n\n\n\n\nwait(r::RemoteChannel, args...)\n\nWait for a value to become available on the specified RemoteChannel.\n\n\n\n\n\nwait([x])\n\nBlock the current task until some event occurs, depending on the type of the argument:\n\nChannel: Wait for a value to be appended to the channel.\nCondition: Wait for notify on a condition.\nProcess: Wait for a process or process chain to exit. The exitcode field of a process can be used to determine success or failure.\nTask: Wait for a Task to finish. If the task fails with an exception, the exception is propagated (re-thrown in the task that called wait).\nRawFD: Wait for changes on a file descriptor (see the FileWatching package).\n\nIf no argument is passed, the task blocks for an undefined period. A task can only be restarted by an explicit call to schedule or yieldto.\n\nOften wait is called within a while loop to ensure a waited-for condition is met before proceeding.\n\n\n\n\n\n"
-},
-
-{
     "location": "stdlib/Distributed/#Base.fetch-Tuple{Any}",
     "page": "Distributed Computing",
     "title": "Base.fetch",
@@ -15265,14 +15321,6 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "stdlib/Distributed/#Base.timedwait",
-    "page": "Distributed Computing",
-    "title": "Base.timedwait",
-    "category": "function",
-    "text": "timedwait(testcb::Function, secs::Float64; pollint::Float64=0.1)\n\nWaits until testcb returns true or for secs seconds, whichever is earlier. testcb is polled every pollint seconds.\n\n\n\n\n\n"
-},
-
-{
     "location": "stdlib/Distributed/#Distributed.@spawn",
     "page": "Distributed Computing",
     "title": "Distributed.@spawn",
@@ -15302,22 +15350,6 @@ var documenterSearchIndex = {"docs": [
     "title": "Distributed.@fetchfrom",
     "category": "macro",
     "text": "@fetchfrom\n\nEquivalent to fetch(@spawnat p expr). See fetch and @spawnat.\n\nExamples\n\njulia> addprocs(3);\n\njulia> @fetchfrom 2 myid()\n2\n\njulia> @fetchfrom 4 myid()\n4\n\n\n\n\n\n"
-},
-
-{
-    "location": "stdlib/Distributed/#Base.@async",
-    "page": "Distributed Computing",
-    "title": "Base.@async",
-    "category": "macro",
-    "text": "@async\n\nWrap an expression in a Task and add it to the local machine\'s scheduler queue.\n\n\n\n\n\n"
-},
-
-{
-    "location": "stdlib/Distributed/#Base.@sync",
-    "page": "Distributed Computing",
-    "title": "Base.@sync",
-    "category": "macro",
-    "text": "@sync\n\nWait until all lexically-enclosed uses of @async, @spawn, @spawnat and @distributed are complete. All exceptions thrown by enclosed async operations are collected and thrown as a CompositeException.\n\n\n\n\n\n"
 },
 
 {
@@ -15389,7 +15421,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Distributed Computing",
     "title": "Distributed Computing",
     "category": "section",
-    "text": "DocTestSetup = :(using Distributed)Distributed.addprocs\nDistributed.nprocs\nDistributed.nworkers\nDistributed.procs()\nDistributed.procs(::Integer)\nDistributed.workers\nDistributed.rmprocs\nDistributed.interrupt\nDistributed.myid\nDistributed.pmap\nDistributed.RemoteException\nDistributed.Future\nDistributed.RemoteChannel\nDistributed.wait\nDistributed.fetch(::Any)\nDistributed.remotecall(::Any, ::Integer, ::Any...)\nDistributed.remotecall_wait(::Any, ::Integer, ::Any...)\nDistributed.remotecall_fetch(::Any, ::Integer, ::Any...)\nDistributed.remote_do(::Any, ::Integer, ::Any...)\nDistributed.put!(::RemoteChannel, ::Any...)\nDistributed.put!(::Future, ::Any)\nDistributed.take!(::RemoteChannel, ::Any...)\nDistributed.isready(::RemoteChannel, ::Any...)\nDistributed.isready(::Future)\nDistributed.WorkerPool\nDistributed.CachingPool\nDistributed.default_worker_pool\nDistributed.clear!(::CachingPool)\nDistributed.remote\nDistributed.remotecall(::Any, ::AbstractWorkerPool, ::Any...)\nDistributed.remotecall_wait(::Any, ::AbstractWorkerPool, ::Any...)\nDistributed.remotecall_fetch(::Any, ::AbstractWorkerPool, ::Any...)\nDistributed.remote_do(::Any, ::AbstractWorkerPool, ::Any...)\nDistributed.timedwait\nDistributed.@spawn\nDistributed.@spawnat\nDistributed.@fetch\nDistributed.@fetchfrom\nDistributed.@async\nDistributed.@sync\nDistributed.@distributed\nDistributed.@everywhere\nDistributed.clear!(::Any, ::Any; ::Any)\nDistributed.remoteref_id\nDistributed.channel_from_id\nDistributed.worker_id_from_socket\nDistributed.cluster_cookie()\nDistributed.cluster_cookie(::Any)"
+    "text": "DocTestSetup = :(using Distributed)Distributed.addprocs\nDistributed.nprocs\nDistributed.nworkers\nDistributed.procs()\nDistributed.procs(::Integer)\nDistributed.workers\nDistributed.rmprocs\nDistributed.interrupt\nDistributed.myid\nDistributed.pmap\nDistributed.RemoteException\nDistributed.Future\nDistributed.RemoteChannel\nDistributed.fetch(::Any)\nDistributed.remotecall(::Any, ::Integer, ::Any...)\nDistributed.remotecall_wait(::Any, ::Integer, ::Any...)\nDistributed.remotecall_fetch(::Any, ::Integer, ::Any...)\nDistributed.remote_do(::Any, ::Integer, ::Any...)\nDistributed.put!(::RemoteChannel, ::Any...)\nDistributed.put!(::Future, ::Any)\nDistributed.take!(::RemoteChannel, ::Any...)\nDistributed.isready(::RemoteChannel, ::Any...)\nDistributed.isready(::Future)\nDistributed.WorkerPool\nDistributed.CachingPool\nDistributed.default_worker_pool\nDistributed.clear!(::CachingPool)\nDistributed.remote\nDistributed.remotecall(::Any, ::AbstractWorkerPool, ::Any...)\nDistributed.remotecall_wait(::Any, ::AbstractWorkerPool, ::Any...)\nDistributed.remotecall_fetch(::Any, ::AbstractWorkerPool, ::Any...)\nDistributed.remote_do(::Any, ::AbstractWorkerPool, ::Any...)\nDistributed.@spawn\nDistributed.@spawnat\nDistributed.@fetch\nDistributed.@fetchfrom\nDistributed.@distributed\nDistributed.@everywhere\nDistributed.clear!(::Any, ::Any; ::Any)\nDistributed.remoteref_id\nDistributed.channel_from_id\nDistributed.worker_id_from_socket\nDistributed.cluster_cookie()\nDistributed.cluster_cookie(::Any)"
 },
 
 {
@@ -20373,7 +20405,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Sockets",
     "title": "Base.bind",
     "category": "function",
-    "text": "bind(socket::Union{UDPSocket, TCPSocket}, host::IPAddr, port::Integer; ipv6only=false, reuseaddr=false, kws...)\n\nBind socket to the given host:port. Note that 0.0.0.0 will listen on all devices.\n\nThe ipv6only parameter disables dual stack mode. If ipv6only=true, only an IPv6 stack is created.\nIf reuseaddr=true, multiple threads or processes can bind to the same address without error if they all set reuseaddr=true, but only the last to bind will receive any traffic.\n\n\n\n\n\nbind(chnl::Channel, task::Task)\n\nAssociate the lifetime of chnl with a task. Channel chnl is automatically closed when the task terminates. Any uncaught exception in the task is propagated to all waiters on chnl.\n\nThe chnl object can be explicitly closed independent of task termination. Terminating tasks have no effect on already closed Channel objects.\n\nWhen a channel is bound to multiple tasks, the first task to terminate will close the channel. When multiple channels are bound to the same task, termination of the task will close all of the bound channels.\n\nExamples\n\njulia> c = Channel(0);\n\njulia> task = @async foreach(i->put!(c, i), 1:4);\n\njulia> bind(c,task);\n\njulia> for i in c\n           @show i\n       end;\ni = 1\ni = 2\ni = 3\ni = 4\n\njulia> isopen(c)\nfalse\n\njulia> c = Channel(0);\n\njulia> task = @async (put!(c,1);error(\"foo\"));\n\njulia> bind(c,task);\n\njulia> take!(c)\n1\n\njulia> put!(c,1);\nERROR: foo\nStacktrace:\n[...]\n\n\n\n\n\n"
+    "text": "bind(chnl::Channel, task::Task)\n\nAssociate the lifetime of chnl with a task. Channel chnl is automatically closed when the task terminates. Any uncaught exception in the task is propagated to all waiters on chnl.\n\nThe chnl object can be explicitly closed independent of task termination. Terminating tasks have no effect on already closed Channel objects.\n\nWhen a channel is bound to multiple tasks, the first task to terminate will close the channel. When multiple channels are bound to the same task, termination of the task will close all of the bound channels.\n\nExamples\n\njulia> c = Channel(0);\n\njulia> task = @async foreach(i->put!(c, i), 1:4);\n\njulia> bind(c,task);\n\njulia> for i in c\n           @show i\n       end;\ni = 1\ni = 2\ni = 3\ni = 4\n\njulia> isopen(c)\nfalse\n\njulia> c = Channel(0);\n\njulia> task = @async (put!(c,1);error(\"foo\"));\n\njulia> bind(c,task);\n\njulia> take!(c)\n1\n\njulia> put!(c,1);\nERROR: foo\nStacktrace:\n[...]\n\n\n\n\n\nbind(socket::Union{UDPSocket, TCPSocket}, host::IPAddr, port::Integer; ipv6only=false, reuseaddr=false, kws...)\n\nBind socket to the given host:port. Note that 0.0.0.0 will listen on all devices.\n\nThe ipv6only parameter disables dual stack mode. If ipv6only=true, only an IPv6 stack is created.\nIf reuseaddr=true, multiple threads or processes can bind to the same address without error if they all set reuseaddr=true, but only the last to bind will receive any traffic.\n\n\n\n\n\n"
 },
 
 {
