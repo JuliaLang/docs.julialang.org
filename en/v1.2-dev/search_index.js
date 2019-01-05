@@ -20613,7 +20613,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Sparse Arrays",
     "title": "SparseArrays.sprand",
     "category": "function",
-    "text": "sprand([rng],[type],m,[n],p::AbstractFloat,[rfn])\n\nCreate a random length m sparse vector or m by n sparse matrix, in which the probability of any element being nonzero is independently given by p (and hence the mean density of nonzeros is also exactly p). Nonzero values are sampled from the distribution specified by rfn and have the type type. The uniform distribution is used in case rfn is not specified. The optional rng argument specifies a random number generator, see Random Numbers.\n\nExamples\n\njulia> sprand(Bool, 2, 2, 0.5)\n2×2 SparseMatrixCSC{Bool,Int64} with 2 stored entries:\n  [1, 1]  =  true\n  [2, 1]  =  true\n\njulia> sprand(Float64, 3, 0.75)\n3-element SparseVector{Float64,Int64} with 1 stored entry:\n  [3]  =  0.298614\n\n\n\n\n\n"
+    "text": "sprand([rng],[type],m,[n],p::AbstractFloat,[rfn])\n\nCreate a random length m sparse vector or m by n sparse matrix, in which the probability of any element being nonzero is independently given by p (and hence the mean density of nonzeros is also exactly p). Nonzero values are sampled from the distribution specified by rfn and have the type type. The uniform distribution is used in case rfn is not specified. The optional rng argument specifies a random number generator, see Random Numbers.\n\nExamples\n\njulia> sprand(Bool, 2, 2, 0.5)\n2×2 SparseMatrixCSC{Bool,Int64} with 1 stored entry:\n  [2, 2]  =  true\n\njulia> sprand(Float64, 3, 0.75)\n3-element SparseVector{Float64,Int64} with 1 stored entry:\n  [3]  =  0.298614\n\n\n\n\n\n"
 },
 
 {
@@ -20621,7 +20621,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Sparse Arrays",
     "title": "SparseArrays.sprandn",
     "category": "function",
-    "text": "sprandn([rng][,Type],m[,n],p::AbstractFloat)\n\nCreate a random sparse vector of length m or sparse matrix of size m by n with the specified (independent) probability p of any entry being nonzero, where nonzero values are sampled from the normal distribution. The optional rng argument specifies a random number generator, see Random Numbers.\n\ncompat: Julia 1.1\nSpecifying the output element type Type requires at least Julia 1.1.\n\nExamples\n\njulia> sprandn(2, 2, 0.75)\n2×2 SparseMatrixCSC{Float64,Int64} with 2 stored entries:\n  [1, 1]  =  0.586617\n  [1, 2]  =  0.297336\n\n\n\n\n\n"
+    "text": "sprandn([rng][,Type],m[,n],p::AbstractFloat)\n\nCreate a random sparse vector of length m or sparse matrix of size m by n with the specified (independent) probability p of any entry being nonzero, where nonzero values are sampled from the normal distribution. The optional rng argument specifies a random number generator, see Random Numbers.\n\ncompat: Julia 1.1\nSpecifying the output element type Type requires at least Julia 1.1.\n\nExamples\n\njulia> sprandn(2, 2, 0.75)\n2×2 SparseMatrixCSC{Float64,Int64} with 2 stored entries:\n  [1, 2]  =  0.586617\n  [2, 2]  =  0.297336\n\n\n\n\n\n"
 },
 
 {
