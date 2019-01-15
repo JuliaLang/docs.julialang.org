@@ -224,7 +224,7 @@ NamedTuple{(:a, :b),Tuple{Int64,String}}</code></pre><p>A <code>NamedTuple</code
 (a = 1.0f0, b = &quot;&quot;)
 
 julia&gt; NamedTuple{(:a, :b)}((1,&quot;&quot;))
-(a = 1, b = &quot;&quot;)</code></pre><p>If field types are specified, the arguments are converted. Otherwise the types of the arguments are used directly.</p><h4><a class="nav-anchor" id="man-singleton-types-1" href="#man-singleton-types-1">Singleton Types</a></h4><p>There is a special kind of abstract parametric type that must be mentioned here: singleton types. For each type, <code>T</code>, the &quot;singleton type&quot; <code>Type{T}</code> is an abstract type whose only instance is the object <code>T</code>. Since the definition is a little difficult to parse, let&#39;s look at some examples:</p><pre><code class="language-julia-repl">julia&gt; isa(Float64, Type{Float64})
+(a = 1, b = &quot;&quot;)</code></pre><p>If field types are specified, the arguments are converted. Otherwise the types of the arguments are used directly.</p><h3><a class="nav-anchor" id="man-singleton-types-1" href="#man-singleton-types-1">Singleton Types</a></h3><p>There is a special kind of abstract parametric type that must be mentioned here: singleton types. For each type, <code>T</code>, the &quot;singleton type&quot; <code>Type{T}</code> is an abstract type whose only instance is the object <code>T</code>. Since the definition is a little difficult to parse, let&#39;s look at some examples:</p><pre><code class="language-julia-repl">julia&gt; isa(Float64, Type{Float64})
 true
 
 julia&gt; isa(Real, Type{Float64})
