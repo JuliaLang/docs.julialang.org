@@ -4349,7 +4349,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Essentials",
     "title": "return",
     "category": "keyword",
-    "text": "return\n\nreturn can be used in function bodies to exit early and return a given value, e.g.\n\nfunction compare(a, b)\n    a == b && return \"equal to\"\n    a < b ? \"less than\" : \"greater than\"\nend\n\nIn general you can place a return statement anywhere within a function body, including within deeply nested loops or conditionals, but be careful with do blocks. For example:\n\nfunction test1(xs)\n    for x in xs\n        iseven(x) && return 2x\n    end\nend\n\nfunction test2(xs)\n    map(xs) do x\n        iseven(x) && return 2x\n        x\n    end\nend\n\nIn the first example, the return breaks out of its enclosing function as soon as it hits an even number, so test1([5,6,7]) returns 12.\n\nYou might expect the second example to behave the same way, but in fact the return there only breaks out of the inner function (inside the do block) and gives a value back to map. test2([5,6,7]) then returns [5,12,7].\n\n\n\n\n\n"
+    "text": "return\n\nreturn x causes the enclosing function to exit early, passing the given value x back to its caller. return by itself with no value is equivalent to return nothing (see nothing).\n\nfunction compare(a, b)\n    a == b && return \"equal to\"\n    a < b ? \"less than\" : \"greater than\"\nend\n\nIn general you can place a return statement anywhere within a function body, including within deeply nested loops or conditionals, but be careful with do blocks. For example:\n\nfunction test1(xs)\n    for x in xs\n        iseven(x) && return 2x\n    end\nend\n\nfunction test2(xs)\n    map(xs) do x\n        iseven(x) && return 2x\n        x\n    end\nend\n\nIn the first example, the return breaks out of test1 as soon as it hits an even number, so test1([5,6,7]) returns 12.\n\nYou might expect the second example to behave the same way, but in fact the return there only breaks out of the inner function (inside the do block) and gives a value back to map. test2([5,6,7]) then returns [5,12,7].\n\nWhen used in a top-level expression (i.e. outside any function), return causes the entire current top-level expression to terminate early.\n\n\n\n\n\n"
 },
 
 {
@@ -4357,7 +4357,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Essentials",
     "title": "do",
     "category": "keyword",
-    "text": "do\n\nCreate an anonymous function. For example:\n\nmap(1:10) do x\n    2x\nend\n\nis equivalent to map(x->2x, 1:10).\n\nUse multiple arguments like so:\n\nmap(1:10, 11:20) do x, y\n    x + y\nend\n\n\n\n\n\n"
+    "text": "do\n\nCreate an anonymous function and pass it as the first argument to a function call. For example:\n\nmap(1:10) do x\n    2x\nend\n\nis equivalent to map(x->2x, 1:10).\n\nUse multiple arguments like so:\n\nmap(1:10, 11:20) do x, y\n    x + y\nend\n\n\n\n\n\n"
 },
 
 {
@@ -4397,7 +4397,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Essentials",
     "title": "for",
     "category": "keyword",
-    "text": "for\n\nfor loops repeatedly evaluate the body of the loop by iterating over a sequence of values.\n\nExamples\n\njulia> for i in [1, 4, 0]\n           println(i)\n       end\n1\n4\n0\n\n\n\n\n\n"
+    "text": "for\n\nfor loops repeatedly evaluate a block of statements while iterating over a sequence of values.\n\nExamples\n\njulia> for i in [1, 4, 0]\n           println(i)\n       end\n1\n4\n0\n\n\n\n\n\n"
 },
 
 {
@@ -4405,7 +4405,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Essentials",
     "title": "while",
     "category": "keyword",
-    "text": "while\n\nwhile loops repeatedly evaluate a conditional expression, and continues evaluating the body of the while loop so long as the expression remains true. If the condition expression is false when the while loop is first reached, the body is never evaluated.\n\nExamples\n\njulia> i = 1\n1\n\njulia> while i < 5\n           println(i)\n           global i += 1\n       end\n1\n2\n3\n4\n\n\n\n\n\n"
+    "text": "while\n\nwhile loops repeatedly evaluate a conditional expression, and continue evaluating the body of the while loop as long as the expression remains true. If the condition expression is false when the while loop is first reached, the body is never evaluated.\n\nExamples\n\njulia> i = 1\n1\n\njulia> while i < 5\n           println(i)\n           global i += 1\n       end\n1\n2\n3\n4\n\n\n\n\n\n"
 },
 
 {
@@ -4429,7 +4429,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Essentials",
     "title": "try",
     "category": "keyword",
-    "text": "try/catch\n\nA try/catch statement allows for Exceptions to be tested for. For example, a customized square root function can be written to automatically call either the real or complex square root method on demand using Exceptions:\n\nf(x) = try\n    sqrt(x)\ncatch\n    sqrt(complex(x, 0))\nend\n\ntry/catch statements also allow the Exception to be saved in a variable, e.g. catch y.\n\nThe power of the try/catch construct lies in the ability to unwind a deeply nested computation immediately to a much higher level in the stack of calling functions.\n\n\n\n\n\n"
+    "text": "try/catch\n\nA try/catch statement allows intercepting errors (exceptions) thrown by throw so that program execution can continue. For example, the following code attempts to write a file, but warns the user and proceeds instead of terminating execution if the file cannot be written:\n\ntry\n    open(\"/danger\", \"w\") do f\n        println(f, \"Hello\")\n    end\ncatch\n    @warn \"Could not write file.\"\nend\n\nThe syntax catch e (where e is any variable) assigns the thrown exception object to the given variable within the catch block.\n\nThe power of the try/catch construct lies in the ability to unwind a deeply nested computation immediately to a much higher level in the stack of calling functions.\n\n\n\n\n\n"
 },
 
 {
@@ -7453,7 +7453,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Mathematics",
     "title": "Base.:+",
     "category": "function",
-    "text": "dt::Date + t::Time -> DateTime\n\nThe addition of a Date with a Time produces a DateTime. The hour, minute, second, and millisecond parts of the Time are used along with the year, month, and day of the Date to create the new DateTime. Non-zero microseconds or nanoseconds in the Time type will result in an InexactError being thrown.\n\n\n\n\n\n+(x, y...)\n\nAddition operator. x+y+z+... calls this function with all arguments, i.e. +(x, y, z, ...).\n\nExamples\n\njulia> 1 + 20 + 4\n25\n\njulia> +(1, 20, 4)\n25\n\n\n\n\n\n"
+    "text": "+(x, y...)\n\nAddition operator. x+y+z+... calls this function with all arguments, i.e. +(x, y, z, ...).\n\nExamples\n\njulia> 1 + 20 + 4\n25\n\njulia> +(1, 20, 4)\n25\n\n\n\n\n\ndt::Date + t::Time -> DateTime\n\nThe addition of a Date with a Time produces a DateTime. The hour, minute, second, and millisecond parts of the Time are used along with the year, month, and day of the Date to create the new DateTime. Non-zero microseconds or nanoseconds in the Time type will result in an InexactError being thrown.\n\n\n\n\n\n"
 },
 
 {
@@ -8917,7 +8917,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Numbers",
     "title": "Core.Bool",
     "category": "type",
-    "text": "Bool <: Integer\n\nBoolean type.\n\n\n\n\n\n"
+    "text": "Bool <: Integer\n\nBoolean type, containing the values true and false.\n\n\n\n\n\n"
 },
 
 {
@@ -11437,7 +11437,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Tasks",
     "title": "Base.wait",
     "category": "function",
-    "text": "wait([x])\n\nBlock the current task until some event occurs, depending on the type of the argument:\n\nChannel: Wait for a value to be appended to the channel.\nCondition: Wait for notify on a condition.\nProcess: Wait for a process or process chain to exit. The exitcode field of a process can be used to determine success or failure.\nTask: Wait for a Task to finish. If the task fails with an exception, the exception is propagated (re-thrown in the task that called wait).\nRawFD: Wait for changes on a file descriptor (see the FileWatching package).\n\nIf no argument is passed, the task blocks for an undefined period. A task can only be restarted by an explicit call to schedule or yieldto.\n\nOften wait is called within a while loop to ensure a waited-for condition is met before proceeding.\n\n\n\n\n\nwait(r::Future)\n\nWait for a value to become available for the specified Future.\n\n\n\n\n\nwait(r::RemoteChannel, args...)\n\nWait for a value to become available on the specified RemoteChannel.\n\n\n\n\n\nSpecial note for Threads.Condition:\n\nThe caller must be holding the lock that owns c before calling this method. The calling task will be blocked until some other task wakes it, usually by calling notify` on the same Condition object. The lock will be atomically released when blocking (even if it was locked recursively), and will be reacquired before returning.\n\n\n\n\n\n"
+    "text": "wait([x])\n\nBlock the current task until some event occurs, depending on the type of the argument:\n\nChannel: Wait for a value to be appended to the channel.\nCondition: Wait for notify on a condition.\nProcess: Wait for a process or process chain to exit. The exitcode field of a process can be used to determine success or failure.\nTask: Wait for a Task to finish. If the task fails with an exception, the exception is propagated (re-thrown in the task that called wait).\nRawFD: Wait for changes on a file descriptor (see the FileWatching package).\n\nIf no argument is passed, the task blocks for an undefined period. A task can only be restarted by an explicit call to schedule or yieldto.\n\nOften wait is called within a while loop to ensure a waited-for condition is met before proceeding.\n\n\n\n\n\nSpecial note for Threads.Condition:\n\nThe caller must be holding the lock that owns c before calling this method. The calling task will be blocked until some other task wakes it, usually by calling notify` on the same Condition object. The lock will be atomically released when blocking (even if it was locked recursively), and will be reacquired before returning.\n\n\n\n\n\nwait(r::Future)\n\nWait for a value to become available for the specified Future.\n\n\n\n\n\nwait(r::RemoteChannel, args...)\n\nWait for a value to become available on the specified RemoteChannel.\n\n\n\n\n\n"
 },
 
 {
@@ -13493,7 +13493,7 @@ var documenterSearchIndex = {"docs": [
     "page": "C Interface",
     "title": "Base.copyto!",
     "category": "function",
-    "text": "copyto!(dest, do, src, so, N)\n\nCopy N elements from collection src starting at offset so, to array dest starting at offset do. Return dest.\n\n\n\n\n\ncopyto!(dest::AbstractArray, src) -> dest\n\nCopy all elements from collection src to array dest, whose length must be greater than or equal to the length n of src. The first n elements of dest are overwritten, the other elements are left untouched.\n\nExamples\n\njulia> x = [1., 0., 3., 0., 5.];\n\njulia> y = zeros(7);\n\njulia> copyto!(y, x);\n\njulia> y\n7-element Array{Float64,1}:\n 1.0\n 0.0\n 3.0\n 0.0\n 5.0\n 0.0\n 0.0\n\n\n\n\n\ncopyto!(dest, Rdest::CartesianIndices, src, Rsrc::CartesianIndices) -> dest\n\nCopy the block of src in the range of Rsrc to the block of dest in the range of Rdest. The sizes of the two regions must match.\n\n\n\n\n\ncopyto!(dest::AbstractMatrix, src::UniformScaling)\n\nCopies a UniformScaling onto a matrix.\n\ncompat: Julia 1.1\nIn Julia 1.0 this method only supported a square destination matrix. Julia 1.1. added support for a rectangular matrix.\n\n\n\n\n\n"
+    "text": "copyto!(dest::AbstractMatrix, src::UniformScaling)\n\nCopies a UniformScaling onto a matrix.\n\ncompat: Julia 1.1\nIn Julia 1.0 this method only supported a square destination matrix. Julia 1.1. added support for a rectangular matrix.\n\n\n\n\n\ncopyto!(dest, do, src, so, N)\n\nCopy N elements from collection src starting at offset so, to array dest starting at offset do. Return dest.\n\n\n\n\n\ncopyto!(dest::AbstractArray, src) -> dest\n\nCopy all elements from collection src to array dest, whose length must be greater than or equal to the length n of src. The first n elements of dest are overwritten, the other elements are left untouched.\n\nExamples\n\njulia> x = [1., 0., 3., 0., 5.];\n\njulia> y = zeros(7);\n\njulia> copyto!(y, x);\n\njulia> y\n7-element Array{Float64,1}:\n 1.0\n 0.0\n 3.0\n 0.0\n 5.0\n 0.0\n 0.0\n\n\n\n\n\ncopyto!(dest, Rdest::CartesianIndices, src, Rsrc::CartesianIndices) -> dest\n\nCopy the block of src in the range of Rsrc to the block of dest in the range of Rdest. The sizes of the two regions must match.\n\n\n\n\n\n"
 },
 
 {
