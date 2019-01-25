@@ -4537,11 +4537,19 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "base/base/#=",
+    "page": "Essentials",
+    "title": "=",
+    "category": "keyword",
+    "text": "=\n\n= is the assignment operator.\n\nFor variable a and expression b, a = b makes a refer to the value of b.\nFor functions f(x), f(x) = x defines a new function constant f, or adds a new method to f if f is already defined; this usage is equivalent to function f(x); x; end.\na[i] = v calls setindex!(a,v,i).\na.b = c calls setproperty!(a,:b,c).\nInside a function call, f(a=b) passes b as the value of keyword argument a.\nInside parentheses with commas, (a=1,) constructs a NamedTuple.\n\nExamples\n\nAssigning a to b does not create a copy of b; instead use copy or deepcopy.\n\njulia> b = [1]; a = b; b[1] = 2; a\n1-element Array{Int64,1}:\n 2\n\njulia> b = [1]; a = copy(b); b[1] = 2; a\n1-element Array{Int64,1}:\n 1\n\n\nCollections passed to functions are also not copied. Functions can modify (mutate) the contents of the objects their arguments refer to. (The names of functions which do this are conventionally suffixed with \'!\'.)\n\njulia> function f!(x); x[:] .+= 1; end\nf! (generic function with 1 method)\n\njulia> a = [1]; f!(a); a\n1-element Array{Int64,1}:\n 2\n\n\nAssignment can operate on multiple variables in parallel, taking values from an iterable:\n\njulia> a, b = 4, 5\n(4, 5)\n\njulia> a, b = 1:3\n1:3\n\njulia> a, b\n(1, 2)\n\n\nAssignment can operate on multiple variables in series, and will return the value of the right-hand-most expression:\n\njulia> a = [1]; b = [2]; c = [3]; a = b = c\n1-element Array{Int64,1}:\n 3\n\njulia> b[1] = 2; a, b, c\n([2], [2], [2])\n\n\nAssignment at out-of-bounds indices does not grow a collection. If the collection is a Vector it can instead be grown with push! or append!.\n\njulia> a = [1, 1]; a[3] = 2\nERROR: BoundsError: attempt to access 2-element Array{Int64,1} at index [3]\n[...]\n\njulia> push!(a, 2, 3)\n4-element Array{Int64,1}:\n 1\n 1\n 2\n 3\n\n\nAssigning [] does not eliminate elements from a collection; instead use filter!.\n\njulia> a = collect(1:3); a[a .<= 1] = []\nERROR: DimensionMismatch(\"tried to assign 0 elements to 1 destinations\")\n[...]\n\njulia> filter!(x -> x > 1, a) # in-place & thus more efficient than a = a[a .> 1]\n2-element Array{Int64,1}:\n 2\n 3\n\n\n\n\n\n\n"
+},
+
+{
     "location": "base/base/#Keywords-1",
     "page": "Essentials",
     "title": "Keywords",
     "category": "section",
-    "text": "This is the list of reserved keywords in Julia: baremodule, begin, break, catch, const, continue, do, else, elseif, end, export, false, finally, for, function, global, if, import, let, local, macro, module, quote, return, struct, true, try, using, while. Those keywords are not allowed to be used as variable names.The following two-word sequences are reserved: abstract type, mutable struct, primitive type. However, you can create variables with names: abstract, mutable, primitive and type.Finally,where is parsed as an infix operator for writing parametric method and type definitions. Also in and isa are parsed as infix operators. Creation of a variable named where, in or isa is allowed though.module\nexport\nimport\nusing\nbaremodule\nfunction\nmacro\nreturn\ndo\nbegin\nend\nlet\nif\nfor\nwhile\nbreak\ncontinue\ntry\nfinally\nquote\nlocal\nglobal\nconst\nstruct\nmutable struct\nabstract type\nprimitive type\nwhere\n...\n;"
+    "text": "This is the list of reserved keywords in Julia: baremodule, begin, break, catch, const, continue, do, else, elseif, end, export, false, finally, for, function, global, if, import, let, local, macro, module, quote, return, struct, true, try, using, while. Those keywords are not allowed to be used as variable names.The following two-word sequences are reserved: abstract type, mutable struct, primitive type. However, you can create variables with names: abstract, mutable, primitive and type.Finally,where is parsed as an infix operator for writing parametric method and type definitions. Also in and isa are parsed as infix operators. Creation of a variable named where, in or isa is allowed though.module\nexport\nimport\nusing\nbaremodule\nfunction\nmacro\nreturn\ndo\nbegin\nend\nlet\nif\nfor\nwhile\nbreak\ncontinue\ntry\nfinally\nquote\nlocal\nglobal\nconst\nstruct\nmutable struct\nabstract type\nprimitive type\nwhere\n...\n;\n="
 },
 
 {
@@ -5265,6 +5273,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "base/base/#Base.Enums.Enum",
+    "page": "Essentials",
+    "title": "Base.Enums.Enum",
+    "category": "type",
+    "text": "Enum{T<:Integer}\n\nThe abstract supertype of all enumerated types defined with @enum.\n\n\n\n\n\n"
+},
+
+{
     "location": "base/base/#Base.Enums.@enum",
     "page": "Essentials",
     "title": "Base.Enums.@enum",
@@ -5273,11 +5289,35 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "base/base/#Core.Expr",
+    "page": "Essentials",
+    "title": "Core.Expr",
+    "category": "type",
+    "text": "Expr(head::Symbol, args...)\n\nA type representing compound expressions in parsed julia code (ASTs). Each expression consists of a head Symbol identifying which kind of expression it is (e.g. a call, for loop, conditional statement, etc.), and subexpressions (e.g. the arguments of a call). The subexpressions are stored in a Vector{Any} field called args.\n\nSee the manual chapter on Metaprogramming and the developer documentation Julia ASTs.\n\nExamples\n\njulia> Expr(:call, :+, 1, 2)\n:(1 + 2)\n\njulia> dump(:(a ? b : c))\nExpr\n  head: Symbol if\n  args: Array{Any}((3,))\n    1: Symbol a\n    2: Symbol b\n    3: Symbol c\n\n\n\n\n\n"
+},
+
+{
+    "location": "base/base/#Core.Symbol",
+    "page": "Essentials",
+    "title": "Core.Symbol",
+    "category": "type",
+    "text": "Symbol\n\nThe type of object used to represent identifiers in parsed julia code (ASTs). Also often used as a name or label to identify an entity (e.g. as a dictionary key). Symbols can be entered using the : quote operator:\n\njulia> :name\n:name\n\njulia> typeof(:name)\nSymbol\n\njulia> x = 42\n42\n\njulia> eval(:x)\n42\n\nSymbols can also be constructed from strings or other values by calling the constructor Symbol(x...).\n\nSymbols are immutable and should be compared using ===. The implementation re-uses the same object for all Symbols with the same name, so comparison tends to be efficient (it can just compare pointers).\n\nUnlike strings, Symbols are \"atomic\" or \"scalar\" entities that do not support iteration over characters.\n\n\n\n\n\n"
+},
+
+{
+    "location": "base/base/#Core.Symbol-Tuple",
+    "page": "Essentials",
+    "title": "Core.Symbol",
+    "category": "method",
+    "text": "Symbol(x...) -> Symbol\n\nCreate a Symbol by concatenating the string representations of the arguments together.\n\nExamples\n\njulia> Symbol(\"my\", \"name\")\n:myname\n\njulia> Symbol(\"day\", 4)\n:day4\n\n\n\n\n\n"
+},
+
+{
     "location": "base/base/#Special-Types-1",
     "page": "Essentials",
     "title": "Special Types",
     "category": "section",
-    "text": "Core.Any\nCore.Union\nUnion{}\nCore.UnionAll\nCore.Tuple\nCore.NamedTuple\nBase.Val\nCore.Vararg\nCore.Nothing\nBase.isnothing\nBase.Some\nBase.something\nBase.Enums.@enum"
+    "text": "Core.Any\nCore.Union\nUnion{}\nCore.UnionAll\nCore.Tuple\nCore.NamedTuple\nBase.Val\nCore.Vararg\nCore.Nothing\nBase.isnothing\nBase.Some\nBase.something\nBase.Enums.Enum\nBase.Enums.@enum\nCore.Expr\nCore.Symbol\nCore.Symbol(x...)"
 },
 
 {
@@ -5693,7 +5733,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Essentials",
     "title": "Base.Libc.getpid",
     "category": "function",
-    "text": "getpid(process) -> Int32\n\nGet the child process ID, if it still exists.\n\ncompat: Julia 1.1\nThis function requires at least Julia 1.1.\n\n\n\n\n\ngetpid() -> Int32\n\nGet Julia\'s process ID.\n\n\n\n\n\n"
+    "text": "getpid() -> Int32\n\nGet Julia\'s process ID.\n\n\n\n\n\ngetpid(process) -> Int32\n\nGet the child process ID, if it still exists.\n\ncompat: Julia 1.1\nThis function requires at least Julia 1.1.\n\n\n\n\n\n"
 },
 
 {
@@ -7461,7 +7501,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Mathematics",
     "title": "Base.:+",
     "category": "function",
-    "text": "dt::Date + t::Time -> DateTime\n\nThe addition of a Date with a Time produces a DateTime. The hour, minute, second, and millisecond parts of the Time are used along with the year, month, and day of the Date to create the new DateTime. Non-zero microseconds or nanoseconds in the Time type will result in an InexactError being thrown.\n\n\n\n\n\n+(x, y...)\n\nAddition operator. x+y+z+... calls this function with all arguments, i.e. +(x, y, z, ...).\n\nExamples\n\njulia> 1 + 20 + 4\n25\n\njulia> +(1, 20, 4)\n25\n\n\n\n\n\n"
+    "text": "+(x, y...)\n\nAddition operator. x+y+z+... calls this function with all arguments, i.e. +(x, y, z, ...).\n\nExamples\n\njulia> 1 + 20 + 4\n25\n\njulia> +(1, 20, 4)\n25\n\n\n\n\n\ndt::Date + t::Time -> DateTime\n\nThe addition of a Date with a Time produces a DateTime. The hour, minute, second, and millisecond parts of the Time are used along with the year, month, and day of the Date to create the new DateTime. Non-zero microseconds or nanoseconds in the Time type will result in an InexactError being thrown.\n\n\n\n\n\n"
 },
 
 {
@@ -9785,6 +9825,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "base/strings/#Base.@b_str",
+    "page": "Strings",
+    "title": "Base.@b_str",
+    "category": "macro",
+    "text": "@b_str\n\nCreate an immutable byte (UInt8) vector using string syntax.\n\nExamples\n\njulia> v = b\"12\\x01\\x02\"\n4-element Base.CodeUnits{UInt8,String}:\n 0x31\n 0x32\n 0x01\n 0x02\n\njulia> v[2]\n0x32\n\n\n\n\n\n"
+},
+
+{
     "location": "base/strings/#Base.Docs.@html_str",
     "page": "Strings",
     "title": "Base.Docs.@html_str",
@@ -10193,14 +10241,6 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "base/strings/#Core.Symbol",
-    "page": "Strings",
-    "title": "Core.Symbol",
-    "category": "type",
-    "text": "Symbol\n\nThe type of object used to represent identifiers in parsed julia code (ASTs). Also often used as a name or label to identify an entity (e.g. as a dictionary key). Symbols can be entered using the : quote operator:\n\njulia> :name\n:name\n\njulia> typeof(:name)\nSymbol\n\njulia> x = 42\n42\n\njulia> eval(:x)\n42\n\nSymbols can also be constructed from strings or other values by calling the constructor Symbol(x...).\n\nSymbols are immutable and should be compared using ===. The implementation re-uses the same object for all Symbols with the same name, so comparison tends to be efficient (it can just compare pointers).\n\nUnlike strings, Symbols are \"atomic\" or \"scalar\" entities that do not support iteration over characters.\n\n\n\n\n\n"
-},
-
-{
     "location": "base/strings/#Base.escape_string",
     "page": "Strings",
     "title": "Base.escape_string",
@@ -10221,7 +10261,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Strings",
     "title": "Strings",
     "category": "section",
-    "text": "Core.AbstractChar\nCore.Char\nBase.codepoint\nBase.length(::AbstractString)\nBase.sizeof(::AbstractString)\nBase.:*(::Union{AbstractChar, AbstractString}, ::Union{AbstractChar, AbstractString}...)\nBase.:^(::AbstractString, ::Integer)\nBase.string\nBase.repeat(::AbstractString, ::Integer)\nBase.repeat(::AbstractChar, ::Integer)\nBase.repr(::Any)\nCore.String(::AbstractString)\nBase.SubString\nBase.transcode\nBase.unsafe_string\nBase.ncodeunits(::AbstractString)\nBase.codeunit\nBase.codeunits\nBase.ascii\nBase.@r_str\nBase.SubstitutionString\nBase.@s_str\nBase.@raw_str\nBase.Docs.@html_str\nBase.Docs.@text_str\nBase.isvalid(::Any)\nBase.isvalid(::Any, ::Any)\nBase.isvalid(::AbstractString, ::Integer)\nBase.match\nBase.eachmatch\nBase.isless(::AbstractString, ::AbstractString)\nBase.:(==)(::AbstractString, ::AbstractString)\nBase.cmp(::AbstractString, ::AbstractString)\nBase.lpad\nBase.rpad\nBase.findfirst(::AbstractString, ::AbstractString)\nBase.findnext(::AbstractString, ::AbstractString, ::Integer)\nBase.findlast(::AbstractString, ::AbstractString)\nBase.findprev(::AbstractString, ::AbstractString, ::Integer)\nBase.occursin\nBase.reverse(::Union{String,SubString{String}})\nBase.replace(s::AbstractString, ::Pair)\nBase.split\nBase.rsplit\nBase.strip\nBase.lstrip\nBase.rstrip\nBase.startswith\nBase.endswith\nBase.first(::AbstractString, ::Integer)\nBase.last(::AbstractString, ::Integer)\nBase.uppercase\nBase.lowercase\nBase.titlecase\nBase.uppercasefirst\nBase.lowercasefirst\nBase.join\nBase.chop\nBase.chomp\nBase.thisind\nBase.nextind\nBase.prevind\nBase.textwidth\nBase.isascii\nBase.iscntrl\nBase.isdigit\nBase.isletter\nBase.islowercase\nBase.isnumeric\nBase.isprint\nBase.ispunct\nBase.isspace\nBase.isuppercase\nBase.isxdigit\nCore.Symbol\nBase.escape_string\nBase.unescape_string"
+    "text": "Core.AbstractChar\nCore.Char\nBase.codepoint\nBase.length(::AbstractString)\nBase.sizeof(::AbstractString)\nBase.:*(::Union{AbstractChar, AbstractString}, ::Union{AbstractChar, AbstractString}...)\nBase.:^(::AbstractString, ::Integer)\nBase.string\nBase.repeat(::AbstractString, ::Integer)\nBase.repeat(::AbstractChar, ::Integer)\nBase.repr(::Any)\nCore.String(::AbstractString)\nBase.SubString\nBase.transcode\nBase.unsafe_string\nBase.ncodeunits(::AbstractString)\nBase.codeunit\nBase.codeunits\nBase.ascii\nBase.@r_str\nBase.SubstitutionString\nBase.@s_str\nBase.@raw_str\nBase.@b_str\nBase.Docs.@html_str\nBase.Docs.@text_str\nBase.isvalid(::Any)\nBase.isvalid(::Any, ::Any)\nBase.isvalid(::AbstractString, ::Integer)\nBase.match\nBase.eachmatch\nBase.isless(::AbstractString, ::AbstractString)\nBase.:(==)(::AbstractString, ::AbstractString)\nBase.cmp(::AbstractString, ::AbstractString)\nBase.lpad\nBase.rpad\nBase.findfirst(::AbstractString, ::AbstractString)\nBase.findnext(::AbstractString, ::AbstractString, ::Integer)\nBase.findlast(::AbstractString, ::AbstractString)\nBase.findprev(::AbstractString, ::AbstractString, ::Integer)\nBase.occursin\nBase.reverse(::Union{String,SubString{String}})\nBase.replace(s::AbstractString, ::Pair)\nBase.split\nBase.rsplit\nBase.strip\nBase.lstrip\nBase.rstrip\nBase.startswith\nBase.endswith\nBase.first(::AbstractString, ::Integer)\nBase.last(::AbstractString, ::Integer)\nBase.uppercase\nBase.lowercase\nBase.titlecase\nBase.uppercasefirst\nBase.lowercasefirst\nBase.join\nBase.chop\nBase.chomp\nBase.thisind\nBase.nextind\nBase.prevind\nBase.textwidth\nBase.isascii\nBase.iscntrl\nBase.isdigit\nBase.isletter\nBase.islowercase\nBase.isnumeric\nBase.isprint\nBase.ispunct\nBase.isspace\nBase.isuppercase\nBase.isxdigit\nBase.escape_string\nBase.unescape_string"
 },
 
 {
@@ -11445,7 +11485,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Tasks",
     "title": "Base.wait",
     "category": "function",
-    "text": "Special note for Threads.Condition:\n\nThe caller must be holding the lock that owns c before calling this method. The calling task will be blocked until some other task wakes it, usually by calling notify` on the same Condition object. The lock will be atomically released when blocking (even if it was locked recursively), and will be reacquired before returning.\n\n\n\n\n\nwait([x])\n\nBlock the current task until some event occurs, depending on the type of the argument:\n\nChannel: Wait for a value to be appended to the channel.\nCondition: Wait for notify on a condition.\nProcess: Wait for a process or process chain to exit. The exitcode field of a process can be used to determine success or failure.\nTask: Wait for a Task to finish. If the task fails with an exception, the exception is propagated (re-thrown in the task that called wait).\nRawFD: Wait for changes on a file descriptor (see the FileWatching package).\n\nIf no argument is passed, the task blocks for an undefined period. A task can only be restarted by an explicit call to schedule or yieldto.\n\nOften wait is called within a while loop to ensure a waited-for condition is met before proceeding.\n\n\n\n\n\nwait(r::Future)\n\nWait for a value to become available for the specified Future.\n\n\n\n\n\nwait(r::RemoteChannel, args...)\n\nWait for a value to become available on the specified RemoteChannel.\n\n\n\n\n\n"
+    "text": "wait([x])\n\nBlock the current task until some event occurs, depending on the type of the argument:\n\nChannel: Wait for a value to be appended to the channel.\nCondition: Wait for notify on a condition.\nProcess: Wait for a process or process chain to exit. The exitcode field of a process can be used to determine success or failure.\nTask: Wait for a Task to finish. If the task fails with an exception, the exception is propagated (re-thrown in the task that called wait).\nRawFD: Wait for changes on a file descriptor (see the FileWatching package).\n\nIf no argument is passed, the task blocks for an undefined period. A task can only be restarted by an explicit call to schedule or yieldto.\n\nOften wait is called within a while loop to ensure a waited-for condition is met before proceeding.\n\n\n\n\n\nwait(r::Future)\n\nWait for a value to become available for the specified Future.\n\n\n\n\n\nwait(r::RemoteChannel, args...)\n\nWait for a value to become available on the specified RemoteChannel.\n\n\n\n\n\nSpecial note for Threads.Condition:\n\nThe caller must be holding the lock that owns c before calling this method. The calling task will be blocked until some other task wakes it, usually by calling notify` on the same Condition object. The lock will be atomically released when blocking (even if it was locked recursively), and will be reacquired before returning.\n\n\n\n\n\n"
 },
 
 {
@@ -12481,6 +12521,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "base/io-network/#Base.IOStream",
+    "page": "I/O and Network",
+    "title": "Base.IOStream",
+    "category": "type",
+    "text": "IOStream\n\nA buffered IO stream wrapping an OS file descriptor. Mostly used to represent files returned by open.\n\n\n\n\n\n"
+},
+
+{
     "location": "base/io-network/#Base.IOBuffer",
     "page": "I/O and Network",
     "title": "Base.IOBuffer",
@@ -12821,7 +12869,7 @@ var documenterSearchIndex = {"docs": [
     "page": "I/O and Network",
     "title": "General I/O",
     "category": "section",
-    "text": "Base.stdout\nBase.stderr\nBase.stdin\nBase.open\nBase.IOBuffer\nBase.take!(::Base.GenericIOBuffer)\nBase.fdio\nBase.flush\nBase.close\nBase.write\nBase.read\nBase.read!\nBase.readbytes!\nBase.unsafe_read\nBase.unsafe_write\nBase.position\nBase.seek\nBase.seekstart\nBase.seekend\nBase.skip\nBase.mark\nBase.unmark\nBase.reset\nBase.ismarked\nBase.eof\nBase.isreadonly\nBase.iswritable\nBase.isreadable\nBase.isopen\nBase.Grisu.print_shortest\nBase.fd\nBase.redirect_stdout\nBase.redirect_stdout(::Function, ::Any)\nBase.redirect_stderr\nBase.redirect_stderr(::Function, ::Any)\nBase.redirect_stdin\nBase.redirect_stdin(::Function, ::Any)\nBase.readchomp\nBase.truncate\nBase.skipchars\nBase.countlines\nBase.PipeBuffer\nBase.readavailable\nBase.IOContext\nBase.IOContext(::IO, ::Pair)\nBase.IOContext(::IO, ::IOContext)"
+    "text": "Base.stdout\nBase.stderr\nBase.stdin\nBase.open\nBase.IOStream\nBase.IOBuffer\nBase.take!(::Base.GenericIOBuffer)\nBase.fdio\nBase.flush\nBase.close\nBase.write\nBase.read\nBase.read!\nBase.readbytes!\nBase.unsafe_read\nBase.unsafe_write\nBase.position\nBase.seek\nBase.seekstart\nBase.seekend\nBase.skip\nBase.mark\nBase.unmark\nBase.reset\nBase.ismarked\nBase.eof\nBase.isreadonly\nBase.iswritable\nBase.isreadable\nBase.isopen\nBase.Grisu.print_shortest\nBase.fd\nBase.redirect_stdout\nBase.redirect_stdout(::Function, ::Any)\nBase.redirect_stderr\nBase.redirect_stderr(::Function, ::Any)\nBase.redirect_stdin\nBase.redirect_stdin(::Function, ::Any)\nBase.readchomp\nBase.truncate\nBase.skipchars\nBase.countlines\nBase.PipeBuffer\nBase.readavailable\nBase.IOContext\nBase.IOContext(::IO, ::Pair)\nBase.IOContext(::IO, ::IOContext)"
 },
 
 {
@@ -12993,6 +13041,22 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "base/io-network/#Base.Multimedia.MIME",
+    "page": "I/O and Network",
+    "title": "Base.Multimedia.MIME",
+    "category": "type",
+    "text": "MIME\n\nA type representing a standard internet data format. \"MIME\" stands for \"Multipurpose Internet Mail Extensions\", since the standard was originally used to describe multimedia attachments to email messages.\n\nA MIME object can be passed as the second argument to show to request output in that format.\n\nExamples\n\njulia> show(stdout, MIME(\"text/plain\"), \"hi\")\n\"hi\"\n\n\n\n\n\n"
+},
+
+{
+    "location": "base/io-network/#Base.Multimedia.@MIME_str",
+    "page": "I/O and Network",
+    "title": "Base.Multimedia.@MIME_str",
+    "category": "macro",
+    "text": "@MIME_str\n\nA convenience macro for writing MIME types, typically used when adding methods to show. For example the syntax show(io::IO, ::MIME\"text/html\", x::MyType) = ... could be used to define how to write an HTML representation of MyType.\n\n\n\n\n\n"
+},
+
+{
     "location": "base/io-network/#Base.Multimedia.pushdisplay",
     "page": "I/O and Network",
     "title": "Base.Multimedia.pushdisplay",
@@ -13029,7 +13093,7 @@ var documenterSearchIndex = {"docs": [
     "page": "I/O and Network",
     "title": "Multimedia I/O",
     "category": "section",
-    "text": "Just as text output is performed by print and user-defined types can indicate their textual representation by overloading show, Julia provides a standardized mechanism for rich multimedia output (such as images, formatted text, or even audio and video), consisting of three parts:A function display(x) to request the richest available multimedia display of a Julia object x (with a plain-text fallback).\nOverloading show allows one to indicate arbitrary multimedia representations (keyed by standard MIME types) of user-defined types.\nMultimedia-capable display backends may be registered by subclassing a generic AbstractDisplay type and pushing them onto a stack of display backends via pushdisplay.The base Julia runtime provides only plain-text display, but richer displays may be enabled by loading external modules or by using graphical Julia environments (such as the IPython-based IJulia notebook).Base.Multimedia.display\nBase.Multimedia.redisplay\nBase.Multimedia.displayable\nBase.show(::Any, ::Any, ::Any)\nBase.Multimedia.showable\nBase.repr(::MIME, ::Any)As mentioned above, one can also define new display backends. For example, a module that can display PNG images in a window can register this capability with Julia, so that calling display(x) on types with PNG representations will automatically display the image using the module\'s window.In order to define a new display backend, one should first create a subtype D of the abstract class AbstractDisplay.  Then, for each MIME type (mime string) that can be displayed on D, one should define a function display(d::D, ::MIME\"mime\", x) = ... that displays x as that MIME type, usually by calling show(io, mime, x) or repr(io, mime, x). A MethodError should be thrown if x cannot be displayed as that MIME type; this is automatic if one calls show or repr. Finally, one should define a function display(d::D, x) that queries showable(mime, x) for the mime types supported by D and displays the \"best\" one; a MethodError should be thrown if no supported MIME types are found for x.  Similarly, some subtypes may wish to override redisplay(d::D, ...). (Again, one should import Base.display to add new methods to display.) The return values of these functions are up to the implementation (since in some cases it may be useful to return a display \"handle\" of some type).  The display functions for D can then be called directly, but they can also be invoked automatically from display(x) simply by pushing a new display onto the display-backend stack with:Base.Multimedia.pushdisplay\nBase.Multimedia.popdisplay\nBase.Multimedia.TextDisplay\nBase.Multimedia.istextmime"
+    "text": "Just as text output is performed by print and user-defined types can indicate their textual representation by overloading show, Julia provides a standardized mechanism for rich multimedia output (such as images, formatted text, or even audio and video), consisting of three parts:A function display(x) to request the richest available multimedia display of a Julia object x (with a plain-text fallback).\nOverloading show allows one to indicate arbitrary multimedia representations (keyed by standard MIME types) of user-defined types.\nMultimedia-capable display backends may be registered by subclassing a generic AbstractDisplay type and pushing them onto a stack of display backends via pushdisplay.The base Julia runtime provides only plain-text display, but richer displays may be enabled by loading external modules or by using graphical Julia environments (such as the IPython-based IJulia notebook).Base.Multimedia.display\nBase.Multimedia.redisplay\nBase.Multimedia.displayable\nBase.show(::Any, ::Any, ::Any)\nBase.Multimedia.showable\nBase.repr(::MIME, ::Any)\nBase.MIME\nBase.@MIME_strAs mentioned above, one can also define new display backends. For example, a module that can display PNG images in a window can register this capability with Julia, so that calling display(x) on types with PNG representations will automatically display the image using the module\'s window.In order to define a new display backend, one should first create a subtype D of the abstract class AbstractDisplay.  Then, for each MIME type (mime string) that can be displayed on D, one should define a function display(d::D, ::MIME\"mime\", x) = ... that displays x as that MIME type, usually by calling show(io, mime, x) or repr(io, mime, x). A MethodError should be thrown if x cannot be displayed as that MIME type; this is automatic if one calls show or repr. Finally, one should define a function display(d::D, x) that queries showable(mime, x) for the mime types supported by D and displays the \"best\" one; a MethodError should be thrown if no supported MIME types are found for x.  Similarly, some subtypes may wish to override redisplay(d::D, ...). (Again, one should import Base.display to add new methods to display.) The return values of these functions are up to the implementation (since in some cases it may be useful to return a display \"handle\" of some type).  The display functions for D can then be called directly, but they can also be invoked automatically from display(x) simply by pushing a new display onto the display-backend stack with:Base.Multimedia.pushdisplay\nBase.Multimedia.popdisplay\nBase.Multimedia.TextDisplay\nBase.Multimedia.istextmime"
 },
 
 {
@@ -13501,7 +13565,7 @@ var documenterSearchIndex = {"docs": [
     "page": "C Interface",
     "title": "Base.copyto!",
     "category": "function",
-    "text": "copyto!(dest::AbstractMatrix, src::UniformScaling)\n\nCopies a UniformScaling onto a matrix.\n\ncompat: Julia 1.1\nIn Julia 1.0 this method only supported a square destination matrix. Julia 1.1. added support for a rectangular matrix.\n\n\n\n\n\ncopyto!(dest, do, src, so, N)\n\nCopy N elements from collection src starting at offset so, to array dest starting at offset do. Return dest.\n\n\n\n\n\ncopyto!(dest::AbstractArray, src) -> dest\n\nCopy all elements from collection src to array dest, whose length must be greater than or equal to the length n of src. The first n elements of dest are overwritten, the other elements are left untouched.\n\nExamples\n\njulia> x = [1., 0., 3., 0., 5.];\n\njulia> y = zeros(7);\n\njulia> copyto!(y, x);\n\njulia> y\n7-element Array{Float64,1}:\n 1.0\n 0.0\n 3.0\n 0.0\n 5.0\n 0.0\n 0.0\n\n\n\n\n\ncopyto!(dest, Rdest::CartesianIndices, src, Rsrc::CartesianIndices) -> dest\n\nCopy the block of src in the range of Rsrc to the block of dest in the range of Rdest. The sizes of the two regions must match.\n\n\n\n\n\n"
+    "text": "copyto!(dest, do, src, so, N)\n\nCopy N elements from collection src starting at offset so, to array dest starting at offset do. Return dest.\n\n\n\n\n\ncopyto!(dest::AbstractArray, src) -> dest\n\nCopy all elements from collection src to array dest, whose length must be greater than or equal to the length n of src. The first n elements of dest are overwritten, the other elements are left untouched.\n\nExamples\n\njulia> x = [1., 0., 3., 0., 5.];\n\njulia> y = zeros(7);\n\njulia> copyto!(y, x);\n\njulia> y\n7-element Array{Float64,1}:\n 1.0\n 0.0\n 3.0\n 0.0\n 5.0\n 0.0\n 0.0\n\n\n\n\n\ncopyto!(dest, Rdest::CartesianIndices, src, Rsrc::CartesianIndices) -> dest\n\nCopy the block of src in the range of Rsrc to the block of dest in the range of Rdest. The sizes of the two regions must match.\n\n\n\n\n\ncopyto!(dest::AbstractMatrix, src::UniformScaling)\n\nCopies a UniformScaling onto a matrix.\n\ncompat: Julia 1.1\nIn Julia 1.0 this method only supported a square destination matrix. Julia 1.1. added support for a rectangular matrix.\n\n\n\n\n\n"
 },
 
 {
