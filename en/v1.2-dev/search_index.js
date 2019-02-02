@@ -5765,7 +5765,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Essentials",
     "title": "Base.Libc.getpid",
     "category": "function",
-    "text": "getpid(process) -> Int32\n\nGet the child process ID, if it still exists.\n\ncompat: Julia 1.1\nThis function requires at least Julia 1.1.\n\n\n\n\n\ngetpid() -> Int32\n\nGet Julia\'s process ID.\n\n\n\n\n\n"
+    "text": "getpid() -> Int32\n\nGet Julia\'s process ID.\n\n\n\n\n\ngetpid(process) -> Int32\n\nGet the child process ID, if it still exists.\n\ncompat: Julia 1.1\nThis function requires at least Julia 1.1.\n\n\n\n\n\n"
 },
 
 {
@@ -7797,7 +7797,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Mathematics",
     "title": "Base.:!=",
     "category": "function",
-    "text": "!=(x, y)\n≠(x,y)\n\nNot-equals comparison operator. Always gives the opposite answer as ==.\n\nImplementation\n\nNew types should generally not implement this, and rely on the fallback definition !=(x,y) = !(x==y) instead.\n\nExamples\n\njulia> 3 != 2\ntrue\n\njulia> \"foo\" ≠ \"foo\"\nfalse\n\n\n\n\n\n"
+    "text": "!=(x, y)\n≠(x,y)\n\nNot-equals comparison operator. Always gives the opposite answer as ==.\n\nImplementation\n\nNew types should generally not implement this, and rely on the fallback definition !=(x,y) = !(x==y) instead.\n\nExamples\n\njulia> 3 != 2\ntrue\n\njulia> \"foo\" ≠ \"foo\"\nfalse\n\n\n\n\n\n!=(x)\n\nCreate a function that compares its argument to x using !=, i.e. a function equivalent to y -> y != x. The returned function is of type Base.Fix2{typeof(!=)}, which can be used to implement specialized methods.\n\n\n\n\n\n"
 },
 
 {
@@ -7813,7 +7813,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Mathematics",
     "title": "Base.:<",
     "category": "function",
-    "text": "<(x, y)\n\nLess-than comparison operator. Falls back to isless. Because of the behavior of floating-point NaN values, this operator implements a partial order.\n\nImplementation\n\nNew numeric types with a canonical partial order should implement this function for two arguments of the new type. Types with a canonical total order should implement isless instead. (x < y) | (x == y)\n\nExamples\n\njulia> \'a\' < \'b\'\ntrue\n\njulia> \"abc\" < \"abd\"\ntrue\n\njulia> 5 < 3\nfalse\n\n\n\n\n\n"
+    "text": "<(x, y)\n\nLess-than comparison operator. Falls back to isless. Because of the behavior of floating-point NaN values, this operator implements a partial order.\n\nImplementation\n\nNew numeric types with a canonical partial order should implement this function for two arguments of the new type. Types with a canonical total order should implement isless instead. (x < y) | (x == y)\n\nExamples\n\njulia> \'a\' < \'b\'\ntrue\n\njulia> \"abc\" < \"abd\"\ntrue\n\njulia> 5 < 3\nfalse\n\n\n\n\n\n<(x)\n\nCreate a function that compares its argument to x using <, i.e. a function equivalent to y -> y < x. The returned function is of type Base.Fix2{typeof(<)}, which can be used to implement specialized methods.\n\n\n\n\n\n"
 },
 
 {
@@ -7821,7 +7821,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Mathematics",
     "title": "Base.:<=",
     "category": "function",
-    "text": "<=(x, y)\n≤(x,y)\n\nLess-than-or-equals comparison operator. Falls back to (x < y) | (x == y).\n\nExamples\n\njulia> \'a\' <= \'b\'\ntrue\n\njulia> 7 ≤ 7 ≤ 9\ntrue\n\njulia> \"abc\" ≤ \"abc\"\ntrue\n\njulia> 5 <= 3\nfalse\n\n\n\n\n\n"
+    "text": "<=(x, y)\n≤(x,y)\n\nLess-than-or-equals comparison operator. Falls back to (x < y) | (x == y).\n\nExamples\n\njulia> \'a\' <= \'b\'\ntrue\n\njulia> 7 ≤ 7 ≤ 9\ntrue\n\njulia> \"abc\" ≤ \"abc\"\ntrue\n\njulia> 5 <= 3\nfalse\n\n\n\n\n\n<=(x)\n\nCreate a function that compares its argument to x using <=, i.e. a function equivalent to y -> y <= x. The returned function is of type Base.Fix2{typeof(<=)}, which can be used to implement specialized methods.\n\n\n\n\n\n"
 },
 
 {
@@ -7829,7 +7829,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Mathematics",
     "title": "Base.:>",
     "category": "function",
-    "text": ">(x, y)\n\nGreater-than comparison operator. Falls back to y < x.\n\nImplementation\n\nGenerally, new types should implement < instead of this function, and rely on the fallback definition >(x, y) = y < x.\n\nExamples\n\njulia> \'a\' > \'b\'\nfalse\n\njulia> 7 > 3 > 1\ntrue\n\njulia> \"abc\" > \"abd\"\nfalse\n\njulia> 5 > 3\ntrue\n\n\n\n\n\n"
+    "text": ">(x, y)\n\nGreater-than comparison operator. Falls back to y < x.\n\nImplementation\n\nGenerally, new types should implement < instead of this function, and rely on the fallback definition >(x, y) = y < x.\n\nExamples\n\njulia> \'a\' > \'b\'\nfalse\n\njulia> 7 > 3 > 1\ntrue\n\njulia> \"abc\" > \"abd\"\nfalse\n\njulia> 5 > 3\ntrue\n\n\n\n\n\n>(x)\n\nCreate a function that compares its argument to x using >, i.e. a function equivalent to y -> y > x. The returned function is of type Base.Fix2{typeof(>)}, which can be used to implement specialized methods.\n\n\n\n\n\n"
 },
 
 {
@@ -7837,7 +7837,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Mathematics",
     "title": "Base.:>=",
     "category": "function",
-    "text": ">=(x, y)\n≥(x,y)\n\nGreater-than-or-equals comparison operator. Falls back to y <= x.\n\nExamples\n\njulia> \'a\' >= \'b\'\nfalse\n\njulia> 7 ≥ 7 ≥ 3\ntrue\n\njulia> \"abc\" ≥ \"abc\"\ntrue\n\njulia> 5 >= 3\ntrue\n\n\n\n\n\n"
+    "text": ">=(x, y)\n≥(x,y)\n\nGreater-than-or-equals comparison operator. Falls back to y <= x.\n\nExamples\n\njulia> \'a\' >= \'b\'\nfalse\n\njulia> 7 ≥ 7 ≥ 3\ntrue\n\njulia> \"abc\" ≥ \"abc\"\ntrue\n\njulia> 5 >= 3\ntrue\n\n\n\n\n\n>=(x)\n\nCreate a function that compares its argument to x using >=, i.e. a function equivalent to y -> y >= x. The returned function is of type Base.Fix2{typeof(>=)}, which can be used to implement specialized methods.\n\n\n\n\n\n"
 },
 
 {
@@ -11517,7 +11517,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Tasks",
     "title": "Base.wait",
     "category": "function",
-    "text": "Special note for Threads.Condition:\n\nThe caller must be holding the lock that owns c before calling this method. The calling task will be blocked until some other task wakes it, usually by calling notify` on the same Condition object. The lock will be atomically released when blocking (even if it was locked recursively), and will be reacquired before returning.\n\n\n\n\n\nwait(r::Future)\n\nWait for a value to become available for the specified Future.\n\n\n\n\n\nwait(r::RemoteChannel, args...)\n\nWait for a value to become available on the specified RemoteChannel.\n\n\n\n\n\nwait([x])\n\nBlock the current task until some event occurs, depending on the type of the argument:\n\nChannel: Wait for a value to be appended to the channel.\nCondition: Wait for notify on a condition.\nProcess: Wait for a process or process chain to exit. The exitcode field of a process can be used to determine success or failure.\nTask: Wait for a Task to finish. If the task fails with an exception, the exception is propagated (re-thrown in the task that called wait).\nRawFD: Wait for changes on a file descriptor (see the FileWatching package).\n\nIf no argument is passed, the task blocks for an undefined period. A task can only be restarted by an explicit call to schedule or yieldto.\n\nOften wait is called within a while loop to ensure a waited-for condition is met before proceeding.\n\n\n\n\n\n"
+    "text": "wait(r::Future)\n\nWait for a value to become available for the specified Future.\n\n\n\n\n\nwait(r::RemoteChannel, args...)\n\nWait for a value to become available on the specified RemoteChannel.\n\n\n\n\n\nSpecial note for Threads.Condition:\n\nThe caller must be holding the lock that owns c before calling this method. The calling task will be blocked until some other task wakes it, usually by calling notify` on the same Condition object. The lock will be atomically released when blocking (even if it was locked recursively), and will be reacquired before returning.\n\n\n\n\n\nwait([x])\n\nBlock the current task until some event occurs, depending on the type of the argument:\n\nChannel: Wait for a value to be appended to the channel.\nCondition: Wait for notify on a condition.\nProcess: Wait for a process or process chain to exit. The exitcode field of a process can be used to determine success or failure.\nTask: Wait for a Task to finish. If the task fails with an exception, the exception is propagated (re-thrown in the task that called wait).\nRawFD: Wait for changes on a file descriptor (see the FileWatching package).\n\nIf no argument is passed, the task blocks for an undefined period. A task can only be restarted by an explicit call to schedule or yieldto.\n\nOften wait is called within a while loop to ensure a waited-for condition is met before proceeding.\n\n\n\n\n\n"
 },
 
 {
