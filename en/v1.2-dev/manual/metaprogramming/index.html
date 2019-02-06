@@ -173,11 +173,11 @@ Hello, world!</code></pre><p>Now, consider a slightly more complex macro:</p><pr
        end
 @sayhello (macro with 1 method)</code></pre><p>This macro takes one argument: <code>name</code>. When <code>@sayhello</code> is encountered, the quoted expression is <em>expanded</em> to interpolate the value of the argument into the final expression:</p><pre><code class="language-julia-repl">julia&gt; @sayhello(&quot;human&quot;)
 Hello, human</code></pre><p>We can view the quoted return expression using the function <a href="../../base/base/#Base.macroexpand"><code>macroexpand</code></a> (<strong>important note:</strong> this is an extremely useful tool for debugging macros):</p><pre><code class="language-julia-repl">julia&gt; ex = macroexpand(Main, :(@sayhello(&quot;human&quot;)) )
-:((Main.println)(&quot;Hello, &quot;, &quot;human&quot;))
+:(Main.println(&quot;Hello, &quot;, &quot;human&quot;))
 
 julia&gt; typeof(ex)
 Expr</code></pre><p>We can see that the <code>&quot;human&quot;</code> literal has been interpolated into the expression.</p><p>There also exists a macro <a href="../../base/base/#Base.@macroexpand"><code>@macroexpand</code></a> that is perhaps a bit more convenient than the <code>macroexpand</code> function:</p><pre><code class="language-julia-repl">julia&gt; @macroexpand @sayhello &quot;human&quot;
-:((println)(&quot;Hello, &quot;, &quot;human&quot;))</code></pre><h3><a class="nav-anchor" id="Hold-up:-why-macros?-1" href="#Hold-up:-why-macros?-1">Hold up: why macros?</a></h3><p>We have already seen a function <code>f(::Expr...) -&gt; Expr</code> in a previous section. In fact, <a href="../../base/base/#Base.macroexpand"><code>macroexpand</code></a> is also such a function. So, why do macros exist?</p><p>Macros are necessary because they execute when code is parsed, therefore, macros allow the programmer to generate and include fragments of customized code <em>before</em> the full program is run. To illustrate the difference, consider the following example:</p><pre><code class="language-julia-repl">julia&gt; macro twostep(arg)
+:(println(&quot;Hello, &quot;, &quot;human&quot;))</code></pre><h3><a class="nav-anchor" id="Hold-up:-why-macros?-1" href="#Hold-up:-why-macros?-1">Hold up: why macros?</a></h3><p>We have already seen a function <code>f(::Expr...) -&gt; Expr</code> in a previous section. In fact, <a href="../../base/base/#Base.macroexpand"><code>macroexpand</code></a> is also such a function. So, why do macros exist?</p><p>Macros are necessary because they execute when code is parsed, therefore, macros allow the programmer to generate and include fragments of customized code <em>before</em> the full program is run. To illustrate the difference, consider the following example:</p><pre><code class="language-julia-repl">julia&gt; macro twostep(arg)
            println(&quot;I execute at parse time. The argument is: &quot;, arg)
            return :(println(&quot;I execute at runtime. The argument is: &quot;, $arg))
        end
@@ -188,7 +188,7 @@ I execute at parse time. The argument is: $(Expr(:quote, :((1, 2, 3))))</code></
 Expr
 
 julia&gt; ex
-:((println)(&quot;I execute at runtime. The argument is: &quot;, $(Expr(:copyast, :($(QuoteNode(:((1, 2, 3)))))))))
+:(println(&quot;I execute at runtime. The argument is: &quot;, $(Expr(:copyast, :($(QuoteNode(:((1, 2, 3)))))))))
 
 julia&gt; eval(ex)
 I execute at runtime. The argument is: (1, 2, 3)</code></pre><h3><a class="nav-anchor" id="Macro-invocation-1" href="#Macro-invocation-1">Macro invocation</a></h3><p>Macros are invoked with the following general syntax:</p><pre><code class="language-julia">@name expr1 expr2 ...
@@ -230,14 +230,14 @@ ERROR: AssertionError: 1 == 0</code></pre><p>In place of the written syntax, the
 :(if Main.a == Main.b
         Main.nothing
     else
-        (Main.throw)((Main.AssertionError)(&quot;a == b&quot;))
+        Main.throw(Main.AssertionError(&quot;a == b&quot;))
     end)
 
 julia&gt; @macroexpand @assert a==b &quot;a should equal b!&quot;
 :(if Main.a == Main.b
         Main.nothing
     else
-        (Main.throw)((Main.AssertionError)(&quot;a should equal b!&quot;))
+        Main.throw(Main.AssertionError(&quot;a should equal b!&quot;))
     end)</code></pre><p>There is yet another case that the actual <code>@assert</code> macro handles: what if, in addition to printing &quot;a should equal b,&quot; we wanted to print their values? One might naively try to use string interpolation in the custom message, e.g., <code>@assert a==b &quot;a ($a) should equal b ($b)!&quot;</code>, but this won&#39;t work as expected with the above macro. Can you see why? Recall from <a href="../strings/#string-interpolation-1">string interpolation</a> that an interpolated string is rewritten to a call to <a href="../../base/strings/#Base.string"><code>string</code></a>. Compare:</p><pre><code class="language-julia-repl">julia&gt; typeof(:(&quot;a should equal b&quot;))
 String
 
