@@ -55,9 +55,9 @@ julia&gt; time_sum(x)
 
 julia&gt; push!(a, 1); push!(a, 2.0); push!(a, π)
 3-element Array{Real,1}:
-  1
-  2.0
- π = 3.1415926535897...</code></pre><p>Because <code>a</code> is a an array of abstract type <a href="../../base/numbers/#Core.Real"><code>Real</code></a>, it must be able to hold any <code>Real</code> value. Since <code>Real</code> objects can be of arbitrary size and structure, <code>a</code> must be represented as an array of pointers to individually allocated <code>Real</code> objects. However, if we instead only allow numbers of the same type, e.g. <a href="../../base/numbers/#Core.Float64"><code>Float64</code></a>, to be stored in <code>a</code> these can be stored more efficiently:</p><pre><code class="language-julia-repl">julia&gt; a = Float64[]
+ 1
+ 2.0
+ π</code></pre><p>Because <code>a</code> is a an array of abstract type <a href="../../base/numbers/#Core.Real"><code>Real</code></a>, it must be able to hold any <code>Real</code> value. Since <code>Real</code> objects can be of arbitrary size and structure, <code>a</code> must be represented as an array of pointers to individually allocated <code>Real</code> objects. However, if we instead only allow numbers of the same type, e.g. <a href="../../base/numbers/#Core.Float64"><code>Float64</code></a>, to be stored in <code>a</code> these can be stored more efficiently:</p><pre><code class="language-julia-repl">julia&gt; a = Float64[]
 0-element Array{Float64,1}
 
 julia&gt; push!(a, 1); push!(a, 2.0); push!(a,  π)

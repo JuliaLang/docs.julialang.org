@@ -3421,7 +3421,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Performance Tips",
     "title": "Avoid containers with abstract type parameters",
     "category": "section",
-    "text": "When working with parameterized types, including arrays, it is best to avoid parameterizing with abstract types where possible.Consider the following:julia> a = Real[]\n0-element Array{Real,1}\n\njulia> push!(a, 1); push!(a, 2.0); push!(a, π)\n3-element Array{Real,1}:\n  1\n  2.0\n π = 3.1415926535897...Because a is a an array of abstract type Real, it must be able to hold any Real value. Since Real objects can be of arbitrary size and structure, a must be represented as an array of pointers to individually allocated Real objects. However, if we instead only allow numbers of the same type, e.g. Float64, to be stored in a these can be stored more efficiently:julia> a = Float64[]\n0-element Array{Float64,1}\n\njulia> push!(a, 1); push!(a, 2.0); push!(a,  π)\n3-element Array{Float64,1}:\n 1.0\n 2.0\n 3.141592653589793Assigning numbers into a will now convert them to Float64 and a will be stored as a contiguous block of 64-bit floating-point values that can be manipulated efficiently.See also the discussion under Parametric Types."
+    "text": "When working with parameterized types, including arrays, it is best to avoid parameterizing with abstract types where possible.Consider the following:julia> a = Real[]\n0-element Array{Real,1}\n\njulia> push!(a, 1); push!(a, 2.0); push!(a, π)\n3-element Array{Real,1}:\n 1\n 2.0\n πBecause a is a an array of abstract type Real, it must be able to hold any Real value. Since Real objects can be of arbitrary size and structure, a must be represented as an array of pointers to individually allocated Real objects. However, if we instead only allow numbers of the same type, e.g. Float64, to be stored in a these can be stored more efficiently:julia> a = Float64[]\n0-element Array{Float64,1}\n\njulia> push!(a, 1); push!(a, 2.0); push!(a,  π)\n3-element Array{Float64,1}:\n 1.0\n 2.0\n 3.141592653589793Assigning numbers into a will now convert them to Float64 and a will be stored as a contiguous block of 64-bit floating-point values that can be manipulated efficiently.See also the discussion under Parametric Types."
 },
 
 {
@@ -4733,7 +4733,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Essentials",
     "title": "Core.tuple",
     "category": "function",
-    "text": "tuple(xs...)\n\nConstruct a tuple of the given objects.\n\nExamples\n\njulia> tuple(1, \'a\', pi)\n(1, \'a\', π = 3.1415926535897...)\n\n\n\n\n\n"
+    "text": "tuple(xs...)\n\nConstruct a tuple of the given objects.\n\nExamples\n\njulia> tuple(1, \'a\', pi)\n(1, \'a\', π)\n\n\n\n\n\n"
 },
 
 {
@@ -7533,7 +7533,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Mathematics",
     "title": "Base.:+",
     "category": "function",
-    "text": "+(x, y...)\n\nAddition operator. x+y+z+... calls this function with all arguments, i.e. +(x, y, z, ...).\n\nExamples\n\njulia> 1 + 20 + 4\n25\n\njulia> +(1, 20, 4)\n25\n\n\n\n\n\ndt::Date + t::Time -> DateTime\n\nThe addition of a Date with a Time produces a DateTime. The hour, minute, second, and millisecond parts of the Time are used along with the year, month, and day of the Date to create the new DateTime. Non-zero microseconds or nanoseconds in the Time type will result in an InexactError being thrown.\n\n\n\n\n\n"
+    "text": "dt::Date + t::Time -> DateTime\n\nThe addition of a Date with a Time produces a DateTime. The hour, minute, second, and millisecond parts of the Time are used along with the year, month, and day of the Date to create the new DateTime. Non-zero microseconds or nanoseconds in the Time type will result in an InexactError being thrown.\n\n\n\n\n\n+(x, y...)\n\nAddition operator. x+y+z+... calls this function with all arguments, i.e. +(x, y, z, ...).\n\nExamples\n\njulia> 1 + 20 + 4\n25\n\njulia> +(1, 20, 4)\n25\n\n\n\n\n\n"
 },
 
 {
@@ -11517,7 +11517,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Tasks",
     "title": "Base.wait",
     "category": "function",
-    "text": "Special note for Threads.Condition:\n\nThe caller must be holding the lock that owns c before calling this method. The calling task will be blocked until some other task wakes it, usually by calling notify` on the same Condition object. The lock will be atomically released when blocking (even if it was locked recursively), and will be reacquired before returning.\n\n\n\n\n\nwait(r::Future)\n\nWait for a value to become available for the specified Future.\n\n\n\n\n\nwait(r::RemoteChannel, args...)\n\nWait for a value to become available on the specified RemoteChannel.\n\n\n\n\n\nwait([x])\n\nBlock the current task until some event occurs, depending on the type of the argument:\n\nChannel: Wait for a value to be appended to the channel.\nCondition: Wait for notify on a condition.\nProcess: Wait for a process or process chain to exit. The exitcode field of a process can be used to determine success or failure.\nTask: Wait for a Task to finish. If the task fails with an exception, the exception is propagated (re-thrown in the task that called wait).\nRawFD: Wait for changes on a file descriptor (see the FileWatching package).\n\nIf no argument is passed, the task blocks for an undefined period. A task can only be restarted by an explicit call to schedule or yieldto.\n\nOften wait is called within a while loop to ensure a waited-for condition is met before proceeding.\n\n\n\n\n\n"
+    "text": "wait(r::Future)\n\nWait for a value to become available for the specified Future.\n\n\n\n\n\nwait(r::RemoteChannel, args...)\n\nWait for a value to become available on the specified RemoteChannel.\n\n\n\n\n\nSpecial note for Threads.Condition:\n\nThe caller must be holding the lock that owns c before calling this method. The calling task will be blocked until some other task wakes it, usually by calling notify` on the same Condition object. The lock will be atomically released when blocking (even if it was locked recursively), and will be reacquired before returning.\n\n\n\n\n\nwait([x])\n\nBlock the current task until some event occurs, depending on the type of the argument:\n\nChannel: Wait for a value to be appended to the channel.\nCondition: Wait for notify on a condition.\nProcess: Wait for a process or process chain to exit. The exitcode field of a process can be used to determine success or failure.\nTask: Wait for a Task to finish. If the task fails with an exception, the exception is propagated (re-thrown in the task that called wait).\nRawFD: Wait for changes on a file descriptor (see the FileWatching package).\n\nIf no argument is passed, the task blocks for an undefined period. A task can only be restarted by an explicit call to schedule or yieldto.\n\nOften wait is called within a while loop to ensure a waited-for condition is met before proceeding.\n\n\n\n\n\n"
 },
 
 {
