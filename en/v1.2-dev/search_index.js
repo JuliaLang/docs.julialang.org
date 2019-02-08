@@ -1609,14 +1609,6 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "manual/modules/#Module-file-paths-1",
-    "page": "Modules",
-    "title": "Module file paths",
-    "category": "section",
-    "text": "The global variable LOAD_PATH contains the directories Julia searches for modules when calling require. It can be extended using push!:push!(LOAD_PATH, \"/Path/To/My/Module/\")Putting this statement in the file ~/.julia/config/startup.jl will extend LOAD_PATH on every Julia startup. Alternatively, the module load path can be extended by defining the environment variable JULIA_LOAD_PATH."
-},
-
-{
     "location": "manual/modules/#Namespace-miscellanea-1",
     "page": "Modules",
     "title": "Namespace miscellanea",
@@ -2821,7 +2813,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Environment Variables",
     "title": "JULIA_PROJECT",
     "category": "section",
-    "text": "A directory path that points to the current Julia project. Setting this environment variable has the same effect as specifying the --project start-up option, but --project has higher precedence.  If the variable is set to @. then Julia tries to find a project directory that contains Project.toml or JuliaProject.toml file from the current directory and its parents.  See also the chapter on Code Loading.note: Note\nJULIA_PROJECT must be defined before starting julia; defining it in startup.jl is too late in the startup process."
+    "text": "A directory path that indicates which project should be the initial active project. Setting this environment variable has the same effect as specifying the --project start-up option, but --project has higher precedence. If the variable is set to @. then Julia tries to find a project directory that contains Project.toml or JuliaProject.toml file from the current directory and its parents. See also the chapter on Code Loading.note: Note\nJULIA_PROJECT must be defined before starting julia; defining it in startup.jl is too late in the startup process."
 },
 
 {
@@ -2829,7 +2821,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Environment Variables",
     "title": "JULIA_LOAD_PATH",
     "category": "section",
-    "text": "A separated list of absolute paths that are to be appended to the variable LOAD_PATH. (In Unix-like systems, : is the path separator; in Windows systems, ; is the path separator.) The LOAD_PATH variable is where Base.require and Base.load_in_path() look for code; it defaults to the absolute path $JULIA_HOME/../share/julia/stdlib/v$(VERSION.major).$(VERSION.minor) so that, e.g., version 0.7 of Julia on a Linux system with a Julia executable at /bin/julia will have a default LOAD_PATH of /share/julia/stdlib/v0.7."
+    "text": "The JULIA_LOAD_PATH environment variable is used to populate the global Julia LOAD_PATH variable, which determines which packages can be loaded via import and using (see Code Loading). Unlike the shell PATH variable, empty entries in JULIA_LOAD_PATH are expanded to the default value of LOAD_PATH, [\"@\", \"@v#.#\", \"@stdlib\"] when populating LOAD_PATH. This allows easy appending, prepending, etc. of the load path value in shell scripts regardless of whether JULIA_LOAD_PATH is already set or not. For example, to prepend the directory /foo/bar to LOAD_PATH just doexport JULIA_LOAD_PATH=\"/foo/bar:$JULIA_LOAD_PATH\"If the JULIA_LOAD_PATH environment variable is already set, its old value will be prepended with /foo/bar. On the other hand, if JULIA_LOAD_PATH is not set, then it will be set to /foo/bar: which will expand to a LOAD_PATH value of [\"/foo/bar\", \"@\", \"@v#.#\", \"@stdlib\"]. If JULIA_LOAD_PATH is set to the empty string, it expands to an empty LOAD_PATH array. In other words, the empty string is interpreted as a zero-element array, not a one-element array of the empty string. This behavior was chosen so that it would be possible to set an empty load path via the environment variable. If you want the default load path, either unset the environment variable or if it must have a value, set it to the string :."
 },
 
 {
@@ -7237,7 +7229,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Collections and Data Structures",
     "title": "Base.pairs",
     "category": "function",
-    "text": "pairs(IndexLinear(), A)\npairs(IndexCartesian(), A)\npairs(IndexStyle(A), A)\n\nAn iterator that accesses each element of the array A, returning i => x, where i is the index for the element and x = A[i]. Identical to pairs(A), except that the style of index can be selected. Also similar to enumerate(A), except i will be a valid index for A, while enumerate always counts from 1 regardless of the indices of A.\n\nSpecifying IndexLinear() ensures that i will be an integer; specifying IndexCartesian() ensures that i will be a CartesianIndex; specifying IndexStyle(A) chooses whichever has been defined as the native indexing style for array A.\n\nMutation of the bounds of the underlying array will invalidate this iterator.\n\nExamples\n\njulia> A = [\"a\" \"d\"; \"b\" \"e\"; \"c\" \"f\"];\n\njulia> for (index, value) in pairs(IndexStyle(A), A)\n           println(\"$index $value\")\n       end\n1 a\n2 b\n3 c\n4 d\n5 e\n6 f\n\njulia> S = view(A, 1:2, :);\n\njulia> for (index, value) in pairs(IndexStyle(S), S)\n           println(\"$index $value\")\n       end\nCartesianIndex(1, 1) a\nCartesianIndex(2, 1) b\nCartesianIndex(1, 2) d\nCartesianIndex(2, 2) e\n\nSee also: IndexStyle, axes.\n\n\n\n\n\npairs(collection)\n\nReturn an iterator over key => value pairs for any collection that maps a set of keys to a set of values. This includes arrays, where the keys are the array indices.\n\n\n\n\n\n"
+    "text": "pairs(collection)\n\nReturn an iterator over key => value pairs for any collection that maps a set of keys to a set of values. This includes arrays, where the keys are the array indices.\n\n\n\n\n\npairs(IndexLinear(), A)\npairs(IndexCartesian(), A)\npairs(IndexStyle(A), A)\n\nAn iterator that accesses each element of the array A, returning i => x, where i is the index for the element and x = A[i]. Identical to pairs(A), except that the style of index can be selected. Also similar to enumerate(A), except i will be a valid index for A, while enumerate always counts from 1 regardless of the indices of A.\n\nSpecifying IndexLinear() ensures that i will be an integer; specifying IndexCartesian() ensures that i will be a CartesianIndex; specifying IndexStyle(A) chooses whichever has been defined as the native indexing style for array A.\n\nMutation of the bounds of the underlying array will invalidate this iterator.\n\nExamples\n\njulia> A = [\"a\" \"d\"; \"b\" \"e\"; \"c\" \"f\"];\n\njulia> for (index, value) in pairs(IndexStyle(A), A)\n           println(\"$index $value\")\n       end\n1 a\n2 b\n3 c\n4 d\n5 e\n6 f\n\njulia> S = view(A, 1:2, :);\n\njulia> for (index, value) in pairs(IndexStyle(S), S)\n           println(\"$index $value\")\n       end\nCartesianIndex(1, 1) a\nCartesianIndex(2, 1) b\nCartesianIndex(1, 2) d\nCartesianIndex(2, 2) e\n\nSee also: IndexStyle, axes.\n\n\n\n\n\n"
 },
 
 {
@@ -7557,7 +7549,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Mathematics",
     "title": "Base.:+",
     "category": "function",
-    "text": "+(x, y...)\n\nAddition operator. x+y+z+... calls this function with all arguments, i.e. +(x, y, z, ...).\n\nExamples\n\njulia> 1 + 20 + 4\n25\n\njulia> +(1, 20, 4)\n25\n\n\n\n\n\ndt::Date + t::Time -> DateTime\n\nThe addition of a Date with a Time produces a DateTime. The hour, minute, second, and millisecond parts of the Time are used along with the year, month, and day of the Date to create the new DateTime. Non-zero microseconds or nanoseconds in the Time type will result in an InexactError being thrown.\n\n\n\n\n\n"
+    "text": "dt::Date + t::Time -> DateTime\n\nThe addition of a Date with a Time produces a DateTime. The hour, minute, second, and millisecond parts of the Time are used along with the year, month, and day of the Date to create the new DateTime. Non-zero microseconds or nanoseconds in the Time type will result in an InexactError being thrown.\n\n\n\n\n\n+(x, y...)\n\nAddition operator. x+y+z+... calls this function with all arguments, i.e. +(x, y, z, ...).\n\nExamples\n\njulia> 1 + 20 + 4\n25\n\njulia> +(1, 20, 4)\n25\n\n\n\n\n\n"
 },
 
 {
@@ -11957,7 +11949,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Constants",
     "title": "Base.LOAD_PATH",
     "category": "constant",
-    "text": "LOAD_PATH\n\nAn array of paths for using and import statements to consider as project environments or package directories when loading code. See Code Loading.\n\n\n\n\n\n"
+    "text": "LOAD_PATH\n\nAn array of paths for using and import statements to consider as project environments or package directories when loading code. It is populated based on the JULIA_LOAD_PATH environment variable if set; otherwise it defaults to [\"@\", \"@v#.#\", \"@stdlib\"]. Entries starting with @ have special meanings:\n\n@ refers to the \"current active environment\", the initial value of which is initially determined by the JULIA_PROJECT environment variable or the --project command-line option.\n@stdlib expands to the absolute path of the current Julia installation\'s standard library directory.\n@name refers to a named environment, which are stored in depots (see JULIA_DEPOT_PATH) under the environments subdirectory. The user\'s named environments are stored in ~/.julia/environments so @name would refer to the environment in ~/.julia/environments/name if it exists and contains a Project.toml file. If name contains # characters, then they are replaced with the major, minor and patch components of the Julia version number. For example, if you are running Julia 1.2 then @v#.# expands to @v1.2 and will look for an environment by that name, typically at ~/.julia/environments/v1.2.\n\nThe fully expanded value of LOAD_PATH that is searched for projects and packages can be seen by calling the Base.load_path() function.\n\nSee also: JULIA_LOAD_PATH, JULIA_PROJECT, JULIA_DEPOT_PATH, and Code Loading.\n\n\n\n\n\n"
 },
 
 {
