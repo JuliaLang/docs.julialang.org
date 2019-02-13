@@ -108,7 +108,16 @@ Stacktrace:
 [...]
 
 julia&gt; s[4]
-&#39; &#39;: ASCII/Unicode U+0020 (category Zs: Separator, space)</code></pre><p>In this case, the character <code>∀</code> is a three-byte character, so the indices 2 and 3 are invalid and the next character&#39;s index is 4; this next valid index can be computed by <a href="../../base/strings/#Base.nextind"><code>nextind(s,1)</code></a>, and the next index after that by <code>nextind(s,4)</code> and so on.</p><p>Extraction of a substring using range indexing also expects valid byte indices or an error is thrown:</p><pre><code class="language-julia-repl">julia&gt; s[1:1]
+&#39; &#39;: ASCII/Unicode U+0020 (category Zs: Separator, space)</code></pre><p>In this case, the character <code>∀</code> is a three-byte character, so the indices 2 and 3 are invalid and the next character&#39;s index is 4; this next valid index can be computed by <a href="../../base/strings/#Base.nextind"><code>nextind(s,1)</code></a>, and the next index after that by <code>nextind(s,4)</code> and so on.</p><p>Since <code>end</code> is always the last valid index into a collection, <code>end-1</code> references an invalid byte index if the second-to-last character is multibyte.</p><pre><code class="language-julia-repl">julia&gt; s[end-1]
+&#39; &#39;: ASCII/Unicode U+0020 (category Zs: Separator, space)
+
+julia&gt; s[end-2]
+ERROR: StringIndexError(&quot;∀ x ∃ y&quot;, 9)
+Stacktrace:
+[...]
+
+julia&gt; s[prevind(s, end, 2)]
+&#39;∃&#39;: Unicode U+2203 (category Sm: Symbol, math)</code></pre><p>The first case works, because the last character <code>y</code> and the space are one-byte characters, whereas <code>end-2</code> indexes into the middle of the <code>∃</code> multibyte representation. The correct way for this case is using <code>prevind(s, lastindex(s), 2)</code> or, if you&#39;re using that value to index into <code>s</code> you can write <code>s[prevind(s, end, 2)]</code> and <code>end</code> expands to <code>lastindex(s)</code>.</p><p>Extraction of a substring using range indexing also expects valid byte indices or an error is thrown:</p><pre><code class="language-julia-repl">julia&gt; s[1:1]
 &quot;∀&quot;
 
 julia&gt; s[1:2]
