@@ -2345,7 +2345,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "manual/parallel-computing/#Code-Availability-and-Loading-Packages-1",
+    "location": "manual/parallel-computing/#code-availability-1",
     "page": "Parallel Computing",
     "title": "Code Availability and Loading Packages",
     "category": "section",
@@ -4245,7 +4245,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Essentials",
     "title": "Base.require",
     "category": "function",
-    "text": "require(into::Module, module::Symbol)\n\nThis function is part of the implementation of using / import, if a module is not already defined in Main. It can also be called directly to force reloading a module, regardless of whether it has been loaded before (for example, when interactively developing libraries).\n\nLoads a source file, in the context of the Main module, on every active node, searching standard locations for files. require is considered a top-level operation, so it sets the current include path but does not use it to search for files (see help for include). This function is typically used to load library code, and is implicitly called by using to load packages.\n\nWhen searching for files, require first looks for package code in the global array LOAD_PATH. require is case-sensitive on all platforms, including those with case-insensitive filesystems like macOS and Windows.\n\nFor more details regarding code loading, see the manual.\n\n\n\n\n\n"
+    "text": "require(into::Module, module::Symbol)\n\nThis function is part of the implementation of using / import, if a module is not already defined in Main. It can also be called directly to force reloading a module, regardless of whether it has been loaded before (for example, when interactively developing libraries).\n\nLoads a source file, in the context of the Main module, on every active node, searching standard locations for files. require is considered a top-level operation, so it sets the current include path but does not use it to search for files (see help for include). This function is typically used to load library code, and is implicitly called by using to load packages.\n\nWhen searching for files, require first looks for package code in the global array LOAD_PATH. require is case-sensitive on all platforms, including those with case-insensitive filesystems like macOS and Windows.\n\nFor more details regarding code loading, see the manual sections on modules and parallel computing.\n\n\n\n\n\n"
 },
 
 {
@@ -4725,7 +4725,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Essentials",
     "title": "Core.typeassert",
     "category": "function",
-    "text": "typeassert(x, type)\n\nThrow a TypeError unless x isa type. The syntax x::type calls this function.\n\n\n\n\n\n"
+    "text": "typeassert(x, type)\n\nThrow a TypeError unless x isa type. The syntax x::type calls this function.\n\nExamples\n\njulia> typeassert(2.5, Int)\nERROR: TypeError: in typeassert, expected Int64, got Float64\nStacktrace:\n[...]\n\n\n\n\n\n"
 },
 
 {
@@ -5381,7 +5381,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Essentials",
     "title": "Core.Function",
     "category": "type",
-    "text": "Function\n\nAbstract type of all functions.\n\njulia> isa(+, Function)\ntrue\n\njulia> typeof(sin)\ntypeof(sin)\n\njulia> ans <: Function\ntrue\n\n\n\n\n\n"
+    "text": "Function\n\nAbstract type of all functions.\n\nExamples\n\njulia> isa(+, Function)\ntrue\n\njulia> typeof(sin)\ntypeof(sin)\n\njulia> ans <: Function\ntrue\n\n\n\n\n\n"
 },
 
 {
@@ -5477,7 +5477,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Essentials",
     "title": "Base.evalfile",
     "category": "function",
-    "text": "evalfile(path::AbstractString, args::Vector{String}=String[])\n\nLoad the file using Base.include, evaluate all expressions, and return the value of the last one.\n\n\n\n\n\n"
+    "text": "evalfile(path::AbstractString, args::Vector{String}=String[])\n\nLoad the file using include, evaluate all expressions, and return the value of the last one.\n\n\n\n\n\n"
 },
 
 {
@@ -5789,7 +5789,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Essentials",
     "title": "Base.Libc.getpid",
     "category": "function",
-    "text": "getpid() -> Int32\n\nGet Julia\'s process ID.\n\n\n\n\n\ngetpid(process) -> Int32\n\nGet the child process ID, if it still exists.\n\ncompat: Julia 1.1\nThis function requires at least Julia 1.1.\n\n\n\n\n\n"
+    "text": "getpid(process) -> Int32\n\nGet the child process ID, if it still exists.\n\ncompat: Julia 1.1\nThis function requires at least Julia 1.1.\n\n\n\n\n\ngetpid() -> Int32\n\nGet Julia\'s process ID.\n\n\n\n\n\n"
 },
 
 {
@@ -6109,7 +6109,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Essentials",
     "title": "Core.ErrorException",
     "category": "type",
-    "text": "ErrorException(msg)\n\nGeneric error type. The error message, in the .msg field, may provide more specific details.\n\nExample\n\njulia> ex = ErrorException(\"I\'ve done a bad thing\");\n\njulia> ex.msg\n\"I\'ve done a bad thing\"\n\n\n\n\n\n"
+    "text": "ErrorException(msg)\n\nGeneric error type. The error message, in the .msg field, may provide more specific details.\n\nExamples\n\njulia> ex = ErrorException(\"I\'ve done a bad thing\");\n\njulia> ex.msg\n\"I\'ve done a bad thing\"\n\n\n\n\n\n"
 },
 
 {
@@ -6213,7 +6213,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Essentials",
     "title": "Core.UndefKeywordError",
     "category": "type",
-    "text": "UndefKeywordError(var::Symbol)\n\nThe required keyword argument var was not assigned in a function call.\n\n\n\n\n\n"
+    "text": "UndefKeywordError(var::Symbol)\n\nThe required keyword argument var was not assigned in a function call.\n\nExamples\n\njulia> function my_func(;my_arg)\n           return my_arg + 1\n       end\nmy_func (generic function with 1 method)\n\njulia> my_func()\nERROR: UndefKeywordError: keyword argument my_arg not assigned\nStacktrace:\n [1] my_func() at ./REPL[1]:2\n [2] top-level scope at REPL[2]:1\n\n\n\n\n\n"
 },
 
 {
@@ -6221,7 +6221,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Essentials",
     "title": "Core.UndefRefError",
     "category": "type",
-    "text": "UndefRefError()\n\nThe item or field is not defined for the given object.\n\n\n\n\n\n"
+    "text": "UndefRefError()\n\nThe item or field is not defined for the given object.\n\nExamples\n\njulia> struct MyType\n           a::Int\n       end\n\njulia> A = MyType(5)\nMyType(5)\n\njulia> getfield(A, b)\nERROR: UndefVarError: b not defined\nStacktrace:\n[...]\n\n\n\n\n\n"
 },
 
 {
@@ -7237,7 +7237,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Collections and Data Structures",
     "title": "Base.pairs",
     "category": "function",
-    "text": "pairs(IndexLinear(), A)\npairs(IndexCartesian(), A)\npairs(IndexStyle(A), A)\n\nAn iterator that accesses each element of the array A, returning i => x, where i is the index for the element and x = A[i]. Identical to pairs(A), except that the style of index can be selected. Also similar to enumerate(A), except i will be a valid index for A, while enumerate always counts from 1 regardless of the indices of A.\n\nSpecifying IndexLinear() ensures that i will be an integer; specifying IndexCartesian() ensures that i will be a CartesianIndex; specifying IndexStyle(A) chooses whichever has been defined as the native indexing style for array A.\n\nMutation of the bounds of the underlying array will invalidate this iterator.\n\nExamples\n\njulia> A = [\"a\" \"d\"; \"b\" \"e\"; \"c\" \"f\"];\n\njulia> for (index, value) in pairs(IndexStyle(A), A)\n           println(\"$index $value\")\n       end\n1 a\n2 b\n3 c\n4 d\n5 e\n6 f\n\njulia> S = view(A, 1:2, :);\n\njulia> for (index, value) in pairs(IndexStyle(S), S)\n           println(\"$index $value\")\n       end\nCartesianIndex(1, 1) a\nCartesianIndex(2, 1) b\nCartesianIndex(1, 2) d\nCartesianIndex(2, 2) e\n\nSee also: IndexStyle, axes.\n\n\n\n\n\npairs(collection)\n\nReturn an iterator over key => value pairs for any collection that maps a set of keys to a set of values. This includes arrays, where the keys are the array indices.\n\n\n\n\n\n"
+    "text": "pairs(collection)\n\nReturn an iterator over key => value pairs for any collection that maps a set of keys to a set of values. This includes arrays, where the keys are the array indices.\n\n\n\n\n\npairs(IndexLinear(), A)\npairs(IndexCartesian(), A)\npairs(IndexStyle(A), A)\n\nAn iterator that accesses each element of the array A, returning i => x, where i is the index for the element and x = A[i]. Identical to pairs(A), except that the style of index can be selected. Also similar to enumerate(A), except i will be a valid index for A, while enumerate always counts from 1 regardless of the indices of A.\n\nSpecifying IndexLinear() ensures that i will be an integer; specifying IndexCartesian() ensures that i will be a CartesianIndex; specifying IndexStyle(A) chooses whichever has been defined as the native indexing style for array A.\n\nMutation of the bounds of the underlying array will invalidate this iterator.\n\nExamples\n\njulia> A = [\"a\" \"d\"; \"b\" \"e\"; \"c\" \"f\"];\n\njulia> for (index, value) in pairs(IndexStyle(A), A)\n           println(\"$index $value\")\n       end\n1 a\n2 b\n3 c\n4 d\n5 e\n6 f\n\njulia> S = view(A, 1:2, :);\n\njulia> for (index, value) in pairs(IndexStyle(S), S)\n           println(\"$index $value\")\n       end\nCartesianIndex(1, 1) a\nCartesianIndex(2, 1) b\nCartesianIndex(1, 2) d\nCartesianIndex(2, 2) e\n\nSee also: IndexStyle, axes.\n\n\n\n\n\n"
 },
 
 {
@@ -7781,7 +7781,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Mathematics",
     "title": "Base.::",
     "category": "function",
-    "text": "(:)(I::CartesianIndex, J::CartesianIndex)\n\nConstruct CartesianIndices from two CartesianIndex.\n\ncompat: Julia 1.1\nThis method requires at least Julia 1.1.\n\nExamples\n\njulia> I = CartesianIndex(2,1);\n\njulia> J = CartesianIndex(3,3);\n\njulia> I:J\n2×3 CartesianIndices{2,Tuple{UnitRange{Int64},UnitRange{Int64}}}:\n CartesianIndex(2, 1)  CartesianIndex(2, 2)  CartesianIndex(2, 3)\n CartesianIndex(3, 1)  CartesianIndex(3, 2)  CartesianIndex(3, 3)\n\n\n\n\n\n(:)(start, [step], stop)\n\nRange operator. a:b constructs a range from a to b with a step size of 1 (a UnitRange) , and a:s:b is similar but uses a step size of s (a StepRange).\n\n: is also used in indexing to select whole dimensions  and for Symbol literals, as in e.g. :hello.\n\n\n\n\n\n"
+    "text": "(:)(start, [step], stop)\n\nRange operator. a:b constructs a range from a to b with a step size of 1 (a UnitRange) , and a:s:b is similar but uses a step size of s (a StepRange).\n\n: is also used in indexing to select whole dimensions  and for Symbol literals, as in e.g. :hello.\n\n\n\n\n\n(:)(I::CartesianIndex, J::CartesianIndex)\n\nConstruct CartesianIndices from two CartesianIndex.\n\ncompat: Julia 1.1\nThis method requires at least Julia 1.1.\n\nExamples\n\njulia> I = CartesianIndex(2,1);\n\njulia> J = CartesianIndex(3,3);\n\njulia> I:J\n2×3 CartesianIndices{2,Tuple{UnitRange{Int64},UnitRange{Int64}}}:\n CartesianIndex(2, 1)  CartesianIndex(2, 2)  CartesianIndex(2, 3)\n CartesianIndex(3, 1)  CartesianIndex(3, 2)  CartesianIndex(3, 3)\n\n\n\n\n\n"
 },
 
 {
@@ -11541,7 +11541,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Tasks",
     "title": "Base.wait",
     "category": "function",
-    "text": "wait(r::Future)\n\nWait for a value to become available for the specified Future.\n\n\n\n\n\nwait(r::RemoteChannel, args...)\n\nWait for a value to become available on the specified RemoteChannel.\n\n\n\n\n\nSpecial note for Threads.Condition:\n\nThe caller must be holding the lock that owns c before calling this method. The calling task will be blocked until some other task wakes it, usually by calling notify` on the same Condition object. The lock will be atomically released when blocking (even if it was locked recursively), and will be reacquired before returning.\n\n\n\n\n\nwait([x])\n\nBlock the current task until some event occurs, depending on the type of the argument:\n\nChannel: Wait for a value to be appended to the channel.\nCondition: Wait for notify on a condition.\nProcess: Wait for a process or process chain to exit. The exitcode field of a process can be used to determine success or failure.\nTask: Wait for a Task to finish. If the task fails with an exception, the exception is propagated (re-thrown in the task that called wait).\nRawFD: Wait for changes on a file descriptor (see the FileWatching package).\n\nIf no argument is passed, the task blocks for an undefined period. A task can only be restarted by an explicit call to schedule or yieldto.\n\nOften wait is called within a while loop to ensure a waited-for condition is met before proceeding.\n\n\n\n\n\n"
+    "text": "wait([x])\n\nBlock the current task until some event occurs, depending on the type of the argument:\n\nChannel: Wait for a value to be appended to the channel.\nCondition: Wait for notify on a condition.\nProcess: Wait for a process or process chain to exit. The exitcode field of a process can be used to determine success or failure.\nTask: Wait for a Task to finish. If the task fails with an exception, the exception is propagated (re-thrown in the task that called wait).\nRawFD: Wait for changes on a file descriptor (see the FileWatching package).\n\nIf no argument is passed, the task blocks for an undefined period. A task can only be restarted by an explicit call to schedule or yieldto.\n\nOften wait is called within a while loop to ensure a waited-for condition is met before proceeding.\n\n\n\n\n\nSpecial note for Threads.Condition:\n\nThe caller must be holding the lock that owns c before calling this method. The calling task will be blocked until some other task wakes it, usually by calling notify` on the same Condition object. The lock will be atomically released when blocking (even if it was locked recursively), and will be reacquired before returning.\n\n\n\n\n\nwait(r::Future)\n\nWait for a value to become available for the specified Future.\n\n\n\n\n\nwait(r::RemoteChannel, args...)\n\nWait for a value to become available on the specified RemoteChannel.\n\n\n\n\n\n"
 },
 
 {
@@ -13629,7 +13629,7 @@ var documenterSearchIndex = {"docs": [
     "page": "C Interface",
     "title": "Base.copyto!",
     "category": "function",
-    "text": "copyto!(dest::AbstractMatrix, src::UniformScaling)\n\nCopies a UniformScaling onto a matrix.\n\ncompat: Julia 1.1\nIn Julia 1.0 this method only supported a square destination matrix. Julia 1.1. added support for a rectangular matrix.\n\n\n\n\n\ncopyto!(dest, do, src, so, N)\n\nCopy N elements from collection src starting at offset so, to array dest starting at offset do. Return dest.\n\n\n\n\n\ncopyto!(dest::AbstractArray, src) -> dest\n\nCopy all elements from collection src to array dest, whose length must be greater than or equal to the length n of src. The first n elements of dest are overwritten, the other elements are left untouched.\n\nExamples\n\njulia> x = [1., 0., 3., 0., 5.];\n\njulia> y = zeros(7);\n\njulia> copyto!(y, x);\n\njulia> y\n7-element Array{Float64,1}:\n 1.0\n 0.0\n 3.0\n 0.0\n 5.0\n 0.0\n 0.0\n\n\n\n\n\ncopyto!(dest, Rdest::CartesianIndices, src, Rsrc::CartesianIndices) -> dest\n\nCopy the block of src in the range of Rsrc to the block of dest in the range of Rdest. The sizes of the two regions must match.\n\n\n\n\n\n"
+    "text": "copyto!(dest, do, src, so, N)\n\nCopy N elements from collection src starting at offset so, to array dest starting at offset do. Return dest.\n\n\n\n\n\ncopyto!(dest::AbstractArray, src) -> dest\n\nCopy all elements from collection src to array dest, whose length must be greater than or equal to the length n of src. The first n elements of dest are overwritten, the other elements are left untouched.\n\nExamples\n\njulia> x = [1., 0., 3., 0., 5.];\n\njulia> y = zeros(7);\n\njulia> copyto!(y, x);\n\njulia> y\n7-element Array{Float64,1}:\n 1.0\n 0.0\n 3.0\n 0.0\n 5.0\n 0.0\n 0.0\n\n\n\n\n\ncopyto!(dest, Rdest::CartesianIndices, src, Rsrc::CartesianIndices) -> dest\n\nCopy the block of src in the range of Rsrc to the block of dest in the range of Rdest. The sizes of the two regions must match.\n\n\n\n\n\ncopyto!(dest::AbstractMatrix, src::UniformScaling)\n\nCopies a UniformScaling onto a matrix.\n\ncompat: Julia 1.1\nIn Julia 1.0 this method only supported a square destination matrix. Julia 1.1. added support for a rectangular matrix.\n\n\n\n\n\n"
 },
 
 {
