@@ -7021,7 +7021,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Collections and Data Structures",
     "title": "Base.map!",
     "category": "function",
-    "text": "map!(function, destination, collection...)\n\nLike map, but stores the result in destination rather than a new collection. destination must be at least as large as the first collection.\n\nExamples\n\njulia> a = zeros(3);\n\njulia> map!(x -> x * 2, a, [1, 2, 3]);\n\njulia> a\n3-element Array{Float64,1}:\n 2.0\n 4.0\n 6.0\n\n\n\n\n\n"
+    "text": "map!(function, destination, collection...)\n\nLike map, but stores the result in destination rather than a new collection. destination must be at least as large as the first collection.\n\nExamples\n\njulia> a = zeros(3);\n\njulia> map!(x -> x * 2, a, [1, 2, 3]);\n\njulia> a\n3-element Array{Float64,1}:\n 2.0\n 4.0\n 6.0\n\n\n\n\n\nmap!(f, values(dict::AbstractDict))\n\nModifies dict by transforming each value from val to f(val). Note that the type of dict cannot be changed: if f(val) is not an instance of the key type of dict then it will be converted to the key type if possible and otherwise raise an error.\n\nExamples\n\n```jldoctest julia> d = Dict(:a => 1, :b => 2) Dict{Symbol,Int64} with 2 entries:   :a => 1   :b => 2\n\njulia> map!(v -> v-1, values(d)) Dict{Symbol,Int64} with 2 entries:   :a => 0   :b => 1  ```\n\n\n\n\n\n"
 },
 
 {
@@ -7062,6 +7062,22 @@ var documenterSearchIndex = {"docs": [
     "title": "Base.last",
     "category": "function",
     "text": "last(coll)\n\nGet the last element of an ordered collection, if it can be computed in O(1) time. This is accomplished by calling lastindex to get the last index. Return the end point of an AbstractRange even if it is empty.\n\nExamples\n\njulia> last(1:2:10)\n9\n\njulia> last([1; 2; 3; 4])\n4\n\n\n\n\n\nlast(s::AbstractString, n::Integer)\n\nGet a string consisting of the last n characters of s.\n\njulia> last(\"∀ϵ≠0: ϵ²>0\", 0)\n\"\"\n\njulia> last(\"∀ϵ≠0: ϵ²>0\", 1)\n\"0\"\n\njulia> last(\"∀ϵ≠0: ϵ²>0\", 3)\n\"²>0\"\n\n\n\n\n\n"
+},
+
+{
+    "location": "base/collections/#Base.front",
+    "page": "Collections and Data Structures",
+    "title": "Base.front",
+    "category": "function",
+    "text": "front(x::Tuple)::Tuple\n\nReturn a Tuple consisting of all but the last component of x.\n\nExamples\n\njulia> Base.front((1,2,3))\n(1, 2)\n\njulia> Base.front(())\nERROR: ArgumentError: Cannot call front on an empty tuple.\n\n\n\n\n\n"
+},
+
+{
+    "location": "base/collections/#Base.tail",
+    "page": "Collections and Data Structures",
+    "title": "Base.tail",
+    "category": "function",
+    "text": "tail(x::Tuple)::Tuple\n\nReturn a Tuple consisting of all but the first component of x.\n\nExamples\n\njulia> Base.tail((1,2,3))\n(2, 3)\n\njulia> Base.tail(())\nERROR: ArgumentError: Cannot call tail on an empty tuple.\n\n\n\n\n\n"
 },
 
 {
@@ -7133,7 +7149,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Collections and Data Structures",
     "title": "Iterable Collections",
     "category": "section",
-    "text": "Base.in\nBase.:∉\nBase.eltype\nBase.indexin\nBase.unique\nBase.unique!\nBase.allunique\nBase.reduce(::Any, ::Any)\nBase.foldl(::Any, ::Any)\nBase.foldr(::Any, ::Any)\nBase.maximum\nBase.maximum!\nBase.minimum\nBase.minimum!\nBase.extrema\nBase.argmax\nBase.argmin\nBase.findmax\nBase.findmin\nBase.findmax!\nBase.findmin!\nBase.sum\nBase.sum!\nBase.prod\nBase.prod!\nBase.any(::Any)\nBase.any(::AbstractArray, ::Any)\nBase.any!\nBase.all(::Any)\nBase.all(::AbstractArray, ::Any)\nBase.all!\nBase.count\nBase.any(::Any, ::Any)\nBase.all(::Any, ::Any)\nBase.foreach\nBase.map\nBase.map!\nBase.mapreduce(::Any, ::Any, ::Any)\nBase.mapfoldl(::Any, ::Any, ::Any)\nBase.mapfoldr(::Any, ::Any, ::Any)\nBase.first\nBase.last\nBase.step\nBase.collect(::Any)\nBase.collect(::Type, ::Any)\nBase.filter\nBase.filter!\nBase.replace(::Any, ::Pair...)\nBase.replace(::Base.Callable, ::Any)\nBase.replace!"
+    "text": "Base.in\nBase.:∉\nBase.eltype\nBase.indexin\nBase.unique\nBase.unique!\nBase.allunique\nBase.reduce(::Any, ::Any)\nBase.foldl(::Any, ::Any)\nBase.foldr(::Any, ::Any)\nBase.maximum\nBase.maximum!\nBase.minimum\nBase.minimum!\nBase.extrema\nBase.argmax\nBase.argmin\nBase.findmax\nBase.findmin\nBase.findmax!\nBase.findmin!\nBase.sum\nBase.sum!\nBase.prod\nBase.prod!\nBase.any(::Any)\nBase.any(::AbstractArray, ::Any)\nBase.any!\nBase.all(::Any)\nBase.all(::AbstractArray, ::Any)\nBase.all!\nBase.count\nBase.any(::Any, ::Any)\nBase.all(::Any, ::Any)\nBase.foreach\nBase.map\nBase.map!\nBase.mapreduce(::Any, ::Any, ::Any)\nBase.mapfoldl(::Any, ::Any, ::Any)\nBase.mapfoldr(::Any, ::Any, ::Any)\nBase.first\nBase.last\nBase.front\nBase.tail\nBase.step\nBase.collect(::Any)\nBase.collect(::Type, ::Any)\nBase.filter\nBase.filter!\nBase.replace(::Any, ::Pair...)\nBase.replace(::Base.Callable, ::Any)\nBase.replace!"
 },
 
 {
@@ -7629,7 +7645,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Mathematics",
     "title": "Base.:+",
     "category": "function",
-    "text": "dt::Date + t::Time -> DateTime\n\nThe addition of a Date with a Time produces a DateTime. The hour, minute, second, and millisecond parts of the Time are used along with the year, month, and day of the Date to create the new DateTime. Non-zero microseconds or nanoseconds in the Time type will result in an InexactError being thrown.\n\n\n\n\n\n+(x, y...)\n\nAddition operator. x+y+z+... calls this function with all arguments, i.e. +(x, y, z, ...).\n\nExamples\n\njulia> 1 + 20 + 4\n25\n\njulia> +(1, 20, 4)\n25\n\n\n\n\n\n"
+    "text": "+(x, y...)\n\nAddition operator. x+y+z+... calls this function with all arguments, i.e. +(x, y, z, ...).\n\nExamples\n\njulia> 1 + 20 + 4\n25\n\njulia> +(1, 20, 4)\n25\n\n\n\n\n\ndt::Date + t::Time -> DateTime\n\nThe addition of a Date with a Time produces a DateTime. The hour, minute, second, and millisecond parts of the Time are used along with the year, month, and day of the Date to create the new DateTime. Non-zero microseconds or nanoseconds in the Time type will result in an InexactError being thrown.\n\n\n\n\n\n"
 },
 
 {
