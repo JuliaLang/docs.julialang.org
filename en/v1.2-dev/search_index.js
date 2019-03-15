@@ -5537,6 +5537,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "base/base/#Base.@propagate_inbounds",
+    "page": "Essentials",
+    "title": "Base.@propagate_inbounds",
+    "category": "macro",
+    "text": "@propagate_inbounds\n\nTells the compiler to inline a function while retaining the caller\'s inbounds context.\n\n\n\n\n\n"
+},
+
+{
     "location": "base/base/#Base.@inline",
     "page": "Essentials",
     "title": "Base.@inline",
@@ -5645,7 +5653,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Essentials",
     "title": "Syntax",
     "category": "section",
-    "text": "Core.eval\nBase.MainInclude.eval\nBase.@eval\nBase.evalfile\nBase.esc\nBase.@inbounds\nBase.@boundscheck\nBase.@inline\nBase.@noinline\nBase.@nospecialize\nBase.@specialize\nBase.gensym\nBase.@gensym\nBase.@goto\nBase.@label\nBase.@simd\nBase.@polly\nBase.@generated\nBase.@pure\nBase.@deprecate"
+    "text": "Core.eval\nBase.MainInclude.eval\nBase.@eval\nBase.evalfile\nBase.esc\nBase.@inbounds\nBase.@boundscheck\nBase.@propagate_inbounds\nBase.@inline\nBase.@noinline\nBase.@nospecialize\nBase.@specialize\nBase.gensym\nBase.@gensym\nBase.@goto\nBase.@label\nBase.@simd\nBase.@polly\nBase.@generated\nBase.@pure\nBase.@deprecate"
 },
 
 {
@@ -11629,7 +11637,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Tasks",
     "title": "Base.wait",
     "category": "function",
-    "text": "wait([x])\n\nBlock the current task until some event occurs, depending on the type of the argument:\n\nChannel: Wait for a value to be appended to the channel.\nCondition: Wait for notify on a condition.\nProcess: Wait for a process or process chain to exit. The exitcode field of a process can be used to determine success or failure.\nTask: Wait for a Task to finish. If the task fails with an exception, the exception is propagated (re-thrown in the task that called wait).\nRawFD: Wait for changes on a file descriptor (see the FileWatching package).\n\nIf no argument is passed, the task blocks for an undefined period. A task can only be restarted by an explicit call to schedule or yieldto.\n\nOften wait is called within a while loop to ensure a waited-for condition is met before proceeding.\n\n\n\n\n\nwait(r::Future)\n\nWait for a value to become available for the specified Future.\n\n\n\n\n\nwait(r::RemoteChannel, args...)\n\nWait for a value to become available on the specified RemoteChannel.\n\n\n\n\n\nSpecial note for Threads.Condition:\n\nThe caller must be holding the lock that owns c before calling this method. The calling task will be blocked until some other task wakes it, usually by calling notify` on the same Condition object. The lock will be atomically released when blocking (even if it was locked recursively), and will be reacquired before returning.\n\n\n\n\n\n"
+    "text": "wait([x])\n\nBlock the current task until some event occurs, depending on the type of the argument:\n\nChannel: Wait for a value to be appended to the channel.\nCondition: Wait for notify on a condition.\nProcess: Wait for a process or process chain to exit. The exitcode field of a process can be used to determine success or failure.\nTask: Wait for a Task to finish. If the task fails with an exception, the exception is propagated (re-thrown in the task that called wait).\nRawFD: Wait for changes on a file descriptor (see the FileWatching package).\n\nIf no argument is passed, the task blocks for an undefined period. A task can only be restarted by an explicit call to schedule or yieldto.\n\nOften wait is called within a while loop to ensure a waited-for condition is met before proceeding.\n\n\n\n\n\nSpecial note for Threads.Condition:\n\nThe caller must be holding the lock that owns c before calling this method. The calling task will be blocked until some other task wakes it, usually by calling notify` on the same Condition object. The lock will be atomically released when blocking (even if it was locked recursively), and will be reacquired before returning.\n\n\n\n\n\nwait(r::Future)\n\nWait for a value to become available for the specified Future.\n\n\n\n\n\nwait(r::RemoteChannel, args...)\n\nWait for a value to become available on the specified RemoteChannel.\n\n\n\n\n\n"
 },
 
 {
@@ -13725,7 +13733,7 @@ var documenterSearchIndex = {"docs": [
     "page": "C Interface",
     "title": "Base.copyto!",
     "category": "function",
-    "text": "copyto!(dest::AbstractMatrix, src::UniformScaling)\n\nCopies a UniformScaling onto a matrix.\n\ncompat: Julia 1.1\nIn Julia 1.0 this method only supported a square destination matrix. Julia 1.1. added support for a rectangular matrix.\n\n\n\n\n\ncopyto!(dest, do, src, so, N)\n\nCopy N elements from collection src starting at offset so, to array dest starting at offset do. Return dest.\n\n\n\n\n\ncopyto!(dest::AbstractArray, src) -> dest\n\nCopy all elements from collection src to array dest, whose length must be greater than or equal to the length n of src. The first n elements of dest are overwritten, the other elements are left untouched.\n\nExamples\n\njulia> x = [1., 0., 3., 0., 5.];\n\njulia> y = zeros(7);\n\njulia> copyto!(y, x);\n\njulia> y\n7-element Array{Float64,1}:\n 1.0\n 0.0\n 3.0\n 0.0\n 5.0\n 0.0\n 0.0\n\n\n\n\n\ncopyto!(dest, Rdest::CartesianIndices, src, Rsrc::CartesianIndices) -> dest\n\nCopy the block of src in the range of Rsrc to the block of dest in the range of Rdest. The sizes of the two regions must match.\n\n\n\n\n\n"
+    "text": "copyto!(dest, do, src, so, N)\n\nCopy N elements from collection src starting at offset so, to array dest starting at offset do. Return dest.\n\n\n\n\n\ncopyto!(dest::AbstractArray, src) -> dest\n\nCopy all elements from collection src to array dest, whose length must be greater than or equal to the length n of src. The first n elements of dest are overwritten, the other elements are left untouched.\n\nExamples\n\njulia> x = [1., 0., 3., 0., 5.];\n\njulia> y = zeros(7);\n\njulia> copyto!(y, x);\n\njulia> y\n7-element Array{Float64,1}:\n 1.0\n 0.0\n 3.0\n 0.0\n 5.0\n 0.0\n 0.0\n\n\n\n\n\ncopyto!(dest, Rdest::CartesianIndices, src, Rsrc::CartesianIndices) -> dest\n\nCopy the block of src in the range of Rsrc to the block of dest in the range of Rdest. The sizes of the two regions must match.\n\n\n\n\n\ncopyto!(dest::AbstractMatrix, src::UniformScaling)\n\nCopies a UniformScaling onto a matrix.\n\ncompat: Julia 1.1\nIn Julia 1.0 this method only supported a square destination matrix. Julia 1.1. added support for a rectangular matrix.\n\n\n\n\n\n"
 },
 
 {
@@ -20861,7 +20869,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Sockets",
     "title": "Base.bind",
     "category": "function",
-    "text": "bind(socket::Union{UDPSocket, TCPSocket}, host::IPAddr, port::Integer; ipv6only=false, reuseaddr=false, kws...)\n\nBind socket to the given host:port. Note that 0.0.0.0 will listen on all devices.\n\nThe ipv6only parameter disables dual stack mode. If ipv6only=true, only an IPv6 stack is created.\nIf reuseaddr=true, multiple threads or processes can bind to the same address without error if they all set reuseaddr=true, but only the last to bind will receive any traffic.\n\n\n\n\n\nbind(chnl::Channel, task::Task)\n\nAssociate the lifetime of chnl with a task. Channel chnl is automatically closed when the task terminates. Any uncaught exception in the task is propagated to all waiters on chnl.\n\nThe chnl object can be explicitly closed independent of task termination. Terminating tasks have no effect on already closed Channel objects.\n\nWhen a channel is bound to multiple tasks, the first task to terminate will close the channel. When multiple channels are bound to the same task, termination of the task will close all of the bound channels.\n\nExamples\n\njulia> c = Channel(0);\n\njulia> task = @async foreach(i->put!(c, i), 1:4);\n\njulia> bind(c,task);\n\njulia> for i in c\n           @show i\n       end;\ni = 1\ni = 2\ni = 3\ni = 4\n\njulia> isopen(c)\nfalse\n\njulia> c = Channel(0);\n\njulia> task = @async (put!(c,1);error(\"foo\"));\n\njulia> bind(c,task);\n\njulia> take!(c)\n1\n\njulia> put!(c,1);\nERROR: foo\nStacktrace:\n[...]\n\n\n\n\n\n"
+    "text": "bind(chnl::Channel, task::Task)\n\nAssociate the lifetime of chnl with a task. Channel chnl is automatically closed when the task terminates. Any uncaught exception in the task is propagated to all waiters on chnl.\n\nThe chnl object can be explicitly closed independent of task termination. Terminating tasks have no effect on already closed Channel objects.\n\nWhen a channel is bound to multiple tasks, the first task to terminate will close the channel. When multiple channels are bound to the same task, termination of the task will close all of the bound channels.\n\nExamples\n\njulia> c = Channel(0);\n\njulia> task = @async foreach(i->put!(c, i), 1:4);\n\njulia> bind(c,task);\n\njulia> for i in c\n           @show i\n       end;\ni = 1\ni = 2\ni = 3\ni = 4\n\njulia> isopen(c)\nfalse\n\njulia> c = Channel(0);\n\njulia> task = @async (put!(c,1);error(\"foo\"));\n\njulia> bind(c,task);\n\njulia> take!(c)\n1\n\njulia> put!(c,1);\nERROR: foo\nStacktrace:\n[...]\n\n\n\n\n\nbind(socket::Union{UDPSocket, TCPSocket}, host::IPAddr, port::Integer; ipv6only=false, reuseaddr=false, kws...)\n\nBind socket to the given host:port. Note that 0.0.0.0 will listen on all devices.\n\nThe ipv6only parameter disables dual stack mode. If ipv6only=true, only an IPv6 stack is created.\nIf reuseaddr=true, multiple threads or processes can bind to the same address without error if they all set reuseaddr=true, but only the last to bind will receive any traffic.\n\n\n\n\n\n"
 },
 
 {
@@ -22669,7 +22677,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Bounds checking",
     "title": "Propagating inbounds",
     "category": "section",
-    "text": "There may be certain scenarios where for code-organization reasons you want more than one layer between the @inbounds and @boundscheck declarations. For instance, the default getindex methods have the chain getindex(A::AbstractArray, i::Real) calls getindex(IndexStyle(A), A, i) calls _getindex(::IndexLinear, A, i).To override the \"one layer of inlining\" rule, a function may be marked with @propagate_inbounds to propagate an inbounds context (or out of bounds context) through one additional layer of inlining."
+    "text": "There may be certain scenarios where for code-organization reasons you want more than one layer between the @inbounds and @boundscheck declarations. For instance, the default getindex methods have the chain getindex(A::AbstractArray, i::Real) calls getindex(IndexStyle(A), A, i) calls _getindex(::IndexLinear, A, i).To override the \"one layer of inlining\" rule, a function may be marked with Base.@propagate_inbounds to propagate an inbounds context (or out of bounds context) through one additional layer of inlining."
 },
 
 {
