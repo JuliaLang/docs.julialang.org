@@ -7653,7 +7653,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Mathematics",
     "title": "Base.:+",
     "category": "function",
-    "text": "+(x, y...)\n\nAddition operator. x+y+z+... calls this function with all arguments, i.e. +(x, y, z, ...).\n\nExamples\n\njulia> 1 + 20 + 4\n25\n\njulia> +(1, 20, 4)\n25\n\n\n\n\n\ndt::Date + t::Time -> DateTime\n\nThe addition of a Date with a Time produces a DateTime. The hour, minute, second, and millisecond parts of the Time are used along with the year, month, and day of the Date to create the new DateTime. Non-zero microseconds or nanoseconds in the Time type will result in an InexactError being thrown.\n\n\n\n\n\n"
+    "text": "dt::Date + t::Time -> DateTime\n\nThe addition of a Date with a Time produces a DateTime. The hour, minute, second, and millisecond parts of the Time are used along with the year, month, and day of the Date to create the new DateTime. Non-zero microseconds or nanoseconds in the Time type will result in an InexactError being thrown.\n\n\n\n\n\n+(x, y...)\n\nAddition operator. x+y+z+... calls this function with all arguments, i.e. +(x, y, z, ...).\n\nExamples\n\njulia> 1 + 20 + 4\n25\n\njulia> +(1, 20, 4)\n25\n\n\n\n\n\n"
 },
 
 {
@@ -7877,7 +7877,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Mathematics",
     "title": "Base.::",
     "category": "function",
-    "text": "(:)(I::CartesianIndex, J::CartesianIndex)\n\nConstruct CartesianIndices from two CartesianIndex.\n\ncompat: Julia 1.1\nThis method requires at least Julia 1.1.\n\nExamples\n\njulia> I = CartesianIndex(2,1);\n\njulia> J = CartesianIndex(3,3);\n\njulia> I:J\n2×3 CartesianIndices{2,Tuple{UnitRange{Int64},UnitRange{Int64}}}:\n CartesianIndex(2, 1)  CartesianIndex(2, 2)  CartesianIndex(2, 3)\n CartesianIndex(3, 1)  CartesianIndex(3, 2)  CartesianIndex(3, 3)\n\n\n\n\n\n(:)(start, [step], stop)\n\nRange operator. a:b constructs a range from a to b with a step size of 1 (a UnitRange) , and a:s:b is similar but uses a step size of s (a StepRange).\n\n: is also used in indexing to select whole dimensions  and for Symbol literals, as in e.g. :hello.\n\n\n\n\n\n"
+    "text": "(:)(start, [step], stop)\n\nRange operator. a:b constructs a range from a to b with a step size of 1 (a UnitRange) , and a:s:b is similar but uses a step size of s (a StepRange).\n\n: is also used in indexing to select whole dimensions  and for Symbol literals, as in e.g. :hello.\n\n\n\n\n\n(:)(I::CartesianIndex, J::CartesianIndex)\n\nConstruct CartesianIndices from two CartesianIndex.\n\ncompat: Julia 1.1\nThis method requires at least Julia 1.1.\n\nExamples\n\njulia> I = CartesianIndex(2,1);\n\njulia> J = CartesianIndex(3,3);\n\njulia> I:J\n2×3 CartesianIndices{2,Tuple{UnitRange{Int64},UnitRange{Int64}}}:\n CartesianIndex(2, 1)  CartesianIndex(2, 2)  CartesianIndex(2, 3)\n CartesianIndex(3, 1)  CartesianIndex(3, 2)  CartesianIndex(3, 3)\n\n\n\n\n\n"
 },
 
 {
