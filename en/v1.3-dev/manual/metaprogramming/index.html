@@ -95,7 +95,7 @@ end</code></pre><p>Notice that <code>:(1 + 2)</code> now appears in the result i
 quote
     #= none:1 =#
     3
-end</code></pre><p>The intuition behind this behavior is that <code>x</code> is evaluated once for each <code>$</code>: one <code>$</code> works similarly to <code>eval(:x)</code>, giving <code>x</code>&#39;s value, while two <code>$</code>s do the equivalent of <code>eval(eval(:x))</code>.</p><h3><a class="nav-anchor" id="QuoteNode-1" href="#QuoteNode-1">QuoteNode</a></h3><p>The usual representation of a <code>quote</code> form in an AST is an <a href="../../base/base/#Core.Expr"><code>Expr</code></a> with head <code>:quote</code>:</p><pre><code class="language-julia-repl">julia&gt; dump(Meta.parse(&quot;:(1+2)&quot;))
+end</code></pre><p>The intuition behind this behavior is that <code>x</code> is evaluated once for each <code>$</code>: one <code>$</code> works similarly to <code>eval(:x)</code>, giving <code>x</code>&#39;s value, while two <code>$</code>s do the equivalent of <code>eval(eval(:x))</code>.</p><h3><a class="nav-anchor" id="man-quote-node-1" href="#man-quote-node-1">QuoteNode</a></h3><p>The usual representation of a <code>quote</code> form in an AST is an <a href="../../base/base/#Core.Expr"><code>Expr</code></a> with head <code>:quote</code>:</p><pre><code class="language-julia-repl">julia&gt; dump(Meta.parse(&quot;:(1+2)&quot;))
 Expr
   head: Symbol quote
   args: Array{Any}((1,))
@@ -104,7 +104,11 @@ Expr
       args: Array{Any}((3,))
         1: Symbol +
         2: Int64 1
-        3: Int64 2</code></pre><p>As we have seen, such expressions support interpolation with <code>$</code>. However, in some situations it is necessary to quote code <em>without</em> performing interpolation. This kind of quoting does not yet have syntax, but is represented internally as an object of type <code>QuoteNode</code>. The parser yields <code>QuoteNode</code>s for simple quoted items like symbols:</p><pre><code class="language-julia-repl">julia&gt; dump(Meta.parse(&quot;:x&quot;))
+        3: Int64 2</code></pre><p>As we have seen, such expressions support interpolation with <code>$</code>. However, in some situations it is necessary to quote code <em>without</em> performing interpolation. This kind of quoting does not yet have syntax, but is represented internally as an object of type <code>QuoteNode</code>:</p><pre><code class="language-julia-repl">julia&gt; eval(quot(Expr(:$, :(1+2))))
+3
+
+julia&gt; eval(QuoteNode(Expr(:$, :(1+2))))
+:($(Expr(:$, :(1 + 2))))</code></pre><p>The parser yields <code>QuoteNode</code>s for simple quoted items like symbols:</p><pre><code class="language-julia-repl">julia&gt; dump(Meta.parse(&quot;:x&quot;))
 QuoteNode
   value: Symbol x</code></pre><p><code>QuoteNode</code> can also be used for certain advanced metaprogramming tasks.</p><h3><a class="nav-anchor" id="[eval](@ref)-and-effects-1" href="#[eval](@ref)-and-effects-1"><a href="../../base/base/#Base.MainInclude.eval"><code>eval</code></a> and effects</a></h3><p>Given an expression object, one can cause Julia to evaluate (execute) it at global scope using <a href="../../base/base/#Base.MainInclude.eval"><code>eval</code></a>:</p><pre><code class="language-julia-repl">julia&gt; :(1 + 2)
 :(1 + 2)
