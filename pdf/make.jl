@@ -11,6 +11,10 @@ function download_release(v::VersionNumber)
         julia = "julia-$(x).$(y).$(z)-linux-x86_64"
         tarball = "$(julia).tar.gz"
         sha256 = "julia-$(x).$(y).$(z).sha256"
+        @show julia
+        @show tarball
+        @show sha256
+        println("---- SHA256 ----"); println(read(sha256, String)); println("---- SHA256 ----");
         run(`curl -o $(tarball) -L https://julialang-s3.julialang.org/bin/linux/x64/$(x).$(y)/$(tarball)`)
         run(`curl -o $(sha256) -L https://julialang-s3.julialang.org/bin/checksums/$(sha256)`)
         run(pipeline(`grep $(tarball) $(sha256)`, `sha256sum -c`))
