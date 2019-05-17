@@ -126,7 +126,7 @@ function collect_versions()
             # versions and exclude tags that are pre-releases or have build information.
             v = VersionNumber(tag)
             # pdf doc only possible for 1.0.3 and above
-            v >= v"1.0.4" && push!(versions, v)
+            v >= v"1.1.0" && push!(versions, v)
         end
     end
     return versions
