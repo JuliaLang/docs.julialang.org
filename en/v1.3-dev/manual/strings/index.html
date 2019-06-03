@@ -74,14 +74,13 @@ julia&gt; str[end]
 
 julia&gt; str[end÷2]
 &#39; &#39;: ASCII/Unicode U+0020 (category Zs: Separator, space)</code></pre><p>Using an index less than 1 or greater than <code>end</code> raises an error:</p><pre><code class="language-julia-repl">julia&gt; str[0]
-ERROR: BoundsError: attempt to access &quot;Hello, world.\n&quot;
+ERROR: BoundsError: attempt to access String
   at index [0]
 [...]
 
 julia&gt; str[end+1]
-ERROR: BoundsError: attempt to access &quot;Hello, world.\n&quot;
+ERROR: BoundsError: attempt to access String
   at index [15]
-Stacktrace:
 [...]</code></pre><p>You can also extract a substring using range indexing:</p><pre><code class="language-julia-repl">julia&gt; str[4:9]
 &quot;lo, wo&quot;</code></pre><p>Notice that the expressions <code>str[k]</code> and <code>str[k:k]</code> do not give the same result:</p><pre><code class="language-julia-repl">julia&gt; str[6]
 &#39;,&#39;: ASCII/Unicode U+002c (category Po: Punctuation, other)
