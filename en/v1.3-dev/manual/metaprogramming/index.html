@@ -37,7 +37,7 @@ julia&gt; Symbol(&quot;func&quot;,10)
 :func10
 
 julia&gt; Symbol(:var,&#39;_&#39;,&quot;sym&quot;)
-:var_sym</code></pre><p>In the context of an expression, symbols are used to indicate access to variables; when an expression is evaluated, a symbol is replaced with the value bound to that symbol in the appropriate <a href="../variables-and-scoping/#scope-of-variables-1">scope</a>.</p><p>Sometimes extra parentheses around the argument to <code>:</code> are needed to avoid ambiguity in parsing:</p><pre><code class="language-julia-repl">julia&gt; :(:)
+:var_sym</code></pre><p>Note that to use <code>:</code> syntax, the symbol&#39;s name must be a valid identifier. Otherwise the <code>Symbol(str)</code> constructor must be used.</p><p>In the context of an expression, symbols are used to indicate access to variables; when an expression is evaluated, a symbol is replaced with the value bound to that symbol in the appropriate <a href="../variables-and-scoping/#scope-of-variables-1">scope</a>.</p><p>Sometimes extra parentheses around the argument to <code>:</code> are needed to avoid ambiguity in parsing:</p><pre><code class="language-julia-repl">julia&gt; :(:)
 :(:)
 
 julia&gt; :(::)
