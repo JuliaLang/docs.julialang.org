@@ -172,7 +172,7 @@ true
 julia&gt; same_type_numeric(&quot;foo&quot;, 2.0)
 ERROR: MethodError: no method matching same_type_numeric(::String, ::Float64)
 Closest candidates are:
-  same_type_numeric(!Matched::T&lt;:Number, ::T&lt;:Number) where T&lt;:Number at none:1
+  same_type_numeric(!Matched::T, ::T) where T&lt;:Number at none:1
   same_type_numeric(!Matched::Number, ::Number) at none:1
 
 julia&gt; same_type_numeric(&quot;foo&quot;, &quot;bar&quot;)
