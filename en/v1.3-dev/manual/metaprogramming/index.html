@@ -110,7 +110,7 @@ Expr
 julia&gt; eval(QuoteNode(Expr(:$, :(1+2))))
 :($(Expr(:$, :(1 + 2))))</code></pre><p>The parser yields <code>QuoteNode</code>s for simple quoted items like symbols:</p><pre><code class="language-julia-repl">julia&gt; dump(Meta.parse(&quot;:x&quot;))
 QuoteNode
-  value: Symbol x</code></pre><p><code>QuoteNode</code> can also be used for certain advanced metaprogramming tasks.</p><h3><a class="nav-anchor" id="[eval](@ref)-and-effects-1" href="#[eval](@ref)-and-effects-1"><a href="../../base/base/#Base.MainInclude.eval"><code>eval</code></a> and effects</a></h3><p>Given an expression object, one can cause Julia to evaluate (execute) it at global scope using <a href="../../base/base/#Base.MainInclude.eval"><code>eval</code></a>:</p><pre><code class="language-julia-repl">julia&gt; :(1 + 2)
+  value: Symbol x</code></pre><p><code>QuoteNode</code> can also be used for certain advanced metaprogramming tasks.</p><h3><a class="nav-anchor" id="Evaluating-expressions-1" href="#Evaluating-expressions-1">Evaluating expressions</a></h3><p>Given an expression object, one can cause Julia to evaluate (execute) it at global scope using <a href="../../base/base/#Base.MainInclude.eval"><code>eval</code></a>:</p><pre><code class="language-julia-repl">julia&gt; :(1 + 2)
 :(1 + 2)
 
 julia&gt; eval(ans)
