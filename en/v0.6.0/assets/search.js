@@ -48,7 +48,7 @@ var currentScript = document.currentScript;
 require(["jquery", "lunr"], function($, lunr) {
     var index = lunr(function () {
         this.ref('location')
-        this.field('title', {boost: 10})
+        this.field('title', {boost: 100})
         this.field('text')
     })
     var store = {}
