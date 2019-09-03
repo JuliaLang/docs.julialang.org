@@ -6,3 +6,4 @@ Disallow: /en/release-0.3/
 Disallow: /en/release-0.4/
 Disallow: /en/release-0.5/
 Disallow: /en/release-0.6/
+Sitemap: http://docs.julialang.org/sitemap.xml
