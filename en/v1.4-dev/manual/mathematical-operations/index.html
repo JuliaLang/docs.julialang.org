@@ -81,7 +81,7 @@ julia&gt; -1 &lt;= -2
 false
 
 julia&gt; 3 &lt; -0.5
-false</code></pre><p>Integers are compared in the standard manner – by comparison of bits. Floating-point numbers are compared according to the <a href="https://en.wikipedia.org/wiki/IEEE_754-2008">IEEE 754 standard</a>:</p><ul><li>Finite numbers are ordered in the usual manner.</li><li>Positive zero is equal but not greater than negative zero.</li><li><code>Inf</code> is equal to itself and greater than everything else except <code>NaN</code>.</li><li><code>-Inf</code> is equal to itself and less then everything else except <code>NaN</code>.</li><li><code>NaN</code> is not equal to, not less than, and not greater than anything, including itself.</li></ul><p>The last point is potentially surprising and thus worth noting:</p><pre><code class="language-julia-repl">julia&gt; NaN == NaN
+false</code></pre><p>Integers are compared in the standard manner – by comparison of bits. Floating-point numbers are compared according to the <a href="https://en.wikipedia.org/wiki/IEEE_754-2008">IEEE 754 standard</a>:</p><ul><li>Finite numbers are ordered in the usual manner.</li><li>Positive zero is equal but not greater than negative zero.</li><li><code>Inf</code> is equal to itself and greater than everything else except <code>NaN</code>.</li><li><code>-Inf</code> is equal to itself and less than everything else except <code>NaN</code>.</li><li><code>NaN</code> is not equal to, not less than, and not greater than anything, including itself.</li></ul><p>The last point is potentially surprising and thus worth noting:</p><pre><code class="language-julia-repl">julia&gt; NaN == NaN
 false
 
 julia&gt; NaN != NaN
