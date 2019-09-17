@@ -38,12 +38,12 @@ f4(A::Array{Any}) = 4</code></pre><p>The signature - as decribed in <a href="../
 UnionAll
   var: TypeVar
     name: Symbol T
-    lb: Core.TypeofBottom Union{}
+    lb: Union{}
     ub: Any
   body: UnionAll
     var: TypeVar
       name: Symbol N
-      lb: Core.TypeofBottom Union{}
+      lb: Union{}
       ub: Any
     body: Array{T,N} &lt;: DenseArray{T,N}</code></pre><p>This indicates that <code>Array</code> actually names a <code>UnionAll</code> type. There is one <code>UnionAll</code> type for each parameter, nested. The syntax <code>Array{Int,2}</code> is equivalent to <code>Array{Int}{2}</code>; internally each <code>UnionAll</code> is instantiated with a particular variable value, one at a time, outermost-first. This gives a natural meaning to the omission of trailing type parameters; <code>Array{Int}</code> gives a type equivalent to <code>Array{Int,N} where N</code>.</p><p>A <code>TypeVar</code> is not itself a type, but rather should be considered part of the structure of a <code>UnionAll</code> type. Type variables have lower and upper bounds on their values (in the fields <code>lb</code> and <code>ub</code>). The symbol <code>name</code> is purely cosmetic. Internally, <code>TypeVar</code>s are compared by address, so they are defined as mutable types to ensure that &quot;different&quot; type variables can be distinguished. However, by convention they should not be mutated.</p><p>One can construct <code>TypeVar</code>s manually:</p><pre><code class="language-julia-repl">julia&gt; TypeVar(:V, Signed, Real)
 Signed&lt;:V&lt;:Real</code></pre><p>There are convenience versions that allow you to omit any of these arguments except the <code>name</code> symbol.</p><p>The syntax <code>Array{T} where T&lt;:Integer</code> is lowered to</p><pre><code class="language-julia">let T = TypeVar(:T,Integer)
@@ -63,12 +63,12 @@ TypeName
   wrapper: UnionAll
     var: TypeVar
       name: Symbol T
-      lb: Core.TypeofBottom Union{}
+      lb: Union{}
       ub: Any
     body: UnionAll
       var: TypeVar
         name: Symbol N
-        lb: Core.TypeofBottom Union{}
+        lb: Union{}
         ub: Any
       body: Array{T,N} &lt;: DenseArray{T,N}
   cache: SimpleVector

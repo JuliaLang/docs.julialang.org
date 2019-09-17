@@ -94,11 +94,11 @@ MyStillAmbiguousType</code></pre><p>The type of field <code>a</code> can be read
 Float64
 
 julia&gt; t.a = 4.5f0
-4.5
+4.5f0
 
 julia&gt; typeof(t.a)
 Float32</code></pre><p>In contrast, once <code>m</code> is constructed, the type of <code>m.a</code> cannot change:</p><pre><code class="language-julia-repl">julia&gt; m.a = 4.5f0
-4.5
+4.5f0
 
 julia&gt; typeof(m.a)
 Float64</code></pre><p>The fact that the type of <code>m.a</code> is known from <code>m</code>&#39;s type—coupled with the fact that its type cannot change mid-function—allows the compiler to generate highly-optimized code for objects like <code>m</code> but not for objects like <code>t</code>.</p><p>Of course, all of this is true only if we construct <code>m</code> with a concrete type. We can break this by explicitly constructing it with an abstract type:</p><pre><code class="language-julia-repl">julia&gt; m = MyType{AbstractFloat}(3.2)
@@ -108,7 +108,7 @@ julia&gt; typeof(m.a)
 Float64
 
 julia&gt; m.a = 4.5f0
-4.5
+4.5f0
 
 julia&gt; typeof(m.a)
 Float32</code></pre><p>For all practical purposes, such objects behave identically to those of <code>MyStillAmbiguousType</code>.</p><p>It&#39;s quite instructive to compare the sheer amount code generated for a simple function</p><pre><code class="language-julia">func(m::MyType) = m.a+1</code></pre><p>using</p><pre><code class="language-julia">code_llvm(func, Tuple{MyType{Float64}})
@@ -514,10 +514,10 @@ end</code></pre><p>This gives an output similar to</p><pre><code class="language
   0.001455 seconds (1 allocation: 4.063 KiB)</code></pre><p>Note how each even iteration is significantly faster.</p><p>This example generates many subnormal numbers because the values in <code>a</code> become an exponentially decreasing curve, which slowly flattens out over time.</p><p>Treating subnormals as zeros should be used with caution, because doing so breaks some identities, such as <code>x-y == 0</code> implies <code>x == y</code>:</p><pre><code class="language-julia-repl">julia&gt; x = 3f-38; y = 2f-38;
 
 julia&gt; set_zero_subnormals(true); (x - y, x == y)
-(0.0, false)
+(0.0f0, false)
 
 julia&gt; set_zero_subnormals(false); (x - y, x == y)
-(1.0000001e-38, false)</code></pre><p>In some applications, an alternative to zeroing subnormal numbers is to inject a tiny bit of noise.  For example, instead of initializing <code>a</code> with zeros, initialize it with:</p><pre><code class="language-julia">a = rand(Float32,1000) * 1.f-9</code></pre><h2><a class="nav-anchor" id="man-code-warntype-1" href="#man-code-warntype-1"><a href="../../stdlib/InteractiveUtils/#InteractiveUtils.@code_warntype"><code>@code_warntype</code></a></a></h2><p>The macro <a href="../../stdlib/InteractiveUtils/#InteractiveUtils.@code_warntype"><code>@code_warntype</code></a> (or its function variant <a href="../../stdlib/InteractiveUtils/#InteractiveUtils.code_warntype"><code>code_warntype</code></a>) can sometimes be helpful in diagnosing type-related problems. Here&#39;s an example:</p><pre><code class="language-julia-repl">julia&gt; @noinline pos(x) = x &lt; 0 ? 0 : x;
+(1.0000001f-38, false)</code></pre><p>In some applications, an alternative to zeroing subnormal numbers is to inject a tiny bit of noise.  For example, instead of initializing <code>a</code> with zeros, initialize it with:</p><pre><code class="language-julia">a = rand(Float32,1000) * 1.f-9</code></pre><h2><a class="nav-anchor" id="man-code-warntype-1" href="#man-code-warntype-1"><a href="../../stdlib/InteractiveUtils/#InteractiveUtils.@code_warntype"><code>@code_warntype</code></a></a></h2><p>The macro <a href="../../stdlib/InteractiveUtils/#InteractiveUtils.@code_warntype"><code>@code_warntype</code></a> (or its function variant <a href="../../stdlib/InteractiveUtils/#InteractiveUtils.code_warntype"><code>code_warntype</code></a>) can sometimes be helpful in diagnosing type-related problems. Here&#39;s an example:</p><pre><code class="language-julia-repl">julia&gt; @noinline pos(x) = x &lt; 0 ? 0 : x;
 
 julia&gt; function f(x)
            y = pos(x)
