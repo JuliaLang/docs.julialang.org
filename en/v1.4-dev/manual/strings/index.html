@@ -19,7 +19,7 @@ Int64</code></pre><p>On 32-bit architectures, <a href="../../base/base/#Core.typ
 &#39;\U110000&#39;: Unicode U+110000 (category In: Invalid, too high)
 
 julia&gt; isvalid(Char, 0x110000)
-false</code></pre><p>As of this writing, the valid Unicode code points are <code>U+00</code> through <code>U+d7ff</code> and <code>U+e000</code> through <code>U+10ffff</code>. These have not all been assigned intelligible meanings yet, nor are they necessarily interpretable by applications, but all of these values are considered to be valid Unicode characters.</p><p>You can input any Unicode character in single quotes using <code>\u</code> followed by up to four hexadecimal digits or <code>\U</code> followed by up to eight hexadecimal digits (the longest valid value only requires six):</p><pre><code class="language-julia-repl">julia&gt; &#39;\u0&#39;
+false</code></pre><p>As of this writing, the valid Unicode code points are <code>U+0000</code> through <code>U+D7FF</code> and <code>U+E000</code> through <code>U+10FFFF</code>. These have not all been assigned intelligible meanings yet, nor are they necessarily interpretable by applications, but all of these values are considered to be valid Unicode characters.</p><p>You can input any Unicode character in single quotes using <code>\u</code> followed by up to four hexadecimal digits or <code>\U</code> followed by up to eight hexadecimal digits (the longest valid value only requires six):</p><pre><code class="language-julia-repl">julia&gt; &#39;\u0&#39;
 &#39;\0&#39;: ASCII/Unicode U+0000 (category Cc: Other, control)
 
 julia&gt; &#39;\u78&#39;
@@ -29,7 +29,7 @@ julia&gt; &#39;\u2200&#39;
 &#39;∀&#39;: Unicode U+2200 (category Sm: Symbol, math)
 
 julia&gt; &#39;\U10ffff&#39;
-&#39;\U10ffff&#39;: Unicode U+10ffff (category Cn: Other, not assigned)</code></pre><p>Julia uses your system&#39;s locale and language settings to determine which characters can be printed as-is and which must be output using the generic, escaped <code>\u</code> or <code>\U</code> input forms. In addition to these Unicode escape forms, all of <a href="https://en.wikipedia.org/wiki/C_syntax#Backslash_escapes">C&#39;s traditional escaped input forms</a> can also be used:</p><pre><code class="language-julia-repl">julia&gt; Int(&#39;\0&#39;)
+&#39;\U10ffff&#39;: Unicode U+10FFFF (category Cn: Other, not assigned)</code></pre><p>Julia uses your system&#39;s locale and language settings to determine which characters can be printed as-is and which must be output using the generic, escaped <code>\u</code> or <code>\U</code> input forms. In addition to these Unicode escape forms, all of <a href="https://en.wikipedia.org/wiki/C_syntax#Backslash_escapes">C&#39;s traditional escaped input forms</a> can also be used:</p><pre><code class="language-julia-repl">julia&gt; Int(&#39;\0&#39;)
 0
 
 julia&gt; Int(&#39;\t&#39;)
@@ -66,11 +66,11 @@ julia&gt; &quot;&quot;&quot;Contains &quot;quote&quot; characters&quot;&quot;&qu
 &#39;H&#39;: ASCII/Unicode U+0048 (category Lu: Letter, uppercase)
 
 julia&gt; str[6]
-&#39;,&#39;: ASCII/Unicode U+002c (category Po: Punctuation, other)
+&#39;,&#39;: ASCII/Unicode U+002C (category Po: Punctuation, other)
 
 julia&gt; str[end]
-&#39;\n&#39;: ASCII/Unicode U+000a (category Cc: Other, control)</code></pre><p>Many Julia objects, including strings, can be indexed with integers. The index of the first element (the first character of a string) is returned by <a href="../../base/collections/#Base.firstindex"><code>firstindex(str)</code></a>, and the index of the last element (character) with <a href="../../base/collections/#Base.lastindex"><code>lastindex(str)</code></a>. The keyword <code>end</code> can be used inside an indexing operation as shorthand for the last index along the given dimension. String indexing, like most indexing in Julia, is 1-based: <code>firstindex</code> always returns <code>1</code> for any <code>AbstractString</code>. As we will see below, however, <code>lastindex(str)</code> is <em>not</em> in general the same as <code>length(str)</code> for a string, because some Unicode characters can occupy multiple &quot;code units&quot;.</p><p>You can perform arithmetic and other operations with <a href="../../base/base/#end"><code>end</code></a>, just like a normal value:</p><pre><code class="language-julia-repl">julia&gt; str[end-1]
-&#39;.&#39;: ASCII/Unicode U+002e (category Po: Punctuation, other)
+&#39;\n&#39;: ASCII/Unicode U+000A (category Cc: Other, control)</code></pre><p>Many Julia objects, including strings, can be indexed with integers. The index of the first element (the first character of a string) is returned by <a href="../../base/collections/#Base.firstindex"><code>firstindex(str)</code></a>, and the index of the last element (character) with <a href="../../base/collections/#Base.lastindex"><code>lastindex(str)</code></a>. The keyword <code>end</code> can be used inside an indexing operation as shorthand for the last index along the given dimension. String indexing, like most indexing in Julia, is 1-based: <code>firstindex</code> always returns <code>1</code> for any <code>AbstractString</code>. As we will see below, however, <code>lastindex(str)</code> is <em>not</em> in general the same as <code>length(str)</code> for a string, because some Unicode characters can occupy multiple &quot;code units&quot;.</p><p>You can perform arithmetic and other operations with <a href="../../base/base/#end"><code>end</code></a>, just like a normal value:</p><pre><code class="language-julia-repl">julia&gt; str[end-1]
+&#39;.&#39;: ASCII/Unicode U+002E (category Po: Punctuation, other)
 
 julia&gt; str[end÷2]
 &#39; &#39;: ASCII/Unicode U+0020 (category Zs: Separator, space)</code></pre><p>Using an index less than 1 or greater than <code>end</code> raises an error:</p><pre><code class="language-julia-repl">julia&gt; str[0]
@@ -83,7 +83,7 @@ ERROR: BoundsError: attempt to access String
   at index [15]
 [...]</code></pre><p>You can also extract a substring using range indexing:</p><pre><code class="language-julia-repl">julia&gt; str[4:9]
 &quot;lo, wo&quot;</code></pre><p>Notice that the expressions <code>str[k]</code> and <code>str[k:k]</code> do not give the same result:</p><pre><code class="language-julia-repl">julia&gt; str[6]
-&#39;,&#39;: ASCII/Unicode U+002c (category Po: Punctuation, other)
+&#39;,&#39;: ASCII/Unicode U+002C (category Po: Punctuation, other)
 
 julia&gt; str[6:6]
 &quot;,&quot;</code></pre><p>The former is a single character value of type <code>Char</code>, while the latter is a string value that happens to contain only a single character. In Julia these are very different things.</p><p>Range indexing makes a copy of the selected part of the original string. Alternatively, it is possible to create a view into a string using the type <a href="../../base/strings/#Base.SubString"><code>SubString</code></a>, for example:</p><pre><code class="language-julia-repl">julia&gt; str = &quot;long string&quot;
@@ -162,7 +162,7 @@ julia&gt; foreach(display, s)
 &#39;\xc0\xa0&#39;: [overlong] ASCII/Unicode U+0020 (category Zs: Separator, space)
 &#39;\xe2\x88&#39;: Malformed UTF-8 (category Ma: Malformed, bad data)
 &#39;\xe2&#39;: Malformed UTF-8 (category Ma: Malformed, bad data)
-&#39;|&#39;: ASCII/Unicode U+007c (category Sm: Symbol, math)
+&#39;|&#39;: ASCII/Unicode U+007C (category Sm: Symbol, math)
 
 julia&gt; isvalid.(collect(s))
 4-element BitArray{1}:
@@ -175,7 +175,7 @@ julia&gt; s2 = &quot;\xf7\xbf\xbf\xbf&quot;
 &quot;\U1fffff&quot;
 
 julia&gt; foreach(display, s2)
-&#39;\U1fffff&#39;: Unicode U+1fffff (category In: Invalid, too high)</code></pre><p>We can see that the first two code units in the string <code>s</code> form an overlong encoding of space character. It is invalid, but is accepted in a string as a single character. The next two code units form a valid start of a three-byte UTF-8 sequence. However, the fifth code unit <code>\xe2</code> is not its valid continuation. Therefore code units 3 and 4 are also interpreted as malformed characters in this string. Similarly code unit 5 forms a malformed character because <code>|</code> is not a valid continuation to it. Finally the string <code>s2</code> contains one too high code point.</p><p>Julia uses the UTF-8 encoding by default, and support for new encodings can be added by packages. For example, the <a href="https://github.com/JuliaStrings/LegacyStrings.jl">LegacyStrings.jl</a> package implements <code>UTF16String</code> and <code>UTF32String</code> types. Additional discussion of other encodings and how to implement support for them is beyond the scope of this document for the time being. For further discussion of UTF-8 encoding issues, see the section below on <a href="#man-byte-array-literals-1">byte array literals</a>. The <a href="../../base/strings/#Base.transcode"><code>transcode</code></a> function is provided to convert data between the various UTF-xx encodings, primarily for working with external data and libraries.</p><h2><a class="nav-anchor" id="man-concatenation-1" href="#man-concatenation-1">Concatenation</a></h2><p>One of the most common and useful string operations is concatenation:</p><pre><code class="language-julia-repl">julia&gt; greet = &quot;Hello&quot;
+&#39;\U1fffff&#39;: Unicode U+1FFFFF (category In: Invalid, too high)</code></pre><p>We can see that the first two code units in the string <code>s</code> form an overlong encoding of space character. It is invalid, but is accepted in a string as a single character. The next two code units form a valid start of a three-byte UTF-8 sequence. However, the fifth code unit <code>\xe2</code> is not its valid continuation. Therefore code units 3 and 4 are also interpreted as malformed characters in this string. Similarly code unit 5 forms a malformed character because <code>|</code> is not a valid continuation to it. Finally the string <code>s2</code> contains one too high code point.</p><p>Julia uses the UTF-8 encoding by default, and support for new encodings can be added by packages. For example, the <a href="https://github.com/JuliaStrings/LegacyStrings.jl">LegacyStrings.jl</a> package implements <code>UTF16String</code> and <code>UTF32String</code> types. Additional discussion of other encodings and how to implement support for them is beyond the scope of this document for the time being. For further discussion of UTF-8 encoding issues, see the section below on <a href="#man-byte-array-literals-1">byte array literals</a>. The <a href="../../base/strings/#Base.transcode"><code>transcode</code></a> function is provided to convert data between the various UTF-xx encodings, primarily for working with external data and libraries.</p><h2><a class="nav-anchor" id="man-concatenation-1" href="#man-concatenation-1">Concatenation</a></h2><p>One of the most common and useful string operations is concatenation:</p><pre><code class="language-julia-repl">julia&gt; greet = &quot;Hello&quot;
 &quot;Hello&quot;
 
 julia&gt; whom = &quot;world&quot;
