@@ -190,9 +190,9 @@ julia&gt; stacktrace(trace)
  jl_apply_generic at gf.c:2167
  jl_apply at julia.h:1540 [inlined]
  start_task at task.c:268
- ip:0xffffffffffffffff</code></pre><p>Individual pointers returned by <a href="../../base/base/#Base.backtrace"><code>backtrace</code></a> can be translated into <a href="../../base/stacktraces/#Base.StackTraces.StackFrame"><code>StackTraces.StackFrame</code></a> s by passing them into <a href="../../base/stacktraces/#Base.StackTraces.lookupat"><code>StackTraces.lookupat</code></a>:</p><pre><code class="language-julia-repl">julia&gt; pointer = backtrace()[1];
+ ip:0xffffffffffffffff</code></pre><p>Individual pointers returned by <a href="../../base/base/#Base.backtrace"><code>backtrace</code></a> can be translated into <a href="../../base/stacktraces/#Base.StackTraces.StackFrame"><code>StackTraces.StackFrame</code></a> s by passing them into <a href="../../base/stacktraces/#Base.StackTraces.lookup"><code>StackTraces.lookup</code></a>:</p><pre><code class="language-julia-repl">julia&gt; pointer = backtrace()[1];
 
-julia&gt; frame = StackTraces.lookupat(pointer - 1)
+julia&gt; frame = StackTraces.lookup(pointer)
 1-element Array{Base.StackTraces.StackFrame,1}:
  jl_apply_generic at gf.c:2167
 
