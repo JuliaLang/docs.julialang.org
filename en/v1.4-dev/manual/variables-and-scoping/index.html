@@ -184,7 +184,7 @@ julia&gt; Fs[2]()
            end
            x
        end
-1</code></pre><p>Since <code>let</code> introduces a new scope block, the inner local <code>x</code> is a different variable than the outer local <code>x</code>.</p><h3><a class="nav-anchor" id="For-Loops-and-Comprehensions-1" href="#For-Loops-and-Comprehensions-1">For Loops and Comprehensions</a></h3><p><code>for</code> loops, <code>while</code> loops, and <a href="../arrays/#Comprehensions-1">Comprehensions</a> have the following behavior: any new variables introduced in their body scopes are freshly allocated for each loop iteration, as if the loop body were surrounded by a <code>let</code> block:</p><pre><code class="language-julia-repl">julia&gt; Fs = Vector{Any}(undef, 2);
+1</code></pre><p>Since <code>let</code> introduces a new scope block, the inner local <code>x</code> is a different variable than the outer local <code>x</code>.</p><h3><a class="nav-anchor" id="For-Loops-and-Comprehensions-1" href="#For-Loops-and-Comprehensions-1">For Loops and Comprehensions</a></h3><p><code>for</code> loops, <code>while</code> loops, and <a href="../arrays/#man-comprehensions-1">comprehensions</a> have the following behavior: any new variables introduced in their body scopes are freshly allocated for each loop iteration, as if the loop body were surrounded by a <code>let</code> block:</p><pre><code class="language-julia-repl">julia&gt; Fs = Vector{Any}(undef, 2);
 
 julia&gt; for j = 1:2
            Fs[j] = ()-&gt;j

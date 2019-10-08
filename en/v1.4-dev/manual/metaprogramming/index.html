@@ -63,7 +63,7 @@ quote
 end
 
 julia&gt; typeof(ex)
-Expr</code></pre><h3><a class="nav-anchor" id="Interpolation-1" href="#Interpolation-1">Interpolation</a></h3><p>Direct construction of <a href="../../base/base/#Core.Expr"><code>Expr</code></a> objects with value arguments is powerful, but <code>Expr</code> constructors can be tedious compared to &quot;normal&quot; Julia syntax. As an alternative, Julia allows <em>interpolation</em> of literals or expressions into quoted expressions. Interpolation is indicated by a prefix <code>$</code>.</p><p>In this example, the value of variable <code>a</code> is interpolated:</p><pre><code class="language-julia-repl">julia&gt; a = 1;
+Expr</code></pre><h3><a class="nav-anchor" id="man-expression-interpolation-1" href="#man-expression-interpolation-1">Interpolation</a></h3><p>Direct construction of <a href="../../base/base/#Core.Expr"><code>Expr</code></a> objects with value arguments is powerful, but <code>Expr</code> constructors can be tedious compared to &quot;normal&quot; Julia syntax. As an alternative, Julia allows <em>interpolation</em> of literals or expressions into quoted expressions. Interpolation is indicated by a prefix <code>$</code>.</p><p>In this example, the value of variable <code>a</code> is interpolated:</p><pre><code class="language-julia-repl">julia&gt; a = 1;
 
 julia&gt; ex = :($a + b)
 :(1 + b)</code></pre><p>Interpolating into an unquoted expression is not supported and will cause a compile-time error:</p><pre><code class="language-julia-repl">julia&gt; $a + b
