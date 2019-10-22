@@ -465,7 +465,7 @@ julia&gt; addprocs(3)
 
 julia&gt; @everywhere using SharedArrays
 
-julia&gt; S = SharedArray{Int,2}((3,4), init = S -&gt; S[localindices(S)] = myid())
+julia&gt; S = SharedArray{Int,2}((3,4), init = S -&gt; S[localindices(S)] = repeat([myid()], length(localindices(S))))
 3×4 SharedArray{Int64,2}:
  2  2  3  4
  2  3  3  4
@@ -478,7 +478,7 @@ julia&gt; S
 3×4 SharedArray{Int64,2}:
  2  2  3  4
  2  3  3  4
- 2  7  4  4</code></pre><p><a href="../../stdlib/SharedArrays/#SharedArrays.localindices"><code>SharedArrays.localindices</code></a> provides disjoint one-dimensional ranges of indices, and is sometimes convenient for splitting up tasks among processes. You can, of course, divide the work any way you wish:</p><pre><code class="language-julia-repl">julia&gt; S = SharedArray{Int,2}((3,4), init = S -&gt; S[indexpids(S):length(procs(S)):length(S)] = myid())
+ 2  7  4  4</code></pre><p><a href="../../stdlib/SharedArrays/#SharedArrays.localindices"><code>SharedArrays.localindices</code></a> provides disjoint one-dimensional ranges of indices, and is sometimes convenient for splitting up tasks among processes. You can, of course, divide the work any way you wish:</p><pre><code class="language-julia-repl">julia&gt; S = SharedArray{Int,2}((3,4), init = S -&gt; S[indexpids(S):length(procs(S)):length(S)] = repeat([myid()], length( indexpids(S):length(procs(S)):length(S))))
 3×4 SharedArray{Int64,2}:
  2  2  2  2
  3  3  3  3
