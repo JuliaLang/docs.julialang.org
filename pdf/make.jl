@@ -132,17 +132,6 @@ function collect_versions()
     return versions
 end
 
-function withfile(f, file, contents)
-    hasfile = isfile(file)
-    original = hasfile ? read(file) : nothing
-    write(file, contents)
-    try
-        f()
-    finally
-        hasfile ? write(file, original) : rm(file)
-    end
-end
-
 # similar to Documenter.deploydocs
 function commit()
     if get(ENV, "TRAVIS_PULL_REQUEST", "true") != "false"
@@ -151,32 +140,33 @@ function commit()
     end
     @info "committing built PDF files."
 
-    # initialize git
-    run(`git config user.name "zeptodoctor"`)
-    run(`git config user.email "44736852+zeptodoctor@users.noreply.github.com"`)
-    # committing all .pdf files
-    run(`git add '*.pdf'`)
-    run(`git commit --amend --date=now -m "PDF versions of Julia's manual."`)
-
-    # setting up ssh key and force push
-    keyfile = abspath(".documenter")
-    try
-        write(keyfile, String(base64decode(get(ENV, "DOCUMENTER_KEY_PDF", ""))))
+    mktemp() do keyfile, iokey; mktemp() do sshconfig, iossh
+        # Set up keyfile
+        write(iokey, base64decode(get(ENV, "DOCUMENTER_KEY_PDF", "")))
+        close(iokey)
         chmod(keyfile, 0o600)
-        withfile("$(homedir())/.ssh/config",
+        # Set up ssh config file
+        print(iossh,
             """
             Host github.com
                StrictHostKeyChecking no
                HostName github.com
                IdentityFile $keyfile
                BatchMode yes
-            """) do
-            run(`git remote set-url origin git@github.com:JuliaLang/docs.julialang.org.git`)
-            run(`git push -f origin assets`)
-        end
-    finally
-        rm(keyfile; force=true)
-    end
+            """)
+        close(iossh)
+        chmod(sshconfig, 0o600)
+        # Configure git
+        run(`git config user.name "zeptodoctor"`)
+        run(`git config user.email "44736852+zeptodoctor@users.noreply.github.com"`)
+        run(`git remote set-url origin git@github.com:JuliaLang/docs.julialang.org.git`)
+        run(`git config core.sshCommand "ssh -F $(sshconfig)"`)
+        # Committing all .pdf files
+        run(`git add '*.pdf'`)
+        run(`git commit --amend --date=now -m "PDF versions of Julia's manual."`)
+        # Push
+        run(`git push -f origin assets`)
+    end end
 end
 
 function main()
