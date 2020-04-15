@@ -14,5 +14,6 @@ script:
     - export JULIA_DOCS=$PWD/pdf/build/docs.julialang.org &&
       git clone https://github.com/JuliaLang/docs.julialang.org.git -b assets --single-branch $JULIA_DOCS
     - julia --color=yes pdf/make.jl releases
+    - julia --color=yes pdf/make.jl commit
     - julia --color=yes pdf/make.jl nightly
     - julia --color=yes pdf/make.jl commit
