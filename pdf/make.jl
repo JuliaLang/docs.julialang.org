@@ -140,6 +140,9 @@ function commit()
     end
     @info "committing built PDF files."
 
+    # Make sure the repo is up to date
+    run(`git pull origin`)
+
     mktemp() do keyfile, iokey; mktemp() do sshconfig, iossh
         # Set up keyfile
         write(iokey, base64decode(get(ENV, "DOCUMENTER_KEY_PDF", "")))
