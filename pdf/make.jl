@@ -40,6 +40,7 @@ function makedocs(julia_exec)
     @sync begin
         builder = @async begin
             withenv("TRAVIS_REPO_SLUG" => nothing, # workaround Documenter bugs and julia#26314
+                    "DOCUMENTER_KEY" => nothing, # skips deploydocs with the BuildBotConfig (see doc/make.jl)
                     "BUILDROOT" => nothing) do
                 run(`make -C $(JULIA_SOURCE)/doc pdf texplatform=docker JULIA_EXECUTABLE=$(julia_exec)`)
             end
