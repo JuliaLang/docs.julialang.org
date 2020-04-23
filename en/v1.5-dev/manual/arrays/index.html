@@ -35,7 +35,7 @@ julia&gt; [1, 2.3, 4//5] # Thus that&#39;s the element type of this Array
  0.8
 
 julia&gt; []
-0-element Array{Any,1}</code></pre><h3 id="man-array-concatenation-1"><a class="docs-heading-anchor" href="#man-array-concatenation-1">Concatenation</a><a class="docs-heading-anchor-permalink" href="#man-array-concatenation-1" title="Permalink"></a></h3><p>If the arguments inside the square brackets are separated by semicolons (<code>;</code>) or newlines instead of commas, then their contents are <em>vertically concatenated</em> together instead of the arguments being used as elements themselves.</p><pre><code class="language-julia-repl">julia&gt; [1:2, 4:5] # Has a comma, so no concatenation occurs. The ranges are themselves the elements
+Any[]</code></pre><h3 id="man-array-concatenation-1"><a class="docs-heading-anchor" href="#man-array-concatenation-1">Concatenation</a><a class="docs-heading-anchor-permalink" href="#man-array-concatenation-1" title="Permalink"></a></h3><p>If the arguments inside the square brackets are separated by semicolons (<code>;</code>) or newlines instead of commas, then their contents are <em>vertically concatenated</em> together instead of the arguments being used as elements themselves.</p><pre><code class="language-julia-repl">julia&gt; [1:2, 4:5] # Has a comma, so no concatenation occurs. The ranges are themselves the elements
 2-element Array{UnitRange{Int64},1}:
  1:2
  4:5
@@ -216,7 +216,7 @@ julia&gt; A[[1 4; 3 8]]
  5  15
 
 julia&gt; A[[]]
-0-element Array{Int64,1}
+Int64[]
 
 julia&gt; A[1:2:5]
 3-element Array{Int64,1}:
@@ -413,4 +413,4 @@ julia&gt; q
 julia&gt; r
 2×2 Array{Float64,2}:
  -1.20921  -0.383393
-  0.0      -0.910506</code></pre><section class="footnotes is-size-7"><ul><li class="footnote" id="footnote-1"><a class="tag is-link" href="#citeref-1">1</a><em>iid</em>, independently and identically distributed.</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../metaprogramming/">« Metaprogramming</a><a class="docs-footer-nextpage" href="../missing/">Missing Values »</a></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Thursday 23 April 2020 21:28">Thursday 23 April 2020</span>. Using Julia version 1.5.0-DEV.671.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+  0.0      -0.910506</code></pre><section class="footnotes is-size-7"><ul><li class="footnote" id="footnote-1"><a class="tag is-link" href="#citeref-1">1</a><em>iid</em>, independently and identically distributed.</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../metaprogramming/">« Metaprogramming</a><a class="docs-footer-nextpage" href="../missing/">Missing Values »</a></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Thursday 23 April 2020 21:52">Thursday 23 April 2020</span>. Using Julia version 1.5.0-DEV.672.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
