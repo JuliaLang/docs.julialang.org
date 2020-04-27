@@ -142,7 +142,8 @@ function commit()
     @info "committing built PDF files."
 
     # Make sure the repo is up to date
-    run(`git pull origin`)
+    run(`git fetch origin`)
+    run(`git reset --hard origin/assets`)
 
     mktemp() do keyfile, iokey; mktemp() do sshconfig, iossh
         # Set up keyfile
