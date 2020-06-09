@@ -34,50 +34,50 @@ Int64
 julia&gt; UInt
 UInt64</code></pre><p>Larger integer literals that cannot be represented using only 32 bits but can be represented in 64 bits always create 64-bit integers, regardless of the system type:</p><pre><code class="language-julia-repl"># 32-bit or 64-bit system:
 julia&gt; typeof(3000000000)
-Int64</code></pre><p>Unsigned integers are input and output using the <code>0x</code> prefix and hexadecimal (base 16) digits <code>0-9a-f</code> (the capitalized digits <code>A-F</code> also work for input). The size of the unsigned value is determined by the number of hex digits used:</p><pre><code class="language-julia-repl">julia&gt; 0x1
+Int64</code></pre><p>Unsigned integers are input and output using the <code>0x</code> prefix and hexadecimal (base 16) digits <code>0-9a-f</code> (the capitalized digits <code>A-F</code> also work for input). The size of the unsigned value is determined by the number of hex digits used:</p><pre><code class="language-julia-repl">julia&gt; x = 0x1
 0x01
 
-julia&gt; typeof(ans)
+julia&gt; typeof(x)
 UInt8
 
-julia&gt; 0x123
+julia&gt; x = 0x123
 0x0123
 
-julia&gt; typeof(ans)
+julia&gt; typeof(x)
 UInt16
 
-julia&gt; 0x1234567
+julia&gt; x = 0x1234567
 0x01234567
 
-julia&gt; typeof(ans)
+julia&gt; typeof(x)
 UInt32
 
-julia&gt; 0x123456789abcdef
+julia&gt; x = 0x123456789abcdef
 0x0123456789abcdef
 
-julia&gt; typeof(ans)
+julia&gt; typeof(x)
 UInt64
 
-julia&gt; 0x11112222333344445555666677778888
+julia&gt; x = 0x11112222333344445555666677778888
 0x11112222333344445555666677778888
 
-julia&gt; typeof(ans)
-UInt128</code></pre><p>This behavior is based on the observation that when one uses unsigned hex literals for integer values, one typically is using them to represent a fixed numeric byte sequence, rather than just an integer value.</p><p>Recall that the variable <a href="../../base/base/#ans"><code>ans</code></a> is set to the value of the last expression evaluated in an interactive session. This does not occur when Julia code is run in other ways.</p><p>Binary and octal literals are also supported:</p><pre><code class="language-julia-repl">julia&gt; 0b10
+julia&gt; typeof(x)
+UInt128</code></pre><p>This behavior is based on the observation that when one uses unsigned hex literals for integer values, one typically is using them to represent a fixed numeric byte sequence, rather than just an integer value.</p><p>Binary and octal literals are also supported:</p><pre><code class="language-julia-repl">julia&gt; x = 0b10
 0x02
 
-julia&gt; typeof(ans)
+julia&gt; typeof(x)
 UInt8
 
-julia&gt; 0o010
+julia&gt; x = 0o010
 0x08
 
-julia&gt; typeof(ans)
+julia&gt; typeof(x)
 UInt8
 
-julia&gt; 0x00000000000000001111222233334444
+julia&gt; x = 0x00000000000000001111222233334444
 0x00000000000000001111222233334444
 
-julia&gt; typeof(ans)
+julia&gt; typeof(x)
 UInt128</code></pre><p>As for hexadecimal literals, binary and octal literals produce unsigned integer types. The size of the binary data item is the minimal needed size, if the leading digit of the literal is not <code>0</code>. In the case of leading zeros, the size is determined by the minimal needed size for a literal, which has the same length but leading digit <code>1</code>. That allows the user to control the size. Values which cannot be stored in <code>UInt128</code> cannot be written as such literals.</p><p>Binary, octal, and hexadecimal literals may be signed by a <code>-</code> immediately preceding the unsigned literal. They produce an unsigned integer of the same size as the unsigned literal would do, with the two&#39;s complement of the value:</p><pre><code class="language-julia-repl">julia&gt; -0x2
 0xfe
 
@@ -127,27 +127,27 @@ julia&gt; 1e10
 1.0e10
 
 julia&gt; 2.5e-4
-0.00025</code></pre><p>The above results are all <a href="../../base/numbers/#Core.Float64"><code>Float64</code></a> values. Literal <a href="../../base/numbers/#Core.Float32"><code>Float32</code></a> values can be entered by writing an <code>f</code> in place of <code>e</code>:</p><pre><code class="language-julia-repl">julia&gt; 0.5f0
+0.00025</code></pre><p>The above results are all <a href="../../base/numbers/#Core.Float64"><code>Float64</code></a> values. Literal <a href="../../base/numbers/#Core.Float32"><code>Float32</code></a> values can be entered by writing an <code>f</code> in place of <code>e</code>:</p><pre><code class="language-julia-repl">julia&gt; x = 0.5f0
 0.5f0
 
-julia&gt; typeof(ans)
+julia&gt; typeof(x)
 Float32
 
 julia&gt; 2.5f-4
-0.00025f0</code></pre><p>Values can be converted to <a href="../../base/numbers/#Core.Float32"><code>Float32</code></a> easily:</p><pre><code class="language-julia-repl">julia&gt; Float32(-1.5)
+0.00025f0</code></pre><p>Values can be converted to <a href="../../base/numbers/#Core.Float32"><code>Float32</code></a> easily:</p><pre><code class="language-julia-repl">julia&gt; x = Float32(-1.5)
 -1.5f0
 
-julia&gt; typeof(ans)
+julia&gt; typeof(x)
 Float32</code></pre><p>Hexadecimal floating-point literals are also valid, but only as <a href="../../base/numbers/#Core.Float64"><code>Float64</code></a> values, with <code>p</code> preceding the base-2 exponent:</p><pre><code class="language-julia-repl">julia&gt; 0x1p0
 1.0
 
 julia&gt; 0x1.8p3
 12.0
 
-julia&gt; 0x.4p-1
+julia&gt; x = 0x.4p-1
 0.125
 
-julia&gt; typeof(ans)
+julia&gt; typeof(x)
 Float64</code></pre><p>Half-precision floating-point numbers are also supported (<a href="../../base/numbers/#Core.Float16"><code>Float16</code></a>), but they are implemented in software and use <a href="../../base/numbers/#Core.Float32"><code>Float32</code></a> for calculations.</p><pre><code class="language-julia-repl">julia&gt; sizeof(Float16(4.))
 2
 
@@ -306,4 +306,4 @@ julia&gt; one(Int32)
 1
 
 julia&gt; one(BigFloat)
-1.0</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../variables/">« Variables</a><a class="docs-footer-nextpage" href="../mathematical-operations/">Mathematical Operations and Elementary Functions »</a></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Tuesday 9 June 2020 00:13">Tuesday 9 June 2020</span>. Using Julia version 1.6.0-DEV.198.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+1.0</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../variables/">« Variables</a><a class="docs-footer-nextpage" href="../mathematical-operations/">Mathematical Operations and Elementary Functions »</a></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Tuesday 9 June 2020 02:28">Tuesday 9 June 2020</span>. Using Julia version 1.6.0-DEV.199.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
