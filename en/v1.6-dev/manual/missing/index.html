@@ -93,23 +93,23 @@ missing
 
 julia&gt; false &amp;&amp; missing
 false</code></pre><h2 id="Arrays-With-Missing-Values-1"><a class="docs-heading-anchor" href="#Arrays-With-Missing-Values-1">Arrays With Missing Values</a><a class="docs-heading-anchor-permalink" href="#Arrays-With-Missing-Values-1" title="Permalink"></a></h2><p>Arrays containing missing values can be created like other arrays</p><pre><code class="language-julia-repl">julia&gt; [1, missing]
-2-element Array{Union{Missing, Int64},1}:
+2-element Vector{Union{Missing, Int64}}:
  1
   missing</code></pre><p>As this example shows, the element type of such arrays is <code>Union{Missing, T}</code>, with <code>T</code> the type of the non-missing values. This simply reflects the fact that array entries can be either of type <code>T</code> (here, <code>Int64</code>) or of type <code>Missing</code>. This kind of array uses an efficient memory storage equivalent to an <code>Array{T}</code> holding the actual values combined with an <code>Array{UInt8}</code> indicating the type of the entry (i.e. whether it is <code>Missing</code> or <code>T</code>).</p><p>Arrays allowing for missing values can be constructed with the standard syntax. Use <code>Array{Union{Missing, T}}(missing, dims)</code> to create arrays filled with missing values:</p><pre><code class="language-julia-repl">julia&gt; Array{Union{Missing, String}}(missing, 2, 3)
-2×3 Array{Union{Missing, String},2}:
+2×3 Matrix{Union{Missing, String}}:
  missing  missing  missing
  missing  missing  missing</code></pre><p>An array allowing for <code>missing</code> values but which does not contain any such value can be converted back to an array which does not allow for missing values using <a href="../../base/base/#Base.convert"><code>convert</code></a>. If the array contains <code>missing</code> values, a <code>MethodError</code> is thrown during conversion</p><pre><code class="language-julia-repl">julia&gt; x = Union{Missing, String}[&quot;a&quot;, &quot;b&quot;]
-2-element Array{Union{Missing, String},1}:
+2-element Vector{Union{Missing, String}}:
  &quot;a&quot;
  &quot;b&quot;
 
 julia&gt; convert(Array{String}, x)
-2-element Array{String,1}:
+2-element Vector{String}:
  &quot;a&quot;
  &quot;b&quot;
 
 julia&gt; y = Union{Missing, String}[missing, &quot;b&quot;]
-2-element Array{Union{Missing, String},1}:
+2-element Vector{Union{Missing, String}}:
  missing
  &quot;b&quot;
 
@@ -132,7 +132,7 @@ julia&gt; mapreduce(sqrt, +, x)
 julia&gt; x[2]
 ERROR: MissingException: the value at index (2,) is missing
 [...]</code></pre><p>This allows functions which operate on indices to work in combination with <code>skipmissing</code>. This is notably the case for search and find functions, which return indices valid for the object returned by <code>skipmissing</code> which are also the indices of the matching entries <em>in the parent array</em></p><pre><code class="language-julia-repl">julia&gt; findall(==(1), x)
-1-element Array{Int64,1}:
+1-element Vector{Int64}:
  4
 
 julia&gt; findfirst(!iszero, x)
@@ -140,7 +140,7 @@ julia&gt; findfirst(!iszero, x)
 
 julia&gt; argmax(x)
 1</code></pre><p>Use <a href="../../base/collections/#Base.collect-Tuple{Any}"><code>collect</code></a> to extract non-<code>missing</code> values and store them in an array</p><pre><code class="language-julia-repl">julia&gt; collect(x)
-3-element Array{Int64,1}:
+3-element Vector{Int64}:
  3
  2
  1</code></pre><h2 id="Logical-Operations-on-Arrays-1"><a class="docs-heading-anchor" href="#Logical-Operations-on-Arrays-1">Logical Operations on Arrays</a><a class="docs-heading-anchor-permalink" href="#Logical-Operations-on-Arrays-1" title="Permalink"></a></h2><p>The three-valued logic described above for logical operators is also used by logical functions applied to arrays. Thus, array equality tests using the <a href="../../base/math/#Base.:=="><code>==</code></a> operator return <code>missing</code> whenever the result cannot be determined without knowing the actual value of the <code>missing</code> entry. In practice, this means that <code>missing</code> is returned if all non-missing values of the compared arrays are equal, but one or both arrays contain missing values (possibly at different positions)</p><pre><code class="language-julia-repl">julia&gt; [1, missing] == [2, missing]
@@ -164,4 +164,4 @@ julia&gt; any([true, missing])
 true
 
 julia&gt; any([false, missing])
-missing</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../arrays/">« Multi-dimensional Arrays</a><a class="docs-footer-nextpage" href="../networking-and-streams/">Networking and Streams »</a></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Wednesday 1 July 2020 21:33">Wednesday 1 July 2020</span>. Using Julia version 1.6.0-DEV.346.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+missing</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../arrays/">« Multi-dimensional Arrays</a><a class="docs-footer-nextpage" href="../networking-and-streams/">Networking and Streams »</a></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Thursday 2 July 2020 02:15">Thursday 2 July 2020</span>. Using Julia version 1.6.0-DEV.353.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
