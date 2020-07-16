@@ -1,8 +1,9 @@
 using Base64
 
-const BUILDROOT    = get(ENV, "BUILDROOT", pwd())
-const JULIA_SOURCE = get(ENV, "JULIA_SOURCE", "$(BUILDROOT)/julia")
-const JULIA_DOCS   = get(ENV, "JULIA_DOCS", "$(BUILDROOT)/docs.julialang.org")
+const BUILDROOT      = get(ENV, "BUILDROOT", pwd())
+const JULIA_SOURCE   = get(ENV, "JULIA_SOURCE", "$(BUILDROOT)/julia")
+const JULIA_DOCS     = get(ENV, "JULIA_DOCS", "$(BUILDROOT)/docs.julialang.org")
+const JULIA_DOCS_TMP = get(ENV, "JULIA_DOCS_TMP", "$(BUILDROOT)/tmp")
 
 # download and extract binary for a given version, return path to executable
 function download_release(v::VersionNumber)
@@ -54,12 +55,14 @@ function makedocs(julia_exec)
     end
 end
 
-function copydocs(path)
+function copydocs(file)
+    isdir(JULIA_DOCS_TMP) || mkpath(JULIA_DOCS_TMP)
     output = "$(JULIA_SOURCE)/doc/_build/pdf/en"
+    destination = "$(JULIA_DOCS_TMP)/$(file)"
     for f in readdir(output)
         if startswith(f, "TheJuliaLanguage") && endswith(f, ".pdf")
-            cp("$(output)/$(f)", path; force=true)
-            @info "finished, output file copied to $(path)."
+            cp("$(output)/$(f)", destination; force=true)
+            @info "finished, output file copied to $(destination)."
             break
         end
     end
@@ -70,10 +73,9 @@ function build_release_pdf(v::VersionNumber)
     @info "building PDF for Julia v$(x).$(y).$(z)."
 
     file = "julia-$(x).$(y).$(z).pdf"
-    path = "$(JULIA_DOCS)/$(file)"
 
     # early return if file exists
-    if isfile(path)
+    if isfile("$(JULIA_DOCS)/$(file)")
         @info "PDF for Julia v$(x).$(y).$(z) already exists, skipping."
         return
     end
@@ -89,8 +91,8 @@ function build_release_pdf(v::VersionNumber)
     # invoke makedocs
     makedocs(julia_exec)
 
-    # copy built PDF to JULIA_DOCS
-    copydocs(path)
+    # copy built PDF to JULIA_DOCS_TMP
+    copydocs(file)
 end
 
 function build_nightly_pdf()
@@ -100,9 +102,6 @@ function build_nightly_pdf()
     _, _, v = split(readchomp(`$(julia_exec) --version`))
     @info "commit determined to $(commit) and version determined to $(v)."
 
-    file = "julia-$(v).pdf"
-    path = "$JULIA_DOCS/$file"
-
     # checkout correct commit and clean repo
     run(`git -C $(JULIA_SOURCE) checkout $(commit)`)
     run(`git -C $(JULIA_SOURCE) clean -fdx`)
@@ -111,7 +110,7 @@ function build_nightly_pdf()
     makedocs(julia_exec)
 
     # copy the built PDF to JULIA_DOCS
-    copydocs(path)
+    copydocs("julia-$(v).pdf")
 end
 
 # find all tags in the julia repo
@@ -144,6 +143,14 @@ function commit()
     # Make sure the repo is up to date
     run(`git fetch origin`)
     run(`git reset --hard origin/assets`)
+
+    # Copy file from JULIA_DOCS_TMP to JULIA_DOCS
+    for file in readdir(JULIA_DOCS_TMP)
+        endswith(file, ".pdf") || continue
+        from = joinpath(JULIA_DOCS_TMP, file)
+        @debug "Copying a PDF" file from pwd()
+        cp(from, file; force = true)
+    end
 
     mktemp() do keyfile, iokey; mktemp() do sshconfig, iossh
         # Set up keyfile
