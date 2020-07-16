@@ -6,14 +6,11 @@ env:
   - BUILDTYPE=nightly
 
 branches:
-  only:
-    - master
-    - mp/fix-nightly
+  only: master
 
 services: docker
 
 script:
-    - export JULIA_DEBUG=all
     - export BUILDROOT=$PWD/pdf/build && mkdir $BUILDROOT
     - export JULIA_SOURCE=$PWD/pdf/build/julia &&
       git clone https://github.com/JuliaLang/julia.git $JULIA_SOURCE
