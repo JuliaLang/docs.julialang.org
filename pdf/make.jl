@@ -138,6 +138,10 @@ function commit()
         @info "skipping commit from pull requests."
         return
     end
+    if !isdir(JULIA_DOCS_TMP)
+        @info "No new PDFs created, skipping commit."
+        return
+    end
     @info "committing built PDF files."
 
     # Make sure the repo is up to date
