@@ -59,14 +59,16 @@ Symbol(&quot;~/julia/usr/share/julia/stdlib/v0.7/REPL/src/REPL.jl&quot;)
 julia&gt; frame.line
 5
 
-julia&gt; top_frame.linfo
+julia&gt; frame.linfo
 MethodInstance for eval(::Module, ::Expr)
 
-julia&gt; top_frame.inlined
+julia&gt; frame.inlined
 false
 
-julia&gt; top_frame.from_c
-false</code></pre><pre><code class="language-julia-repl">julia&gt; top_frame.pointer
+julia&gt; frame.from_c
+false
+
+julia&gt; frame.pointer
 0x00007f92d6293171</code></pre><p>This makes stack trace information available programmatically for logging, error handling, and more.</p><h2 id="Error-handling-1"><a class="docs-heading-anchor" href="#Error-handling-1">Error handling</a><a class="docs-heading-anchor-permalink" href="#Error-handling-1" title="Permalink"></a></h2><p>While having easy access to information about the current state of the callstack can be helpful in many places, the most obvious application is in error handling and debugging.</p><pre><code class="language-julia-repl">julia&gt; @noinline bad_function() = undeclared_variable
 bad_function (generic function with 1 method)
 
@@ -82,7 +84,7 @@ julia&gt; example()
  example() at REPL[2]:4
  top-level scope
  eval at boot.jl:317 [inlined]
-[...]</code></pre><p>You may notice that in the example above the first stack frame points points at line 4, where <a href="../../base/stacktraces/#Base.StackTraces.stacktrace"><code>stacktrace</code></a> is called, rather than line 2, where <em>bad_function</em> is called, and <code>bad_function</code>&#39;s frame is missing entirely. This is understandable, given that <a href="../../base/stacktraces/#Base.StackTraces.stacktrace"><code>stacktrace</code></a> is called from the context of the <em>catch</em>. While in this example it&#39;s fairly easy to find the actual source of the error, in complex cases tracking down the source of the error becomes nontrivial.</p><p>This can be remedied by passing the result of <a href="../../base/base/#Base.catch_backtrace"><code>catch_backtrace</code></a> to <a href="../../base/stacktraces/#Base.StackTraces.stacktrace"><code>stacktrace</code></a>. Instead of returning callstack information for the current context, <a href="../../base/base/#Base.catch_backtrace"><code>catch_backtrace</code></a> returns stack information for the context of the most recent exception:</p><pre><code class="language-julia-repl">julia&gt; @noinline bad_function() = undeclared_variable
+[...]</code></pre><p>You may notice that in the example above the first stack frame points at line 4, where <a href="../../base/stacktraces/#Base.StackTraces.stacktrace"><code>stacktrace</code></a> is called, rather than line 2, where <em>bad_function</em> is called, and <code>bad_function</code>&#39;s frame is missing entirely. This is understandable, given that <a href="../../base/stacktraces/#Base.StackTraces.stacktrace"><code>stacktrace</code></a> is called from the context of the <em>catch</em>. While in this example it&#39;s fairly easy to find the actual source of the error, in complex cases tracking down the source of the error becomes nontrivial.</p><p>This can be remedied by passing the result of <a href="../../base/base/#Base.catch_backtrace"><code>catch_backtrace</code></a> to <a href="../../base/stacktraces/#Base.StackTraces.stacktrace"><code>stacktrace</code></a>. Instead of returning callstack information for the current context, <a href="../../base/base/#Base.catch_backtrace"><code>catch_backtrace</code></a> returns stack information for the context of the most recent exception:</p><pre><code class="language-julia-repl">julia&gt; @noinline bad_function() = undeclared_variable
 bad_function (generic function with 1 method)
 
 julia&gt; @noinline example() = try
@@ -197,4 +199,4 @@ julia&gt; frame = StackTraces.lookup(pointer)
  jl_apply_generic at gf.c:2167
 
 julia&gt; println(&quot;The top frame is from $(frame[1].func)!&quot;)
-The top frame is from jl_apply_generic!</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../profile/">« Profiling</a><a class="docs-footer-nextpage" href="../performance-tips/">Performance Tips »</a></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Friday 24 July 2020 20:17">Friday 24 July 2020</span>. Using Julia version 1.6.0-DEV.535.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+The top frame is from jl_apply_generic!</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../profile/">« Profiling</a><a class="docs-footer-nextpage" href="../performance-tips/">Performance Tips »</a></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Friday 24 July 2020 20:35">Friday 24 July 2020</span>. Using Julia version 1.6.0-DEV.536.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
