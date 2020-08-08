@@ -32,4 +32,27 @@ julia&gt; open(&quot;/tmp/test.txt&quot;) do f
  0xb0
  0xf0
  0x0a
- 0x08</code></pre><p>Note the lack of a newline at the end of <code>/tmp/text.txt</code>.  Julia automatically inserts a newline before the <code>julia&gt;</code> prompt.</p><p>Due to the colloquial usage of <code>sha256</code> to refer to <code>sha2_256</code>, convenience functions are provided, mapping <code>shaxxx()</code> function calls to <code>sha2_xxx()</code>.  For SHA-3, no such colloquialisms exist and the user must use the full <code>sha3_xxx()</code> names.</p><p><code>shaxxx()</code> takes <code>AbstractString</code> and array-like objects (<code>NTuple</code> and <code>Array</code>) with elements of type <code>UInt8</code>.</p><p>Note that, at the time of this writing, the SHA3 code is not optimized, and as such is roughly an order of magnitude slower than SHA2.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../Random/">« Random Numbers</a><a class="docs-footer-nextpage" href="../Serialization/">Serialization »</a></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Saturday 8 August 2020 20:01">Saturday 8 August 2020</span>. Using Julia version 1.6.0-DEV.605.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+ 0x08</code></pre><p>Due to the colloquial usage of <code>sha256</code> to refer to <code>sha2_256</code>, convenience functions are provided, mapping <code>shaxxx()</code> function calls to <code>sha2_xxx()</code>.  For SHA-3, no such colloquialisms exist and the user must use the full <code>sha3_xxx()</code> names.</p><p><code>shaxxx()</code> takes <code>AbstractString</code> and array-like objects (<code>NTuple</code> and <code>Array</code>) with elements of type <code>UInt8</code>.</p><p>To create a hash from multiple items the <code>SHAX_XXX_CTX()</code> types can be used to create a stateful hash object that is updated with <code>update!</code> and finalized with <code>digest!</code></p><pre><code class="language-julia">julia&gt; ctx = SHA2_256_CTX()
+SHA2 256-bit hash state
+
+julia&gt; update!(ctx, b&quot;some data&quot;)
+0x0000000000000009
+
+julia&gt; update!(ctx, b&quot;some more data&quot;)
+0x0000000000000017
+
+julia&gt; digest!(ctx)
+32-element Vector{UInt8}:
+ 0xbe
+ 0xcf
+ 0x23
+ 0xda
+ 0xaf
+ 0x02
+    ⋮
+ 0x25
+ 0x52
+ 0x19
+ 0xa0
+ 0x8b
+ 0xc5</code></pre><p>Note that, at the time of this writing, the SHA3 code is not optimized, and as such is roughly an order of magnitude slower than SHA2.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../Random/">« Random Numbers</a><a class="docs-footer-nextpage" href="../Serialization/">Serialization »</a></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Saturday 8 August 2020 20:11">Saturday 8 August 2020</span>. Using Julia version 1.6.0-DEV.606.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
