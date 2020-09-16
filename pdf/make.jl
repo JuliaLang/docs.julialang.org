@@ -173,8 +173,8 @@ function commit()
         close(iossh)
         chmod(sshconfig, 0o600)
         # Configure git
-        run(`git config user.name "zeptodoctor"`)
-        run(`git config user.email "44736852+zeptodoctor@users.noreply.github.com"`)
+        run(`git config user.name "docs.julialang.org"`)
+        run(`git config user.email "documenter@juliadocs.github.io"`)
         run(`git remote set-url origin git@github.com:JuliaLang/docs.julialang.org.git`)
         run(`git config core.sshCommand "ssh -F $(sshconfig)"`)
         # Committing all .pdf files
