@@ -1,0 +1,42 @@
+name: CI
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+jobs:
+  pdf:
+    name: Julia PDF builds (${{ matrix.buildtype }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        buildtype:
+          - 'releases'
+          - 'nightly'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: julia-actions/setup-julia@v1
+        with:
+          version: 1
+          show-versioninfo: true
+      - uses: actions/cache@v1
+        env:
+          cache-name: cache-artifacts
+        with:
+          path: ~/.julia/artifacts
+          key: ${{ runner.os }}-test-${{ env.cache-name }}-${{ hashFiles('**/Project.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-test-${{ env.cache-name }}-
+            ${{ runner.os }}-test-
+            ${{ runner.os }}-
+      - run: |
+          export BUILDROOT=$PWD/pdf/build && mkdir $BUILDROOT
+          export JULIA_SOURCE=$PWD/pdf/build/julia &&
+            git clone https://github.com/JuliaLang/julia.git $JULIA_SOURCE
+          export JULIA_DOCS=$PWD/pdf/build/docs.julialang.org &&
+            git clone https://github.com/JuliaLang/docs.julialang.org.git -b assets --single-branch $JULIA_DOCS
+          julia --color=yes pdf/make.jl ${{ matrix.buildtype }}
+      - run: julia --color=yes pdf/make.jl commit
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
