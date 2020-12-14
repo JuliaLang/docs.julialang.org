@@ -15,9 +15,9 @@ jobs:
           - 'releases'
           - 'nightly'
     env:
-      BUILDROOT: $GITHUB_WORKSPACE/pdf/build
-      JULIA_SOURCE: $GITHUB_WORKSPACE/pdf/build/julia
-      JULIA_DOCS: $GITHUB_WORKSPACE/pdf/build/docs.julialang.org
+      BUILDROOT: ${{ env.GITHUB_WORKSPACE }}/pdf/build
+      JULIA_SOURCE: ${{ env.GITHUB_WORKSPACE }}/pdf/build/julia
+      JULIA_DOCS: ${{ env.GITHUB_WORKSPACE }}/pdf/build/docs.julialang.org
     steps:
       - uses: actions/checkout@v2
       - uses: julia-actions/setup-julia@v1
