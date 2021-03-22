@@ -6,6 +6,7 @@ on:
   schedule:
     - cron: '0 0 * * *' # daily
   pull_request:
+  workflow_dispatch:
 jobs:
   pdf:
     name: Julia PDF builds (${{ matrix.buildtype }})
