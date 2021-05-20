@@ -35,7 +35,7 @@ julia&gt; [1, 2.3, 4//5] # Thus that&#39;s the element type of this Array
  0.8
 
 julia&gt; []
-Any[]</code></pre><h3 id="man-array-concatenation"><a class="docs-heading-anchor" href="#man-array-concatenation">Concatenation</a><a id="man-array-concatenation-1"></a><a class="docs-heading-anchor-permalink" href="#man-array-concatenation" title="Permalink"></a></h3><p>If the arguments inside the square brackets are separated by semicolons (<code>;</code>) or newlines instead of commas, then their contents are <em>vertically concatenated</em> together instead of the arguments being used as elements themselves.</p><pre><code class="language-julia-repl">julia&gt; [1:2, 4:5] # Has a comma, so no concatenation occurs. The ranges are themselves the elements
+Any[]</code></pre><h3 id="man-array-concatenation"><a class="docs-heading-anchor" href="#man-array-concatenation">Concatenation</a><a id="man-array-concatenation-1"></a><a class="docs-heading-anchor-permalink" href="#man-array-concatenation" title="Permalink"></a></h3><p>If the arguments inside the square brackets are separated by single semicolons (<code>;</code>) or newlines instead of commas, then their contents are <em>vertically concatenated</em> together instead of the arguments being used as elements themselves.</p><pre><code class="language-julia-repl">julia&gt; [1:2, 4:5] # Has a comma, so no concatenation occurs. The ranges are themselves the elements
 2-element Vector{UnitRange{Int64}}:
  1:2
  4:5
@@ -55,7 +55,7 @@ julia&gt; [1:2
  2
  4
  5
- 6</code></pre><p>Similarly, if the arguments are separated by tabs or spaces, then their contents are <em>horizontally concatenated</em> together.</p><pre><code class="language-julia-repl">julia&gt; [1:2  4:5  7:8]
+ 6</code></pre><p>Similarly, if the arguments are separated by tabs or spaces or double semicolons, then their contents are <em>horizontally concatenated</em> together.</p><pre><code class="language-julia-repl">julia&gt; [1:2  4:5  7:8]
 2×3 Matrix{Int64}:
  1  4  7
  2  5  8
@@ -67,7 +67,11 @@ julia&gt; [[1,2]  [4,5]  [7,8]]
 
 julia&gt; [1 2 3] # Numbers can also be horizontally concatenated
 1×3 Matrix{Int64}:
- 1  2  3</code></pre><p>Using semicolons (or newlines) and spaces (or tabs) can be combined to concatenate both horizontally and vertically at the same time.</p><pre><code class="language-julia-repl">julia&gt; [1 2
+ 1  2  3
+
+julia&gt; [1;; 2;; 3;; 4]
+1×4 Matrix{Int64}:
+ 1  2  3  4</code></pre><p>Single semicolons (or newlines) and spaces (or tabs) can be combined to concatenate both horizontally and vertically at the same time.</p><pre><code class="language-julia-repl">julia&gt; [1 2
         3 4]
 2×2 Matrix{Int64}:
  1  2
@@ -78,7 +82,82 @@ julia&gt; [zeros(Int, 2, 2) [1; 2]
 3×3 Matrix{Int64}:
  0  0  1
  0  0  2
- 3  4  5</code></pre><p>More generally, concatenation can be accomplished through the <a href="../../base/arrays/#Base.cat"><code>cat</code></a> function. These syntaxes are shorthands for function calls that themselves are convenience functions:</p><table><tr><th style="text-align: left">Syntax</th><th style="text-align: left">Function</th><th style="text-align: left">Description</th></tr><tr><td style="text-align: left"></td><td style="text-align: left"><a href="../../base/arrays/#Base.cat"><code>cat</code></a></td><td style="text-align: left">concatenate input arrays along dimension(s) <code>k</code></td></tr><tr><td style="text-align: left"><code>[A; B; C; ...]</code></td><td style="text-align: left"><a href="../../base/arrays/#Base.vcat"><code>vcat</code></a></td><td style="text-align: left">shorthand for `cat(A...; dims=1)</td></tr><tr><td style="text-align: left"><code>[A B C ...]</code></td><td style="text-align: left"><a href="../../base/arrays/#Base.hcat"><code>hcat</code></a></td><td style="text-align: left">shorthand for `cat(A...; dims=2)</td></tr><tr><td style="text-align: left"><code>[A B; C D; ...]</code></td><td style="text-align: left"><a href="../../base/arrays/#Base.hvcat"><code>hvcat</code></a></td><td style="text-align: left">simultaneous vertical and horizontal concatenation</td></tr></table><h3 id="Typed-array-literals"><a class="docs-heading-anchor" href="#Typed-array-literals">Typed array literals</a><a id="Typed-array-literals-1"></a><a class="docs-heading-anchor-permalink" href="#Typed-array-literals" title="Permalink"></a></h3><p>An array with a specific element type can be constructed using the syntax <code>T[A, B, C, ...]</code>. This will construct a 1-d array with element type <code>T</code>, initialized to contain elements <code>A</code>, <code>B</code>, <code>C</code>, etc. For example, <code>Any[x, y, z]</code> constructs a heterogeneous array that can contain any values.</p><p>Concatenation syntax can similarly be prefixed with a type to specify the element type of the result.</p><pre><code class="language-julia-repl">julia&gt; [[1 2] [3 4]]
+ 3  4  5
+
+julia&gt; [[1 1]; 2 3; [4 4]]
+3×2 Matrix{Int64}:
+ 1  1
+ 2  3
+ 4  4</code></pre><p>Spaces (and tabs) have a higher precedence than semicolons, performing any horizontal concatenations first and then concatenating the result. Using double semicolons for the horizontal concatenation, on the other hand, performs any vertical concatenations before horizontally concatenating the result.</p><pre><code class="language-julia-repl">julia&gt; [zeros(Int, 2, 2) ; [3 4] ;; [1; 2] ; 5]
+3×3 Matrix{Int64}:
+ 0  0  1
+ 0  0  2
+ 3  4  5
+
+julia&gt; [1:2; 4;; 1; 3:4]
+3×2 Matrix{Int64}:
+ 1  1
+ 2  3
+ 4  4</code></pre><p>Just as <code>;</code> and <code>;;</code> concatenate in the first and second dimension, using more semicolons extends this same general scheme. The number of semicolons in the separator specifies the particular dimension, so <code>;;;</code> concetenates in the third dimension, <code>;;;;</code> in the 4th, and so on. Fewer semicolons take precedence, so the lower dimensions are generally concatenated first.</p><pre><code class="language-julia-repl">julia&gt; [1; 2;; 3; 4;; 5; 6;;;
+        7; 8;; 9; 10;; 11; 12]
+2×3×2 Array{Int64, 3}:
+[:, :, 1] =
+ 1  3  5
+ 2  4  6
+
+[:, :, 2] =
+ 7   9  11
+ 8  10  12</code></pre><p>Like before, spaces (and tabs) for horizontal concatenation have a higher precedence than any number of semicolons. Thus, higher dimensional arrays can also be written by specifying their rows first, with their elements textually arranged in a manner similar to their layout:</p><pre><code class="language-julia-repl">julia&gt; [1 3 5
+        2 4 6;;;
+        7 9 11
+        8 10 12]
+2×3×2 Array{Int64, 3}:
+[:, :, 1] =
+ 1  3  5
+ 2  4  6
+
+[:, :, 2] =
+ 7   9  11
+ 8  10  12
+
+julia&gt; [1 2;;; 3 4;;;; 5 6;;; 7 8]
+1×2×2×2 Array{Int64, 4}:
+[:, :, 1, 1] =
+ 1  2
+
+[:, :, 2, 1] =
+ 3  4
+
+[:, :, 1, 2] =
+ 5  6
+
+[:, :, 2, 2] =
+ 7  8
+
+julia&gt; [[1 2;;; 3 4];;;; [5 6];;; [7 8]]
+1×2×2×2 Array{Int64, 4}:
+[:, :, 1, 1] =
+ 1  2
+
+[:, :, 2, 1] =
+ 3  4
+
+[:, :, 1, 2] =
+ 5  6
+
+[:, :, 2, 2] =
+ 7  8</code></pre><p>Although they both mean concatenation in the second dimension, spaces (or tabs) and <code>;;</code> cannot appear in the same array expression unless the double semicolon is simply serving as a &quot;line continuation&quot; character. This allows a single horizontal concatenation to span multiple lines (without the line break being interpreted as a vertical concatenation).</p><pre><code class="language-julia-repl">julia&gt; [1 2 ;;
+       3 4]
+1×4 Matrix{Int64}:
+ 1  2  3  4</code></pre><p>Terminating semicolons may also be used to add trailing length 1 dimensions.</p><pre><code class="language-julia-repl">julia&gt; [1;;]
+1×1 Matrix{Int64}:
+ 1
+
+julia&gt; [2; 3;;;]
+2×1×1 Array{Int64, 3}:
+[:, :, 1] =
+ 2
+ 3</code></pre><p>More generally, concatenation can be accomplished through the <a href="../../base/arrays/#Base.cat"><code>cat</code></a> function. These syntaxes are shorthands for function calls that themselves are convenience functions:</p><table><tr><th style="text-align: left">Syntax</th><th style="text-align: left">Function</th><th style="text-align: left">Description</th></tr><tr><td style="text-align: left"></td><td style="text-align: left"><a href="../../base/arrays/#Base.cat"><code>cat</code></a></td><td style="text-align: left">concatenate input arrays along dimension(s) <code>k</code></td></tr><tr><td style="text-align: left"><code>[A; B; C; ...]</code></td><td style="text-align: left"><a href="../../base/arrays/#Base.vcat"><code>vcat</code></a></td><td style="text-align: left">shorthand for `cat(A...; dims=1)</td></tr><tr><td style="text-align: left"><code>[A B C ...]</code></td><td style="text-align: left"><a href="../../base/arrays/#Base.hcat"><code>hcat</code></a></td><td style="text-align: left">shorthand for `cat(A...; dims=2)</td></tr><tr><td style="text-align: left"><code>[A B; C D; ...]</code></td><td style="text-align: left"><a href="../../base/arrays/#Base.hvcat"><code>hvcat</code></a></td><td style="text-align: left">simultaneous vertical and horizontal concatenation</td></tr><tr><td style="text-align: left"><code>[A; C;; B; D;;; ...]</code></td><td style="text-align: left"><a href="../../base/arrays/#Base.hvncat"><code>hvncat</code></a></td><td style="text-align: left">simultaneous n-dimensional concatenation, where number of semicolons indicate the dimension to concatenate</td></tr></table><h3 id="Typed-array-literals"><a class="docs-heading-anchor" href="#Typed-array-literals">Typed array literals</a><a id="Typed-array-literals-1"></a><a class="docs-heading-anchor-permalink" href="#Typed-array-literals" title="Permalink"></a></h3><p>An array with a specific element type can be constructed using the syntax <code>T[A, B, C, ...]</code>. This will construct a 1-d array with element type <code>T</code>, initialized to contain elements <code>A</code>, <code>B</code>, <code>C</code>, etc. For example, <code>Any[x, y, z]</code> constructs a heterogeneous array that can contain any values.</p><p>Concatenation syntax can similarly be prefixed with a type to specify the element type of the result.</p><pre><code class="language-julia-repl">julia&gt; [[1 2] [3 4]]
 1×4 Matrix{Int64}:
  1  2  3  4
 
@@ -394,4 +473,4 @@ julia&gt; stride(A,1)
 julia&gt; stride(V, 1)
 3</code></pre><p>This view is similarly selecting every other column from our original <code>A</code> — and thus it needs to skip the equivalent of two five-element columns when moving between indices in the second dimension:</p><pre><code class="language-julia-repl">julia&gt; stride(V, 2)
 10</code></pre><p>The third dimension is interesting because its order is reversed! Thus to get from the first &quot;page&quot; to the second one it must go <em>backwards</em> in memory, and so its stride in this dimension is negative!</p><pre><code class="language-julia-repl">julia&gt; stride(V, 3)
--35</code></pre><p>This means that the <code>pointer</code> for <code>V</code> is actually pointing into the middle of <code>A</code>&#39;s memory block, and it refers to elements both backwards and forwards in memory. See the <a href="../interfaces/#man-interface-strided-arrays">interface guide for strided arrays</a> for more details on defining your own strided arrays. <a href="../../base/arrays/#Base.StridedVector"><code>StridedVector</code></a> and <a href="../../base/arrays/#Base.StridedMatrix"><code>StridedMatrix</code></a> are convenient aliases for many of the builtin array types that are considered strided arrays, allowing them to dispatch to select specialized implementations that call highly tuned and optimized BLAS and LAPACK functions using just the pointer and strides.</p><p>It is worth emphasizing that strides are about offsets in memory rather than indexing. If you are looking to convert between linear (single-index) indexing and cartesian (multi-index) indexing, see <a href="../../base/arrays/#Base.LinearIndices"><code>LinearIndices</code></a> and <a href="../../base/arrays/#Base.IteratorsMD.CartesianIndices"><code>CartesianIndices</code></a>.</p><section class="footnotes is-size-7"><ul><li class="footnote" id="footnote-1"><a class="tag is-link" href="#citeref-1">1</a><em>iid</em>, independently and identically distributed.</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../metaprogramming/">« Metaprogramming</a><a class="docs-footer-nextpage" href="../missing/">Missing Values »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Thursday 20 May 2021 13:44">Thursday 20 May 2021</span>. Using Julia version 1.7.0-DEV.1128.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+-35</code></pre><p>This means that the <code>pointer</code> for <code>V</code> is actually pointing into the middle of <code>A</code>&#39;s memory block, and it refers to elements both backwards and forwards in memory. See the <a href="../interfaces/#man-interface-strided-arrays">interface guide for strided arrays</a> for more details on defining your own strided arrays. <a href="../../base/arrays/#Base.StridedVector"><code>StridedVector</code></a> and <a href="../../base/arrays/#Base.StridedMatrix"><code>StridedMatrix</code></a> are convenient aliases for many of the builtin array types that are considered strided arrays, allowing them to dispatch to select specialized implementations that call highly tuned and optimized BLAS and LAPACK functions using just the pointer and strides.</p><p>It is worth emphasizing that strides are about offsets in memory rather than indexing. If you are looking to convert between linear (single-index) indexing and cartesian (multi-index) indexing, see <a href="../../base/arrays/#Base.LinearIndices"><code>LinearIndices</code></a> and <a href="../../base/arrays/#Base.IteratorsMD.CartesianIndices"><code>CartesianIndices</code></a>.</p><section class="footnotes is-size-7"><ul><li class="footnote" id="footnote-1"><a class="tag is-link" href="#citeref-1">1</a><em>iid</em>, independently and identically distributed.</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../metaprogramming/">« Metaprogramming</a><a class="docs-footer-nextpage" href="../missing/">Missing Values »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Thursday 20 May 2021 16:55">Thursday 20 May 2021</span>. Using Julia version 1.7.0-DEV.1129.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
