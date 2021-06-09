@@ -11,5 +11,5 @@ var DOC_VERSIONS = [
   "v0.5",
   "v0.4",
   "v0.3",
-  "v1.7-dev",
+  "v1.8-dev",
 ];
