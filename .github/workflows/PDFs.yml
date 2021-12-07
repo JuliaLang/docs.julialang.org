@@ -23,26 +23,7 @@ jobs:
       JULIA_DOCS: ${{ github.workspace }}/pdf/build/docs.julialang.org
     steps:
       - uses: actions/checkout@v2
-      - uses: julia-actions/setup-julia@v1
-        with:
-          version: 1
-          show-versioninfo: true
-      - uses: actions/cache@v1
-        env:
-          cache-name: cache-artifacts
-        with:
-          path: ~/.julia/artifacts
-          key: ${{ runner.os }}-test-${{ env.cache-name }}-${{ hashFiles('**/Project.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-test-${{ env.cache-name }}-
-            ${{ runner.os }}-test-
-            ${{ runner.os }}-
-      - run: |
-          mkdir $BUILDROOT
-          git clone https://github.com/JuliaLang/julia.git $JULIA_SOURCE
-          git clone https://github.com/JuliaLang/docs.julialang.org.git -b assets --single-branch $JULIA_DOCS
-      - run: julia --color=yes pdf/make.jl ${{ matrix.buildtype }}
-      - run: julia --color=yes pdf/make.jl commit
+      - uses: mxschmitt/action-tmate@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DOCUMENTER_KEY_PDF: ${{ secrets.DOCUMENTER_KEY_PDF }}
