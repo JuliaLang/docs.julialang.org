@@ -1,4 +1,5 @@
 using Base64
+import Dates
 
 const BUILDROOT      = get(ENV, "BUILDROOT", pwd())
 const JULIA_SOURCE   = get(ENV, "JULIA_SOURCE", "$(BUILDROOT)/julia")
@@ -48,7 +49,7 @@ function makedocs(julia_exec)
         @async begin
             while !istaskdone(builder)
                 sleep(60)
-                @info "building pdf ..."
+                @info "[$(Dates.format(Dates.now(), raw"yyyy-mm-dd\THH:MM:SS"))] building pdf ..."
             end
         end
     end
