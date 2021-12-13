@@ -15,9 +15,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        buildtype:
-          - 'releases'
-          - 'nightly'
+        include:
+          - buildtype: "releases"
+            julia_version: "1"
+          - buildtype: "nightly"
+            julia_version: "nightly"
     env:
       BUILDROOT: ${{ github.workspace }}/pdf/build
       JULIA_SOURCE: ${{ github.workspace }}/pdf/build/julia
@@ -26,7 +28,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: julia-actions/setup-julia@v1
         with:
-          version: 1
+          version: "${{ matrix.julia_version }}"
           show-versioninfo: true
       - uses: actions/cache@v1
         env:
