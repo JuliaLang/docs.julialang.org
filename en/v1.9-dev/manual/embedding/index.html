@@ -66,15 +66,17 @@ else {
 jl_value_t *b = jl_box_float32(3.0f);
 jl_value_t *c = jl_box_int32(3);</code></pre><p>As we will see next, boxing is required to call Julia functions with specific arguments.</p><h2 id="Calling-Julia-Functions"><a class="docs-heading-anchor" href="#Calling-Julia-Functions">Calling Julia Functions</a><a id="Calling-Julia-Functions-1"></a><a class="docs-heading-anchor-permalink" href="#Calling-Julia-Functions" title="Permalink"></a></h2><p>While <code>jl_eval_string</code> allows C to obtain the result of a Julia expression, it does not allow passing arguments computed in C to Julia. For this you will need to invoke Julia functions directly, using <code>jl_call</code>:</p><pre><code class="language-c hljs">jl_function_t *func = jl_get_function(jl_base_module, &quot;sqrt&quot;);
 jl_value_t *argument = jl_box_float64(2.0);
-jl_value_t *ret = jl_call1(func, argument);</code></pre><p>In the first step, a handle to the Julia function <code>sqrt</code> is retrieved by calling <code>jl_get_function</code>. The first argument passed to <code>jl_get_function</code> is a pointer to the <code>Base</code> module in which <code>sqrt</code> is defined. Then, the double value is boxed using <code>jl_box_float64</code>. Finally, in the last step, the function is called using <code>jl_call1</code>. <code>jl_call0</code>, <code>jl_call2</code>, and <code>jl_call3</code> functions also exist, to conveniently handle different numbers of arguments. To pass more arguments, use <code>jl_call</code>:</p><pre><code class="nohighlight hljs">jl_value_t *jl_call(jl_function_t *f, jl_value_t **args, int32_t nargs)</code></pre><p>Its second argument <code>args</code> is an array of <code>jl_value_t*</code> arguments and <code>nargs</code> is the number of arguments.</p><h2 id="Memory-Management"><a class="docs-heading-anchor" href="#Memory-Management">Memory Management</a><a id="Memory-Management-1"></a><a class="docs-heading-anchor-permalink" href="#Memory-Management" title="Permalink"></a></h2><p>As we have seen, Julia objects are represented in C as pointers. This raises the question of who is responsible for freeing these objects.</p><p>Typically, Julia objects are freed by a garbage collector (GC), but the GC does not automatically know that we are holding a reference to a Julia value from C. This means the GC can free objects out from under you, rendering pointers invalid.</p><p>The GC can only run when Julia objects are allocated. Calls like <code>jl_box_float64</code> perform allocation, and allocation might also happen at any point in running Julia code. However, it is generally safe to use pointers in between <code>jl_...</code> calls. But in order to make sure that values can survive <code>jl_...</code> calls, we have to tell Julia that we still hold a reference to Julia <a href="https://www.cs.purdue.edu/homes/hosking/690M/p611-fenichel.pdf">root</a> values, a process called &quot;GC rooting&quot;. Rooting a value will ensure that the garbage collector does not accidentally identify this value as unused and free the memory backing that value. This can be done using the <code>JL_GC_PUSH</code> macros:</p><pre><code class="language-c hljs">jl_value_t *ret = jl_eval_string(&quot;sqrt(2.0)&quot;);
+jl_value_t *ret = jl_call1(func, argument);</code></pre><p>In the first step, a handle to the Julia function <code>sqrt</code> is retrieved by calling <code>jl_get_function</code>. The first argument passed to <code>jl_get_function</code> is a pointer to the <code>Base</code> module in which <code>sqrt</code> is defined. Then, the double value is boxed using <code>jl_box_float64</code>. Finally, in the last step, the function is called using <code>jl_call1</code>. <code>jl_call0</code>, <code>jl_call2</code>, and <code>jl_call3</code> functions also exist, to conveniently handle different numbers of arguments. To pass more arguments, use <code>jl_call</code>:</p><pre><code class="nohighlight hljs">jl_value_t *jl_call(jl_function_t *f, jl_value_t **args, int32_t nargs)</code></pre><p>Its second argument <code>args</code> is an array of <code>jl_value_t*</code> arguments and <code>nargs</code> is the number of arguments.</p><h2 id="Memory-Management"><a class="docs-heading-anchor" href="#Memory-Management">Memory Management</a><a id="Memory-Management-1"></a><a class="docs-heading-anchor-permalink" href="#Memory-Management" title="Permalink"></a></h2><p>As we have seen, Julia objects are represented in C as pointers of type <code>jl_value_t*</code>. This raises the question of who is responsible for freeing these objects.</p><p>Typically, Julia objects are freed by the garbage collector (GC), but the GC does not automatically know that we are holding a reference to a Julia value from C. This means the GC can free objects out from under you, rendering pointers invalid.</p><p>The GC will only run when new Julia objects are being allocated. Calls like <code>jl_box_float64</code> perform allocation, but allocation might also happen at any point in running Julia code.</p><p>When writing code that embeds Julia, it is generally safe to use <code>jl_value_t*</code> values in between <code>jl_...</code> calls (as GC will only get triggered by those calls). But in order to make sure that values can survive <code>jl_...</code> calls, we have to tell Julia that we still hold a reference to Julia <a href="https://www.cs.purdue.edu/homes/hosking/690M/p611-fenichel.pdf">root</a> values, a process called &quot;GC rooting&quot;. Rooting a value will ensure that the garbage collector does not accidentally identify this value as unused and free the memory backing that value. This can be done using the <code>JL_GC_PUSH</code> macros:</p><pre><code class="language-c hljs">jl_value_t *ret = jl_eval_string(&quot;sqrt(2.0)&quot;);
 JL_GC_PUSH1(&amp;ret);
 // Do something with ret
-JL_GC_POP();</code></pre><p>The <code>JL_GC_POP</code> call releases the references established by the previous <code>JL_GC_PUSH</code>. Note that <code>JL_GC_PUSH</code> stores references on the C stack, so it must be exactly paired with a <code>JL_GC_POP</code> before the scope is exited. That is, before the function returns, or control flow otherwise leaves the block in which the <code>JL_GC_PUSH</code> was invoked.</p><p>Several Julia values can be pushed at once using the <code>JL_GC_PUSH2</code> , <code>JL_GC_PUSH3</code> , <code>JL_GC_PUSH4</code> , <code>JL_GC_PUSH5</code> , and <code>JL_GC_PUSH6</code> macros. To push an array of Julia values one can use the <code>JL_GC_PUSHARGS</code> macro, which can be used as follows:</p><pre><code class="language-c hljs">jl_value_t **args;
+JL_GC_POP();</code></pre><p>The <code>JL_GC_POP</code> call releases the references established by the previous <code>JL_GC_PUSH</code>. Note that <code>JL_GC_PUSH</code> stores references on the C stack, so it must be exactly paired with a <code>JL_GC_POP</code> before the scope is exited. That is, before the function returns, or control flow otherwise leaves the block in which the <code>JL_GC_PUSH</code> was invoked.</p><p>Several Julia values can be pushed at once using the <code>JL_GC_PUSH2</code> to <code>JL_GC_PUSH6</code> macros:</p><pre><code class="nohighlight hljs">JL_GC_PUSH2(&amp;ret1, &amp;ret2);
+// ...
+JL_GC_PUSH6(&amp;ret1, &amp;ret2, &amp;ret3, &amp;ret4, &amp;ret5, &amp;ret6);</code></pre><p>To push an array of Julia values one can use the <code>JL_GC_PUSHARGS</code> macro, which can be used as follows:</p><pre><code class="language-c hljs">jl_value_t **args;
 JL_GC_PUSHARGS(args, 2); // args can now hold 2 `jl_value_t*` objects
 args[0] = some_value;
 args[1] = some_other_value;
 // Do something with args (e.g. call jl_... functions)
-JL_GC_POP();</code></pre><p>Each scope must have only one call to <code>JL_GC_PUSH*</code>. Hence, if all variables cannot be pushed once by a single call to <code>JL_GC_PUSH*</code>, or if there are more than 6 variables to be pushed and using an array of arguments is not an option, then one can use inner blocks:</p><pre><code class="language-c hljs">jl_value_t *ret1 = jl_eval_string(&quot;sqrt(2.0)&quot;);
+JL_GC_POP();</code></pre><p>Each scope must have only one call to <code>JL_GC_PUSH*</code>, and should be paired with only a single <code>JL_GC_POP</code> call. If all necessary variables you want to root cannot be pushed by a one single call to <code>JL_GC_PUSH*</code>, or if there are more than 6 variables to be pushed and using an array of arguments is not an option, then one can use inner blocks:</p><pre><code class="language-c hljs">jl_value_t *ret1 = jl_eval_string(&quot;sqrt(2.0)&quot;);
 JL_GC_PUSH1(&amp;ret1);
 jl_value_t *ret2 = 0;
 {
@@ -84,7 +86,12 @@ jl_value_t *ret2 = 0;
     // Do something with ret2.
     JL_GC_POP();    // This pops ret2.
 }
-JL_GC_POP();    // This pops ret1.</code></pre><p>If it is required to hold the pointer to a variable between functions (or block scopes), then it is not possible to use <code>JL_GC_PUSH*</code>. In this case, it is necessary to create and keep a reference to the variable in the Julia global scope. One simple way to accomplish this is to use a global <code>IdDict</code> that will hold the references, avoiding deallocation by the GC. However, this method will only work properly with mutable types.</p><pre><code class="language-c hljs">// This functions shall be executed only once, during the initialization.
+JL_GC_POP();    // This pops ret1.</code></pre><p>Note that it is not necessary to have valid <code>jl_value_t*</code> values before calling <code>JL_GC_PUSH*</code>. It is fine to have a number of them initialized to <code>NULL</code>, pass those to <code>JL_GC_PUSH*</code> and then create the actual Julia values. For example:</p><pre><code class="nohighlight hljs">jl_value_t *ret1 = NULL, *ret2 = NULL;
+JL_GC_PUSH2(&amp;ret1, &amp;ret2);
+ret1 = jl_eval_string(&quot;sqrt(2.0)&quot;);
+ret2 = jl_eval_string(&quot;sqrt(3.0)&quot;);
+// Use ret1 and ret2
+JL_GC_POP();</code></pre><p>If it is required to hold the pointer to a variable between functions (or block scopes), then it is not possible to use <code>JL_GC_PUSH*</code>. In this case, it is necessary to create and keep a reference to the variable in the Julia global scope. One simple way to accomplish this is to use a global <code>IdDict</code> that will hold the references, avoiding deallocation by the GC. However, this method will only work properly with mutable types.</p><pre><code class="language-c hljs">// This functions shall be executed only once, during the initialization.
 jl_value_t* refs = jl_eval_string(&quot;refs = IdDict()&quot;);
 jl_function_t* setindex = jl_get_function(jl_base_module, &quot;setindex!&quot;);
 
@@ -153,4 +160,77 @@ for(size_t i=0; i&lt;size1; i++)
     printf(&quot;%s \n&quot;, jl_typeof_str(jl_exception_occurred()));</code></pre><p>If you are using the Julia C API from a language that supports exceptions (e.g. Python, C#, C++), it makes sense to wrap each call into <code>libjulia</code> with a function that checks whether an exception was thrown, and then rethrows the exception in the host language.</p><h3 id="Throwing-Julia-Exceptions"><a class="docs-heading-anchor" href="#Throwing-Julia-Exceptions">Throwing Julia Exceptions</a><a id="Throwing-Julia-Exceptions-1"></a><a class="docs-heading-anchor-permalink" href="#Throwing-Julia-Exceptions" title="Permalink"></a></h3><p>When writing Julia callable functions, it might be necessary to validate arguments and throw exceptions to indicate errors. A typical type check looks like:</p><pre><code class="language-c hljs">if (!jl_typeis(val, jl_float64_type)) {
     jl_type_error(function_name, (jl_value_t*)jl_float64_type, val);
 }</code></pre><p>General exceptions can be raised using the functions:</p><pre><code class="language-c hljs">void jl_error(const char *str);
-void jl_errorf(const char *fmt, ...);</code></pre><p><code>jl_error</code> takes a C string, and <code>jl_errorf</code> is called like <code>printf</code>:</p><pre><code class="language-c hljs">jl_errorf(&quot;argument x = %d is too large&quot;, x);</code></pre><p>where in this example <code>x</code> is assumed to be an integer.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../environment-variables/">« Environment Variables</a><a class="docs-footer-nextpage" href="../code-loading/">Code Loading »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.13 on <span class="colophon-date" title="Wednesday 6 April 2022 12:43">Wednesday 6 April 2022</span>. Using Julia version 1.9.0-DEV.330.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+void jl_errorf(const char *fmt, ...);</code></pre><p><code>jl_error</code> takes a C string, and <code>jl_errorf</code> is called like <code>printf</code>:</p><pre><code class="language-c hljs">jl_errorf(&quot;argument x = %d is too large&quot;, x);</code></pre><p>where in this example <code>x</code> is assumed to be an integer.</p><h3 id="Thread-safety"><a class="docs-heading-anchor" href="#Thread-safety">Thread-safety</a><a id="Thread-safety-1"></a><a class="docs-heading-anchor-permalink" href="#Thread-safety" title="Permalink"></a></h3><p>In general, the Julia C API is not fully thread-safe. When embedding Julia in a multi-threaded application care needs to be taken not to violate the following restrictions:</p><ul><li><code>jl_init()</code> may only be called once in the application life-time. The same applies to <code>jl_atexit_hook()</code>, and it may only be called after <code>jl_init()</code>.</li><li><code>jl_...()</code> API functions may only be called from the thread in which <code>jl_init()</code> was called, <em>or from threads started by the Julia runtime</em>. Calling Julia API functions from user-started threads is not supported, and may lead to undefined behaviour and crashes.</li></ul><p>The second condition above implies that you can not safely call <code>jl_...()</code> functions from threads that were not started by Julia (the thread calling <code>jl_init()</code> being the exception). For example, the following is not supported and will most likely segfault:</p><pre><code class="language-c hljs">void *func(void*)
+{
+    // Wrong, jl_eval_string() called from thread that was not started by Julia
+    jl_eval_string(&quot;println(Threads.nthreads())&quot;);
+    return NULL;
+}
+
+int main()
+{
+    pthread_t t;
+
+    jl_init();
+
+    // Start a new thread
+    pthread_create(&amp;t, NULL, func, NULL);
+    pthread_join(t, NULL);
+
+    jl_atexit_hook(0);
+}</code></pre><p>Instead, performing all Julia calls from the same user-created thread will work:</p><pre><code class="language-c hljs">void *func(void*)
+{
+    // Okay, all jl_...() calls from the same thread,
+    // even though it is not the main application thread
+    jl_init();
+    jl_eval_string(&quot;println(Threads.nthreads())&quot;);
+    jl_atexit_hook(0);
+    return NULL;
+}
+
+int main()
+{
+    pthread_t t;
+    // Create a new thread, which runs func()
+    pthread_create(&amp;t, NULL, func, NULL);
+    pthread_join(t, NULL);
+}</code></pre><p>An example of calling the Julia C API from a thread started by Julia itself:</p><pre><code class="language-c hljs">#include &lt;julia/julia.h&gt;
+JULIA_DEFINE_FAST_TLS
+
+double c_func(int i)
+{
+    printf(&quot;[C %08x] i = %d\n&quot;, pthread_self(), i);
+
+    // Call the Julia sqrt() function to compute the square root of i, and return it
+    jl_function_t *sqrt = jl_get_function(jl_base_module, &quot;sqrt&quot;);
+    jl_value_t* arg = jl_box_int32(i);
+    double ret = jl_unbox_float64(jl_call1(sqrt, arg));
+
+    return ret;
+}
+
+int main()
+{
+    jl_init();
+
+    // Define a Julia function func() that calls our c_func() defined in C above
+    jl_eval_string(&quot;func(i) = ccall(:c_func, Float64, (Int32,), i)&quot;);
+
+    // Call func() multiple times, using multiple threads to do so
+    jl_eval_string(&quot;println(Threads.nthreads())&quot;);
+    jl_eval_string(&quot;use(i) = println(\&quot;[J $(Threads.threadid())] i = $(i) -&gt; $(func(i))\&quot;)&quot;);
+    jl_eval_string(&quot;Threads.@threads for i in 1:5 use(i) end&quot;);
+
+    jl_atexit_hook(0);
+}</code></pre><p>If we run this code with 2 Julia threads we get the following output (note: the output will vary per run and system):</p><pre><code class="language-sh hljs">$ JULIA_NUM_THREADS=2 ./thread_example
+2
+[C 3bfd9c00] i = 1
+[C 23938640] i = 4
+[J 1] i = 1 -&gt; 1.0
+[C 3bfd9c00] i = 2
+[J 1] i = 2 -&gt; 1.4142135623730951
+[C 3bfd9c00] i = 3
+[J 2] i = 4 -&gt; 2.0
+[C 23938640] i = 5
+[J 1] i = 3 -&gt; 1.7320508075688772
+[J 2] i = 5 -&gt; 2.23606797749979</code></pre><p>As can be seen, Julia thread 1 corresponds to pthread ID 3bfd9c00, and Julia thread 2 corresponds to ID 23938640, showing that indeed multiple threads are used at the C level, and that we can safely call Julia C API routines from those threads.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../environment-variables/">« Environment Variables</a><a class="docs-footer-nextpage" href="../code-loading/">Code Loading »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.13 on <span class="colophon-date" title="Wednesday 6 April 2022 12:58">Wednesday 6 April 2022</span>. Using Julia version 1.9.0-DEV.331.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
