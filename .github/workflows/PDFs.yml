@@ -45,8 +45,14 @@ jobs:
           git clone https://github.com/JuliaLang/docs.julialang.org.git -b assets --single-branch $JULIA_DOCS
       - run: julia --color=yes pdf/make.jl ${{ matrix.buildtype }}
         env:
-          DOCUMENTER_LATEX_DEBUG: latex-logs
+          DOCUMENTER_LATEX_DEBUG: latex-debug-logs
       - run: tree
+        if: always
+      - uses: actions/upload-artifact@v3
+        if: always
+        with:
+          name: ${{ matrix.buildtype }} LaTeX source and logs
+          path: pdf/latex-debug-logs/
       - run: julia --color=yes pdf/make.jl commit
         # env:
         #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
