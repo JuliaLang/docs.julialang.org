@@ -47,9 +47,9 @@ jobs:
         env:
           DOCUMENTER_LATEX_DEBUG: latex-debug-logs
       - run: tree
-        if: always
+        if: ${{ always() }}
       - uses: actions/upload-artifact@v3
-        if: always
+        if: ${{ always() }}
         with:
           name: ${{ matrix.buildtype }} LaTeX source and logs
           path: pdf/latex-debug-logs/
