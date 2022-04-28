@@ -50,7 +50,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         if: ${{ always() }}
         with:
-          name: ${{ matrix.buildtype }} LaTeX source and logs
+          name: "LaTeX source and logs: ${{ matrix.buildtype }}"
           path: ${{ github.workspace }}/latex-debug-logs/
       - run: julia --color=yes pdf/make.jl commit
         env:
