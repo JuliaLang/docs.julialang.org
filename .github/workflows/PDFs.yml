@@ -3,9 +3,8 @@ on:
   push:
     branches:
       - master
-      - mp/latex-logs
-  #schedule:
-    #- cron: '0 0 * * *' # daily
+  schedule:
+    - cron: '0 0 * * *' # daily
   pull_request:
   workflow_dispatch:
 jobs:
@@ -17,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         buildtype:
-          #- 'releases'
+          - 'releases'
           - 'nightly'
     env:
       BUILDROOT: ${{ github.workspace }}/pdf/build
@@ -54,6 +53,6 @@ jobs:
           name: ${{ matrix.buildtype }} LaTeX source and logs
           path: ${{ github.workspace }}/latex-debug-logs/
       - run: julia --color=yes pdf/make.jl commit
-        # env:
-        #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        #   DOCUMENTER_KEY_PDF: ${{ secrets.DOCUMENTER_KEY_PDF }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DOCUMENTER_KEY_PDF: ${{ secrets.DOCUMENTER_KEY_PDF }}
