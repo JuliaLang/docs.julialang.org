@@ -48,8 +48,9 @@ jobs:
       - uses: actions/upload-artifact@v3
         if: ${{ always() }}
         with:
-          name: "LaTeX source and logs: ${{ matrix.buildtype }}"
+          name: "LaTeX source and logs (${{ matrix.buildtype }})"
           path: ${{ github.workspace }}/latex-debug-logs/
+          retention-days: 7 # reduced from the default 90, builds run daily anyway
       - run: julia --color=yes pdf/make.jl commit
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
