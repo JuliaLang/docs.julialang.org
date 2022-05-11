@@ -180,32 +180,36 @@ ERROR: TypeError: non-boolean (Int64) used in boolean context</code></pre><p>On 
 julia&gt; false &amp;&amp; (x = (1, 2, 3))
 false</code></pre><h2 id="man-loops"><a class="docs-heading-anchor" href="#man-loops">Repeated Evaluation: Loops</a><a id="man-loops-1"></a><a class="docs-heading-anchor-permalink" href="#man-loops" title="Permalink"></a></h2><p>There are two constructs for repeated evaluation of expressions: the <code>while</code> loop and the <code>for</code> loop. Here is an example of a <code>while</code> loop:</p><pre><code class="language-julia-repl hljs">julia&gt; i = 1;
 
-julia&gt; while i &lt;= 5
+julia&gt; while i &lt;= 3
            println(i)
            global i += 1
        end
 1
 2
-3
-4
-5</code></pre><p>The <code>while</code> loop evaluates the condition expression (<code>i &lt;= 5</code> in this case), and as long it remains <code>true</code>, keeps also evaluating the body of the <code>while</code> loop. If the condition expression is <code>false</code> when the <code>while</code> loop is first reached, the body is never evaluated.</p><p>The <code>for</code> loop makes common repeated evaluation idioms easier to write. Since counting up and down like the above <code>while</code> loop does is so common, it can be expressed more concisely with a <code>for</code> loop:</p><pre><code class="language-julia-repl hljs">julia&gt; for i = 1:5
+3</code></pre><p>The <code>while</code> loop evaluates the condition expression (<code>i &lt;= 5</code> in this case), and as long it remains <code>true</code>, keeps also evaluating the body of the <code>while</code> loop. If the condition expression is <code>false</code> when the <code>while</code> loop is first reached, the body is never evaluated.</p><p>The <code>for</code> loop makes common repeated evaluation idioms easier to write. Since counting up and down like the above <code>while</code> loop does is so common, it can be expressed more concisely with a <code>for</code> loop:</p><pre><code class="language-julia-repl hljs">julia&gt; for i = 1:3
            println(i)
        end
 1
 2
-3
-4
-5</code></pre><p>Here the <code>1:5</code> is a range object, representing the sequence of numbers 1, 2, 3, 4, 5. The <code>for</code> loop iterates through these values, assigning each one in turn to the variable <code>i</code>. One rather important distinction between the previous <code>while</code> loop form and the <code>for</code> loop form is the scope during which the variable is visible. If the variable <code>i</code> has not been introduced in another scope, in the <code>for</code> loop form, it is visible only inside of the <code>for</code> loop, and not outside/afterwards. You&#39;ll either need a new interactive session instance or a different variable name to test this:</p><pre><code class="language-julia-repl hljs">julia&gt; for j = 1:5
+3</code></pre><p>Here the <code>1:3</code> is a range object, representing the sequence of numbers 1, 2, 3. The <code>for</code> loop iterates through these values, assigning each one in turn to the variable <code>i</code>. One rather important distinction between the previous <code>while</code> loop form and the <code>for</code> loop form is the scope during which the variable is visible. A <code>for</code> loop always introduces a new iteration variable in its body, regardless of whether a variable of the same name exists in the enclosing scope. This implies that on the one hand <code>i</code> need not be declared before the loop. On the other hand it will not be visible outside the loop, nor will an outside variable of the same name be affected. You&#39;ll either need a new interactive session instance or a different variable name to test this:</p><pre><code class="language-julia-repl hljs">julia&gt; for j = 1:3
            println(j)
        end
 1
 2
 3
-4
-5
 
 julia&gt; j
-ERROR: UndefVarError: j not defined</code></pre><p>See <a href="../variables-and-scoping/#scope-of-variables">Scope of Variables</a> for a detailed explanation of variable scope and how it works in Julia.</p><p>In general, the <code>for</code> loop construct can iterate over any container. In these cases, the alternative (but fully equivalent) keyword <code>in</code> or <code>∈</code> is typically used instead of <code>=</code>, since it makes the code read more clearly:</p><pre><code class="language-julia-repl hljs">julia&gt; for i in [1,4,0]
+ERROR: UndefVarError: j not defined</code></pre><pre><code class="language-julia-repl hljs">julia&gt; j = 0;
+
+julia&gt; for j = 1:3
+           println(j)
+       end
+1
+2
+3
+
+julia&gt; j
+0</code></pre><p>Use <code>for outer</code> to modify the latter behavior and reuse an existing local variable.</p><p>See <a href="../variables-and-scoping/#scope-of-variables">Scope of Variables</a> for a detailed explanation of variable scope, <a href="../../base/base/#outer"><code>outer</code></a>, and how it works in Julia.</p><p>In general, the <code>for</code> loop construct can iterate over any container. In these cases, the alternative (but fully equivalent) keyword <code>in</code> or <code>∈</code> is typically used instead of <code>=</code>, since it makes the code read more clearly:</p><pre><code class="language-julia-repl hljs">julia&gt; for i in [1,4,0]
            println(i)
        end
 1
@@ -221,7 +225,7 @@ baz</code></pre><p>Various types of iterable containers will be introduced and d
 
 julia&gt; while true
            println(i)
-           if i &gt;= 5
+           if i &gt;= 3
                break
            end
            global i += 1
@@ -229,20 +233,16 @@ julia&gt; while true
 1
 2
 3
-4
-5
 
 julia&gt; for j = 1:1000
            println(j)
-           if j &gt;= 5
+           if j &gt;= 3
                break
            end
        end
 1
 2
-3
-4
-5</code></pre><p>Without the <code>break</code> keyword, the above <code>while</code> loop would never terminate on its own, and the <code>for</code> loop would iterate up to 1000. These loops are both exited early by using <code>break</code>.</p><p>In other circumstances, it is handy to be able to stop an iteration and move on to the next one immediately. The <code>continue</code> keyword accomplishes this:</p><pre><code class="language-julia-repl hljs">julia&gt; for i = 1:10
+3</code></pre><p>Without the <code>break</code> keyword, the above <code>while</code> loop would never terminate on its own, and the <code>for</code> loop would iterate up to 1000. These loops are both exited early by using <code>break</code>.</p><p>In other circumstances, it is handy to be able to stop an iteration and move on to the next one immediately. The <code>continue</code> keyword accomplishes this:</p><pre><code class="language-julia-repl hljs">julia&gt; for i = 1:10
            if i % 3 != 0
                continue
            end
@@ -361,4 +361,4 @@ try
     # operate on file f
 finally
     close(f)
-end</code></pre><p>When control leaves the <code>try</code> block (for example due to a <code>return</code>, or just finishing normally), <code>close(f)</code> will be executed. If the <code>try</code> block exits due to an exception, the exception will continue propagating. A <code>catch</code> block may be combined with <code>try</code> and <code>finally</code> as well. In this case the <code>finally</code> block will run after <code>catch</code> has handled the error.</p><h2 id="man-tasks"><a class="docs-heading-anchor" href="#man-tasks">Tasks (aka Coroutines)</a><a id="man-tasks-1"></a><a class="docs-heading-anchor-permalink" href="#man-tasks" title="Permalink"></a></h2><p>Tasks are a control flow feature that allows computations to be suspended and resumed in a flexible manner. We mention them here only for completeness; for a full discussion see <a href="../asynchronous-programming/#man-asynchronous">Asynchronous Programming</a>.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../functions/">« Functions</a><a class="docs-footer-nextpage" href="../variables-and-scoping/">Scope of Variables »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.17 on <span class="colophon-date" title="Wednesday 11 May 2022 16:55">Wednesday 11 May 2022</span>. Using Julia version 1.9.0-DEV.549.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+end</code></pre><p>When control leaves the <code>try</code> block (for example due to a <code>return</code>, or just finishing normally), <code>close(f)</code> will be executed. If the <code>try</code> block exits due to an exception, the exception will continue propagating. A <code>catch</code> block may be combined with <code>try</code> and <code>finally</code> as well. In this case the <code>finally</code> block will run after <code>catch</code> has handled the error.</p><h2 id="man-tasks"><a class="docs-heading-anchor" href="#man-tasks">Tasks (aka Coroutines)</a><a id="man-tasks-1"></a><a class="docs-heading-anchor-permalink" href="#man-tasks" title="Permalink"></a></h2><p>Tasks are a control flow feature that allows computations to be suspended and resumed in a flexible manner. We mention them here only for completeness; for a full discussion see <a href="../asynchronous-programming/#man-asynchronous">Asynchronous Programming</a>.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../functions/">« Functions</a><a class="docs-footer-nextpage" href="../variables-and-scoping/">Scope of Variables »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.17 on <span class="colophon-date" title="Wednesday 11 May 2022 18:06">Wednesday 11 May 2022</span>. Using Julia version 1.9.0-DEV.550.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
