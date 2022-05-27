@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Control Flow · The Julia Language</title><script async src="https://www.googletagmanager.com/gtag/js?id=UA-28835595-6"></script><script>  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-28835595-6', {'page_path': location.pathname + location.search + location.hash});
+</script><script data-outdated-warner src="../../assets/warner.js"></script><link rel="canonical" href="https://docs.julialang.org/en/v1/manual/control-flow/"/><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.044/juliamono.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.11/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="../../assets/julia-manual.css" rel="stylesheet" type="text/css"/><link href="../../assets/julia.ico" rel="icon" type="image/x-icon"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../"><img class="docs-light-only" src="../../assets/logo.svg" alt="The Julia Language logo"/><img class="docs-dark-only" src="../../assets/logo-dark.svg" alt="The Julia Language logo"/></a><form class="docs-search" action="../../search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../../">Julia Documentation</a></li><li><input class="collapse-toggle" id="menuitem-3" type="checkbox" checked/><label class="tocitem" for="menuitem-3"><span class="docs-label">Manual</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../getting-started/">Getting Started</a></li><li><a class="tocitem" href="../variables/">Variables</a></li><li><a class="tocitem" href="../integers-and-floating-point-numbers/">Integers and Floating-Point Numbers</a></li><li><a class="tocitem" href="../mathematical-operations/">Mathematical Operations and Elementary Functions</a></li><li><a class="tocitem" href="../complex-and-rational-numbers/">Complex and Rational Numbers</a></li><li><a class="tocitem" href="../strings/">Strings</a></li><li><a class="tocitem" href="../functions/">Functions</a></li><li class="is-active"><a class="tocitem" href>Control Flow</a><ul class="internal"><li><a class="tocitem" href="#man-compound-expressions"><span>Compound Expressions</span></a></li><li><a class="tocitem" href="#man-conditional-evaluation"><span>Conditional Evaluation</span></a></li><li><a class="tocitem" href="#Short-Circuit-Evaluation"><span>Short-Circuit Evaluation</span></a></li><li><a class="tocitem" href="#man-loops"><span>Repeated Evaluation: Loops</span></a></li><li><a class="tocitem" href="#Exception-Handling"><span>Exception Handling</span></a></li><li><a class="tocitem" href="#man-tasks"><span>Tasks (aka Coroutines)</span></a></li></ul></li><li><a class="tocitem" href="../variables-and-scoping/">Scope of Variables</a></li><li><a class="tocitem" href="../types/">Types</a></li><li><a class="tocitem" href="../methods/">Methods</a></li><li><a class="tocitem" href="../constructors/">Constructors</a></li><li><a class="tocitem" href="../conversion-and-promotion/">Conversion and Promotion</a></li><li><a class="tocitem" href="../interfaces/">Interfaces</a></li><li><a class="tocitem" href="../modules/">Modules</a></li><li><a class="tocitem" href="../documentation/">Documentation</a></li><li><a class="tocitem" href="../metaprogramming/">Metaprogramming</a></li><li><a class="tocitem" href="../arrays/">Multi-dimensional Arrays</a></li><li><a class="tocitem" href="../missing/">Missing Values</a></li><li><a class="tocitem" href="../networking-and-streams/">Networking and Streams</a></li><li><a class="tocitem" href="../parallel-computing/">Parallel Computing</a></li><li><a class="tocitem" href="../asynchronous-programming/">Asynchronous Programming</a></li><li><a class="tocitem" href="../multi-threading/">Multi-Threading</a></li><li><a class="tocitem" href="../distributed-computing/">Multi-processing and Distributed Computing</a></li><li><a class="tocitem" href="../running-external-programs/">Running External Programs</a></li><li><a class="tocitem" href="../calling-c-and-fortran-code/">Calling C and Fortran Code</a></li><li><a class="tocitem" href="../handling-operating-system-variation/">Handling Operating System Variation</a></li><li><a class="tocitem" href="../environment-variables/">Environment Variables</a></li><li><a class="tocitem" href="../embedding/">Embedding Julia</a></li><li><a class="tocitem" href="../code-loading/">Code Loading</a></li><li><a class="tocitem" href="../profile/">Profiling</a></li><li><a class="tocitem" href="../stacktraces/">Stack Traces</a></li><li><a class="tocitem" href="../performance-tips/">Performance Tips</a></li><li><a class="tocitem" href="../workflow-tips/">Workflow Tips</a></li><li><a class="tocitem" href="../style-guide/">Style Guide</a></li><li><a class="tocitem" href="../faq/">Frequently Asked Questions</a></li><li><a class="tocitem" href="../noteworthy-differences/">Noteworthy Differences from other Languages</a></li><li><a class="tocitem" href="../unicode-input/">Unicode Input</a></li><li><a class="tocitem" href="../command-line-options/">Command-line Options</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-4" type="checkbox"/><label class="tocitem" for="menuitem-4"><span class="docs-label">Base</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../base/base/">Essentials</a></li><li><a class="tocitem" href="../../base/collections/">Collections and Data Structures</a></li><li><a class="tocitem" href="../../base/math/">Mathematics</a></li><li><a class="tocitem" href="../../base/numbers/">Numbers</a></li><li><a class="tocitem" href="../../base/strings/">Strings</a></li><li><a class="tocitem" href="../../base/arrays/">Arrays</a></li><li><a class="tocitem" href="../../base/parallel/">Tasks</a></li><li><a class="tocitem" href="../../base/multi-threading/">Multi-Threading</a></li><li><a class="tocitem" href="../../base/constants/">Constants</a></li><li><a class="tocitem" href="../../base/file/">Filesystem</a></li><li><a class="tocitem" href="../../base/io-network/">I/O and Network</a></li><li><a class="tocitem" href="../../base/punctuation/">Punctuation</a></li><li><a class="tocitem" href="../../base/sort/">Sorting and Related Functions</a></li><li><a class="tocitem" href="../../base/iterators/">Iteration utilities</a></li><li><a class="tocitem" href="../../base/c/">C Interface</a></li><li><a class="tocitem" href="../../base/libc/">C Standard Library</a></li><li><a class="tocitem" href="../../base/stacktraces/">StackTraces</a></li><li><a class="tocitem" href="../../base/simd-types/">SIMD Support</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-5" type="checkbox"/><label class="tocitem" for="menuitem-5"><span class="docs-label">Standard Library</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../stdlib/ArgTools/">ArgTools</a></li><li><a class="tocitem" href="../../stdlib/Artifacts/">Artifacts</a></li><li><a class="tocitem" href="../../stdlib/Base64/">Base64</a></li><li><a class="tocitem" href="../../stdlib/CRC32c/">CRC32c</a></li><li><a class="tocitem" href="../../stdlib/Dates/">Dates</a></li><li><a class="tocitem" href="../../stdlib/DelimitedFiles/">Delimited Files</a></li><li><a class="tocitem" href="../../stdlib/Distributed/">Distributed Computing</a></li><li><a class="tocitem" href="../../stdlib/Downloads/">Downloads</a></li><li><a class="tocitem" href="../../stdlib/FileWatching/">File Events</a></li><li><a class="tocitem" href="../../stdlib/Future/">Future</a></li><li><a class="tocitem" href="../../stdlib/InteractiveUtils/">Interactive Utilities</a></li><li><a class="tocitem" href="../../stdlib/LazyArtifacts/">Lazy Artifacts</a></li><li><a class="tocitem" href="../../stdlib/LibCURL/">LibCURL</a></li><li><a class="tocitem" href="../../stdlib/LibGit2/">LibGit2</a></li><li><a class="tocitem" href="../../stdlib/Libdl/">Dynamic Linker</a></li><li><a class="tocitem" href="../../stdlib/LinearAlgebra/">Linear Algebra</a></li><li><a class="tocitem" href="../../stdlib/Logging/">Logging</a></li><li><a class="tocitem" href="../../stdlib/Markdown/">Markdown</a></li><li><a class="tocitem" href="../../stdlib/Mmap/">Memory-mapped I/O</a></li><li><a class="tocitem" href="../../stdlib/NetworkOptions/">NetworkOptions</a></li><li><a class="tocitem" href="../../stdlib/Pkg/">Pkg</a></li><li><a class="tocitem" href="../../stdlib/Printf/">Printf</a></li><li><a class="tocitem" href="../../stdlib/Profile/">Profiling</a></li><li><a class="tocitem" href="../../stdlib/REPL/">The Julia REPL</a></li><li><a class="tocitem" href="../../stdlib/Random/">Random Numbers</a></li><li><a class="tocitem" href="../../stdlib/SHA/">SHA</a></li><li><a class="tocitem" href="../../stdlib/Serialization/">Serialization</a></li><li><a class="tocitem" href="../../stdlib/SharedArrays/">Shared Arrays</a></li><li><a class="tocitem" href="../../stdlib/Sockets/">Sockets</a></li><li><a class="tocitem" href="../../stdlib/SparseArrays/">Sparse Arrays</a></li><li><a class="tocitem" href="../../stdlib/Statistics/">Statistics</a></li><li><a class="tocitem" href="../../stdlib/SuiteSparse/">Sparse Linear Algebra</a></li><li><a class="tocitem" href="../../stdlib/TOML/">TOML</a></li><li><a class="tocitem" href="../../stdlib/Tar/">Tar</a></li><li><a class="tocitem" href="../../stdlib/Test/">Unit Testing</a></li><li><a class="tocitem" href="../../stdlib/UUIDs/">UUIDs</a></li><li><a class="tocitem" href="../../stdlib/Unicode/">Unicode</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-6" type="checkbox"/><label class="tocitem" for="menuitem-6"><span class="docs-label">Developer Documentation</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../devdocs/reflection/">Reflection and introspection</a></li><li><input class="collapse-toggle" id="menuitem-6-2" type="checkbox"/><label class="tocitem" for="menuitem-6-2"><span class="docs-label">Documentation of Julia&#39;s Internals</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../devdocs/init/">Initialization of the Julia runtime</a></li><li><a class="tocitem" href="../../devdocs/ast/">Julia ASTs</a></li><li><a class="tocitem" href="../../devdocs/types/">More about types</a></li><li><a class="tocitem" href="../../devdocs/object/">Memory layout of Julia Objects</a></li><li><a class="tocitem" href="../../devdocs/eval/">Eval of Julia code</a></li><li><a class="tocitem" href="../../devdocs/callconv/">Calling Conventions</a></li><li><a class="tocitem" href="../../devdocs/compiler/">High-level Overview of the Native-Code Generation Process</a></li><li><a class="tocitem" href="../../devdocs/functions/">Julia Functions</a></li><li><a class="tocitem" href="../../devdocs/cartesian/">Base.Cartesian</a></li><li><a class="tocitem" href="../../devdocs/meta/">Talking to the compiler (the <code>:meta</code> mechanism)</a></li><li><a class="tocitem" href="../../devdocs/subarrays/">SubArrays</a></li><li><a class="tocitem" href="../../devdocs/isbitsunionarrays/">isbits Union Optimizations</a></li><li><a class="tocitem" href="../../devdocs/sysimg/">System Image Building</a></li><li><a class="tocitem" href="../../devdocs/llvm/">Working with LLVM</a></li><li><a class="tocitem" href="../../devdocs/stdio/">printf() and stdio in the Julia runtime</a></li><li><a class="tocitem" href="../../devdocs/boundscheck/">Bounds checking</a></li><li><a class="tocitem" href="../../devdocs/locks/">Proper maintenance and care of multi-threading locks</a></li><li><a class="tocitem" href="../../devdocs/offset-arrays/">Arrays with custom indices</a></li><li><a class="tocitem" href="../../devdocs/require/">Module loading</a></li><li><a class="tocitem" href="../../devdocs/inference/">Inference</a></li><li><a class="tocitem" href="../../devdocs/ssair/">Julia SSA-form IR</a></li><li><a class="tocitem" href="../../devdocs/EscapeAnalysis/"><code>EscapeAnalysis</code></a></li><li><a class="tocitem" href="../../devdocs/gc-sa/">Static analyzer annotations for GC correctness in C code</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-6-3" type="checkbox"/><label class="tocitem" for="menuitem-6-3"><span class="docs-label">Developing/debugging Julia&#39;s C code</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../devdocs/backtraces/">Reporting and analyzing crashes (segfaults)</a></li><li><a class="tocitem" href="../../devdocs/debuggingtips/">gdb debugging tips</a></li><li><a class="tocitem" href="../../devdocs/valgrind/">Using Valgrind with Julia</a></li><li><a class="tocitem" href="../../devdocs/sanitizers/">Sanitizer support</a></li><li><a class="tocitem" href="../../devdocs/probes/">Instrumenting Julia with DTrace, and bpftrace</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-6-4" type="checkbox"/><label class="tocitem" for="menuitem-6-4"><span class="docs-label">Building Julia</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../devdocs/build/build/">Building Julia (Detailed)</a></li><li><a class="tocitem" href="../../devdocs/build/linux/">Linux</a></li><li><a class="tocitem" href="../../devdocs/build/macos/">macOS</a></li><li><a class="tocitem" href="../../devdocs/build/windows/">Windows</a></li><li><a class="tocitem" href="../../devdocs/build/freebsd/">FreeBSD</a></li><li><a class="tocitem" href="../../devdocs/build/arm/">ARM (Linux)</a></li><li><a class="tocitem" href="../../devdocs/build/distributing/">Binary distributions</a></li></ul></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Manual</a></li><li class="is-active"><a href>Control Flow</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Control Flow</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/JuliaLang/julia/blob/master/doc/src/manual/control-flow.md" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Control-Flow"><a class="docs-heading-anchor" href="#Control-Flow">Control Flow</a><a id="Control-Flow-1"></a><a class="docs-heading-anchor-permalink" href="#Control-Flow" title="Permalink"></a></h1><p>Julia provides a variety of control flow constructs:</p><ul><li><a href="#man-compound-expressions">Compound Expressions</a>: <code>begin</code> and <code>;</code>.</li><li><a href="#man-conditional-evaluation">Conditional Evaluation</a>: <code>if</code>-<code>elseif</code>-<code>else</code> and <code>?:</code> (ternary operator).</li><li><a href="#Short-Circuit-Evaluation">Short-Circuit Evaluation</a>: logical operators <code>&amp;&amp;</code> (“and”) and <code>||</code> (“or”), and also chained comparisons.</li><li><a href="#man-loops">Repeated Evaluation: Loops</a>: <code>while</code> and <code>for</code>.</li><li><a href="#Exception-Handling">Exception Handling</a>: <code>try</code>-<code>catch</code>, <a href="../../base/base/#Base.error"><code>error</code></a> and <a href="../../base/base/#Core.throw"><code>throw</code></a>.</li><li><a href="#man-tasks">Tasks (aka Coroutines)</a>: <a href="../../base/parallel/#Base.yieldto"><code>yieldto</code></a>.</li></ul><p>The first five control flow mechanisms are standard to high-level programming languages. <a href="../../base/parallel/#Core.Task"><code>Task</code></a>s are not so standard: they provide non-local control flow, making it possible to switch between temporarily-suspended computations. This is a powerful construct: both exception handling and cooperative multitasking are implemented in Julia using tasks. Everyday programming requires no direct usage of tasks, but certain problems can be solved much more easily by using tasks.</p><h2 id="man-compound-expressions"><a class="docs-heading-anchor" href="#man-compound-expressions">Compound Expressions</a><a id="man-compound-expressions-1"></a><a class="docs-heading-anchor-permalink" href="#man-compound-expressions" title="Permalink"></a></h2><p>Sometimes it is convenient to have a single expression which evaluates several subexpressions in order, returning the value of the last subexpression as its value. There are two Julia constructs that accomplish this: <code>begin</code> blocks and <code>;</code> chains. The value of both compound expression constructs is that of the last subexpression. Here&#39;s an example of a <code>begin</code> block:</p><pre><code class="language-julia-repl hljs">julia&gt; z = begin
+           x = 1
+           y = 2
+           x + y
+       end
+3</code></pre><p>Since these are fairly small, simple expressions, they could easily be placed onto a single line, which is where the <code>;</code> chain syntax comes in handy:</p><pre><code class="language-julia-repl hljs">julia&gt; z = (x = 1; y = 2; x + y)
+3</code></pre><p>This syntax is particularly useful with the terse single-line function definition form introduced in <a href="../functions/#man-functions">Functions</a>. Although it is typical, there is no requirement that <code>begin</code> blocks be multiline or that <code>;</code> chains be single-line:</p><pre><code class="language-julia-repl hljs">julia&gt; begin x = 1; y = 2; x + y end
+3
+
+julia&gt; (x = 1;
+        y = 2;
+        x + y)
+3</code></pre><h2 id="man-conditional-evaluation"><a class="docs-heading-anchor" href="#man-conditional-evaluation">Conditional Evaluation</a><a id="man-conditional-evaluation-1"></a><a class="docs-heading-anchor-permalink" href="#man-conditional-evaluation" title="Permalink"></a></h2><p>Conditional evaluation allows portions of code to be evaluated or not evaluated depending on the value of a boolean expression. Here is the anatomy of the <code>if</code>-<code>elseif</code>-<code>else</code> conditional syntax:</p><pre><code class="language-julia hljs">if x &lt; y
+    println(&quot;x is less than y&quot;)
+elseif x &gt; y
+    println(&quot;x is greater than y&quot;)
+else
+    println(&quot;x is equal to y&quot;)
+end</code></pre><p>If the condition expression <code>x &lt; y</code> is <code>true</code>, then the corresponding block is evaluated; otherwise the condition expression <code>x &gt; y</code> is evaluated, and if it is <code>true</code>, the corresponding block is evaluated; if neither expression is true, the <code>else</code> block is evaluated. Here it is in action:</p><pre><code class="language-julia-repl hljs">julia&gt; function test(x, y)
+           if x &lt; y
+               println(&quot;x is less than y&quot;)
+           elseif x &gt; y
+               println(&quot;x is greater than y&quot;)
+           else
+               println(&quot;x is equal to y&quot;)
+           end
+       end
+test (generic function with 1 method)
+
+julia&gt; test(1, 2)
+x is less than y
+
+julia&gt; test(2, 1)
+x is greater than y
+
+julia&gt; test(1, 1)
+x is equal to y</code></pre><p>The <code>elseif</code> and <code>else</code> blocks are optional, and as many <code>elseif</code> blocks as desired can be used. The condition expressions in the <code>if</code>-<code>elseif</code>-<code>else</code> construct are evaluated until the first one evaluates to <code>true</code>, after which the associated block is evaluated, and no further condition expressions or blocks are evaluated.</p><p><code>if</code> blocks are &quot;leaky&quot;, i.e. they do not introduce a local scope. This means that new variables defined inside the <code>if</code> clauses can be used after the <code>if</code> block, even if they weren&#39;t defined before. So, we could have defined the <code>test</code> function above as</p><pre><code class="language-julia-repl hljs">julia&gt; function test(x,y)
+           if x &lt; y
+               relation = &quot;less than&quot;
+           elseif x == y
+               relation = &quot;equal to&quot;
+           else
+               relation = &quot;greater than&quot;
+           end
+           println(&quot;x is &quot;, relation, &quot; y.&quot;)
+       end
+test (generic function with 1 method)
+
+julia&gt; test(2, 1)
+x is greater than y.</code></pre><p>The variable <code>relation</code> is declared inside the <code>if</code> block, but used outside. However, when depending on this behavior, make sure all possible code paths define a value for the variable. The following change to the above function results in a runtime error</p><pre><code class="language-julia-repl hljs">julia&gt; function test(x,y)
+           if x &lt; y
+               relation = &quot;less than&quot;
+           elseif x == y
+               relation = &quot;equal to&quot;
+           end
+           println(&quot;x is &quot;, relation, &quot; y.&quot;)
+       end
+test (generic function with 1 method)
+
+julia&gt; test(1,2)
+x is less than y.
+
+julia&gt; test(2,1)
+ERROR: UndefVarError: relation not defined
+Stacktrace:
+ [1] test(::Int64, ::Int64) at ./none:7</code></pre><p><code>if</code> blocks also return a value, which may seem unintuitive to users coming from many other languages. This value is simply the return value of the last executed statement in the branch that was chosen, so</p><pre><code class="language-julia-repl hljs">julia&gt; x = 3
+3
+
+julia&gt; if x &gt; 0
+           &quot;positive!&quot;
+       else
+           &quot;negative...&quot;
+       end
+&quot;positive!&quot;</code></pre><p>Note that very short conditional statements (one-liners) are frequently expressed using Short-Circuit Evaluation in Julia, as outlined in the next section.</p><p>Unlike C, MATLAB, Perl, Python, and Ruby – but like Java, and a few other stricter, typed languages – it is an error if the value of a conditional expression is anything but <code>true</code> or <code>false</code>:</p><pre><code class="language-julia-repl hljs">julia&gt; if 1
+           println(&quot;true&quot;)
+       end
+ERROR: TypeError: non-boolean (Int64) used in boolean context</code></pre><p>This error indicates that the conditional was of the wrong type: <a href="../../base/numbers/#Core.Int64"><code>Int64</code></a> rather than the required <a href="../../base/numbers/#Core.Bool"><code>Bool</code></a>.</p><p>The so-called &quot;ternary operator&quot;, <code>?:</code>, is closely related to the <code>if</code>-<code>elseif</code>-<code>else</code> syntax, but is used where a conditional choice between single expression values is required, as opposed to conditional execution of longer blocks of code. It gets its name from being the only operator in most languages taking three operands:</p><pre><code class="language-julia hljs">a ? b : c</code></pre><p>The expression <code>a</code>, before the <code>?</code>, is a condition expression, and the ternary operation evaluates the expression <code>b</code>, before the <code>:</code>, if the condition <code>a</code> is <code>true</code> or the expression <code>c</code>, after the <code>:</code>, if it is <code>false</code>. Note that the spaces around <code>?</code> and <code>:</code> are mandatory: an expression like <code>a?b:c</code> is not a valid ternary expression (but a newline is acceptable after both the <code>?</code> and the <code>:</code>).</p><p>The easiest way to understand this behavior is to see an example. In the previous example, the <code>println</code> call is shared by all three branches: the only real choice is which literal string to print. This could be written more concisely using the ternary operator. For the sake of clarity, let&#39;s try a two-way version first:</p><pre><code class="language-julia-repl hljs">julia&gt; x = 1; y = 2;
+
+julia&gt; println(x &lt; y ? &quot;less than&quot; : &quot;not less than&quot;)
+less than
+
+julia&gt; x = 1; y = 0;
+
+julia&gt; println(x &lt; y ? &quot;less than&quot; : &quot;not less than&quot;)
+not less than</code></pre><p>If the expression <code>x &lt; y</code> is true, the entire ternary operator expression evaluates to the string <code>&quot;less than&quot;</code> and otherwise it evaluates to the string <code>&quot;not less than&quot;</code>. The original three-way example requires chaining multiple uses of the ternary operator together:</p><pre><code class="language-julia-repl hljs">julia&gt; test(x, y) = println(x &lt; y ? &quot;x is less than y&quot;    :
+                            x &gt; y ? &quot;x is greater than y&quot; : &quot;x is equal to y&quot;)
+test (generic function with 1 method)
+
+julia&gt; test(1, 2)
+x is less than y
+
+julia&gt; test(2, 1)
+x is greater than y
+
+julia&gt; test(1, 1)
+x is equal to y</code></pre><p>To facilitate chaining, the operator associates from right to left.</p><p>It is significant that like <code>if</code>-<code>elseif</code>-<code>else</code>, the expressions before and after the <code>:</code> are only evaluated if the condition expression evaluates to <code>true</code> or <code>false</code>, respectively:</p><pre><code class="language-julia-repl hljs">julia&gt; v(x) = (println(x); x)
+v (generic function with 1 method)
+
+julia&gt; 1 &lt; 2 ? v(&quot;yes&quot;) : v(&quot;no&quot;)
+yes
+&quot;yes&quot;
+
+julia&gt; 1 &gt; 2 ? v(&quot;yes&quot;) : v(&quot;no&quot;)
+no
+&quot;no&quot;</code></pre><h2 id="Short-Circuit-Evaluation"><a class="docs-heading-anchor" href="#Short-Circuit-Evaluation">Short-Circuit Evaluation</a><a id="Short-Circuit-Evaluation-1"></a><a class="docs-heading-anchor-permalink" href="#Short-Circuit-Evaluation" title="Permalink"></a></h2><p>The <code>&amp;&amp;</code> and <code>||</code> operators in Julia correspond to logical “and” and “or” operations, respectively, and are typically used for this purpose.  However, they have an additional property of <em>short-circuit</em> evaluation: they don&#39;t necessarily evaluate their second argument, as explained below.  (There are also bitwise <code>&amp;</code> and <code>|</code> operators that can be used as logical “and” and “or” <em>without</em> short-circuit behavior, but beware that <code>&amp;</code> and <code>|</code> have higher precedence than <code>&amp;&amp;</code> and <code>||</code> for evaluation order.)</p><p>Short-circuit evaluation is quite similar to conditional evaluation. The behavior is found in most imperative programming languages having the <code>&amp;&amp;</code> and <code>||</code> boolean operators: in a series of boolean expressions connected by these operators, only the minimum number of expressions are evaluated as are necessary to determine the final boolean value of the entire chain. Some languages (like Python) refer to them as <code>and</code> (<code>&amp;&amp;</code>) and <code>or</code> (<code>||</code>). Explicitly, this means that:</p><ul><li>In the expression <code>a &amp;&amp; b</code>, the subexpression <code>b</code> is only evaluated if <code>a</code> evaluates to <code>true</code>.</li><li>In the expression <code>a || b</code>, the subexpression <code>b</code> is only evaluated if <code>a</code> evaluates to <code>false</code>.</li></ul><p>The reasoning is that <code>a &amp;&amp; b</code> must be <code>false</code> if <code>a</code> is <code>false</code>, regardless of the value of <code>b</code>, and likewise, the value of <code>a || b</code> must be true if <code>a</code> is <code>true</code>, regardless of the value of <code>b</code>. Both <code>&amp;&amp;</code> and <code>||</code> associate to the right, but <code>&amp;&amp;</code> has higher precedence than <code>||</code> does. It&#39;s easy to experiment with this behavior:</p><pre><code class="language-julia-repl hljs">julia&gt; t(x) = (println(x); true)
+t (generic function with 1 method)
+
+julia&gt; f(x) = (println(x); false)
+f (generic function with 1 method)
+
+julia&gt; t(1) &amp;&amp; t(2)
+1
+2
+true
+
+julia&gt; t(1) &amp;&amp; f(2)
+1
+2
+false
+
+julia&gt; f(1) &amp;&amp; t(2)
+1
+false
+
+julia&gt; f(1) &amp;&amp; f(2)
+1
+false
+
+julia&gt; t(1) || t(2)
+1
+true
+
+julia&gt; t(1) || f(2)
+1
+true
+
+julia&gt; f(1) || t(2)
+1
+2
+true
+
+julia&gt; f(1) || f(2)
+1
+2
+false</code></pre><p>You can easily experiment in the same way with the associativity and precedence of various combinations of <code>&amp;&amp;</code> and <code>||</code> operators.</p><p>This behavior is frequently used in Julia to form an alternative to very short <code>if</code> statements. Instead of <code>if &lt;cond&gt; &lt;statement&gt; end</code>, one can write <code>&lt;cond&gt; &amp;&amp; &lt;statement&gt;</code> (which could be read as: &lt;cond&gt; <em>and then</em> &lt;statement&gt;). Similarly, instead of <code>if ! &lt;cond&gt; &lt;statement&gt; end</code>, one can write <code>&lt;cond&gt; || &lt;statement&gt;</code> (which could be read as: &lt;cond&gt; <em>or else</em> &lt;statement&gt;).</p><p>For example, a recursive factorial routine could be defined like this:</p><pre><code class="language-julia-repl hljs">julia&gt; function fact(n::Int)
+           n &gt;= 0 || error(&quot;n must be non-negative&quot;)
+           n == 0 &amp;&amp; return 1
+           n * fact(n-1)
+       end
+fact (generic function with 1 method)
+
+julia&gt; fact(5)
+120
+
+julia&gt; fact(0)
+1
+
+julia&gt; fact(-1)
+ERROR: n must be non-negative
+Stacktrace:
+ [1] error at ./error.jl:33 [inlined]
+ [2] fact(::Int64) at ./none:2
+ [3] top-level scope</code></pre><p>Boolean operations <em>without</em> short-circuit evaluation can be done with the bitwise boolean operators introduced in <a href="../mathematical-operations/#Mathematical-Operations-and-Elementary-Functions">Mathematical Operations and Elementary Functions</a>: <code>&amp;</code> and <code>|</code>. These are normal functions, which happen to support infix operator syntax, but always evaluate their arguments:</p><pre><code class="language-julia-repl hljs">julia&gt; f(1) &amp; t(2)
+1
+2
+false
+
+julia&gt; t(1) | t(2)
+1
+2
+true</code></pre><p>Just like condition expressions used in <code>if</code>, <code>elseif</code> or the ternary operator, the operands of <code>&amp;&amp;</code> or <code>||</code> must be boolean values (<code>true</code> or <code>false</code>). Using a non-boolean value anywhere except for the last entry in a conditional chain is an error:</p><pre><code class="language-julia-repl hljs">julia&gt; 1 &amp;&amp; true
+ERROR: TypeError: non-boolean (Int64) used in boolean context</code></pre><p>On the other hand, any type of expression can be used at the end of a conditional chain. It will be evaluated and returned depending on the preceding conditionals:</p><pre><code class="language-julia-repl hljs">julia&gt; true &amp;&amp; (x = (1, 2, 3))
+(1, 2, 3)
+
+julia&gt; false &amp;&amp; (x = (1, 2, 3))
+false</code></pre><h2 id="man-loops"><a class="docs-heading-anchor" href="#man-loops">Repeated Evaluation: Loops</a><a id="man-loops-1"></a><a class="docs-heading-anchor-permalink" href="#man-loops" title="Permalink"></a></h2><p>There are two constructs for repeated evaluation of expressions: the <code>while</code> loop and the <code>for</code> loop. Here is an example of a <code>while</code> loop:</p><pre><code class="language-julia-repl hljs">julia&gt; i = 1;
+
+julia&gt; while i &lt;= 5
+           println(i)
+           global i += 1
+       end
+1
+2
+3
+4
+5</code></pre><p>The <code>while</code> loop evaluates the condition expression (<code>i &lt;= 5</code> in this case), and as long it remains <code>true</code>, keeps also evaluating the body of the <code>while</code> loop. If the condition expression is <code>false</code> when the <code>while</code> loop is first reached, the body is never evaluated.</p><p>The <code>for</code> loop makes common repeated evaluation idioms easier to write. Since counting up and down like the above <code>while</code> loop does is so common, it can be expressed more concisely with a <code>for</code> loop:</p><pre><code class="language-julia-repl hljs">julia&gt; for i = 1:5
+           println(i)
+       end
+1
+2
+3
+4
+5</code></pre><p>Here the <code>1:5</code> is a range object, representing the sequence of numbers 1, 2, 3, 4, 5. The <code>for</code> loop iterates through these values, assigning each one in turn to the variable <code>i</code>. One rather important distinction between the previous <code>while</code> loop form and the <code>for</code> loop form is the scope during which the variable is visible. If the variable <code>i</code> has not been introduced in another scope, in the <code>for</code> loop form, it is visible only inside of the <code>for</code> loop, and not outside/afterwards. You&#39;ll either need a new interactive session instance or a different variable name to test this:</p><pre><code class="language-julia-repl hljs">julia&gt; for j = 1:5
+           println(j)
+       end
+1
+2
+3
+4
+5
+
+julia&gt; j
+ERROR: UndefVarError: j not defined</code></pre><p>See <a href="../variables-and-scoping/#scope-of-variables">Scope of Variables</a> for a detailed explanation of variable scope and how it works in Julia.</p><p>In general, the <code>for</code> loop construct can iterate over any container. In these cases, the alternative (but fully equivalent) keyword <code>in</code> or <code>∈</code> is typically used instead of <code>=</code>, since it makes the code read more clearly:</p><pre><code class="language-julia-repl hljs">julia&gt; for i in [1,4,0]
+           println(i)
+       end
+1
+4
+0
+
+julia&gt; for s ∈ [&quot;foo&quot;,&quot;bar&quot;,&quot;baz&quot;]
+           println(s)
+       end
+foo
+bar
+baz</code></pre><p>Various types of iterable containers will be introduced and discussed in later sections of the manual (see, e.g., <a href="../arrays/#man-multi-dim-arrays">Multi-dimensional Arrays</a>).</p><p>It is sometimes convenient to terminate the repetition of a <code>while</code> before the test condition is falsified or stop iterating in a <code>for</code> loop before the end of the iterable object is reached. This can be accomplished with the <code>break</code> keyword:</p><pre><code class="language-julia-repl hljs">julia&gt; i = 1;
+
+julia&gt; while true
+           println(i)
+           if i &gt;= 5
+               break
+           end
+           global i += 1
+       end
+1
+2
+3
+4
+5
+
+julia&gt; for j = 1:1000
+           println(j)
+           if j &gt;= 5
+               break
+           end
+       end
+1
+2
+3
+4
+5</code></pre><p>Without the <code>break</code> keyword, the above <code>while</code> loop would never terminate on its own, and the <code>for</code> loop would iterate up to 1000. These loops are both exited early by using <code>break</code>.</p><p>In other circumstances, it is handy to be able to stop an iteration and move on to the next one immediately. The <code>continue</code> keyword accomplishes this:</p><pre><code class="language-julia-repl hljs">julia&gt; for i = 1:10
+           if i % 3 != 0
+               continue
+           end
+           println(i)
+       end
+3
+6
+9</code></pre><p>This is a somewhat contrived example since we could produce the same behavior more clearly by negating the condition and placing the <code>println</code> call inside the <code>if</code> block. In realistic usage there is more code to be evaluated after the <code>continue</code>, and often there are multiple points from which one calls <code>continue</code>.</p><p>Multiple nested <code>for</code> loops can be combined into a single outer loop, forming the cartesian product of its iterables:</p><pre><code class="language-julia-repl hljs">julia&gt; for i = 1:2, j = 3:4
+           println((i, j))
+       end
+(1, 3)
+(1, 4)
+(2, 3)
+(2, 4)</code></pre><p>With this syntax, iterables may still refer to outer loop variables; e.g. <code>for i = 1:n, j = 1:i</code> is valid. However a <code>break</code> statement inside such a loop exits the entire nest of loops, not just the inner one. Both variables (<code>i</code> and <code>j</code>) are set to their current iteration values each time the inner loop runs. Therefore, assignments to <code>i</code> will not be visible to subsequent iterations:</p><pre><code class="language-julia-repl hljs">julia&gt; for i = 1:2, j = 3:4
+           println((i, j))
+           i = 0
+       end
+(1, 3)
+(1, 4)
+(2, 3)
+(2, 4)</code></pre><p>If this example were rewritten to use a <code>for</code> keyword for each variable, then the output would be different: the second and fourth values would contain <code>0</code>.</p><p>Multiple containers can be iterated over at the same time in a single <code>for</code> loop using <a href="../../base/iterators/#Base.Iterators.zip"><code>zip</code></a>:</p><pre><code class="language-julia-repl hljs">julia&gt; for (j, k) in zip([1 2 3], [4 5 6 7])
+           println((j,k))
+       end
+(1, 4)
+(2, 5)
+(3, 6)</code></pre><p>Using <a href="../../base/iterators/#Base.Iterators.zip"><code>zip</code></a> will create an iterator that is a tuple containing the subiterators for the containers passed to it. The <code>zip</code> iterator will iterate over all subiterators in order, choosing the <span>$i$</span>th element of each subiterator in the <span>$i$</span>th iteration of the <code>for</code> loop. Once any of the subiterators run out, the <code>for</code> loop will stop.</p><h2 id="Exception-Handling"><a class="docs-heading-anchor" href="#Exception-Handling">Exception Handling</a><a id="Exception-Handling-1"></a><a class="docs-heading-anchor-permalink" href="#Exception-Handling" title="Permalink"></a></h2><p>When an unexpected condition occurs, a function may be unable to return a reasonable value to its caller. In such cases, it may be best for the exceptional condition to either terminate the program while printing a diagnostic error message, or if the programmer has provided code to handle such exceptional circumstances then allow that code to take the appropriate action.</p><h3 id="Built-in-Exceptions"><a class="docs-heading-anchor" href="#Built-in-Exceptions">Built-in <code>Exception</code>s</a><a id="Built-in-Exceptions-1"></a><a class="docs-heading-anchor-permalink" href="#Built-in-Exceptions" title="Permalink"></a></h3><p><code>Exception</code>s are thrown when an unexpected condition has occurred. The built-in <code>Exception</code>s listed below all interrupt the normal flow of control.</p><table><tr><th style="text-align: left"><code>Exception</code></th></tr><tr><td style="text-align: left"><a href="../../base/base/#Core.ArgumentError"><code>ArgumentError</code></a></td></tr><tr><td style="text-align: left"><a href="../../base/base/#Core.BoundsError"><code>BoundsError</code></a></td></tr><tr><td style="text-align: left"><a href="../../base/base/#Base.CompositeException"><code>CompositeException</code></a></td></tr><tr><td style="text-align: left"><a href="../../base/base/#Base.DimensionMismatch"><code>DimensionMismatch</code></a></td></tr><tr><td style="text-align: left"><a href="../../base/base/#Core.DivideError"><code>DivideError</code></a></td></tr><tr><td style="text-align: left"><a href="../../base/base/#Core.DomainError"><code>DomainError</code></a></td></tr><tr><td style="text-align: left"><a href="../../base/base/#Base.EOFError"><code>EOFError</code></a></td></tr><tr><td style="text-align: left"><a href="../../base/base/#Core.ErrorException"><code>ErrorException</code></a></td></tr><tr><td style="text-align: left"><a href="../../base/base/#Core.InexactError"><code>InexactError</code></a></td></tr><tr><td style="text-align: left"><a href="../../base/base/#Core.InitError"><code>InitError</code></a></td></tr><tr><td style="text-align: left"><a href="../../base/base/#Core.InterruptException"><code>InterruptException</code></a></td></tr><tr><td style="text-align: left"><code>InvalidStateException</code></td></tr><tr><td style="text-align: left"><a href="../../base/base/#Base.KeyError"><code>KeyError</code></a></td></tr><tr><td style="text-align: left"><a href="../../base/base/#Core.LoadError"><code>LoadError</code></a></td></tr><tr><td style="text-align: left"><a href="../../base/base/#Core.OutOfMemoryError"><code>OutOfMemoryError</code></a></td></tr><tr><td style="text-align: left"><a href="../../base/base/#Core.ReadOnlyMemoryError"><code>ReadOnlyMemoryError</code></a></td></tr><tr><td style="text-align: left"><a href="../../stdlib/Distributed/#Distributed.RemoteException"><code>RemoteException</code></a></td></tr><tr><td style="text-align: left"><a href="../../base/base/#Core.MethodError"><code>MethodError</code></a></td></tr><tr><td style="text-align: left"><a href="../../base/base/#Core.OverflowError"><code>OverflowError</code></a></td></tr><tr><td style="text-align: left"><a href="../../base/base/#Base.Meta.ParseError"><code>Meta.ParseError</code></a></td></tr><tr><td style="text-align: left"><a href="../../base/base/#Base.SystemError"><code>SystemError</code></a></td></tr><tr><td style="text-align: left"><a href="../../base/base/#Core.TypeError"><code>TypeError</code></a></td></tr><tr><td style="text-align: left"><a href="../../base/base/#Core.UndefRefError"><code>UndefRefError</code></a></td></tr><tr><td style="text-align: left"><a href="../../base/base/#Core.UndefVarError"><code>UndefVarError</code></a></td></tr><tr><td style="text-align: left"><a href="../../base/base/#Base.StringIndexError"><code>StringIndexError</code></a></td></tr></table><p>For example, the <a href="../../base/math/#Base.sqrt-Tuple{Number}"><code>sqrt</code></a> function throws a <a href="../../base/base/#Core.DomainError"><code>DomainError</code></a> if applied to a negative real value:</p><pre><code class="language-julia-repl hljs">julia&gt; sqrt(-1)
+ERROR: DomainError with -1.0:
+sqrt will only return a complex result if called with a complex argument. Try sqrt(Complex(x)).
+Stacktrace:
+[...]</code></pre><p>You may define your own exceptions in the following way:</p><pre><code class="language-julia-repl hljs">julia&gt; struct MyCustomException &lt;: Exception end</code></pre><h3 id="The-[throw](@ref)-function"><a class="docs-heading-anchor" href="#The-[throw](@ref)-function">The <a href="../../base/base/#Core.throw"><code>throw</code></a> function</a><a id="The-[throw](@ref)-function-1"></a><a class="docs-heading-anchor-permalink" href="#The-[throw](@ref)-function" title="Permalink"></a></h3><p>Exceptions can be created explicitly with <a href="../../base/base/#Core.throw"><code>throw</code></a>. For example, a function defined only for nonnegative numbers could be written to <a href="../../base/base/#Core.throw"><code>throw</code></a> a <a href="../../base/base/#Core.DomainError"><code>DomainError</code></a> if the argument is negative:</p><pre><code class="language-julia-repl hljs">julia&gt; f(x) = x&gt;=0 ? exp(-x) : throw(DomainError(x, &quot;argument must be nonnegative&quot;))
+f (generic function with 1 method)
+
+julia&gt; f(1)
+0.36787944117144233
+
+julia&gt; f(-1)
+ERROR: DomainError with -1:
+argument must be nonnegative
+Stacktrace:
+ [1] f(::Int64) at ./none:1</code></pre><p>Note that <a href="../../base/base/#Core.DomainError"><code>DomainError</code></a> without parentheses is not an exception, but a type of exception. It needs to be called to obtain an <code>Exception</code> object:</p><pre><code class="language-julia-repl hljs">julia&gt; typeof(DomainError(nothing)) &lt;: Exception
+true
+
+julia&gt; typeof(DomainError) &lt;: Exception
+false</code></pre><p>Additionally, some exception types take one or more arguments that are used for error reporting:</p><pre><code class="language-julia-repl hljs">julia&gt; throw(UndefVarError(:x))
+ERROR: UndefVarError: x not defined</code></pre><p>This mechanism can be implemented easily by custom exception types following the way <a href="../../base/base/#Core.UndefVarError"><code>UndefVarError</code></a> is written:</p><pre><code class="language-julia-repl hljs">julia&gt; struct MyUndefVarError &lt;: Exception
+           var::Symbol
+       end
+
+julia&gt; Base.showerror(io::IO, e::MyUndefVarError) = print(io, e.var, &quot; not defined&quot;)</code></pre><div class="admonition is-info"><header class="admonition-header">Note</header><div class="admonition-body"><p>When writing an error message, it is preferred to make the first word lowercase. For example,</p><p><code>size(A) == size(B) || throw(DimensionMismatch(&quot;size of A not equal to size of B&quot;))</code></p><p>is preferred over</p><p><code>size(A) == size(B) || throw(DimensionMismatch(&quot;Size of A not equal to size of B&quot;))</code>.</p><p>However, sometimes it makes sense to keep the uppercase first letter, for instance if an argument to a function is a capital letter:</p><p><code>size(A,1) == size(B,2) || throw(DimensionMismatch(&quot;A has first dimension...&quot;))</code>.</p></div></div><h3 id="Errors"><a class="docs-heading-anchor" href="#Errors">Errors</a><a id="Errors-1"></a><a class="docs-heading-anchor-permalink" href="#Errors" title="Permalink"></a></h3><p>The <a href="../../base/base/#Base.error"><code>error</code></a> function is used to produce an <a href="../../base/base/#Core.ErrorException"><code>ErrorException</code></a> that interrupts the normal flow of control.</p><p>Suppose we want to stop execution immediately if the square root of a negative number is taken. To do this, we can define a fussy version of the <a href="../../base/math/#Base.sqrt-Tuple{Number}"><code>sqrt</code></a> function that raises an error if its argument is negative:</p><pre><code class="language-julia-repl hljs">julia&gt; fussy_sqrt(x) = x &gt;= 0 ? sqrt(x) : error(&quot;negative x not allowed&quot;)
+fussy_sqrt (generic function with 1 method)
+
+julia&gt; fussy_sqrt(2)
+1.4142135623730951
+
+julia&gt; fussy_sqrt(-1)
+ERROR: negative x not allowed
+Stacktrace:
+ [1] error at ./error.jl:33 [inlined]
+ [2] fussy_sqrt(::Int64) at ./none:1
+ [3] top-level scope</code></pre><p>If <code>fussy_sqrt</code> is called with a negative value from another function, instead of trying to continue execution of the calling function, it returns immediately, displaying the error message in the interactive session:</p><pre><code class="language-julia-repl hljs">julia&gt; function verbose_fussy_sqrt(x)
+           println(&quot;before fussy_sqrt&quot;)
+           r = fussy_sqrt(x)
+           println(&quot;after fussy_sqrt&quot;)
+           return r
+       end
+verbose_fussy_sqrt (generic function with 1 method)
+
+julia&gt; verbose_fussy_sqrt(2)
+before fussy_sqrt
+after fussy_sqrt
+1.4142135623730951
+
+julia&gt; verbose_fussy_sqrt(-1)
+before fussy_sqrt
+ERROR: negative x not allowed
+Stacktrace:
+ [1] error at ./error.jl:33 [inlined]
+ [2] fussy_sqrt at ./none:1 [inlined]
+ [3] verbose_fussy_sqrt(::Int64) at ./none:3
+ [4] top-level scope</code></pre><h3 id="The-try/catch-statement"><a class="docs-heading-anchor" href="#The-try/catch-statement">The <code>try/catch</code> statement</a><a id="The-try/catch-statement-1"></a><a class="docs-heading-anchor-permalink" href="#The-try/catch-statement" title="Permalink"></a></h3><p>The <code>try/catch</code> statement allows for <code>Exception</code>s to be tested for, and for the graceful handling of things that may ordinarily break your application. For example, in the below code the function for square root would normally throw an exception. By placing a <code>try/catch</code> block around it we can mitigate that here. You may choose how you wish to handle this exception, whether logging it, return a placeholder value or as in the case below where we just printed out a statement. One thing to think about when deciding how to handle unexpected situations is that using a <code>try/catch</code> block is much slower than using conditional branching to handle those situations. Below there are more examples of handling exceptions with a <code>try/catch</code> block:</p><pre><code class="language-julia-repl hljs">julia&gt; try
+           sqrt(&quot;ten&quot;)
+       catch e
+           println(&quot;You should have entered a numeric value&quot;)
+       end
+You should have entered a numeric value</code></pre><p><code>try/catch</code> statements also allow the <code>Exception</code> to be saved in a variable. The following contrived example calculates the square root of the second element of <code>x</code> if <code>x</code> is indexable, otherwise assumes <code>x</code> is a real number and returns its square root:</p><pre><code class="language-julia-repl hljs">julia&gt; sqrt_second(x) = try
+           sqrt(x[2])
+       catch y
+           if isa(y, DomainError)
+               sqrt(complex(x[2], 0))
+           elseif isa(y, BoundsError)
+               sqrt(x)
+           end
+       end
+sqrt_second (generic function with 1 method)
+
+julia&gt; sqrt_second([1 4])
+2.0
+
+julia&gt; sqrt_second([1 -4])
+0.0 + 2.0im
+
+julia&gt; sqrt_second(9)
+3.0
+
+julia&gt; sqrt_second(-9)
+ERROR: DomainError with -9.0:
+sqrt will only return a complex result if called with a complex argument. Try sqrt(Complex(x)).
+Stacktrace:
+[...]</code></pre><p>Note that the symbol following <code>catch</code> will always be interpreted as a name for the exception, so care is needed when writing <code>try/catch</code> expressions on a single line. The following code will <em>not</em> work to return the value of <code>x</code> in case of an error:</p><pre><code class="language-julia hljs">try bad() catch x end</code></pre><p>Instead, use a semicolon or insert a line break after <code>catch</code>:</p><pre><code class="language-julia hljs">try bad() catch; x end
+
+try bad()
+catch
+    x
+end</code></pre><p>The power of the <code>try/catch</code> construct lies in the ability to unwind a deeply nested computation immediately to a much higher level in the stack of calling functions. There are situations where no error has occurred, but the ability to unwind the stack and pass a value to a higher level is desirable. Julia provides the <a href="../../base/base/#Base.rethrow"><code>rethrow</code></a>, <a href="../../base/base/#Base.backtrace"><code>backtrace</code></a>, <a href="../../base/base/#Base.catch_backtrace"><code>catch_backtrace</code></a> and <a href="../../base/base/#Base.current_exceptions"><code>current_exceptions</code></a> functions for more advanced error handling.</p><h3 id="finally-Clauses"><a class="docs-heading-anchor" href="#finally-Clauses"><code>finally</code> Clauses</a><a id="finally-Clauses-1"></a><a class="docs-heading-anchor-permalink" href="#finally-Clauses" title="Permalink"></a></h3><p>In code that performs state changes or uses resources like files, there is typically clean-up work (such as closing files) that needs to be done when the code is finished. Exceptions potentially complicate this task, since they can cause a block of code to exit before reaching its normal end. The <code>finally</code> keyword provides a way to run some code when a given block of code exits, regardless of how it exits.</p><p>For example, here is how we can guarantee that an opened file is closed:</p><pre><code class="language-julia hljs">f = open(&quot;file&quot;)
+try
+    # operate on file f
+finally
+    close(f)
+end</code></pre><p>When control leaves the <code>try</code> block (for example due to a <code>return</code>, or just finishing normally), <code>close(f)</code> will be executed. If the <code>try</code> block exits due to an exception, the exception will continue propagating. A <code>catch</code> block may be combined with <code>try</code> and <code>finally</code> as well. In this case the <code>finally</code> block will run after <code>catch</code> has handled the error.</p><h2 id="man-tasks"><a class="docs-heading-anchor" href="#man-tasks">Tasks (aka Coroutines)</a><a id="man-tasks-1"></a><a class="docs-heading-anchor-permalink" href="#man-tasks" title="Permalink"></a></h2><p>Tasks are a control flow feature that allows computations to be suspended and resumed in a flexible manner. We mention them here only for completeness; for a full discussion see <a href="../asynchronous-programming/#man-asynchronous">Asynchronous Programming</a>.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../functions/">« Functions</a><a class="docs-footer-nextpage" href="../variables-and-scoping/">Scope of Variables »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.17 on <span class="colophon-date" title="Friday 27 May 2022 18:59">Friday 27 May 2022</span>. Using Julia version 1.8.0-rc1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
