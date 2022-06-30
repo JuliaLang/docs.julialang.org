@@ -8,11 +8,11 @@ const JULIA_DOCS_TMP = get(ENV, "JULIA_DOCS_TMP", "$(BUILDROOT)/tmp")
 
 # download and extract binary for a given version, return path to executable
 function download_release(v::VersionNumber)
-    x, y, z = v.major, v.minor, v.patch
+    x, y = v.major, v.minor
     julia_exec = cd(BUILDROOT) do
-        julia = "julia-$(x).$(y).$(z)-linux-x86_64"
+        julia = "julia-$(v)-linux-x86_64"
         tarball = "$(julia).tar.gz"
-        sha256 = "julia-$(x).$(y).$(z).sha256"
+        sha256 = "julia-$(v).sha256"
         run(`curl -vo $(tarball) -L https://julialang-s3.julialang.org/bin/linux/x64/$(x).$(y)/$(tarball)`)
         run(`curl -vo $(sha256) -L https://julialang-s3.julialang.org/bin/checksums/$(sha256)`)
         run(pipeline(`grep $(tarball) $(sha256)`, `sha256sum -c`))
@@ -69,14 +69,13 @@ function copydocs(file)
 end
 
 function build_release_pdf(v::VersionNumber)
-    x, y, z = v.major, v.minor, v.patch
-    @info "building PDF for Julia v$(x).$(y).$(z)."
+    @info "building PDF for Julia v$(v)."
 
-    file = "julia-$(x).$(y).$(z).pdf"
+    file = "julia-$(v).pdf"
 
     # early return if file exists
     if isfile("$(JULIA_DOCS)/$(file)")
-        @info "PDF for Julia v$(x).$(y).$(z) already exists, skipping."
+        @info "PDF for Julia v$(v) already exists, skipping."
         return
     end
 
@@ -85,7 +84,7 @@ function build_release_pdf(v::VersionNumber)
     julia_exec = download_release(v)
 
     # checkout relevant tag and clean repo
-    run(`git -C $(JULIA_SOURCE) checkout v$(x).$(y).$(z)`)
+    run(`git -C $(JULIA_SOURCE) checkout v$(v)`)
     run(`git -C $(JULIA_SOURCE) clean -fdx`)
 
     # invoke makedocs
@@ -121,12 +120,15 @@ function collect_versions()
         # lines are in the form 'COMMITSHA\trefs/tags/TAG'
         _, ref = split(line, '\t')
         _, _, tag = split(ref, '/')
-        if occursin(r"^v\d+\.\d+\.\d+$", tag)
+        if occursin(r"^v\d+\.\d+\.\d+(?:-rc\d+)?$", tag)
             # the version regex is not as general as Base.VERSION_REGEX -- we only build "pure"
             # versions and exclude tags that are pre-releases or have build information.
             v = VersionNumber(tag)
             # pdf doc only possible for 1.1.0 and above
-            v >= v"1.1.0" && push!(versions, v)
+            # only build rc if > 1.7
+            if v >= v"1.1.0" && (isempty(v.prerelease) || v > v"1.7.0")
+                push!(versions, v)
+            end
         end
     end
     return versions
