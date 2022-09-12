@@ -125,10 +125,12 @@ function collect_versions()
             # versions and exclude tags that are pre-releases or have build information.
             v = VersionNumber(tag)
             # pdf doc only possible for 1.1.0 and above
-            # only build rc if > 1.7
-            if v >= v"1.1.0" && (isempty(v.prerelease) || v > v"1.7.0")
-                push!(versions, v)
-            end
+            v >= v"1.1.0" || continue
+            # only build RCs if > 1.7
+            v < v"1.7.0" && !isempty(v.prerelease) && continue
+            # exclude 1.8.0-rc1
+            v == v"1.8.0-rc1" && continue
+            push!(versions, v)
         end
     end
     return versions
