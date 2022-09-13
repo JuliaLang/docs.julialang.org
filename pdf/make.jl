@@ -128,8 +128,8 @@ function collect_versions()
             v >= v"1.1.0" || continue
             # only build RCs if > 1.7
             v < v"1.7.0" && !isempty(v.prerelease) && continue
-            # exclude 1.8.0-rc1
-            v == v"1.8.0-rc1" && continue
+            # exclude 1.8.0 pre-releases, since those fail
+            v"1.8.0-" < v < v"1.8.0" && continue
             push!(versions, v)
         end
     end
