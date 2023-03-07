@@ -15,11 +15,15 @@ function download_release(v::VersionNumber)
         sha256 = "julia-$(v).sha256"
         url = "https://julialang-s3.julialang.org/bin/linux/x64/$(x).$(y)/$(tarball)"
         sha_url = "https://julialang-s3.julialang.org/bin/checksums/$(sha256)"
-        @info "Downloading release" url sha_url
-        run(`curl -vo $(tarball) -L $(url)`)
-        run(`curl -vo $(sha256) -L $(sha_url)`)
-        @info "Contents of SHA256 file:\n$(read(sha256, String))"
-        run(pipeline(`grep $(tarball) $(sha256)`, `sha256sum -c`))
+        @info "Downloading release tarball." url sha_url
+        run(`curl -fvo $(tarball) -L $(url)`)
+        run(`curl -fvo $(sha256) -L $(sha_url)`)
+        try
+            run(pipeline(`grep $(tarball) $(sha256)`, `sha256sum -c`))
+        catch e
+            @info "Contents of SHA256 file:\n$(read(sha256, String))"
+            rethrow(e)
+        end
         mkpath(julia)
         run(`tar -xzf $(tarball) -C $(julia) --strip-components 1`)
         return abspath(julia, "bin", "julia")
@@ -32,8 +36,8 @@ function download_nightly()
         julia = "julia-latest-linux64"
         tarball = "$(julia).tar.gz"
         url = "https://julialangnightlies-s3.julialang.org/bin/linux/x64/$(tarball)"
-        @info "Downloading nightly" url
-        run(`curl -vo $(tarball) -L $url`)
+        @info "Downloading nightly tarball." url
+        run(`curl -fvo $(tarball) -L $url`)
         # find the commit from the extracted folder
         folder = first(readlines(`tar -tf $(tarball)`))
         _, commit = split(folder, '-'); commit = chop(commit)
@@ -86,7 +90,6 @@ function build_release_pdf(v::VersionNumber)
     end
 
     # download julia binary
-    @info "downloading release tarball."
     julia_exec = download_release(v)
 
     # checkout relevant tag and clean repo
@@ -101,7 +104,6 @@ function build_release_pdf(v::VersionNumber)
 end
 
 function build_nightly_pdf()
-    @info "downloading nightly tarball"
     julia_exec, commit = download_nightly()
     # output is "julia version 1.1.0-DEV"
     _, _, v = split(readchomp(`$(julia_exec) --version`))
@@ -137,6 +139,8 @@ function collect_versions()
             v < v"1.7.0" && !isempty(v.prerelease) && continue
             # exclude 1.8.0 pre-releases, since those fail
             v"1.8.0-" < v < v"1.8.0" && continue
+            # exclude 1.9.0-beta1, because it doesn't have a SHA file
+            v == v"1.9.0-beta1" && continue
             push!(versions, v)
         end
     end
