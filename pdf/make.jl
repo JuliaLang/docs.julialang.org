@@ -120,9 +120,10 @@ function collect_versions()
         # lines are in the form 'COMMITSHA\trefs/tags/TAG'
         _, ref = split(line, '\t')
         _, _, tag = split(ref, '/')
-        if occursin(r"^v\d+\.\d+\.\d+(?:-rc\d+)?$", tag)
+        if occursin(r"^v\d+\.\d+\.\d+(?:-(:?rc|beta)\d+)?$", tag)
             # the version regex is not as general as Base.VERSION_REGEX -- we only build "pure"
-            # versions and exclude tags that are pre-releases or have build information.
+            # versions and exclude tags that are pre-releases (except for -rcN and -betaN) or
+            # have build information.
             v = VersionNumber(tag)
             # pdf doc only possible for 1.1.0 and above
             v >= v"1.1.0" || continue
