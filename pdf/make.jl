@@ -13,8 +13,8 @@ function download_release(v::VersionNumber)
         julia = "julia-$(v)-linux-x86_64"
         tarball = "$(julia).tar.gz"
         sha256 = "julia-$(v).sha256"
-        url = https://julialang-s3.julialang.org/bin/linux/x64/$(x).$(y)/$(tarball)
-        sha_url = https://julialang-s3.julialang.org/bin/checksums/$(sha256)
+        url = "https://julialang-s3.julialang.org/bin/linux/x64/$(x).$(y)/$(tarball)"
+        sha_url = "https://julialang-s3.julialang.org/bin/checksums/$(sha256)"
         @info "Downloading release" url sha_url
         run(`curl -vo $(tarball) -L $(url)`)
         run(`curl -vo $(sha256) -L $(sha_url)`)
@@ -31,7 +31,7 @@ function download_nightly()
     julia_exec, commit = cd(BUILDROOT) do
         julia = "julia-latest-linux64"
         tarball = "$(julia).tar.gz"
-        url = https://julialangnightlies-s3.julialang.org/bin/linux/x64/$(tarball)
+        url = "https://julialangnightlies-s3.julialang.org/bin/linux/x64/$(tarball)"
         @info "Downloading nightly" url
         run(`curl -vo $(tarball) -L $url`)
         # find the commit from the extracted folder
