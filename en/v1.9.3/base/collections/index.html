@@ -1145,29 +1145,7 @@ Dict{Char, Int64} with 2 entries:
 julia&gt; collect(values(D))
 2-element Vector{Int64}:
  2
- 3</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaLang/julia/blob/bed2cd540a11544ed4be381d471bbf590f0b745e/base/abstractdict.jl#L107-L130">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="Base.pairs" href="#Base.pairs"><code>Base.pairs</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia hljs">pairs(IndexLinear(), A)
-pairs(IndexCartesian(), A)
-pairs(IndexStyle(A), A)</code></pre><p>An iterator that accesses each element of the array <code>A</code>, returning <code>i =&gt; x</code>, where <code>i</code> is the index for the element and <code>x = A[i]</code>. Identical to <code>pairs(A)</code>, except that the style of index can be selected. Also similar to <code>enumerate(A)</code>, except <code>i</code> will be a valid index for <code>A</code>, while <code>enumerate</code> always counts from 1 regardless of the indices of <code>A</code>.</p><p>Specifying <a href="../arrays/#Base.IndexLinear"><code>IndexLinear()</code></a> ensures that <code>i</code> will be an integer; specifying <a href="../arrays/#Base.IndexCartesian"><code>IndexCartesian()</code></a> ensures that <code>i</code> will be a <a href="../arrays/#Base.IteratorsMD.CartesianIndex"><code>Base.CartesianIndex</code></a>; specifying <code>IndexStyle(A)</code> chooses whichever has been defined as the native indexing style for array <code>A</code>.</p><p>Mutation of the bounds of the underlying array will invalidate this iterator.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; A = [&quot;a&quot; &quot;d&quot;; &quot;b&quot; &quot;e&quot;; &quot;c&quot; &quot;f&quot;];
-
-julia&gt; for (index, value) in pairs(IndexStyle(A), A)
-           println(&quot;$index $value&quot;)
-       end
-1 a
-2 b
-3 c
-4 d
-5 e
-6 f
-
-julia&gt; S = view(A, 1:2, :);
-
-julia&gt; for (index, value) in pairs(IndexStyle(S), S)
-           println(&quot;$index $value&quot;)
-       end
-CartesianIndex(1, 1) a
-CartesianIndex(2, 1) b
-CartesianIndex(1, 2) d
-CartesianIndex(2, 2) e</code></pre><p>See also <a href="../arrays/#Base.IndexStyle"><code>IndexStyle</code></a>, <a href="../arrays/#Base.axes-Tuple{Any}"><code>axes</code></a>.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaLang/julia/blob/bed2cd540a11544ed4be381d471bbf590f0b745e/base/iterators.jl#L224-L269">source</a></section><section><div><pre><code class="nohighlight hljs">pairs(collection)</code></pre><p>Return an iterator over <code>key =&gt; value</code> pairs for any collection that maps a set of keys to a set of values. This includes arrays, where the keys are the array indices.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; a = Dict(zip([&quot;a&quot;, &quot;b&quot;, &quot;c&quot;], [1, 2, 3]))
+ 3</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaLang/julia/blob/bed2cd540a11544ed4be381d471bbf590f0b745e/base/abstractdict.jl#L107-L130">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="Base.pairs" href="#Base.pairs"><code>Base.pairs</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia hljs">pairs(collection)</code></pre><p>Return an iterator over <code>key =&gt; value</code> pairs for any collection that maps a set of keys to a set of values. This includes arrays, where the keys are the array indices.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; a = Dict(zip([&quot;a&quot;, &quot;b&quot;, &quot;c&quot;], [1, 2, 3]))
 Dict{String, Int64} with 3 entries:
   &quot;c&quot; =&gt; 3
   &quot;b&quot; =&gt; 2
@@ -1194,7 +1172,29 @@ julia&gt; (;a=1, b=2, c=3) |&gt; collect
 3-element Vector{Int64}:
  1
  2
- 3</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaLang/julia/blob/bed2cd540a11544ed4be381d471bbf590f0b745e/base/abstractdict.jl#L133-L171">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="Base.merge" href="#Base.merge"><code>Base.merge</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia hljs">merge(d::AbstractDict, others::AbstractDict...)</code></pre><p>Construct a merged collection from the given collections. If necessary, the types of the resulting collection will be promoted to accommodate the types of the merged collections. If the same key is present in another collection, the value for that key will be the value it has in the last collection listed. See also <a href="#Base.mergewith"><code>mergewith</code></a> for custom handling of values with the same key.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; a = Dict(&quot;foo&quot; =&gt; 0.0, &quot;bar&quot; =&gt; 42.0)
+ 3</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaLang/julia/blob/bed2cd540a11544ed4be381d471bbf590f0b745e/base/abstractdict.jl#L133-L171">source</a></section><section><div><pre><code class="nohighlight hljs">pairs(IndexLinear(), A)
+pairs(IndexCartesian(), A)
+pairs(IndexStyle(A), A)</code></pre><p>An iterator that accesses each element of the array <code>A</code>, returning <code>i =&gt; x</code>, where <code>i</code> is the index for the element and <code>x = A[i]</code>. Identical to <code>pairs(A)</code>, except that the style of index can be selected. Also similar to <code>enumerate(A)</code>, except <code>i</code> will be a valid index for <code>A</code>, while <code>enumerate</code> always counts from 1 regardless of the indices of <code>A</code>.</p><p>Specifying <a href="../arrays/#Base.IndexLinear"><code>IndexLinear()</code></a> ensures that <code>i</code> will be an integer; specifying <a href="../arrays/#Base.IndexCartesian"><code>IndexCartesian()</code></a> ensures that <code>i</code> will be a <a href="../arrays/#Base.IteratorsMD.CartesianIndex"><code>Base.CartesianIndex</code></a>; specifying <code>IndexStyle(A)</code> chooses whichever has been defined as the native indexing style for array <code>A</code>.</p><p>Mutation of the bounds of the underlying array will invalidate this iterator.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; A = [&quot;a&quot; &quot;d&quot;; &quot;b&quot; &quot;e&quot;; &quot;c&quot; &quot;f&quot;];
+
+julia&gt; for (index, value) in pairs(IndexStyle(A), A)
+           println(&quot;$index $value&quot;)
+       end
+1 a
+2 b
+3 c
+4 d
+5 e
+6 f
+
+julia&gt; S = view(A, 1:2, :);
+
+julia&gt; for (index, value) in pairs(IndexStyle(S), S)
+           println(&quot;$index $value&quot;)
+       end
+CartesianIndex(1, 1) a
+CartesianIndex(2, 1) b
+CartesianIndex(1, 2) d
+CartesianIndex(2, 2) e</code></pre><p>See also <a href="../arrays/#Base.IndexStyle"><code>IndexStyle</code></a>, <a href="../arrays/#Base.axes-Tuple{Any}"><code>axes</code></a>.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaLang/julia/blob/bed2cd540a11544ed4be381d471bbf590f0b745e/base/iterators.jl#L224-L269">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="Base.merge" href="#Base.merge"><code>Base.merge</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia hljs">merge(d::AbstractDict, others::AbstractDict...)</code></pre><p>Construct a merged collection from the given collections. If necessary, the types of the resulting collection will be promoted to accommodate the types of the merged collections. If the same key is present in another collection, the value for that key will be the value it has in the last collection listed. See also <a href="#Base.mergewith"><code>mergewith</code></a> for custom handling of values with the same key.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; a = Dict(&quot;foo&quot; =&gt; 0.0, &quot;bar&quot; =&gt; 42.0)
 Dict{String, Float64} with 2 entries:
   &quot;bar&quot; =&gt; 42.0
   &quot;foo&quot; =&gt; 0.0
@@ -1633,4 +1633,4 @@ foo
 julia&gt; replace.([&quot;xops&quot;, &quot;oxps&quot;], &quot;x&quot; =&gt; &quot;o&quot;)
 2-element Vector{String}:
  &quot;oops&quot;
- &quot;oops&quot;</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaLang/julia/blob/bed2cd540a11544ed4be381d471bbf590f0b745e/base/pair.jl#L5-L37">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="Base.Pairs" href="#Base.Pairs"><code>Base.Pairs</code></a> — <span class="docstring-category">Type</span></header><section><div><pre><code class="language-julia hljs">Iterators.Pairs(values, keys) &lt;: AbstractDict{eltype(keys), eltype(values)}</code></pre><p>Transforms an indexable container into a Dictionary-view of the same data. Modifying the key-space of the underlying data may invalidate this object.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaLang/julia/blob/bed2cd540a11544ed4be381d471bbf590f0b745e/base/essentials.jl#L35-L40">source</a></section></article></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../base/">« Essentials</a><a class="docs-footer-nextpage" href="../math/">Mathematics »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.23 on <span class="colophon-date" title="Thursday 24 August 2023 15:27">Thursday 24 August 2023</span>. Using Julia version 1.9.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+ &quot;oops&quot;</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaLang/julia/blob/bed2cd540a11544ed4be381d471bbf590f0b745e/base/pair.jl#L5-L37">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="Base.Pairs" href="#Base.Pairs"><code>Base.Pairs</code></a> — <span class="docstring-category">Type</span></header><section><div><pre><code class="language-julia hljs">Iterators.Pairs(values, keys) &lt;: AbstractDict{eltype(keys), eltype(values)}</code></pre><p>Transforms an indexable container into a Dictionary-view of the same data. Modifying the key-space of the underlying data may invalidate this object.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaLang/julia/blob/bed2cd540a11544ed4be381d471bbf590f0b745e/base/essentials.jl#L35-L40">source</a></section></article></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../base/">« Essentials</a><a class="docs-footer-nextpage" href="../math/">Mathematics »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.23 on <span class="colophon-date" title="Thursday 24 August 2023 15:43">Thursday 24 August 2023</span>. Using Julia version 1.9.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
