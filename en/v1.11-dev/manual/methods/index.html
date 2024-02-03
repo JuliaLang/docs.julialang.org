@@ -7,6 +7,7 @@
 f (generic function with 1 method)</code></pre><p>This function definition applies only to calls where <code>x</code> and <code>y</code> are both values of type <a href="../../base/numbers/#Core.Float64"><code>Float64</code></a>:</p><pre><code class="language-julia-repl hljs">julia&gt; f(2.0, 3.0)
 7.0</code></pre><p>Applying it to any other types of arguments will result in a <a href="../../base/base/#Core.MethodError"><code>MethodError</code></a>:</p><pre><code class="language-julia-repl hljs">julia&gt; f(2.0, 3)
 ERROR: MethodError: no method matching f(::Float64, ::Int64)
+The function `f` exists, but no method is defined for this combination of argument types.
 
 Closest candidates are:
   f(::Float64, !Matched::Float64)
@@ -17,6 +18,7 @@ Stacktrace:
 
 julia&gt; f(Float32(2.0), 3.0)
 ERROR: MethodError: no method matching f(::Float32, ::Float64)
+The function `f` exists, but no method is defined for this combination of argument types.
 
 Closest candidates are:
   f(!Matched::Float64, ::Float64)
@@ -27,6 +29,7 @@ Stacktrace:
 
 julia&gt; f(2.0, &quot;3.0&quot;)
 ERROR: MethodError: no method matching f(::Float64, ::String)
+The function `f` exists, but no method is defined for this combination of argument types.
 
 Closest candidates are:
   f(::Float64, !Matched::Float64)
@@ -36,7 +39,8 @@ Stacktrace:
 [...]
 
 julia&gt; f(&quot;2.0&quot;, &quot;3.0&quot;)
-ERROR: MethodError: no method matching f(::String, ::String)</code></pre><p>As you can see, the arguments must be precisely of type <a href="../../base/numbers/#Core.Float64"><code>Float64</code></a>. Other numeric types, such as integers or 32-bit floating-point values, are not automatically converted to 64-bit floating-point, nor are strings parsed as numbers. Because <code>Float64</code> is a concrete type and concrete types cannot be subclassed in Julia, such a definition can only be applied to arguments that are exactly of type <code>Float64</code>. It may often be useful, however, to write more general methods where the declared parameter types are abstract:</p><pre><code class="language-julia-repl hljs">julia&gt; f(x::Number, y::Number) = 2x - y
+ERROR: MethodError: no method matching f(::String, ::String)
+The function `f` exists, but no method is defined for this combination of argument types.</code></pre><p>As you can see, the arguments must be precisely of type <a href="../../base/numbers/#Core.Float64"><code>Float64</code></a>. Other numeric types, such as integers or 32-bit floating-point values, are not automatically converted to 64-bit floating-point, nor are strings parsed as numbers. Because <code>Float64</code> is a concrete type and concrete types cannot be subclassed in Julia, such a definition can only be applied to arguments that are exactly of type <code>Float64</code>. It may often be useful, however, to write more general methods where the declared parameter types are abstract:</p><pre><code class="language-julia-repl hljs">julia&gt; f(x::Number, y::Number) = 2x - y
 f (generic function with 2 methods)
 
 julia&gt; f(2.0, 3)
@@ -52,6 +56,7 @@ julia&gt; f(2.0, 3)
 julia&gt; f(2, 3)
 1</code></pre><p>The <code>2x + y</code> definition is only used in the first case, while the <code>2x - y</code> definition is used in the others. No automatic casting or conversion of function arguments is ever performed: all conversion in Julia is non-magical and completely explicit. <a href="../conversion-and-promotion/#conversion-and-promotion">Conversion and Promotion</a>, however, shows how clever application of sufficiently advanced technology can be indistinguishable from magic. <sup class="footnote-reference"><a id="citeref-Clarke61" href="#footnote-Clarke61">[Clarke61]</a></sup></p><p>For non-numeric values, and for fewer or more than two arguments, the function <code>f</code> remains undefined, and applying it will still result in a <a href="../../base/base/#Core.MethodError"><code>MethodError</code></a>:</p><pre><code class="language-julia-repl hljs">julia&gt; f(&quot;foo&quot;, 3)
 ERROR: MethodError: no method matching f(::String, ::Int64)
+The function `f` exists, but no method is defined for this combination of argument types.
 
 Closest candidates are:
   f(!Matched::Number, ::Number)
@@ -62,6 +67,7 @@ Stacktrace:
 
 julia&gt; f()
 ERROR: MethodError: no method matching f()
+The function `f` exists, but no method is defined for this combination of argument types.
 
 Closest candidates are:
   f(!Matched::Float64, !Matched::Float64)
@@ -183,6 +189,7 @@ julia&gt; myappend([1,2,3],4)
 
 julia&gt; myappend([1,2,3],2.5)
 ERROR: MethodError: no method matching myappend(::Vector{Int64}, ::Float64)
+The function `myappend` exists, but no method is defined for this combination of argument types.
 
 Closest candidates are:
   myappend(::Vector{T}, !Matched::T) where T
@@ -200,6 +207,7 @@ julia&gt; myappend([1.0,2.0,3.0],4.0)
 
 julia&gt; myappend([1.0,2.0,3.0],4)
 ERROR: MethodError: no method matching myappend(::Vector{Float64}, ::Int64)
+The function `myappend` exists, but no method is defined for this combination of argument types.
 
 Closest candidates are:
   myappend(::Vector{T}, !Matched::T) where T
@@ -230,6 +238,7 @@ true
 
 julia&gt; same_type_numeric(&quot;foo&quot;, 2.0)
 ERROR: MethodError: no method matching same_type_numeric(::String, ::Float64)
+The function `same_type_numeric` exists, but no method is defined for this combination of argument types.
 
 Closest candidates are:
   same_type_numeric(!Matched::T, ::T) where T&lt;:Number
@@ -242,6 +251,7 @@ Stacktrace:
 
 julia&gt; same_type_numeric(&quot;foo&quot;, &quot;bar&quot;)
 ERROR: MethodError: no method matching same_type_numeric(::String, ::String)
+The function `same_type_numeric` exists, but no method is defined for this combination of argument types.
 
 julia&gt; same_type_numeric(Int32(1), Int64(2))
 false</code></pre><p>The <code>same_type_numeric</code> function behaves much like the <code>same_type</code> function defined above, but is only defined for pairs of numbers.</p><p>Parametric methods allow the same syntax as <code>where</code> expressions used to write types (see <a href="../types/#UnionAll-Types">UnionAll Types</a>). If there is only a single parameter, the enclosing curly braces (in <code>where {T}</code>) can be omitted, but are often preferred for clarity. Multiple parameters can be separated with commas, e.g. <code>where {T, S&lt;:Real}</code>, or written using nested <code>where</code>, e.g. <code>where S&lt;:Real where T</code>.</p><h2 id="Redefining-Methods"><a class="docs-heading-anchor" href="#Redefining-Methods">Redefining Methods</a><a id="Redefining-Methods-1"></a><a class="docs-heading-anchor-permalink" href="#Redefining-Methods" title="Permalink"></a></h2><p>When redefining a method or adding new methods, it is important to realize that these changes don&#39;t take effect immediately. This is key to Julia&#39;s ability to statically infer and compile code to run fast, without the usual JIT tricks and overhead. Indeed, any new method definition won&#39;t be visible to the current runtime environment, including Tasks and Threads (and any previously defined <code>@generated</code> functions). Let&#39;s start with an example to see what this means:</p><pre><code class="language-julia-repl hljs">julia&gt; function tryeval()
@@ -353,6 +363,7 @@ bar (generic function with 1 method)
 
 julia&gt; bar(1,2,3)
 ERROR: MethodError: no method matching bar(::Int64, ::Int64, ::Int64)
+The function `bar` exists, but no method is defined for this combination of argument types.
 
 Closest candidates are:
   bar(::Any, ::Any, ::Any, !Matched::Any)
@@ -366,6 +377,7 @@ julia&gt; bar(1,2,3,4)
 
 julia&gt; bar(1,2,3,4,5)
 ERROR: MethodError: no method matching bar(::Int64, ::Int64, ::Int64, ::Int64, ::Int64)
+The function `bar` exists, but no method is defined for this combination of argument types.
 
 Closest candidates are:
   bar(::Any, ::Any, ::Any, ::Any)
@@ -449,4 +461,4 @@ end</code></pre><p>as it is not clear what function will end up getting defined.
     else
         x -&gt; x - 1
     end
-end</code></pre><section class="footnotes is-size-7"><ul><li class="footnote" id="footnote-1"><a class="tag is-link" href="#citeref-1">1</a>In C++ or Java, for example, in a method call like <code>obj.meth(arg1,arg2)</code>, the object obj &quot;receives&quot; the method call and is implicitly passed to the method via the <code>this</code> keyword, rather than as an explicit method argument. When the current <code>this</code> object is the receiver of a method call, it can be omitted altogether, writing just <code>meth(arg1,arg2)</code>, with <code>this</code> implied as the receiving object.</li><li class="footnote" id="footnote-Clarke61"><a class="tag is-link" href="#citeref-Clarke61">Clarke61</a>Arthur C. Clarke, <em>Profiles of the Future</em> (1961): Clarke&#39;s Third Law.</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../types/">« Types</a><a class="docs-footer-nextpage" href="../constructors/">Constructors »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="auto">Automatic (OS)</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.2.1 on <span class="colophon-date" title="Saturday 3 February 2024 01:38">Saturday 3 February 2024</span>. Using Julia version 1.11.0-DEV.1460.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+end</code></pre><section class="footnotes is-size-7"><ul><li class="footnote" id="footnote-1"><a class="tag is-link" href="#citeref-1">1</a>In C++ or Java, for example, in a method call like <code>obj.meth(arg1,arg2)</code>, the object obj &quot;receives&quot; the method call and is implicitly passed to the method via the <code>this</code> keyword, rather than as an explicit method argument. When the current <code>this</code> object is the receiver of a method call, it can be omitted altogether, writing just <code>meth(arg1,arg2)</code>, with <code>this</code> implied as the receiving object.</li><li class="footnote" id="footnote-Clarke61"><a class="tag is-link" href="#citeref-Clarke61">Clarke61</a>Arthur C. Clarke, <em>Profiles of the Future</em> (1961): Clarke&#39;s Third Law.</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../types/">« Types</a><a class="docs-footer-nextpage" href="../constructors/">Constructors »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="auto">Automatic (OS)</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.2.1 on <span class="colophon-date" title="Saturday 3 February 2024 03:18">Saturday 3 February 2024</span>. Using Julia version 1.11.0-DEV.1461.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
