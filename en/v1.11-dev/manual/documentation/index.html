@@ -82,11 +82,11 @@ search: * .*
 f(x) = x</code></pre><p>This makes it possible to use expressions other than normal string literals (such as the <code>raw&quot;&quot;</code> string macro) as a docstring.</p><p>When used for retrieving documentation, the <code>@doc</code> macro (or equally, the <code>doc</code> function) will search all <code>META</code> dictionaries for metadata relevant to the given object and return it. The returned object (some Markdown content, for example) will by default display itself intelligently. This design also makes it easy to use the doc system in a programmatic way; for example, to re-use documentation between different versions of a function:</p><pre><code class="language-julia hljs">@doc &quot;...&quot; foo!
 @doc (@doc foo!) foo</code></pre><p>Or for use with Julia&#39;s metaprogramming functionality:</p><pre><code class="language-julia hljs">for (f, op) in ((:add, :+), (:subtract, :-), (:multiply, :*), (:divide, :/))
     @eval begin
-        $f(a,b) = $op(a,b)
+        $f(a, b) = $op(a, b)
     end
 end
-@doc &quot;`add(a,b)` adds `a` and `b` together&quot; add
-@doc &quot;`subtract(a,b)` subtracts `b` from `a`&quot; subtract</code></pre><p>Documentation in non-toplevel blocks, such as <code>begin</code>, <code>if</code>, <code>for</code>, <code>let</code>, and inner constructors, should be added to the documentation system via <code>@doc</code> as well. For example:</p><pre><code class="language-julia hljs">if condition()
+@doc &quot;`add(a, b)` adds `a` and `b` together&quot; add
+@doc &quot;`subtract(a, b)` subtracts `b` from `a`&quot; subtract</code></pre><p>Documentation in non-toplevel blocks, such as <code>begin</code>, <code>if</code>, <code>for</code>, <code>let</code>, and inner constructors, should be added to the documentation system via <code>@doc</code> as well. For example:</p><pre><code class="language-julia hljs">if condition()
     @doc &quot;...&quot;
     f(x) = x
 end</code></pre><p>will add documentation to <code>f(x)</code> when <code>condition()</code> is <code>true</code>. Note that even if <code>f(x)</code> goes out of scope at the end of a block, its documentation will remain.</p><p>It is possible to make use of metaprogramming to assist in the creation of documentation. When using string-interpolation within the docstring you will need to use an extra <code>$</code> as shown with <code>$($name)</code>:</p><pre><code class="language-julia hljs">for func in (:day, :dayofmonth)
@@ -119,7 +119,7 @@ f(x) = x
 
 &quot;...&quot;
 function f(x)
-    x
+    return x
 end
 
 &quot;...&quot;
@@ -192,4 +192,4 @@ b</code></pre><p>Any number of expressions many be documented together in this w
         @__doc__ $(f)(x) = 1
         $(f)(x, y) = 2
     end |&gt; esc
-end</code></pre><p><code>@__doc__</code> has no effect when a macro that uses it is not documented.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaLang/julia/blob/e2c8809ef505d2aeff9c22eba79ff628fb9e44f6/base/docs/Docs.jl#L457-L472">source</a></section></article></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../modules/">« Modules</a><a class="docs-footer-nextpage" href="../metaprogramming/">Metaprogramming »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="auto">Automatic (OS)</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.2.1 on <span class="colophon-date" title="Wednesday 7 February 2024 20:50">Wednesday 7 February 2024</span>. Using Julia version 1.11.0-DEV.1498.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+end</code></pre><p><code>@__doc__</code> has no effect when a macro that uses it is not documented.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaLang/julia/blob/18df941d50aafdcc134f3048b298bd301f336617/base/docs/Docs.jl#L457-L472">source</a></section></article></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../modules/">« Modules</a><a class="docs-footer-nextpage" href="../metaprogramming/">Metaprogramming »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="auto">Automatic (OS)</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.2.1 on <span class="colophon-date" title="Wednesday 7 February 2024 22:14">Wednesday 7 February 2024</span>. Using Julia version 1.11.0-DEV.1499.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
