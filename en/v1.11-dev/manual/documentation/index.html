@@ -126,7 +126,10 @@ end
 f(x)</code></pre><p>Adds docstring <code>&quot;...&quot;</code> to the method <code>f(::Any)</code>.</p><pre><code class="language-julia hljs">&quot;...&quot;
 f(x, y = 1) = x + y</code></pre><p>Adds docstring <code>&quot;...&quot;</code> to two <code>Method</code>s, namely <code>f(::Any)</code> and <code>f(::Any, ::Any)</code>.</p><h3 id="Macros"><a class="docs-heading-anchor" href="#Macros">Macros</a><a id="Macros-1"></a><a class="docs-heading-anchor-permalink" href="#Macros" title="Permalink"></a></h3><pre><code class="language-julia hljs">&quot;...&quot;
 macro m(x) end</code></pre><p>Adds docstring <code>&quot;...&quot;</code> to the <code>@m(::Any)</code> macro definition.</p><pre><code class="language-julia hljs">&quot;...&quot;
-:(@m)</code></pre><p>Adds docstring <code>&quot;...&quot;</code> to the macro named <code>@m</code>.</p><h3 id="Types"><a class="docs-heading-anchor" href="#Types">Types</a><a id="Types-1"></a><a class="docs-heading-anchor-permalink" href="#Types" title="Permalink"></a></h3><pre><code class="nohighlight hljs">&quot;...&quot;
+:(@m1)
+
+&quot;...&quot;
+macro m2 end</code></pre><p>Adds docstring <code>&quot;...&quot;</code> to the macros named <code>@m1</code> and <code>@m2</code>.</p><h3 id="Types"><a class="docs-heading-anchor" href="#Types">Types</a><a id="Types-1"></a><a class="docs-heading-anchor-permalink" href="#Types" title="Permalink"></a></h3><pre><code class="nohighlight hljs">&quot;...&quot;
 abstract type T1 end
 
 &quot;...&quot;
@@ -137,7 +140,14 @@ end
 &quot;...&quot;
 struct T3
     ...
-end</code></pre><p>Adds the docstring <code>&quot;...&quot;</code> to types <code>T1</code>, <code>T2</code>, and <code>T3</code>.</p><pre><code class="language-julia hljs">&quot;...&quot;
+end</code></pre><p>Adds the docstring <code>&quot;...&quot;</code> to types <code>T1</code>, <code>T2</code>, and <code>T3</code>.</p><pre><code class="nohighlight hljs">&quot;...&quot;
+T1
+
+&quot;...&quot;
+T2
+
+&quot;...&quot;
+T3</code></pre><p>Adds the docstring <code>&quot;...&quot;</code> to types <code>T1</code>, <code>T2</code>, and <code>T3</code>. The previous version is the preferred syntax, however both are equivalent.</p><pre><code class="language-julia hljs">&quot;...&quot;
 struct T
     &quot;x&quot;
     x
@@ -192,4 +202,4 @@ b</code></pre><p>Any number of expressions many be documented together in this w
         @__doc__ $(f)(x) = 1
         $(f)(x, y) = 2
     end |&gt; esc
-end</code></pre><p><code>@__doc__</code> has no effect when a macro that uses it is not documented.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaLang/julia/blob/65ffa7978b230b159be5014de928740ed9b07567/base/docs/Docs.jl#L434-L449">source</a></section></article></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../modules/">« Modules</a><a class="docs-footer-nextpage" href="../metaprogramming/">Metaprogramming »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="auto">Automatic (OS)</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.2.1 on <span class="colophon-date" title="Saturday 10 February 2024 18:45">Saturday 10 February 2024</span>. Using Julia version 1.11.0-DEV.1545.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+end</code></pre><p><code>@__doc__</code> has no effect when a macro that uses it is not documented.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaLang/julia/blob/8e70bf1a02436d7669e60c596777734ae97576f7/base/docs/Docs.jl#L434-L449">source</a></section></article></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../modules/">« Modules</a><a class="docs-footer-nextpage" href="../metaprogramming/">Metaprogramming »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="auto">Automatic (OS)</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.2.1 on <span class="colophon-date" title="Saturday 10 February 2024 18:53">Saturday 10 February 2024</span>. Using Julia version 1.11.0-DEV.1546.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
