@@ -14,7 +14,7 @@ Platform Info:
   LLVM: libLLVM-16.0.6 (ORCJIT, znver2)
 Threads: 1 default, 0 interactive, 1 GC (on 128 virtual cores)
 Environment:
-  JULIA_DEPOT_PATH = /cache/julia-buildkite-plugin/depots/018de947-b86e-4a96-a198-061223670bea
+  JULIA_DEPOT_PATH = /cache/julia-buildkite-plugin/depots/53de1ea5-6dd3-4008-b976-161c9f34b0ad
   JULIA_CPU_THREADS = 128
   JULIA_NUM_THREADS = 1</code></pre><h2 id="Segfaults-during-bootstrap-(sysimg.jl)"><a class="docs-heading-anchor" href="#Segfaults-during-bootstrap-(sysimg.jl)">Segfaults during bootstrap (<code>sysimg.jl</code>)</a><a id="Segfaults-during-bootstrap-(sysimg.jl)-1"></a><a class="docs-heading-anchor-permalink" href="#Segfaults-during-bootstrap-(sysimg.jl)" title="Permalink"></a></h2><p>Segfaults toward the end of the <code>make</code> process of building Julia are a common symptom of something going wrong while Julia is preparsing the corpus of code in the <code>base/</code> folder.  Many factors can contribute toward this process dying unexpectedly, however it is as often as not due to an error in the C-code portion of Julia, and as such must typically be debugged with a debug build inside of <code>gdb</code>.  Explicitly:</p><p>Create a debug build of Julia:</p><pre><code class="nohighlight hljs">$ cd &lt;julia_root&gt;
 $ make debug</code></pre><p>Note that this process will likely fail with the same error as a normal <code>make</code> incantation, however this will create a debug executable that will offer <code>gdb</code> the debugging symbols needed to get accurate backtraces.  Next, manually run the bootstrap process inside of <code>gdb</code>:</p><pre><code class="nohighlight hljs">$ cd base/
