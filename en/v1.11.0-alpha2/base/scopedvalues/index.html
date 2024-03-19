@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Scoped Values · The Julia Language</title><meta name="title" content="Scoped Values · The Julia Language"/><meta property="og:title" content="Scoped Values · The Julia Language"/><meta property="twitter:title" content="Scoped Values · The Julia Language"/><meta name="description" content="Documentation for The Julia Language."/><meta property="og:description" content="Documentation for The Julia Language."/><meta property="twitter:description" content="Documentation for The Julia Language."/><meta property="og:url" content="https://docs.julialang.org/en/v1/base/scopedvalues/"/><meta property="twitter:url" content="https://docs.julialang.org/en/v1/base/scopedvalues/"/><link rel="canonical" href="https://docs.julialang.org/en/v1/base/scopedvalues/"/><script async src="https://www.googletagmanager.com/gtag/js?id=UA-28835595-6"></script><script>  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-28835595-6', {'page_path': location.pathname + location.search + location.hash});
+</script><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="../../assets/julia-manual.css" rel="stylesheet" type="text/css"/><link href="../../assets/julia.ico" rel="icon" type="image/x-icon"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../"><img class="docs-light-only" src="../../assets/logo.svg" alt="The Julia Language logo"/><img class="docs-dark-only" src="../../assets/logo-dark.svg" alt="The Julia Language logo"/></a><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Julia Documentation</a></li><li><input class="collapse-toggle" id="menuitem-3" type="checkbox"/><label class="tocitem" for="menuitem-3"><span class="docs-label">Manual</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../manual/getting-started/">Getting Started</a></li><li><a class="tocitem" href="../../manual/installation/">Installation</a></li><li><a class="tocitem" href="../../manual/variables/">Variables</a></li><li><a class="tocitem" href="../../manual/integers-and-floating-point-numbers/">Integers and Floating-Point Numbers</a></li><li><a class="tocitem" href="../../manual/mathematical-operations/">Mathematical Operations and Elementary Functions</a></li><li><a class="tocitem" href="../../manual/complex-and-rational-numbers/">Complex and Rational Numbers</a></li><li><a class="tocitem" href="../../manual/strings/">Strings</a></li><li><a class="tocitem" href="../../manual/functions/">Functions</a></li><li><a class="tocitem" href="../../manual/control-flow/">Control Flow</a></li><li><a class="tocitem" href="../../manual/variables-and-scoping/">Scope of Variables</a></li><li><a class="tocitem" href="../../manual/types/">Types</a></li><li><a class="tocitem" href="../../manual/methods/">Methods</a></li><li><a class="tocitem" href="../../manual/constructors/">Constructors</a></li><li><a class="tocitem" href="../../manual/conversion-and-promotion/">Conversion and Promotion</a></li><li><a class="tocitem" href="../../manual/interfaces/">Interfaces</a></li><li><a class="tocitem" href="../../manual/modules/">Modules</a></li><li><a class="tocitem" href="../../manual/documentation/">Documentation</a></li><li><a class="tocitem" href="../../manual/metaprogramming/">Metaprogramming</a></li><li><a class="tocitem" href="../../manual/arrays/">Single- and multi-dimensional Arrays</a></li><li><a class="tocitem" href="../../manual/missing/">Missing Values</a></li><li><a class="tocitem" href="../../manual/networking-and-streams/">Networking and Streams</a></li><li><a class="tocitem" href="../../manual/parallel-computing/">Parallel Computing</a></li><li><a class="tocitem" href="../../manual/asynchronous-programming/">Asynchronous Programming</a></li><li><a class="tocitem" href="../../manual/multi-threading/">Multi-Threading</a></li><li><a class="tocitem" href="../../manual/distributed-computing/">Multi-processing and Distributed Computing</a></li><li><a class="tocitem" href="../../manual/running-external-programs/">Running External Programs</a></li><li><a class="tocitem" href="../../manual/calling-c-and-fortran-code/">Calling C and Fortran Code</a></li><li><a class="tocitem" href="../../manual/handling-operating-system-variation/">Handling Operating System Variation</a></li><li><a class="tocitem" href="../../manual/environment-variables/">Environment Variables</a></li><li><a class="tocitem" href="../../manual/embedding/">Embedding Julia</a></li><li><a class="tocitem" href="../../manual/code-loading/">Code Loading</a></li><li><a class="tocitem" href="../../manual/stacktraces/">Stack Traces</a></li><li><a class="tocitem" href="../../manual/performance-tips/">Performance Tips</a></li><li><a class="tocitem" href="../../manual/workflow-tips/">Workflow Tips</a></li><li><a class="tocitem" href="../../manual/style-guide/">Style Guide</a></li><li><a class="tocitem" href="../../manual/faq/">Frequently Asked Questions</a></li><li><a class="tocitem" href="../../manual/noteworthy-differences/">Noteworthy Differences from other Languages</a></li><li><a class="tocitem" href="../../manual/unicode-input/">Unicode Input</a></li><li><a class="tocitem" href="../../manual/command-line-interface/">Command-line Interface</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-4" type="checkbox" checked/><label class="tocitem" for="menuitem-4"><span class="docs-label">Base</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../base/">Essentials</a></li><li><a class="tocitem" href="../collections/">Collections and Data Structures</a></li><li><a class="tocitem" href="../math/">Mathematics</a></li><li><a class="tocitem" href="../numbers/">Numbers</a></li><li><a class="tocitem" href="../strings/">Strings</a></li><li><a class="tocitem" href="../arrays/">Arrays</a></li><li><a class="tocitem" href="../parallel/">Tasks</a></li><li><a class="tocitem" href="../multi-threading/">Multi-Threading</a></li><li class="is-active"><a class="tocitem" href>Scoped Values</a><ul class="internal"><li><a class="tocitem" href="#Example"><span>Example</span></a></li><li><a class="tocitem" href="#Idioms"><span>Idioms</span></a></li><li><a class="tocitem" href="#API-docs"><span>API docs</span></a></li><li><a class="tocitem" href="#Implementation-notes-and-performance"><span>Implementation notes and performance</span></a></li><li><a class="tocitem" href="#Design-inspiration"><span>Design inspiration</span></a></li></ul></li><li><a class="tocitem" href="../constants/">Constants</a></li><li><a class="tocitem" href="../file/">Filesystem</a></li><li><a class="tocitem" href="../io-network/">I/O and Network</a></li><li><a class="tocitem" href="../punctuation/">Punctuation</a></li><li><a class="tocitem" href="../sort/">Sorting and Related Functions</a></li><li><a class="tocitem" href="../iterators/">Iteration utilities</a></li><li><a class="tocitem" href="../reflection/">Reflection and introspection</a></li><li><a class="tocitem" href="../c/">C Interface</a></li><li><a class="tocitem" href="../libc/">C Standard Library</a></li><li><a class="tocitem" href="../stacktraces/">StackTraces</a></li><li><a class="tocitem" href="../simd-types/">SIMD Support</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-5" type="checkbox"/><label class="tocitem" for="menuitem-5"><span class="docs-label">Standard Library</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../stdlib/ArgTools/">ArgTools</a></li><li><a class="tocitem" href="../../stdlib/Artifacts/">Artifacts</a></li><li><a class="tocitem" href="../../stdlib/Base64/">Base64</a></li><li><a class="tocitem" href="../../stdlib/CRC32c/">CRC32c</a></li><li><a class="tocitem" href="../../stdlib/Dates/">Dates</a></li><li><a class="tocitem" href="../../stdlib/DelimitedFiles/">Delimited Files</a></li><li><a class="tocitem" href="../../stdlib/Distributed/">Distributed Computing</a></li><li><a class="tocitem" href="../../stdlib/Downloads/">Downloads</a></li><li><a class="tocitem" href="../../stdlib/FileWatching/">File Events</a></li><li><a class="tocitem" href="../../stdlib/Future/">Future</a></li><li><a class="tocitem" href="../../stdlib/InteractiveUtils/">Interactive Utilities</a></li><li><a class="tocitem" href="../../stdlib/JuliaSyntaxHighlighting/">Julia Syntax Highlighting</a></li><li><a class="tocitem" href="../../stdlib/LazyArtifacts/">Lazy Artifacts</a></li><li><a class="tocitem" href="../../stdlib/LibCURL/">LibCURL</a></li><li><a class="tocitem" href="../../stdlib/LibGit2/">LibGit2</a></li><li><a class="tocitem" href="../../stdlib/Libdl/">Dynamic Linker</a></li><li><a class="tocitem" href="../../stdlib/LinearAlgebra/">Linear Algebra</a></li><li><a class="tocitem" href="../../stdlib/Logging/">Logging</a></li><li><a class="tocitem" href="../../stdlib/Markdown/">Markdown</a></li><li><a class="tocitem" href="../../stdlib/Mmap/">Memory-mapped I/O</a></li><li><a class="tocitem" href="../../stdlib/NetworkOptions/">Network Options</a></li><li><a class="tocitem" href="../../stdlib/Pkg/">Pkg</a></li><li><a class="tocitem" href="../../stdlib/Printf/">Printf</a></li><li><a class="tocitem" href="../../stdlib/Profile/">Profiling</a></li><li><a class="tocitem" href="../../stdlib/REPL/">The Julia REPL</a></li><li><a class="tocitem" href="../../stdlib/Random/">Random Numbers</a></li><li><a class="tocitem" href="../../stdlib/SHA/">SHA</a></li><li><a class="tocitem" href="../../stdlib/Serialization/">Serialization</a></li><li><a class="tocitem" href="../../stdlib/SharedArrays/">Shared Arrays</a></li><li><a class="tocitem" href="../../stdlib/Sockets/">Sockets</a></li><li><a class="tocitem" href="../../stdlib/SparseArrays/">Sparse Arrays</a></li><li><a class="tocitem" href="../../stdlib/Statistics/">Statistics</a></li><li><a class="tocitem" href="../../stdlib/StyledStrings/">StyledStrings</a></li><li><a class="tocitem" href="../../stdlib/TOML/">TOML</a></li><li><a class="tocitem" href="../../stdlib/Tar/">Tar</a></li><li><a class="tocitem" href="../../stdlib/Test/">Unit Testing</a></li><li><a class="tocitem" href="../../stdlib/UUIDs/">UUIDs</a></li><li><a class="tocitem" href="../../stdlib/Unicode/">Unicode</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-6" type="checkbox"/><label class="tocitem" for="menuitem-6"><span class="docs-label">Tutorials</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../tutorials/creating-packages/">Creating Packages</a></li><li><a class="tocitem" href="../../tutorials/profile/">Profiling</a></li><li><a class="tocitem" href="../../tutorials/external/">External Tutorials</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-7" type="checkbox"/><label class="tocitem" for="menuitem-7"><span class="docs-label">Developer Documentation</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><input class="collapse-toggle" id="menuitem-7-1" type="checkbox"/><label class="tocitem" for="menuitem-7-1"><span class="docs-label">Documentation of Julia&#39;s Internals</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../devdocs/init/">Initialization of the Julia runtime</a></li><li><a class="tocitem" href="../../devdocs/ast/">Julia ASTs</a></li><li><a class="tocitem" href="../../devdocs/types/">More about types</a></li><li><a class="tocitem" href="../../devdocs/object/">Memory layout of Julia Objects</a></li><li><a class="tocitem" href="../../devdocs/eval/">Eval of Julia code</a></li><li><a class="tocitem" href="../../devdocs/callconv/">Calling Conventions</a></li><li><a class="tocitem" href="../../devdocs/compiler/">High-level Overview of the Native-Code Generation Process</a></li><li><a class="tocitem" href="../../devdocs/functions/">Julia Functions</a></li><li><a class="tocitem" href="../../devdocs/cartesian/">Base.Cartesian</a></li><li><a class="tocitem" href="../../devdocs/meta/">Talking to the compiler (the <code>:meta</code> mechanism)</a></li><li><a class="tocitem" href="../../devdocs/subarrays/">SubArrays</a></li><li><a class="tocitem" href="../../devdocs/isbitsunionarrays/">isbits Union Optimizations</a></li><li><a class="tocitem" href="../../devdocs/sysimg/">System Image Building</a></li><li><a class="tocitem" href="../../devdocs/pkgimg/">Package Images</a></li><li><a class="tocitem" href="../../devdocs/llvm-passes/">Custom LLVM Passes</a></li><li><a class="tocitem" href="../../devdocs/llvm/">Working with LLVM</a></li><li><a class="tocitem" href="../../devdocs/stdio/">printf() and stdio in the Julia runtime</a></li><li><a class="tocitem" href="../../devdocs/boundscheck/">Bounds checking</a></li><li><a class="tocitem" href="../../devdocs/locks/">Proper maintenance and care of multi-threading locks</a></li><li><a class="tocitem" href="../../devdocs/offset-arrays/">Arrays with custom indices</a></li><li><a class="tocitem" href="../../devdocs/require/">Module loading</a></li><li><a class="tocitem" href="../../devdocs/inference/">Inference</a></li><li><a class="tocitem" href="../../devdocs/ssair/">Julia SSA-form IR</a></li><li><a class="tocitem" href="../../devdocs/EscapeAnalysis/"><code>EscapeAnalysis</code></a></li><li><a class="tocitem" href="../../devdocs/aot/">Ahead of Time Compilation</a></li><li><a class="tocitem" href="../../devdocs/gc-sa/">Static analyzer annotations for GC correctness in C code</a></li><li><a class="tocitem" href="../../devdocs/gc/">Garbage Collection in Julia</a></li><li><a class="tocitem" href="../../devdocs/jit/">JIT Design and Implementation</a></li><li><a class="tocitem" href="../../devdocs/builtins/">Core.Builtins</a></li><li><a class="tocitem" href="../../devdocs/precompile_hang/">Fixing precompilation hangs due to open tasks or IO</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-7-2" type="checkbox"/><label class="tocitem" for="menuitem-7-2"><span class="docs-label">Developing/debugging Julia&#39;s C code</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../devdocs/backtraces/">Reporting and analyzing crashes (segfaults)</a></li><li><a class="tocitem" href="../../devdocs/debuggingtips/">gdb debugging tips</a></li><li><a class="tocitem" href="../../devdocs/valgrind/">Using Valgrind with Julia</a></li><li><a class="tocitem" href="../../devdocs/external_profilers/">External Profiler Support</a></li><li><a class="tocitem" href="../../devdocs/sanitizers/">Sanitizer support</a></li><li><a class="tocitem" href="../../devdocs/probes/">Instrumenting Julia with DTrace, and bpftrace</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-7-3" type="checkbox"/><label class="tocitem" for="menuitem-7-3"><span class="docs-label">Building Julia</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../devdocs/build/build/">Building Julia (Detailed)</a></li><li><a class="tocitem" href="../../devdocs/build/linux/">Linux</a></li><li><a class="tocitem" href="../../devdocs/build/macos/">macOS</a></li><li><a class="tocitem" href="../../devdocs/build/windows/">Windows</a></li><li><a class="tocitem" href="../../devdocs/build/freebsd/">FreeBSD</a></li><li><a class="tocitem" href="../../devdocs/build/arm/">ARM (Linux)</a></li><li><a class="tocitem" href="../../devdocs/build/distributing/">Binary distributions</a></li></ul></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Base</a></li><li class="is-active"><a href>Scoped Values</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Scoped Values</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/JuliaLang/julia" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/JuliaLang/julia/blob/master/doc/src/base/scopedvalues.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="scoped-values"><a class="docs-heading-anchor" href="#scoped-values">Scoped Values</a><a id="scoped-values-1"></a><a class="docs-heading-anchor-permalink" href="#scoped-values" title="Permalink"></a></h1><p>Scoped values provide an implementation of dynamic scoping in Julia.</p><div class="admonition is-info"><header class="admonition-header">Lexical scoping vs dynamic scoping</header><div class="admonition-body"><p><a href="../../manual/variables-and-scoping/#scope-of-variables">Lexical scoping</a> is the default behavior in Julia. Under lexical scoping the scope of a variable is determined by the lexical (textual) structure of a program. Under dynamic scoping a variable is bound to the most recent assigned value during the program&#39;s execution.</p></div></div><p>The state of a scoped value is dependent on the execution path of the program. This means that for a scoped value you may observe multiple different values concurrently.</p><div class="admonition is-compat"><header class="admonition-header">Julia 1.11</header><div class="admonition-body"><p>Scoped values were introduced in Julia 1.11. In Julia 1.8+ a compatible implementation is available from the package ScopedValues.jl.</p></div></div><p>In its simplest form you can create a <a href="#Base.ScopedValues.ScopedValue"><code>ScopedValue</code></a> with a default value and then use <a href="#Base.ScopedValues.with"><code>with</code></a> or <a href="#Base.ScopedValues.@with"><code>@with</code></a> to enter a new dynamic scope. The new scope will inherit all values from the parent scope (and recursively from all outer scopes) with the provided scoped value taking priority over previous definitions.</p><p>Let&#39;s first look at an example of <strong>lexical</strong> scope. A <code>let</code> statement begins a new lexical scope within which the outer definition of <code>x</code> is shadowed by it&#39;s inner definition.</p><pre><code class="language-julia hljs">x = 1
+let x = 5
+    @show x # 5
+end
+@show x # 1</code></pre><p>In the following example, since Julia uses lexical scope, the variable <code>x</code> in the body of <code>f</code> refers to the <code>x</code> defined in the global scope, and entering a <code>let</code> scope does not change the value <code>f</code> observes.</p><pre><code class="language-julia hljs">x = 1
+f() = @show x
+let x = 5
+    f() # 1
+end
+f() # 1</code></pre><p>Now using a <code>ScopedValue</code> we can use <strong>dynamic</strong> scoping.</p><pre><code class="language-julia hljs">using Base.ScopedValues
+
+x = ScopedValue(1)
+f() = @show x[]
+with(x=&gt;5) do
+    f() # 5
+end
+f() # 1</code></pre><p>Note that the observed value of the <code>ScopedValue</code> is dependent on the execution path of the program.</p><p>It often makes sense to use a <code>const</code> variable to point to a scoped value, and you can set the value of multiple <code>ScopedValue</code>s with one call to <code>with</code>.</p><pre><code class="language-julia hljs">using Base.ScopedValues
+
+f() = @show a[]
+g() = @show b[]
+
+const a = ScopedValue(1)
+const b = ScopedValue(2)
+
+f() # a[] = 1
+g() # b[] = 2
+
+# Enter a new dynamic scope and set value.
+with(a =&gt; 3) do
+    f() # a[] = 3
+    g() # b[] = 2
+    with(a =&gt; 4, b =&gt; 5) do
+        f() # a[] = 4
+        g() # b[] = 5
+    end
+    f() # a[] = 3
+    g() # b[] = 2
+end
+
+f() # a[] = 1
+g() # b[] = 2</code></pre><p><code>ScopedValues</code> provides a macro version of <code>with</code>. The expression <code>@with var=&gt;val expr</code> evaluates <code>expr</code> in a new dynamic scope with <code>var</code> set to <code>val</code>. <code>@with var=&gt;val expr</code> is equivalent to <code>with(var=&gt;val) do expr end</code>. However, <code>with</code> requires a zero-argument closure or function, which results in an extra call-frame. As an example, consider the following function <code>f</code>:</p><pre><code class="language-julia hljs">using Base.ScopedValues
+const a = ScopedValue(1)
+f(x) = a[] + x</code></pre><p>If you wish to run <code>f</code> in a dynamic scope with <code>a</code> set to <code>2</code>, then you can use <code>with</code>:</p><pre><code class="language-julia hljs">with(() -&gt; f(10), a=&gt;2)</code></pre><p>However, this requires wrapping <code>f</code> in a zero-argument function. If you wish to avoid the extra call-frame, then you can use the <code>@with</code> macro:</p><pre><code class="language-julia hljs">@with a=&gt;2 f(10)</code></pre><div class="admonition is-info"><header class="admonition-header">Note</header><div class="admonition-body"><p>Dynamic scopes are inherited by <a href="../parallel/#Core.Task"><code>Task</code></a>s, at the moment of task creation. Dynamic scopes are <strong>not</strong> propagated through <code>Distributed.jl</code> operations.</p></div></div><p>In the example below we open a new dynamic scope before launching a task. The parent task and the two child tasks observe independent values of the same scoped value at the same time.</p><pre><code class="language-julia hljs">using Base.ScopedValues
+import Base.Threads: @spawn
+
+const scoped_val = ScopedValue(1)
+@sync begin
+    with(scoped_val =&gt; 2)
+        @spawn @show scoped_val[] # 2
+    end
+    with(scoped_val =&gt; 3)
+        @spawn @show scoped_val[] # 3
+    end
+    @show scoped_val[] # 1
+end</code></pre><p>Scoped values are constant throughout a scope, but you can store mutable state in a scoped value. Just keep in mind that the usual caveats for global variables apply in the context of concurrent programming.</p><p>Care is also required when storing references to mutable state in scoped values. You might want to explicitly <a href="#unshare_mutable_state">unshare mutable state</a> when entering a new dynamic scope.</p><pre><code class="language-julia hljs">using Base.ScopedValues
+import Base.Threads: @spawn
+
+const sval_dict = ScopedValue(Dict())
+
+# Example of using a mutable value wrongly
+@sync begin
+    # `Dict` is not thread-safe the usage below is invalid
+    @spawn (sval_dict[][:a] = 3)
+    @spawn (sval_dict[][:b] = 3)
+end
+
+@sync begin
+    # If we instead pass a unique dictionary to each
+    # task we can access the dictionaries race free.
+    with(sval_dict =&gt; Dict()) do
+        @spawn (sval_dict[][:a] = 3)
+    end
+    with(sval_dict =&gt; Dict()) do
+        @spawn (sval_dict[][:b] = 3)
+    end
+end</code></pre><h2 id="Example"><a class="docs-heading-anchor" href="#Example">Example</a><a id="Example-1"></a><a class="docs-heading-anchor-permalink" href="#Example" title="Permalink"></a></h2><p>In the example below we use a scoped value to implement a permission check in a web-application. After determining the permissions of the request, a new dynamic scope is entered and the scoped value <code>LEVEL</code> is set. Other parts of the application can query the scoped value and will receive the appropriate value. Other alternatives like task-local storage and global variables are not well suited for this kind of propagation; our only alternative would have been to thread a value through the entire call-chain.</p><pre><code class="language-julia hljs">using Base.ScopedValues
+
+const LEVEL = ScopedValue(:GUEST)
+
+function serve(request, response)
+    level = isAdmin(request) ? :ADMIN : :GUEST
+    with(LEVEL =&gt; level) do
+        Threads.@spawn handle(request, response)
+    end
+end
+
+function open(connection::Database)
+    level = LEVEL[]
+    if level !== :ADMIN
+        error(&quot;Access disallowed&quot;)
+    end
+    # ... open connection
+end
+
+function handle(request, response)
+    # ...
+    open(Database(#=...=#))
+    # ...
+end</code></pre><h2 id="Idioms"><a class="docs-heading-anchor" href="#Idioms">Idioms</a><a id="Idioms-1"></a><a class="docs-heading-anchor-permalink" href="#Idioms" title="Permalink"></a></h2><h3 id="unshare_mutable_state"><a class="docs-heading-anchor" href="#unshare_mutable_state">Unshare mutable state</a><a id="unshare_mutable_state-1"></a><a class="docs-heading-anchor-permalink" href="#unshare_mutable_state" title="Permalink"></a></h3><pre><code class="language-julia hljs">using Base.ScopedValues
+import Base.Threads: @spawn
+
+const sval_dict = ScopedValue(Dict())
+
+# If you want to add new values to the dict, instead of replacing
+# it, unshare the values explicitly. In this example we use `merge`
+# to unshare the state of the dictionary in parent scope.
+@sync begin
+    with(sval_dict =&gt; merge(sval_dict[], Dict(:a =&gt; 10))) do
+        @spawn @show sval_dict[][:a]
+    end
+    @spawn sval_dict[][:a] = 3 # Not a race since they are unshared.
+end</code></pre><h3 id="Scoped-values-as-globals"><a class="docs-heading-anchor" href="#Scoped-values-as-globals">Scoped values as globals</a><a id="Scoped-values-as-globals-1"></a><a class="docs-heading-anchor-permalink" href="#Scoped-values-as-globals" title="Permalink"></a></h3><p>In order to access the value of a scoped value, the scoped value itself has to be in (lexical) scope. This means most often you likely want to use scoped values as constant globals.</p><pre><code class="language-julia hljs">using Base.ScopedValues
+const sval = ScopedValue(1)</code></pre><p>Indeed one can think of scoped values as hidden function arguments.</p><p>This does not preclude their use as non-globals.</p><pre><code class="language-julia hljs">using Base.ScopedValues
+import Base.Threads: @spawn
+
+function main()
+    role = ScopedValue(:client)
+
+    function launch()
+        #...
+        role[]
+    end
+
+    @with role =&gt; :server @spawn launch()
+    launch()
+end</code></pre><p>But it might have been simpler to just directly pass the function argument in these cases.</p><h3 id="Very-many-ScopedValues"><a class="docs-heading-anchor" href="#Very-many-ScopedValues">Very many ScopedValues</a><a id="Very-many-ScopedValues-1"></a><a class="docs-heading-anchor-permalink" href="#Very-many-ScopedValues" title="Permalink"></a></h3><p>If you find yourself creating many <code>ScopedValue</code>&#39;s for one given module, it may be better to use a dedicated struct to hold them.</p><pre><code class="language-julia hljs">using Base.ScopedValues
+
+Base.@kwdef struct Configuration
+    color::Bool = false
+    verbose::Bool = false
+end
+
+const CONFIG = ScopedValue(Configuration(color=true))
+
+@with CONFIG =&gt; Configuration(color=CONFIG[].color, verbose=true) begin
+    @show CONFIG[].color # true
+    @show CONFIG[].verbose # true
+end</code></pre><h2 id="API-docs"><a class="docs-heading-anchor" href="#API-docs">API docs</a><a id="API-docs-1"></a><a class="docs-heading-anchor-permalink" href="#API-docs" title="Permalink"></a></h2><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="Base.ScopedValues.ScopedValue" href="#Base.ScopedValues.ScopedValue"><code>Base.ScopedValues.ScopedValue</code></a> — <span class="docstring-category">Type</span></header><section><div><pre><code class="language-julia hljs">ScopedValue(x)</code></pre><p>Create a container that propagates values across dynamic scopes. Use <a href="#Base.ScopedValues.with"><code>with</code></a> to create and enter a new dynamic scope.</p><p>Values can only be set when entering a new dynamic scope, and the value referred to will be constant during the execution of a dynamic scope.</p><p>Dynamic scopes are propagated across tasks.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; using Base.ScopedValues;
+
+julia&gt; const sval = ScopedValue(1);
+
+julia&gt; sval[]
+1
+
+julia&gt; with(sval =&gt; 2) do
+           sval[]
+       end
+2
+
+julia&gt; sval[]
+1</code></pre><div class="admonition is-compat"><header class="admonition-header">Julia 1.11</header><div class="admonition-body"><p>Scoped values were introduced in Julia 1.11. In Julia 1.8+ a compatible implementation is available from the package ScopedValues.jl.</p></div></div></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaLang/julia/blob/9dfd28ab751ea5bd5f2e3b4ed4241ec071a52955/base/scopedvalues.jl#L8-L42">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="Base.ScopedValues.with" href="#Base.ScopedValues.with"><code>Base.ScopedValues.with</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia hljs">with(f, (var::ScopedValue{T} =&gt; val)...)</code></pre><p>Execute <code>f</code> in a new dynamic scope with <code>var</code> set to <code>val</code>. <code>val</code> will be converted to type <code>T</code>.</p><p>See also: <a href="#Base.ScopedValues.@with"><code>ScopedValues.@with</code></a>, <a href="#Base.ScopedValues.ScopedValue"><code>ScopedValues.ScopedValue</code></a>, <a href="#Base.ScopedValues.get"><code>ScopedValues.get</code></a>.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; using Base.ScopedValues
+
+julia&gt; a = ScopedValue(1);
+
+julia&gt; f(x) = a[] + x;
+
+julia&gt; f(10)
+11
+
+julia&gt; with(a=&gt;2) do
+           f(10)
+       end
+12
+
+julia&gt; f(10)
+11
+
+julia&gt; b = ScopedValue(2);
+
+julia&gt; g(x) = a[] + b[] + x;
+
+julia&gt; with(a=&gt;10, b=&gt;20) do
+           g(30)
+       end
+60
+
+julia&gt; with(() -&gt; a[] * b[], a=&gt;3, b=&gt;4)
+12</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaLang/julia/blob/9dfd28ab751ea5bd5f2e3b4ed4241ec071a52955/base/scopedvalues.jl#L226-L265">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="Base.ScopedValues.@with" href="#Base.ScopedValues.@with"><code>Base.ScopedValues.@with</code></a> — <span class="docstring-category">Macro</span></header><section><div><pre><code class="language-julia hljs">@with (var::ScopedValue{T} =&gt; val)... expr</code></pre><p>Macro version of <code>with</code>. The expression <code>@with var=&gt;val expr</code> evaluates <code>expr</code> in a new dynamic scope with <code>var</code> set to <code>val</code>. <code>val</code> will be converted to type <code>T</code>. <code>@with var=&gt;val expr</code> is equivalent to <code>with(var=&gt;val) do expr end</code>, but <code>@with</code> avoids creating a closure.</p><p>See also: <a href="#Base.ScopedValues.with"><code>ScopedValues.with</code></a>, <a href="#Base.ScopedValues.ScopedValue"><code>ScopedValues.ScopedValue</code></a>, <a href="#Base.ScopedValues.get"><code>ScopedValues.get</code></a>.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; using Base.ScopedValues
+
+julia&gt; const a = ScopedValue(1);
+
+julia&gt; f(x) = a[] + x;
+
+julia&gt; @with a=&gt;2 f(10)
+12
+
+julia&gt; @with a=&gt;3 begin
+           x = 100
+           f(x)
+       end
+103</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaLang/julia/blob/9dfd28ab751ea5bd5f2e3b4ed4241ec071a52955/base/scopedvalues.jl#L184-L211">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="Base.isassigned-Tuple{Base.ScopedValues.ScopedValue}" href="#Base.isassigned-Tuple{Base.ScopedValues.ScopedValue}"><code>Base.isassigned</code></a> — <span class="docstring-category">Method</span></header><section><div><pre><code class="language-julia hljs">isassigned(val::ScopedValue)</code></pre><p>Test whether a <code>ScopedValue</code> has an assigned value.</p><p>See also: <a href="#Base.ScopedValues.with"><code>ScopedValues.with</code></a>, <a href="#Base.ScopedValues.@with"><code>ScopedValues.@with</code></a>, <a href="#Base.ScopedValues.get"><code>ScopedValues.get</code></a>.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; using Base.ScopedValues
+
+julia&gt; a = ScopedValue(1); b = ScopedValue{Int}();
+
+julia&gt; isassigned(a)
+true
+
+julia&gt; isassigned(b)
+false</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaLang/julia/blob/9dfd28ab751ea5bd5f2e3b4ed4241ec071a52955/base/scopedvalues.jl#L55-L74">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="Base.ScopedValues.get" href="#Base.ScopedValues.get"><code>Base.ScopedValues.get</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia hljs">get(val::ScopedValue{T})::Union{Nothing, Some{T}}</code></pre><p>If the scoped value isn&#39;t set and doesn&#39;t have a default value, return <code>nothing</code>. Otherwise returns <code>Some{T}</code> with the current value.</p><p>See also: <a href="#Base.ScopedValues.with"><code>ScopedValues.with</code></a>, <a href="#Base.ScopedValues.@with"><code>ScopedValues.@with</code></a>, <a href="#Base.ScopedValues.ScopedValue"><code>ScopedValues.ScopedValue</code></a>.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; using Base.ScopedValues
+
+julia&gt; a = ScopedValue(42); b = ScopedValue{Int}();
+
+julia&gt; ScopedValues.get(a)
+Some(42)
+
+julia&gt; isnothing(ScopedValues.get(b))
+true</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaLang/julia/blob/9dfd28ab751ea5bd5f2e3b4ed4241ec071a52955/base/scopedvalues.jl#L127-L148">source</a></section></article><h2 id="Implementation-notes-and-performance"><a class="docs-heading-anchor" href="#Implementation-notes-and-performance">Implementation notes and performance</a><a id="Implementation-notes-and-performance-1"></a><a class="docs-heading-anchor-permalink" href="#Implementation-notes-and-performance" title="Permalink"></a></h2><p><code>Scope</code>s use a persistent dictionary. Lookup and insertion is <code>O(log(32, n))</code>, upon dynamic scope entry a small amount of data is copied and the unchanged data is shared among other scopes.</p><p>The <code>Scope</code> object itself is not user-facing and may be changed in a future version of Julia.</p><h2 id="Design-inspiration"><a class="docs-heading-anchor" href="#Design-inspiration">Design inspiration</a><a id="Design-inspiration-1"></a><a class="docs-heading-anchor-permalink" href="#Design-inspiration" title="Permalink"></a></h2><p>This design was heavily inspired by <a href="https://openjdk.org/jeps/429">JEPS-429</a>, which in turn was inspired by dynamically scoped free variables in many Lisp dialects. In particular Interlisp-D and its deep binding strategy.</p><p>A prior design discussed was context variables ala <a href="https://peps.python.org/pep-0567/">PEPS-567</a> and implemented in Julia as <a href="https://github.com/tkf/ContextVariablesX.jl">ContextVariablesX.jl</a>.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../multi-threading/">« Multi-Threading</a><a class="docs-footer-nextpage" href="../constants/">Constants »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.3.0 on <span class="colophon-date" title="Tuesday 19 March 2024 00:11">Tuesday 19 March 2024</span>. Using Julia version 1.11.0-alpha2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
