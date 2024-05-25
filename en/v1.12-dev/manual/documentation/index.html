@@ -166,7 +166,10 @@ module M
 &quot;...&quot;
 M
 
-end</code></pre><p>Adds docstring <code>&quot;...&quot;</code> to the <code>Module</code> <code>M</code>. Adding the docstring above the <code>Module</code> is the preferred syntax, however both are equivalent.</p><pre><code class="language-julia hljs">&quot;...&quot;
+end</code></pre><p>Adds docstring <code>&quot;...&quot;</code> to the <code>Module</code> <code>M</code>. Adding the docstring above the <code>Module</code> is the preferred syntax, however both are equivalent.</p><p>The module docstring is evaluated <em>inside</em> the scope of the module, allowing access to all the symbols defined in and imported into the module:</p><pre><code class="language-julia hljs">&quot;The magic number is $(MAGIC).&quot;
+module DocStringEval
+const MAGIC = 42
+end</code></pre><p>Documenting a <code>baremodule</code> by placing a docstring above the expression automatically imports <code>@doc</code> into the module. These imports must be done manually when the module expression is not documented:</p><pre><code class="language-julia hljs">&quot;...&quot;
 baremodule M
 # ...
 end
@@ -178,7 +181,7 @@ import Base: @doc
 &quot;...&quot;
 f(x) = x
 
-end</code></pre><p>Documenting a <code>baremodule</code> by placing a docstring above the expression automatically imports <code>@doc</code> into the module. These imports must be done manually when the module expression is not documented.</p><h3 id="Global-Variables"><a class="docs-heading-anchor" href="#Global-Variables">Global Variables</a><a id="Global-Variables-1"></a><a class="docs-heading-anchor-permalink" href="#Global-Variables" title="Permalink"></a></h3><pre><code class="language-julia hljs">&quot;...&quot;
+end</code></pre><h3 id="Global-Variables"><a class="docs-heading-anchor" href="#Global-Variables">Global Variables</a><a id="Global-Variables-1"></a><a class="docs-heading-anchor-permalink" href="#Global-Variables" title="Permalink"></a></h3><pre><code class="language-julia hljs">&quot;...&quot;
 const a = 1
 
 &quot;...&quot;
@@ -220,4 +223,4 @@ julia&gt; @macroception
 1
 
 julia&gt; &quot;Docstring&quot; @macroception
-1</code></pre></div></div></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaLang/julia/blob/951cd19c27fba592a7033facca975677ee93cb55/base/docs/Docs.jl#L435-L496">source</a></section></article></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../modules/">« Modules</a><a class="docs-footer-nextpage" href="../metaprogramming/">Metaprogramming »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.4.0 on <span class="colophon-date" title="Saturday 25 May 2024 19:26">Saturday 25 May 2024</span>. Using Julia version 1.12.0-DEV.602.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+1</code></pre></div></div></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaLang/julia/blob/d8f37c9920a079738dc01899deed7bd1a9f19d3a/base/docs/Docs.jl#L435-L496">source</a></section></article></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../modules/">« Modules</a><a class="docs-footer-nextpage" href="../metaprogramming/">Metaprogramming »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.4.0 on <span class="colophon-date" title="Saturday 25 May 2024 22:06">Saturday 25 May 2024</span>. Using Julia version 1.12.0-DEV.603.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
