@@ -243,7 +243,7 @@ julia&gt; x = 1
 ERROR: invalid redefinition of constant x</code></pre><ul><li>if a new value has the same type as the constant then a warning is printed:</li></ul><pre><code class="language-julia-repl hljs">julia&gt; const y = 1.0
 1.0
 
-julia&gt; y = 2.0
+julia&gt; const y = 2.0
 WARNING: redefinition of constant y. This may fail, cause incorrect answers, or produce other errors.
 2.0</code></pre><ul><li>if an assignment would not result in the change of variable value no message is given:</li></ul><pre><code class="language-julia-repl hljs">julia&gt; const z = 100
 100
@@ -253,7 +253,7 @@ julia&gt; z = 100
 1-element Vector{Int64}:
  1
 
-julia&gt; a = [1]
+julia&gt; const a = [1]
 WARNING: redefinition of constant a. This may fail, cause incorrect answers, or produce other errors.
 1-element Vector{Int64}:
  1</code></pre><p>Note that although sometimes possible, changing the value of a <code>const</code> variable is strongly discouraged, and is intended only for convenience during interactive use. Changing constants can cause various problems or unexpected behaviors. For instance, if a method references a constant and is already compiled before the constant is changed, then it might keep using the old value:</p><pre><code class="language-julia-repl hljs">julia&gt; const x = 1
@@ -265,7 +265,7 @@ f (generic function with 1 method)
 julia&gt; f()
 1
 
-julia&gt; x = 2
+julia&gt; const x = 2
 WARNING: redefinition of constant x. This may fail, cause incorrect answers, or produce other errors.
 2
 
@@ -295,4 +295,4 @@ Stacktrace:
 julia&gt; global x::Int
 ERROR: cannot set type for global x. It already has a value or is already set to a different type.
 Stacktrace:
-[...]</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../control-flow/">« Control Flow</a><a class="docs-footer-nextpage" href="../types/">Types »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.4.0 on <span class="colophon-date" title="Thursday 29 August 2024 15:55">Thursday 29 August 2024</span>. Using Julia version 1.12.0-DEV.1116.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+[...]</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../control-flow/">« Control Flow</a><a class="docs-footer-nextpage" href="../types/">Types »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.4.0 on <span class="colophon-date" title="Thursday 29 August 2024 17:46">Thursday 29 August 2024</span>. Using Julia version 1.12.0-DEV.1117.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
