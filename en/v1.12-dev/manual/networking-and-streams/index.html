@@ -8,7 +8,7 @@ Hello World
 julia&gt; read(stdin, Char)
 
 &#39;\n&#39;: ASCII/Unicode U+000a (category Cc: Other, control)</code></pre><p>Note that <a href="../../base/io-network/#Base.write"><code>write</code></a> returns 11, the number of bytes (in <code>&quot;Hello World&quot;</code>) written to <a href="../../base/io-network/#Base.stdout"><code>stdout</code></a>, but this return value is suppressed with the <code>;</code>.</p><p>Here Enter was pressed again so that Julia would read the newline. Now, as you can see from this example, <a href="../../base/io-network/#Base.write"><code>write</code></a> takes the data to write as its second argument, while <a href="../../base/io-network/#Base.read"><code>read</code></a> takes the type of the data to be read as the second argument.</p><p>For example, to read a simple byte array, we could do:</p><pre><code class="language-julia-repl hljs">julia&gt; x = zeros(UInt8, 4)
-4-element Array{UInt8,1}:
+4-element Vector{UInt8}:
  0x00
  0x00
  0x00
@@ -16,13 +16,13 @@ julia&gt; read(stdin, Char)
 
 julia&gt; read!(stdin, x)
 abcd
-4-element Array{UInt8,1}:
+4-element Vector{UInt8}:
  0x61
  0x62
  0x63
  0x64</code></pre><p>However, since this is slightly cumbersome, there are several convenience methods provided. For example, we could have written the above as:</p><pre><code class="language-julia-repl hljs">julia&gt; read(stdin, 4)
 abcd
-4-element Array{UInt8,1}:
+4-element Vector{UInt8}:
  0x61
  0x62
  0x63
@@ -41,7 +41,7 @@ a</code></pre><p>Note that <code>a</code> is written to <a href="../../base/io-n
 IOStream(&lt;file hello.txt&gt;)
 
 julia&gt; readlines(f)
-1-element Array{String,1}:
+1-element Vector{String}:
  &quot;Hello, World!&quot;</code></pre><p>If you want to write to a file, you can open it with the write (<code>&quot;w&quot;</code>) flag:</p><pre><code class="language-julia-repl hljs">julia&gt; f = open(&quot;hello.txt&quot;,&quot;w&quot;)
 IOStream(&lt;file hello.txt&gt;)
 
@@ -122,7 +122,7 @@ ip&quot;74.125.226.225&quot;</code></pre><h2 id="Asynchronous-I/O"><a class="doc
 julia&gt; wait(task)
 
 julia&gt; readlines(&quot;foo.txt&quot;)
-1-element Array{String,1}:
+1-element Vector{String}:
  &quot;Hello, World!&quot;</code></pre><p>It&#39;s common to run into situations where you want to perform multiple asynchronous operations concurrently and wait until they&#39;ve all completed. You can use the <a href="../../base/parallel/#Base.@sync"><code>@sync</code></a> macro to cause your program to block until all of the coroutines it wraps around have exited:</p><pre><code class="language-julia-repl hljs">julia&gt; using Sockets
 
 julia&gt; @sync for hostname in (&quot;google.com&quot;, &quot;github.com&quot;, &quot;julialang.org&quot;)
@@ -157,4 +157,4 @@ close(socket)</code></pre><p>Sender:</p><pre><code class="language-julia hljs">u
 group = Sockets.IPv6(&quot;ff05::5:6:7&quot;)
 socket = Sockets.UDPSocket()
 send(socket, group, 6789, &quot;Hello over IPv6&quot;)
-close(socket)</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../missing/">« Missing Values</a><a class="docs-footer-nextpage" href="../parallel-computing/">Parallel Computing »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.8.0 on <span class="colophon-date" title="Sunday 1 December 2024 19:15">Sunday 1 December 2024</span>. Using Julia version 1.12.0-DEV.1710.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+close(socket)</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../missing/">« Missing Values</a><a class="docs-footer-nextpage" href="../parallel-computing/">Parallel Computing »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.8.0 on <span class="colophon-date" title="Monday 30 December 2024 16:48">Monday 30 December 2024</span>. Using Julia version 1.12.0-DEV.1806.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
