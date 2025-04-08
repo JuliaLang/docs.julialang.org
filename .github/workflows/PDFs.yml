@@ -24,7 +24,7 @@ jobs:
       JULIA_DOCS: ${{ github.workspace }}/pdf/build/docs.julialang.org
     steps:
       - uses: actions/checkout@v4
-      - uses: julia-actions/setup-julia@v1
+      - uses: julia-actions/setup-julia@v2
         with:
           version: 1
           show-versioninfo: true
