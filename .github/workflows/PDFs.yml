@@ -45,7 +45,7 @@ jobs:
       - run: julia --color=yes pdf/make.jl ${{ matrix.buildtype }}
         env:
           DOCUMENTER_LATEX_DEBUG: ${{ github.workspace }}/latex-debug-logs
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
           name: "LaTeX source and logs (${{ matrix.buildtype }})"
