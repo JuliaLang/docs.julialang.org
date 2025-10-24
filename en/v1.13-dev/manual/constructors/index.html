@@ -223,28 +223,25 @@ Closest candidates are:
    @ Main none:4
 
 Stacktrace:
-[...]</code></pre><p>This constructor will be invoked by the syntax <code>SummedArray(a)</code>. The syntax <code>new{T,S}</code> allows specifying parameters for the type to be constructed, i.e. this call will return a <code>SummedArray{T,S}</code>. <code>new{T,S}</code> can be used in any constructor definition, but for convenience the parameters to <code>new{}</code> are automatically derived from the type being constructed when possible.</p><h2 id="Constructors-are-just-callable-objects"><a class="docs-heading-anchor" href="#Constructors-are-just-callable-objects">Constructors are just callable objects</a><a id="Constructors-are-just-callable-objects-1"></a><a class="docs-heading-anchor-permalink" href="#Constructors-are-just-callable-objects" title="Permalink"></a></h2><p>An object of any type may be <a href="../methods/#Function-like-objects">made callable</a> by defining a method. This includes types, i.e., objects of type <a href="../../base/base/#Core.Type"><code>Type</code></a>; and constructors may, in fact, be viewed as just callable type objects. For example, there are many methods defined on <code>Bool</code> and various supertypes of it:</p><pre><code class="language-julia-repl hljs">julia&gt; methods(Bool)
-# 10 methods for type constructor:
-  [1] Bool(x::BigFloat)
-     @ Base.MPFR mpfr.jl:393
-  [2] Bool(x::Float16)
-     @ Base float.jl:338
-  [3] Bool(x::Rational)
-     @ Base rational.jl:138
-  [4] Bool(x::Real)
-     @ Base float.jl:233
-  [5] (dt::Type{&lt;:Integer})(ip::Sockets.IPAddr)
-     @ Sockets ~/tmp/jl/jl/julia-nightly-assert/share/julia/stdlib/v1.11/Sockets/src/IPAddr.jl:11
-  [6] (::Type{T})(x::Enum{T2}) where {T&lt;:Integer, T2&lt;:Integer}
-     @ Base.Enums Enums.jl:19
-  [7] (::Type{T})(z::Complex) where T&lt;:Real
-     @ Base complex.jl:44
-  [8] (::Type{T})(x::Base.TwicePrecision) where T&lt;:Number
-     @ Base twiceprecision.jl:265
-  [9] (::Type{T})(x::T) where T&lt;:Number
-     @ boot.jl:894
- [10] (::Type{T})(x::AbstractChar) where T&lt;:Union{AbstractChar, Number}
-     @ char.jl:50</code></pre><p>The usual constructor syntax is exactly equivalent to the function-like object syntax, so trying to define a method with each syntax will cause the first method to be overwritten by the next one:</p><pre><code class="language-julia-repl hljs">julia&gt; struct S
+[...]</code></pre><p>This constructor will be invoked by the syntax <code>SummedArray(a)</code>. The syntax <code>new{T,S}</code> allows specifying parameters for the type to be constructed, i.e. this call will return a <code>SummedArray{T,S}</code>. <code>new{T,S}</code> can be used in any constructor definition, but for convenience the parameters to <code>new{}</code> are automatically derived from the type being constructed when possible.</p><h2 id="Constructors-are-just-callable-objects"><a class="docs-heading-anchor" href="#Constructors-are-just-callable-objects">Constructors are just callable objects</a><a id="Constructors-are-just-callable-objects-1"></a><a class="docs-heading-anchor-permalink" href="#Constructors-are-just-callable-objects" title="Permalink"></a></h2><p>An object of any type may be <a href="../methods/#Function-like-objects">made callable</a> by defining a method. This includes types, i.e., objects of type <a href="../../base/base/#Core.Type"><code>Type</code></a>; and constructors may, in fact, be viewed as just callable type objects. For example, there are many methods defined on <code>Bool</code> and various supertypes of it:</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; methods(Bool)</code><code class="nohighlight hljs ansi" style="display:block;"># 9 methods for type constructor:
+ [1] Bool(<span class="sgr90">x</span>::<span class="sgr1">BigFloat</span>)
+<span class="sgr90">     @</span> <span class="sgr90"><span class="sgr4">mpfr.jl:480</span></span>
+ [2] Bool(<span class="sgr90">x</span>::<span class="sgr1">Float16</span>)
+<span class="sgr90">     @</span> <span class="sgr90"><span class="sgr4">float.jl:360</span></span>
+ [3] Bool(<span class="sgr90">x</span>::<span class="sgr1">Rational</span>)
+<span class="sgr90">     @</span> <span class="sgr90"><span class="sgr4">rational.jl:156</span></span>
+ [4] Bool(<span class="sgr90">x</span>::<span class="sgr1">Real</span>)
+<span class="sgr90">     @</span> <span class="sgr90"><span class="sgr4">bool.jl:191</span></span>
+ [5] (dt::Type{&lt;:Integer})(<span class="sgr90">ip</span>::<span class="sgr1">IPAddr</span>)
+<span class="sgr90">     @</span> <span class="sgr90">/cache/build/builder-amdci4-1/julialang/julia-master/usr/share/julia/stdlib/v1.13/Sockets/src/<span class="sgr4">IPAddr.jl:11</span></span>
+ [6] (::Type{T})(<span class="sgr90">x</span>::<span class="sgr1">Enum</span>{T2}) where {T&lt;:Integer, T2&lt;:Integer}
+<span class="sgr90">     @</span> <span class="sgr90"><span class="sgr4">Enums.jl:19</span></span>
+ [7] (::Type{T})(<span class="sgr90">z</span>::<span class="sgr1">Complex</span>) where T&lt;:Real
+<span class="sgr90">     @</span> <span class="sgr90"><span class="sgr4">complex.jl:44</span></span>
+ [8] (::Type{T})(<span class="sgr90">x</span>::<span class="sgr1">Base.TwicePrecision</span>) where T&lt;:Number
+<span class="sgr90">     @</span> <span class="sgr90"><span class="sgr4">twiceprecision.jl:265</span></span>
+ [9] (::Type{T})(<span class="sgr90">x</span>::<span class="sgr1">AbstractChar</span>) where T&lt;:Union{AbstractChar, Number}
+<span class="sgr90">     @</span> <span class="sgr90"><span class="sgr4">char.jl:52</span></span></code></pre><p>The usual constructor syntax is exactly equivalent to the function-like object syntax, so trying to define a method with each syntax will cause the first method to be overwritten by the next one:</p><pre><code class="language-julia-repl hljs">julia&gt; struct S
            f::Int
        end
 
@@ -254,4 +251,4 @@ S
 julia&gt; (::Type{S})() = S(8)  # overwrites the previous constructor method
 
 julia&gt; S()
-S(8)</code></pre><section class="footnotes is-size-7"><ul><li class="footnote" id="footnote-1"><a class="tag is-link" href="#citeref-1">1</a>Nomenclature: while the term &quot;constructor&quot; generally refers to the entire function which constructs objects of a type, it is common to abuse terminology slightly and refer to specific constructor methods as &quot;constructors&quot;. In such situations, it is generally clear from the context that the term is used to mean &quot;constructor method&quot; rather than &quot;constructor function&quot;, especially as it is often used in the sense of singling out a particular method of the constructor from all of the others.</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../methods/">« Methods</a><a class="docs-footer-nextpage" href="../conversion-and-promotion/">Conversion and Promotion »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.11.4 on <span class="colophon-date" title="Friday 24 October 2025 15:18">Friday 24 October 2025</span>. Using Julia version 1.13.0-DEV.1374.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+S(8)</code></pre><section class="footnotes is-size-7"><ul><li class="footnote" id="footnote-1"><a class="tag is-link" href="#citeref-1">1</a>Nomenclature: while the term &quot;constructor&quot; generally refers to the entire function which constructs objects of a type, it is common to abuse terminology slightly and refer to specific constructor methods as &quot;constructors&quot;. In such situations, it is generally clear from the context that the term is used to mean &quot;constructor method&quot; rather than &quot;constructor function&quot;, especially as it is often used in the sense of singling out a particular method of the constructor from all of the others.</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../methods/">« Methods</a><a class="docs-footer-nextpage" href="../conversion-and-promotion/">Conversion and Promotion »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.11.4 on <span class="colophon-date" title="Friday 24 October 2025 15:41">Friday 24 October 2025</span>. Using Julia version 1.13.0-DEV.1375.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
