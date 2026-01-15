@@ -26,9 +26,9 @@ into an object called an expression, represented by the Julia type <a href="../.
 :(1 + 1)
 
 julia&gt; typeof(ex1)
-Expr</code></pre><p><code>Expr</code> objects contain two parts:</p><ul><li>a <a href="../../base/base/#Core.Symbol"><code>Symbol</code></a> identifying the kind of expression. A symbol is an <a href="https://en.wikipedia.org/wiki/String_interning">interned string</a>
-identifier (more discussion below).</li></ul><pre><code class="language-julia-repl hljs">julia&gt; ex1.head
-:call</code></pre><ul><li>the expression arguments, which may be symbols, other expressions, or literal values:</li></ul><pre><code class="language-julia-repl hljs">julia&gt; ex1.args
+Expr</code></pre><p><code>Expr</code> objects contain two parts:</p><ul><li><p>a <a href="../../base/base/#Core.Symbol"><code>Symbol</code></a> identifying the kind of expression. A symbol is an <a href="https://en.wikipedia.org/wiki/String_interning">interned string</a>
+identifier (more discussion below).</p></li></ul><pre><code class="language-julia-repl hljs">julia&gt; ex1.head
+:call</code></pre><ul><li><p>the expression arguments, which may be symbols, other expressions, or literal values:</p></li></ul><pre><code class="language-julia-repl hljs">julia&gt; ex1.args
 3-element Vector{Any}:
   :+
  1
@@ -211,12 +211,12 @@ julia&gt; a = 0; b = 2;
 
 julia&gt; eval(ex)
 3</code></pre><p>The value of <code>a</code> is used to construct the expression <code>ex</code> which applies the <code>+</code> function to the
-value 1 and the variable <code>b</code>. Note the important distinction between the way <code>a</code> and <code>b</code> are used:</p><ul><li>The value of the <em>variable</em> <code>a</code> at expression construction time is used as an immediate value in
+value 1 and the variable <code>b</code>. Note the important distinction between the way <code>a</code> and <code>b</code> are used:</p><ul><li><p>The value of the <em>variable</em> <code>a</code> at expression construction time is used as an immediate value in
 the expression. Thus, the value of <code>a</code> when the expression is evaluated no longer matters: the
-value in the expression is already <code>1</code>, independent of whatever the value of <code>a</code> might be.</li><li>On the other hand, the <em>symbol</em> <code>:b</code> is used in the expression construction, so the value of the
+value in the expression is already <code>1</code>, independent of whatever the value of <code>a</code> might be.</p></li><li><p>On the other hand, the <em>symbol</em> <code>:b</code> is used in the expression construction, so the value of the
 variable <code>b</code> at that time is irrelevant – <code>:b</code> is just a symbol and the variable <code>b</code> need not
 even be defined. At expression evaluation time, however, the value of the symbol <code>:b</code> is resolved
-by looking up the value of the variable <code>b</code>.</li></ul><h3 id="Functions-on-Expressions"><a class="docs-heading-anchor" href="#Functions-on-Expressions">Functions on <code>Expr</code>essions</a><a id="Functions-on-Expressions-1"></a><a class="docs-heading-anchor-permalink" href="#Functions-on-Expressions" title="Permalink"></a></h3><p>As hinted above, one extremely useful feature of Julia is the capability to generate and manipulate
+by looking up the value of the variable <code>b</code>.</p></li></ul><h3 id="Functions-on-Expressions"><a class="docs-heading-anchor" href="#Functions-on-Expressions">Functions on <code>Expr</code>essions</a><a id="Functions-on-Expressions-1"></a><a class="docs-heading-anchor-permalink" href="#Functions-on-Expressions" title="Permalink"></a></h3><p>As hinted above, one extremely useful feature of Julia is the capability to generate and manipulate
 Julia code within Julia itself. We have already seen one example of a function returning <a href="../../base/base/#Core.Expr"><code>Expr</code></a>
 objects: the <a href="../../base/base/#Base.Meta.parse-Tuple{AbstractString, Int64}"><code>Meta.parse</code></a> function, which takes a string of Julia code and returns the corresponding
 <code>Expr</code>. A function can also take one or more <code>Expr</code> objects as arguments, and return another
@@ -527,7 +527,7 @@ For longer blocks of generated code, the expression argument given to <a href=".
 block:</p><pre><code class="language-julia hljs">@eval begin
     # multiple lines
 end</code></pre><h2 id="meta-non-standard-string-literals"><a class="docs-heading-anchor" href="#meta-non-standard-string-literals">Non-Standard String Literals</a><a id="meta-non-standard-string-literals-1"></a><a class="docs-heading-anchor-permalink" href="#meta-non-standard-string-literals" title="Permalink"></a></h2><p>Recall from <a href="../strings/#non-standard-string-literals">Strings</a> that string literals prefixed by an identifier are called non-standard
-string literals, and can have different semantics than un-prefixed string literals. For example:</p><ul><li><code>r&quot;^\s*(?:#|$)&quot;</code> produces a <a href="../strings/#man-regex-literals">regular expression object</a> rather than a string</li><li><code>b&quot;DATA\xff\u2200&quot;</code> is a <a href="../strings/#man-byte-array-literals">byte array literal</a> for <code>[68,65,84,65,255,226,136,128]</code>.</li></ul><p>Perhaps surprisingly, these behaviors are not hard-coded into the Julia parser or compiler. Instead,
+string literals, and can have different semantics than un-prefixed string literals. For example:</p><ul><li><p><code>r&quot;^\s*(?:#|$)&quot;</code> produces a <a href="../strings/#man-regex-literals">regular expression object</a> rather than a string</p></li><li><p><code>b&quot;DATA\xff\u2200&quot;</code> is a <a href="../strings/#man-byte-array-literals">byte array literal</a> for <code>[68,65,84,65,255,226,136,128]</code>.</p></li></ul><p>Perhaps surprisingly, these behaviors are not hard-coded into the Julia parser or compiler. Instead,
 they are custom behaviors provided by a general mechanism that anyone can use: prefixed string
 literals are parsed as calls to specially-named macros. For example, the regular expression macro
 is just the following:</p><pre><code class="language-julia hljs">macro r_str(p)
@@ -591,16 +591,16 @@ expression which then forms the body for the method corresponding to the types o
 When a generated function is called, the expression it returns is compiled and then run.
 To make this efficient, the result is usually cached. And to make this inferable, only a limited
 subset of the language is usable. Thus, generated functions provide a flexible way to move work from
-run time to compile time, at the expense of greater restrictions on allowed constructs.</p><p>When defining generated functions, there are five main differences to ordinary functions:</p><ol><li>You annotate the function declaration with the <code>@generated</code> macro. This adds some information
-to the AST that lets the compiler know that this is a generated function.</li><li>In the body of the generated function you only have access to the <em>types</em> of the arguments –
-not their values.</li><li>Instead of calculating something or performing some action, you return a <em>quoted expression</em> which,
-when evaluated, does what you want.</li><li>Generated functions are only permitted to call functions that were defined <em>before</em> the definition of the generated
-function. (Failure to follow this may result in getting <code>MethodErrors</code> referring to functions from a future world-age.)</li><li>Generated functions must not <em>mutate</em> or <em>observe</em> any non-constant global state (including,
+run time to compile time, at the expense of greater restrictions on allowed constructs.</p><p>When defining generated functions, there are five main differences to ordinary functions:</p><ol><li><p>You annotate the function declaration with the <code>@generated</code> macro. This adds some information
+to the AST that lets the compiler know that this is a generated function.</p></li><li><p>In the body of the generated function you only have access to the <em>types</em> of the arguments –
+not their values.</p></li><li><p>Instead of calculating something or performing some action, you return a <em>quoted expression</em> which,
+when evaluated, does what you want.</p></li><li><p>Generated functions are only permitted to call functions that were defined <em>before</em> the definition of the generated
+function. (Failure to follow this may result in getting <code>MethodErrors</code> referring to functions from a future world-age.)</p></li><li><p>Generated functions must not <em>mutate</em> or <em>observe</em> any non-constant global state (including,
 for example, IO, locks, non-local dictionaries, or using <a href="../../base/base/#Base.hasmethod"><code>hasmethod</code></a>).
 This means they can only read global constants, and cannot have any side effects.
 In other words, they must be completely pure.
 Due to an implementation limitation, this also means that they currently cannot define a closure
-or generator.</li></ol><p>It&#39;s easiest to illustrate this with an example. We can declare a generated function <code>foo</code> as</p><pre><code class="language-julia-repl hljs">julia&gt; @generated function foo(x)
+or generator.</p></li></ol><p>It&#39;s easiest to illustrate this with an example. We can declare a generated function <code>foo</code> as</p><pre><code class="language-julia-repl hljs">julia&gt; @generated function foo(x)
            Core.println(x)
            return :(x * x)
        end
@@ -676,9 +676,9 @@ julia&gt; bar(&quot;baz&quot;)
        end
 baz (generic function with 1 method)</code></pre><p>Since the body of the generated function is non-deterministic, its behavior, <em>and the behavior of all subsequent code</em>
 is undefined.</p><p><em>Don&#39;t copy these examples!</em></p><p>These examples are hopefully helpful to illustrate how generated functions work, both in the definition
-end and at the call site; however, <em>don&#39;t copy them</em>, for the following reasons:</p><ul><li>the <code>foo</code> function has side-effects (the call to <code>Core.println</code>), and it is undefined exactly
-when, how often or how many times these side-effects will occur</li><li>the <code>bar</code> function solves a problem that is better solved with multiple dispatch - defining <code>bar(x) = x</code>
-and <code>bar(x::Integer) = x ^ 2</code> will do the same thing, but it is both simpler and faster.</li><li>the <code>baz</code> function is pathological</li></ul><p>Note that the set of operations that should not be attempted in a generated function is unbounded,
+end and at the call site; however, <em>don&#39;t copy them</em>, for the following reasons:</p><ul><li><p>the <code>foo</code> function has side-effects (the call to <code>Core.println</code>), and it is undefined exactly
+when, how often or how many times these side-effects will occur</p></li><li><p>the <code>bar</code> function solves a problem that is better solved with multiple dispatch - defining <code>bar(x) = x</code>
+and <code>bar(x::Integer) = x ^ 2</code> will do the same thing, but it is both simpler and faster.</p></li><li><p>the <code>baz</code> function is pathological</p></li></ul><p>Note that the set of operations that should not be attempted in a generated function is unbounded,
 and the runtime system can currently only detect a subset of the invalid operations. There are
 many other operations that will simply corrupt the runtime system without notification, usually
 in subtle ways not obviously connected to the bad definition. Because the function generator is
@@ -792,4 +792,4 @@ implementation instead.
 This style is preferred, since it allows the compiler to make more decisions and compile
 programs in more ways, and since normal code is more readable than code-generating code.
 However, which implementation is used depends on compiler implementation details, so it
-is essential for the two implementations to behave identically.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../documentation/">« Documentation</a><a class="docs-footer-nextpage" href="../arrays/">Single- and multi-dimensional Arrays »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.16.1 on <span class="colophon-date" title="Thursday 15 January 2026 15:04">Thursday 15 January 2026</span>. Using Julia version 1.14.0-DEV.1565.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+is essential for the two implementations to behave identically.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../documentation/">« Documentation</a><a class="docs-footer-nextpage" href="../arrays/">Single- and multi-dimensional Arrays »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.16.1 on <span class="colophon-date" title="Thursday 15 January 2026 22:14">Thursday 15 January 2026</span>. Using Julia version 1.14.0-DEV.1566.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
