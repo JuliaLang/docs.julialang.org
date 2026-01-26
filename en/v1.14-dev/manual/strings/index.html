@@ -19,7 +19,7 @@ makes dealing with plain ASCII text simple and efficient, and handling Unicode i
 efficient as possible. In particular, you can write C-style string code to process ASCII strings,
 and they will work as expected, both in terms of performance and semantics. If such code encounters
 non-ASCII text, it will gracefully fail with a clear error message, rather than silently introducing
-corrupt results. When this happens, modifying the code to handle non-ASCII data is straightforward.</p><p>There are a few noteworthy high-level features about Julia&#39;s strings:</p><ul><li><p>The built-in concrete type used for strings (and string literals) in Julia is <a href="../../base/strings/#Core.String-Tuple{AbstractString}"><code>String</code></a>.
+corrupt results. When this happens, modifying the code to handle non-ASCII data is straightforward.</p><p>There are a few noteworthy high-level features about Julia&#39;s strings:</p><ul><li><p>The built-in concrete type used for strings (and string literals) in Julia is <a href="../../base/strings/#Core.String"><code>String</code></a>.
 This supports the full range of <a href="https://en.wikipedia.org/wiki/Unicode">Unicode</a> characters via
 the <a href="https://en.wikipedia.org/wiki/UTF-8">UTF-8</a> encoding. (A <a href="../../base/strings/#Base.transcode"><code>transcode</code></a> function is
 provided to convert to/from other Unicode encodings.)</p></li><li><p>All string types are subtypes of the abstract type <code>AbstractString</code>, and external packages define
@@ -117,13 +117,14 @@ julia&gt; str[6]
 &#39;,&#39;: ASCII/Unicode U+002C (category Po: Punctuation, other)
 
 julia&gt; str[end]
-&#39;\n&#39;: ASCII/Unicode U+000A (category Cc: Other, control)</code></pre><p>Many Julia objects, including strings, can be indexed with integers. The index of the first
-element (the first character of a string) is returned by <a href="../../base/collections/#Base.firstindex"><code>firstindex(str)</code></a>, and the index of the last element (character)
-with <a href="../../base/collections/#Base.lastindex"><code>lastindex(str)</code></a>. The keywords <code>begin</code> and <code>end</code> can be used inside an indexing
-operation as shorthand for the first and last indices, respectively, along the given dimension.
-String indexing, like most indexing in Julia, is 1-based: <code>firstindex</code> always returns <code>1</code> for any <code>AbstractString</code>.
-As we will see below, however, <code>lastindex(str)</code> is <em>not</em> in general the same as <code>length(str)</code> for a string,
-because some Unicode characters can occupy multiple &quot;code units&quot;.</p><p>You can perform arithmetic and other operations with <a href="../../base/base/#end"><code>end</code></a>, just like
+&#39;\n&#39;: ASCII/Unicode U+000A (category Cc: Other, control)</code></pre><p>Many Julia objects, including strings, can be indexed with integers. The index of the
+first element (the first character of a string) is returned by <a href="../../base/collections/#Base.firstindex"><code>firstindex(str)</code></a>,
+and the index of the last element (character) with <a href="../../base/collections/#Base.lastindex"><code>lastindex(str)</code></a>. The keywords
+<code>begin</code> and <code>end</code> can be used inside an indexing operation as shorthand for the first and
+last indices, respectively, along the given dimension. String indexing, like most indexing
+in Julia, is 1-based: <code>firstindex</code> always returns <code>1</code> for any <code>AbstractString</code>. As we will
+see below, however, <code>lastindex(str)</code> is <em>not</em> in general the same as <code>length(str)</code> for a
+string, because some Unicode characters can occupy multiple &quot;code units&quot;.</p><p>You can perform arithmetic and other operations with <a href="../../base/base/#end"><code>end</code></a>, just like
 a normal value:</p><pre><code class="language-julia-repl hljs">julia&gt; str[end-1]
 &#39;.&#39;: ASCII/Unicode U+002E (category Po: Punctuation, other)
 
@@ -160,9 +161,9 @@ as well as all the standard C escape sequences. These can likewise be used to wr
 &quot;∀ x ∃ y&quot;</code></pre><p>Whether these Unicode characters are displayed as escapes or shown as special characters depends
 on your terminal&#39;s locale settings and its support for Unicode. String literals are encoded using
 the UTF-8 encoding. UTF-8 is a variable-width encoding, meaning that not all characters are encoded
-in the same number of bytes (&quot;code units&quot;). In UTF-8, ASCII characters — i.e. those with code points less than
-0x80 (128) – are encoded as they are in ASCII, using a single byte, while code points 0x80 and
-above are encoded using multiple bytes — up to four per character.</p><p>String indices in Julia refer to code units (= bytes for UTF-8), the fixed-width building blocks that
+in the same number of bytes (&quot;code units&quot;). In UTF-8, ASCII characters — i.e. those with code points
+less than 0x80 (128) – are encoded as they are in ASCII, using a single byte, while code points
+0x80 and above are encoded using multiple bytes — up to four per character.</p><p>String indices in Julia refer to code units (= bytes for UTF-8), the fixed-width building blocks that
 are used to encode arbitrary characters (code points). This means that not every
 index into a <code>String</code> is necessarily a valid index for a character. If you index into
 a string at such an invalid byte index, an error is thrown:</p><pre><code class="language-julia-repl hljs">julia&gt; s[1]
@@ -243,8 +244,9 @@ You can also use the <a href="../../base/arrays/#Base.eachindex"><code>eachindex
   7
  10
  11</code></pre><p>To access the raw code units (bytes for UTF-8) of the encoding, you can use the <a href="../../base/strings/#Base.codeunit"><code>codeunit(s,i)</code></a>
-function, where the index <code>i</code> runs consecutively from <code>1</code> to <a href="../../base/strings/#Base.ncodeunits-Tuple{AbstractString}"><code>ncodeunits(s)</code></a>. The <a href="../../base/strings/#Base.codeunits"><code>codeunits(s)</code></a>
-function returns an <code>AbstractVector{UInt8}</code> wrapper that lets you access these raw codeunits (bytes) as an array.</p><p>Strings in Julia can contain invalid UTF-8 code unit sequences. This convention allows to
+function, where the index <code>i</code> runs consecutively from <code>1</code> to <a href="../../base/strings/#Base.ncodeunits-Tuple{AbstractString}"><code>ncodeunits(s)</code></a>. The
+<a href="../../base/strings/#Base.codeunits"><code>codeunits(s)</code></a> function returns an <code>AbstractVector{UInt8}</code> wrapper that lets you
+access these raw codeunits (bytes) as an array.</p><p>Strings in Julia can contain invalid UTF-8 code unit sequences. This convention allows to
 treat any byte sequence as a <code>String</code>. In such situations a rule is that when parsing
 a sequence of code units from left to right characters are formed by the longest sequence of
 8-bit code units that matches the start of one of the following bit patterns
@@ -289,9 +291,9 @@ julia&gt; whom = &quot;world&quot;
 &quot;world&quot;
 
 julia&gt; string(greet, &quot;, &quot;, whom, &quot;.\n&quot;)
-&quot;Hello, world.\n&quot;</code></pre><p>It&#39;s important to be aware of potentially dangerous situations such as concatenation of invalid UTF-8 strings.
-The resulting string may contain different characters than the input strings,
-and its number of characters may be lower than sum of numbers of characters
+&quot;Hello, world.\n&quot;</code></pre><p>It is important to be aware of potentially dangerous situations such as concatenation of
+invalid UTF-8 strings. The resulting string may contain different characters than the
+input strings, and its number of characters may be lower than sum of numbers of characters
 of the concatenated strings, e.g.:</p><pre><code class="language-julia-repl hljs">julia&gt; a, b = &quot;\xe2\x88&quot;, &quot;\x80&quot;
 (&quot;\xe2\x88&quot;, &quot;\x80&quot;)
 
@@ -321,9 +323,9 @@ operator, consistent with common mathematical use.</p><p>More precisely, the set
 <code>*</code> forms a <a href="https://en.wikipedia.org/wiki/Free_monoid">free monoid</a> (<em>S</em>, <code>*</code>). The identity element
 of this set is the empty string, <code>&quot;&quot;</code>. Whenever a free monoid is not commutative, the operation is
 typically represented as <code>\cdot</code>, <code>*</code>, or a similar symbol, rather than <code>+</code>, which as stated usually
-implies commutativity.</p><h2 id="string-interpolation"><a class="docs-heading-anchor" href="#string-interpolation">Interpolation</a><a id="string-interpolation-1"></a><a class="docs-heading-anchor-permalink" href="#string-interpolation" title="Permalink"></a></h2><p>Constructing strings using concatenation can become a bit cumbersome, however. To reduce the need for these
-verbose calls to <a href="../../base/strings/#Base.string"><code>string</code></a> or repeated multiplications, Julia allows interpolation into string literals
-using <code>$</code>, as in Perl:</p><pre><code class="language-julia-repl hljs">julia&gt; greet = &quot;Hello&quot;; whom = &quot;world&quot;;
+implies commutativity.</p><h2 id="string-interpolation"><a class="docs-heading-anchor" href="#string-interpolation">Interpolation</a><a id="string-interpolation-1"></a><a class="docs-heading-anchor-permalink" href="#string-interpolation" title="Permalink"></a></h2><p>Constructing strings using concatenation can become a bit cumbersome, however. To reduce
+the need for these verbose calls to <a href="../../base/strings/#Base.string"><code>string</code></a> or repeated multiplications, Julia
+allows interpolation into string literals using <code>$</code>, as in Perl:</p><pre><code class="language-julia-repl hljs">julia&gt; greet = &quot;Hello&quot;; whom = &quot;world&quot;;
 
 julia&gt; &quot;$greet, $whom.\n&quot;
 &quot;Hello, world.\n&quot;</code></pre><p>This is more readable and convenient and equivalent to the above string concatenation – the system
@@ -413,20 +415,26 @@ true</code></pre><p>The last example shows that <a href="../../base/strings/#Bas
 &quot;.:Z:..:Z:..:Z:..:Z:..:Z:..:Z:..:Z:..:Z:..:Z:..:Z:.&quot;
 
 julia&gt; join([&quot;apples&quot;, &quot;bananas&quot;, &quot;pineapples&quot;], &quot;, &quot;, &quot; and &quot;)
-&quot;apples, bananas and pineapples&quot;</code></pre><p>Some other useful functions include:</p><ul><li><p><a href="../../base/collections/#Base.firstindex"><code>firstindex(str)</code></a> gives the minimal (byte) index that can be used to index into <code>str</code> (always 1 for strings, not necessarily true for other containers).</p></li><li><p><a href="../../base/collections/#Base.lastindex"><code>lastindex(str)</code></a> gives the maximal (byte) index that can be used to index into <code>str</code>.</p></li><li><p><a href="../../base/arrays/#Base.length-Tuple{AbstractArray}"><code>length(str)</code></a> the number of characters in <code>str</code>.</p></li><li><p><a href="../../base/arrays/#Base.length-Tuple{AbstractArray}"><code>length(str, i, j)</code></a> the number of valid character indices in <code>str</code> from <code>i</code> to <code>j</code>.</p></li><li><p><a href="../../base/strings/#Base.ncodeunits-Tuple{AbstractString}"><code>ncodeunits(str)</code></a> number of <a href="https://en.wikipedia.org/wiki/Character_encoding#Terminology">code units</a> in a string.</p></li><li><p><a href="../../base/strings/#Base.codeunit"><code>codeunit(str, i)</code></a> gives the code unit value in the string <code>str</code> at index <code>i</code>.</p></li><li><p><a href="../../base/strings/#Base.thisind"><code>thisind(str, i)</code></a> given an arbitrary index into a string find the first index of the character into which the index points.</p></li><li><p><a href="../../base/arrays/#Base.nextind"><code>nextind(str, i, n=1)</code></a> find the start of the <code>n</code>th character starting after index <code>i</code>.</p></li><li><p><a href="../../base/arrays/#Base.prevind"><code>prevind(str, i, n=1)</code></a> find the start of the <code>n</code>th character starting before index <code>i</code>.</p></li></ul><h2 id="non-standard-string-literals"><a class="docs-heading-anchor" href="#non-standard-string-literals">Non-Standard String Literals</a><a id="non-standard-string-literals-1"></a><a class="docs-heading-anchor-permalink" href="#non-standard-string-literals" title="Permalink"></a></h2><p>There are situations when you want to construct a string or use string semantics, but the behavior
+&quot;apples, bananas and pineapples&quot;</code></pre><p>Some other useful functions include:</p><ul><li><p><a href="../../base/collections/#Base.firstindex"><code>firstindex(str)</code></a> gives the minimal (byte) index that can be used to index into <code>str</code>
+(always 1 for strings, not necessarily true for other containers).</p></li><li><p><a href="../../base/collections/#Base.lastindex"><code>lastindex(str)</code></a> gives the maximal (byte) index that can be used to index into <code>str</code>.</p></li><li><p><a href="../../base/arrays/#Base.length-Tuple{AbstractArray}"><code>length(str)</code></a> the number of characters in <code>str</code>.</p></li><li><p><a href="../../base/arrays/#Base.length-Tuple{AbstractArray}"><code>length(str, i, j)</code></a> the number of valid character indices in <code>str</code> from <code>i</code> to <code>j</code>.</p></li><li><p><a href="../../base/strings/#Base.ncodeunits-Tuple{AbstractString}"><code>ncodeunits(str)</code></a> number of <a href="https://en.wikipedia.org/wiki/Character_encoding#Terminology">code units</a> in a string.</p></li><li><p><a href="../../base/strings/#Base.codeunit"><code>codeunit(str, i)</code></a> gives the code unit value in the string <code>str</code> at index <code>i</code>.</p></li><li><p><a href="../../base/strings/#Base.thisind"><code>thisind(str, i)</code></a> given an arbitrary index into a string find the first index of the character into which the index points.</p></li><li><p><a href="../../base/arrays/#Base.nextind"><code>nextind(str, i, n=1)</code></a> find the start of the <code>n</code>th character starting after index <code>i</code>.</p></li><li><p><a href="../../base/arrays/#Base.prevind"><code>prevind(str, i, n=1)</code></a> find the start of the <code>n</code>th character starting before index <code>i</code>.</p></li></ul><h2 id="non-standard-string-literals"><a class="docs-heading-anchor" href="#non-standard-string-literals">Non-Standard String Literals</a><a id="non-standard-string-literals-1"></a><a class="docs-heading-anchor-permalink" href="#non-standard-string-literals" title="Permalink"></a></h2><p>There are situations when you want to construct a string or use string semantics, but the behavior
 of the standard string construct is not quite what is needed. For these kinds of situations, Julia
 provides non-standard string literals. A non-standard string literal looks like a regular
 double-quoted string literal,
 but is immediately prefixed by an identifier, and may behave differently from a normal string literal.</p><p><a href="#man-regex-literals">Regular expressions</a>, <a href="#man-byte-array-literals">byte array literals</a>,
 and <a href="#man-version-number-literals">version number literals</a>, as described below,
 are some examples of non-standard string literals. Users and packages may also define new non-standard string literals.
-Further documentation is given in the <a href="../metaprogramming/#meta-non-standard-string-literals">Metaprogramming</a> section.</p><h2 id="man-regex-literals"><a class="docs-heading-anchor" href="#man-regex-literals">Regular Expressions</a><a id="man-regex-literals-1"></a><a class="docs-heading-anchor-permalink" href="#man-regex-literals" title="Permalink"></a></h2><p>Sometimes you are not looking for an exact string, but a particular <em>pattern</em>. For example, suppose you are trying to extract a single date from a large text file. You don’t know what that date is (that’s why you are searching for it), but you do know it will look something like <code>YYYY-MM-DD</code>. Regular expressions allow you to specify these patterns and search for them.</p><p>Julia uses version 2 of Perl-compatible regular expressions (regexes), as provided by the <a href="https://www.pcre.org/">PCRE</a>
-library (see the <a href="https://www.pcre.org/current/doc/html/pcre2syntax.html">PCRE2 syntax description</a> for more details). Regular expressions are related to strings in two ways: the obvious connection is that
-regular expressions are used to find regular patterns in strings; the other connection is that
-regular expressions are themselves input as strings, which are parsed into a state machine that
+Further documentation is given in the <a href="../metaprogramming/#meta-non-standard-string-literals">Metaprogramming</a> section.</p><h2 id="man-regex-literals"><a class="docs-heading-anchor" href="#man-regex-literals">Regular Expressions</a><a id="man-regex-literals-1"></a><a class="docs-heading-anchor-permalink" href="#man-regex-literals" title="Permalink"></a></h2><p>Sometimes you are not looking for an exact string, but a particular <em>pattern</em>. For
+example, suppose you are trying to extract a single date from a large text file. You don’t
+know what that date is (that’s why you are searching for it), but you do know it will look
+something like <code>YYYY-MM-DD</code>. Regular expressions allow you to specify these patterns and
+search for them.</p><p>Julia uses version 2 of Perl-compatible regular expressions (regexes), as provided by the <a href="https://www.pcre.org/">PCRE</a>
+library (see the <a href="https://www.pcre.org/current/doc/html/pcre2syntax.html">PCRE2 syntax description</a>
+for more details). Regular expressions are related to strings in two ways: the obvious connection
+is that regular expressions are used to find regular patterns in strings; the other connection is
+that regular expressions are themselves input as strings, which are parsed into a state machine that
 can be used to efficiently search for patterns in strings. In Julia, regular expressions are input
 using non-standard string literals prefixed with various identifiers beginning with <code>r</code>. The most
-basic regular expression literal without any options turned on just uses <code>r&quot;...&quot;</code>:</p><pre><code class="language-julia-repl hljs">julia&gt; re = r&quot;^\s*(?:#|$)&quot;
+basic regular expression literal without any options turned on just uses <a href="../../base/strings/#Base.@r_str"><code>r&quot;...&quot;</code></a>:</p><pre><code class="language-julia-repl hljs">julia&gt; re = r&quot;^\s*(?:#|$)&quot;
 r&quot;^\s*(?:#|$)&quot;
 
 julia&gt; typeof(re)
@@ -502,8 +510,10 @@ julia&gt; m.offsets
 3-element Vector{Int64}:
  1
  0
- 2</code></pre><p>It is convenient to have captures returned as an array so that one can use destructuring syntax
-to bind them to local variables. As a convenience, the <code>RegexMatch</code> object implements iterator methods that pass through to the <code>captures</code> field, so you can destructure the match object directly:</p><pre><code class="language-julia-repl hljs">julia&gt; first, second, third = m; first
+ 2</code></pre><p>It is convenient to have captures returned as an array so that one can use destructuring
+syntax to bind them to local variables. As a convenience, the <code>RegexMatch</code> object
+implements iterator methods that pass through to the <code>captures</code> field, so you can
+destructure the match object directly:</p><pre><code class="language-julia-repl hljs">julia&gt; first, second, third = m; first
 &quot;a&quot;</code></pre><p>Captures can also be accessed by indexing the <code>RegexMatch</code> object with the number or name of the
 capture group:</p><pre><code class="language-julia-repl hljs">julia&gt; m=match(r&quot;(?&lt;hour&gt;\d+):(?&lt;minute&gt;\d+)&quot;,&quot;12:45&quot;)
 RegexMatch(&quot;12:45&quot;, hour=&quot;12&quot;, minute=&quot;45&quot;)
@@ -568,7 +578,10 @@ ERROR: ParseError:
 # Error @ none:1:2
 &quot;\x&quot;
 #└┘ ── invalid hex escape sequence</code></pre><p>Triple-quoted regex strings, of the form <code>r&quot;&quot;&quot;...&quot;&quot;&quot;</code>, are also supported (and may be convenient
-for regular expressions containing quotation marks or newlines).</p><p>The <code>Regex()</code> constructor may be used to create a valid regex string programmatically. This permits using the contents of string variables and other string operations when constructing the regex string. Any of the regex codes above can be used within the single string argument to <code>Regex()</code>. Here are some examples:</p><pre><code class="language-julia-repl hljs">julia&gt; using Dates
+for regular expressions containing quotation marks or newlines).</p><p>The <code>Regex()</code> constructor may be used to create a valid regex string programmatically.
+This permits using the contents of string variables and other string operations when
+constructing the regex string. Any of the regex codes above can be used within the single
+string argument to <code>Regex()</code>. Here are some examples:</p><pre><code class="language-julia-repl hljs">julia&gt; using Dates
 
 julia&gt; d = Date(1962,7,10)
 1962-07-10
@@ -594,7 +607,7 @@ are interpreted as literal characters. This is convenient for matching character
 would otherwise be regex metacharacters. However, caution is needed when using this feature
 together with string interpolation, since the interpolated string might itself contain
 the <code>\E</code> sequence, unexpectedly terminating literal matching. User inputs need to be sanitized
-before inclusion in a regex.</p><h2 id="man-byte-array-literals"><a class="docs-heading-anchor" href="#man-byte-array-literals">Byte Array Literals</a><a id="man-byte-array-literals-1"></a><a class="docs-heading-anchor-permalink" href="#man-byte-array-literals" title="Permalink"></a></h2><p>Another useful non-standard string literal is the byte-array string literal: <code>b&quot;...&quot;</code>. This
+before inclusion in a regex.</p><h2 id="man-byte-array-literals"><a class="docs-heading-anchor" href="#man-byte-array-literals">Byte Array Literals</a><a id="man-byte-array-literals-1"></a><a class="docs-heading-anchor-permalink" href="#man-byte-array-literals" title="Permalink"></a></h2><p>Another useful non-standard string literal is the byte-array string literal: <a href="../../base/strings/#Base.@b_str"><code>b&quot;...&quot;</code></a>. This
 form lets you use string notation to express read only literal byte arrays – i.e. arrays of
 <a href="../../base/numbers/#Core.UInt8"><code>UInt8</code></a> values. The type of those objects is <code>CodeUnits{UInt8, String}</code>.
 The rules for byte array literals are the following:</p><ul><li><p>ASCII characters and ASCII escapes produce a single byte.</p></li><li><p><code>\x</code> and octal escape sequences produce the <em>byte</em> corresponding to the escape value.</p></li><li><p>Unicode escape sequences produce a sequence of bytes encoding that code point in UTF-8.</p></li></ul><p>There is some overlap between these rules since the behavior of <code>\x</code> and octal escapes less than
@@ -647,7 +660,7 @@ bytes, which – unless followed by very specific continuation bytes – do not 
 data, whereas the latter escapes all represent Unicode code points with two-byte encodings.</p><p>If this is all extremely confusing, try reading [&quot;The Absolute Minimum Every
 Software Developer Absolutely, Positively Must Know About Unicode and Character
 Sets&quot;](https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/).
-It&#39;s an excellent introduction to Unicode and UTF-8, and may help alleviate
+It is an excellent introduction to Unicode and UTF-8, and may help alleviate
 some confusion regarding the matter.</p><h2 id="man-version-number-literals"><a class="docs-heading-anchor" href="#man-version-number-literals">Version Number Literals</a><a id="man-version-number-literals-1"></a><a class="docs-heading-anchor-permalink" href="#man-version-number-literals" title="Permalink"></a></h2><p>Version numbers can easily be expressed with non-standard string literals of the form <a href="../../base/base/#Base.@v_str"><code>v&quot;...&quot;</code></a>.
 Version number literals create <a href="../../base/base/#Base.VersionNumber"><code>VersionNumber</code></a> objects which follow the
 specifications of <a href="https://semver.org/spec/v2.0.0-rc.2.html">semantic versioning 2.0.0-rc2</a>,
@@ -661,7 +674,7 @@ For example, the constant <a href="../../base/constants/#Base.VERSION"><code>VER
 therefore one can define some version-specific behavior using simple statements as:</p><pre><code class="language-julia hljs">if v&quot;0.2&quot; &lt;= VERSION &lt; v&quot;0.3-&quot;
     # do something specific to 0.2 release series
 end</code></pre><p>Note that in the above example the non-standard version number <code>v&quot;0.3-&quot;</code> is used, with a trailing
-<code>-</code>: this notation is a Julia extension of the standard, and it&#39;s used to indicate a version which
+<code>-</code>: this notation is a Julia extension of the standard, and it is used to indicate a version which
 is lower than any <code>0.3</code> release, including all of its pre-releases. So in the above example the
 code would only run with stable <code>0.2</code> versions, and exclude such versions as <code>v&quot;0.3.0-rc1&quot;</code>. In
 order to also allow for unstable (i.e. pre-release) <code>0.2</code> versions, the lower bound check should
@@ -673,7 +686,7 @@ should always be used on upper bounds unless there&#39;s a good reason not to), 
 be used as the actual version number of anything, as they are invalid in the semantic versioning
 scheme.</p><p>Besides being used for the <a href="../../base/constants/#Base.VERSION"><code>VERSION</code></a> constant, <code>VersionNumber</code> objects are widely used
 in the <code>Pkg</code> module, to specify packages versions and their dependencies.</p><h2 id="man-raw-string-literals"><a class="docs-heading-anchor" href="#man-raw-string-literals">Raw String Literals</a><a id="man-raw-string-literals-1"></a><a class="docs-heading-anchor-permalink" href="#man-raw-string-literals" title="Permalink"></a></h2><p>Raw strings without interpolation or unescaping can be expressed with
-non-standard string literals of the form <code>raw&quot;...&quot;</code>. Raw string literals create
+non-standard string literals of the form <a href="../../base/strings/#Base.@raw_str"><code>raw&quot;...&quot;</code></a>. Raw string literals create
 ordinary <code>String</code> objects which contain the enclosed contents exactly as
 entered with no interpolation or unescaping. This is useful for strings which
 contain code or markup in other languages which use <code>$</code> or <code>\</code> as special
@@ -718,4 +731,4 @@ julia&gt; Base.annotatedstring(str, str2)
 julia&gt; str * str2 == Base.annotatedstring(str, str2) # *-concatenation still works
 true</code></pre><p>The annotations of a <a href="../../base/strings/#Base.AnnotatedString"><code>AnnotatedString</code></a> can be accessed
 and modified via the <a href="../../base/strings/#Base.annotations"><code>annotations</code></a> and
-<a href="../../base/strings/#Base.annotate!"><code>annotate!</code></a> functions.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../complex-and-rational-numbers/">« Complex and Rational Numbers</a><a class="docs-footer-nextpage" href="../functions/">Functions »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.16.1 on <span class="colophon-date" title="Monday 26 January 2026 05:02">Monday 26 January 2026</span>. Using Julia version 1.14.0-DEV.1616.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+<a href="../../base/strings/#Base.annotate!"><code>annotate!</code></a> functions.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../complex-and-rational-numbers/">« Complex and Rational Numbers</a><a class="docs-footer-nextpage" href="../functions/">Functions »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.16.1 on <span class="colophon-date" title="Monday 26 January 2026 14:18">Monday 26 January 2026</span>. Using Julia version 1.14.0-DEV.1617.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
