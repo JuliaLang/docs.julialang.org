@@ -67,14 +67,14 @@ julia&gt; isless(missing, Inf)
 false
 
 julia&gt; isless(missing, missing)
-false</code></pre><h2 id="Logical-operators"><a class="docs-heading-anchor" href="#Logical-operators">Logical operators</a><a id="Logical-operators-1"></a><a class="docs-heading-anchor-permalink" href="#Logical-operators" title="Permalink"></a></h2><p>Logical (or boolean) operators <a href="../../base/math/#Base.:|"><code>|</code></a>, <a href="../../base/math/#Base.:&amp;"><code>&amp;</code></a> and <a href="../../base/math/#Base.xor"><code>xor</code></a> are
+false</code></pre><h2 id="Logical-operators"><a class="docs-heading-anchor" href="#Logical-operators">Logical operators</a><a id="Logical-operators-1"></a><a class="docs-heading-anchor-permalink" href="#Logical-operators" title="Permalink"></a></h2><p>Logical (or boolean) operators <a href="../../base/numbers/#Base.:|"><code>|</code></a>, <a href="../../base/numbers/#Base.:&amp;"><code>&amp;</code></a> and <a href="../../base/numbers/#Base.xor"><code>xor</code></a> are
 another special case since they only propagate <code>missing</code> values when it is logically
 required. For these operators, whether or not the result is uncertain, depends
 on the particular operation. This follows the well-established rules of
 <a href="https://en.wikipedia.org/wiki/Three-valued_logic"><em>three-valued logic</em></a> which are
 implemented by e.g. <code>NULL</code> in SQL and <code>NA</code> in R. This abstract definition
 corresponds to a relatively natural behavior which is best explained
-via concrete examples.</p><p>Let us illustrate this principle with the logical &quot;or&quot; operator <a href="../../base/math/#Base.:|"><code>|</code></a>.
+via concrete examples.</p><p>Let us illustrate this principle with the logical &quot;or&quot; operator <a href="../../base/numbers/#Base.:|"><code>|</code></a>.
 Following the rules of boolean logic, if one of the operands is <code>true</code>,
 the value of the other operand does not have an influence on the result,
 which will always be <code>true</code>:</p><pre><code class="language-julia-repl hljs">julia&gt; true | true
@@ -108,7 +108,7 @@ julia&gt; false | missing
 missing
 
 julia&gt; missing | false
-missing</code></pre><p>The behavior of the logical &quot;and&quot; operator <a href="../../base/math/#Base.:&amp;"><code>&amp;</code></a> is similar to that of the
+missing</code></pre><p>The behavior of the logical &quot;and&quot; operator <a href="../../base/numbers/#Base.:&amp;"><code>&amp;</code></a> is similar to that of the
 <code>|</code> operator, with the difference that missingness does not propagate when
 one of the operands is <code>false</code>. For example, when that is the case of the first
 operand:</p><pre><code class="language-julia-repl hljs">julia&gt; false &amp; false
@@ -126,7 +126,7 @@ julia&gt; true &amp; false
 false
 
 julia&gt; true &amp; missing
-missing</code></pre><p>Finally, the &quot;exclusive or&quot; logical operator <a href="../../base/math/#Base.xor"><code>xor</code></a> always propagates
+missing</code></pre><p>Finally, the &quot;exclusive or&quot; logical operator <a href="../../base/numbers/#Base.xor"><code>xor</code></a> always propagates
 <code>missing</code> values, since both operands always have an effect on the result.
 Also note that the negation operator <a href="../../base/math/#Base.:!"><code>!</code></a> returns <code>missing</code> when the
 operand is <code>missing</code>, just like other unary operators.</p><h2 id="Control-Flow-and-Short-Circuiting-Operators"><a class="docs-heading-anchor" href="#Control-Flow-and-Short-Circuiting-Operators">Control Flow and Short-Circuiting Operators</a><a id="Control-Flow-and-Short-Circuiting-Operators-1"></a><a class="docs-heading-anchor-permalink" href="#Control-Flow-and-Short-Circuiting-Operators" title="Permalink"></a></h2><p>Control flow operators including <a href="../../base/base/#if"><code>if</code></a>, <a href="../../base/base/#while"><code>while</code></a> and the
@@ -255,4 +255,4 @@ julia&gt; any([true, missing])
 true
 
 julia&gt; any([false, missing])
-missing</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../arrays/">« Single- and multi-dimensional Arrays</a><a class="docs-footer-nextpage" href="../networking-and-streams/">Networking and Streams »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.16.1 on <span class="colophon-date" title="Saturday 31 January 2026 22:15">Saturday 31 January 2026</span>. Using Julia version 1.14.0-DEV.1656.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+missing</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../arrays/">« Single- and multi-dimensional Arrays</a><a class="docs-footer-nextpage" href="../networking-and-streams/">Networking and Streams »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.16.1 on <span class="colophon-date" title="Saturday 31 January 2026 22:21">Saturday 31 January 2026</span>. Using Julia version 1.14.0-DEV.1657.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
