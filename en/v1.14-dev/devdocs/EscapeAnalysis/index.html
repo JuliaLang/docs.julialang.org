@@ -186,16 +186,16 @@ escapes via <code>arrayref</code>-<code>arrayset</code> use-def chain and does n
 ◌  <span class="sgr90">└───</span>       goto #5
 ◌  <span class="sgr90">5 ──</span> %26 = $(Expr(:boundscheck, true))<span class="sgr36">::Bool</span>
 ◌  <span class="sgr90">└───</span>       goto #10 if not %26
-◌  <span class="sgr90">6 ──</span> %28 = <span class="sgr90">intrinsic </span>Base.sub_int(1, 1)<span class="sgr36">::Int64</span>
-◌  <span class="sgr90">│   </span> %29 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %28)<span class="sgr36">::UInt64</span>
-<span class="sgr31">X  </span><span class="sgr90">│   </span> %30 = <span class="sgr90">  builtin </span>Base.getfield(%3, :size)<span class="sgr36">::Tuple{Int64}</span>
-<span class="sgr31">X  </span><span class="sgr90">│   </span> %31 = <span class="sgr90">  builtin </span>Core.getfield(%30, 1)<span class="sgr36">::Int64</span>
-◌  <span class="sgr90">│   </span> %32 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %31)<span class="sgr36">::UInt64</span>
-◌  <span class="sgr90">│   </span> %33 = <span class="sgr90">intrinsic </span>Base.ult_int(%29, %32)<span class="sgr36">::Bool</span>
-◌  <span class="sgr90">└───</span>       goto #8 if not %33
+◌  <span class="sgr90">6 ──</span> %28 = <span class="sgr90">  builtin </span>Core.tuple(1)<span class="sgr36">::Tuple{Int64}</span>
+◌  <span class="sgr90">│   </span> %29 = <span class="sgr90">intrinsic </span>Base.sub_int(1, 1)<span class="sgr36">::Int64</span>
+◌  <span class="sgr90">│   </span> %30 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %29)<span class="sgr36">::UInt64</span>
+<span class="sgr31">X  </span><span class="sgr90">│   </span> %31 = <span class="sgr90">  builtin </span>Base.getfield(%3, :size)<span class="sgr36">::Tuple{Int64}</span>
+<span class="sgr31">X  </span><span class="sgr90">│   </span> %32 = <span class="sgr90">  builtin </span>Core.getfield(%31, 1)<span class="sgr36">::Int64</span>
+◌  <span class="sgr90">│   </span> %33 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %32)<span class="sgr36">::UInt64</span>
+◌  <span class="sgr90">│   </span> %34 = <span class="sgr90">intrinsic </span>Base.ult_int(%30, %33)<span class="sgr36">::Bool</span>
+◌  <span class="sgr90">└───</span>       goto #8 if not %34
 ◌  <span class="sgr90">7 ──</span>       goto #9
-◌  <span class="sgr90">8 ──</span> %36 = <span class="sgr90">  builtin </span>Core.tuple(1)<span class="sgr36">::Tuple{Int64}</span>
-<span class="sgr32">✓  </span><span class="sgr90">│   </span>       <span class="sgr90">   invoke </span>Base.throw_boundserror(%3::Vector{Any}, %36::Tuple{Int64})<span class="sgr90">::Union{}</span>
+<span class="sgr32">✓  </span><span class="sgr90">8 ──</span>       <span class="sgr90">   invoke </span>Base.throw_boundserror(%3::Vector{Any}, %28::Tuple{Int64})<span class="sgr90">::Union{}</span>
 ◌  <span class="sgr90">└───</span>       unreachable
 ◌  <span class="sgr90">9 ──</span>       nothing<span class="sgr90">::Nothing</span>
 <span class="sgr31">X  </span><span class="sgr90">10 ┄</span> %40 = <span class="sgr90">  builtin </span>Base.getfield(%3, :ref)<span class="sgr36">::MemoryRef{Any}</span>
@@ -224,16 +224,16 @@ as <code>EscapeAnalysis</code> does &quot;per-field&quot; alias analysis for obj
 <span class="sgr31">X  </span><span class="sgr90">│   </span> %4  = %new(Main.SafeRef{String}, _2)<span class="sgr36">::Main.SafeRef{String}</span>
 ◌  <span class="sgr90">│   </span> %5  = $(Expr(:boundscheck, true))<span class="sgr36">::Bool</span>
 ◌  <span class="sgr90">└───</span>       goto #6 if not %5
-◌  <span class="sgr90">2 ──</span> %7  = <span class="sgr90">intrinsic </span>Base.sub_int(1, 1)<span class="sgr36">::Int64</span>
-◌  <span class="sgr90">│   </span> %8  = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %7)<span class="sgr36">::UInt64</span>
-<span class="sgr31">X  </span><span class="sgr90">│   </span> %9  = <span class="sgr90">  builtin </span>Base.getfield(%3, :size)<span class="sgr36">::Tuple{Int64}</span>
-<span class="sgr31">X  </span><span class="sgr90">│   </span> %10 = <span class="sgr90">  builtin </span>Core.getfield(%9, 1)<span class="sgr36">::Int64</span>
-◌  <span class="sgr90">│   </span> %11 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %10)<span class="sgr36">::UInt64</span>
-◌  <span class="sgr90">│   </span> %12 = <span class="sgr90">intrinsic </span>Base.ult_int(%8, %11)<span class="sgr36">::Bool</span>
-◌  <span class="sgr90">└───</span>       goto #4 if not %12
+◌  <span class="sgr90">2 ──</span> %7  = <span class="sgr90">  builtin </span>Core.tuple(1)<span class="sgr36">::Tuple{Int64}</span>
+◌  <span class="sgr90">│   </span> %8  = <span class="sgr90">intrinsic </span>Base.sub_int(1, 1)<span class="sgr36">::Int64</span>
+◌  <span class="sgr90">│   </span> %9  = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %8)<span class="sgr36">::UInt64</span>
+<span class="sgr31">X  </span><span class="sgr90">│   </span> %10 = <span class="sgr90">  builtin </span>Base.getfield(%3, :size)<span class="sgr36">::Tuple{Int64}</span>
+<span class="sgr31">X  </span><span class="sgr90">│   </span> %11 = <span class="sgr90">  builtin </span>Core.getfield(%10, 1)<span class="sgr36">::Int64</span>
+◌  <span class="sgr90">│   </span> %12 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %11)<span class="sgr36">::UInt64</span>
+◌  <span class="sgr90">│   </span> %13 = <span class="sgr90">intrinsic </span>Base.ult_int(%9, %12)<span class="sgr36">::Bool</span>
+◌  <span class="sgr90">└───</span>       goto #4 if not %13
 ◌  <span class="sgr90">3 ──</span>       goto #5
-◌  <span class="sgr90">4 ──</span> %15 = <span class="sgr90">  builtin </span>Core.tuple(1)<span class="sgr36">::Tuple{Int64}</span>
-<span class="sgr32">✓  </span><span class="sgr90">│   </span>       <span class="sgr90">   invoke </span>Base.throw_boundserror(%3::Vector{Any}, %15::Tuple{Int64})<span class="sgr90">::Union{}</span>
+<span class="sgr32">✓  </span><span class="sgr90">4 ──</span>       <span class="sgr90">   invoke </span>Base.throw_boundserror(%3::Vector{Any}, %7::Tuple{Int64})<span class="sgr90">::Union{}</span>
 ◌  <span class="sgr90">└───</span>       unreachable
 ◌  <span class="sgr90">5 ──</span>       nothing<span class="sgr90">::Nothing</span>
 <span class="sgr31">X  </span><span class="sgr90">6 ┄─</span> %19 = <span class="sgr90">  builtin </span>Base.getfield(%3, :ref)<span class="sgr36">::MemoryRef{Any}</span>
@@ -243,16 +243,16 @@ as <code>EscapeAnalysis</code> does &quot;per-field&quot; alias analysis for obj
 <span class="sgr31">X  </span><span class="sgr90">7 ──</span> %23 = %new(Main.SafeRef{String}, _3)<span class="sgr36">::Main.SafeRef{String}</span>
 ◌  <span class="sgr90">│   </span> %24 = $(Expr(:boundscheck, true))<span class="sgr36">::Bool</span>
 ◌  <span class="sgr90">└───</span>       goto #12 if not %24
-◌  <span class="sgr90">8 ──</span> %26 = <span class="sgr90">intrinsic </span>Base.sub_int(2, 1)<span class="sgr36">::Int64</span>
-◌  <span class="sgr90">│   </span> %27 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %26)<span class="sgr36">::UInt64</span>
-<span class="sgr31">X  </span><span class="sgr90">│   </span> %28 = <span class="sgr90">  builtin </span>Base.getfield(%3, :size)<span class="sgr36">::Tuple{Int64}</span>
-<span class="sgr31">X  </span><span class="sgr90">│   </span> %29 = <span class="sgr90">  builtin </span>Core.getfield(%28, 1)<span class="sgr36">::Int64</span>
-◌  <span class="sgr90">│   </span> %30 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %29)<span class="sgr36">::UInt64</span>
-◌  <span class="sgr90">│   </span> %31 = <span class="sgr90">intrinsic </span>Base.ult_int(%27, %30)<span class="sgr36">::Bool</span>
-◌  <span class="sgr90">└───</span>       goto #10 if not %31
+◌  <span class="sgr90">8 ──</span> %26 = <span class="sgr90">  builtin </span>Core.tuple(2)<span class="sgr36">::Tuple{Int64}</span>
+◌  <span class="sgr90">│   </span> %27 = <span class="sgr90">intrinsic </span>Base.sub_int(2, 1)<span class="sgr36">::Int64</span>
+◌  <span class="sgr90">│   </span> %28 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %27)<span class="sgr36">::UInt64</span>
+<span class="sgr31">X  </span><span class="sgr90">│   </span> %29 = <span class="sgr90">  builtin </span>Base.getfield(%3, :size)<span class="sgr36">::Tuple{Int64}</span>
+<span class="sgr31">X  </span><span class="sgr90">│   </span> %30 = <span class="sgr90">  builtin </span>Core.getfield(%29, 1)<span class="sgr36">::Int64</span>
+◌  <span class="sgr90">│   </span> %31 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %30)<span class="sgr36">::UInt64</span>
+◌  <span class="sgr90">│   </span> %32 = <span class="sgr90">intrinsic </span>Base.ult_int(%28, %31)<span class="sgr36">::Bool</span>
+◌  <span class="sgr90">└───</span>       goto #10 if not %32
 ◌  <span class="sgr90">9 ──</span>       goto #11
-◌  <span class="sgr90">10 ─</span> %34 = <span class="sgr90">  builtin </span>Core.tuple(2)<span class="sgr36">::Tuple{Int64}</span>
-<span class="sgr32">✓  </span><span class="sgr90">│   </span>       <span class="sgr90">   invoke </span>Base.throw_boundserror(%3::Vector{Any}, %34::Tuple{Int64})<span class="sgr90">::Union{}</span>
+<span class="sgr32">✓  </span><span class="sgr90">10 ─</span>       <span class="sgr90">   invoke </span>Base.throw_boundserror(%3::Vector{Any}, %26::Tuple{Int64})<span class="sgr90">::Union{}</span>
 ◌  <span class="sgr90">└───</span>       unreachable
 ◌  <span class="sgr90">11 ─</span>       nothing<span class="sgr90">::Nothing</span>
 <span class="sgr31">X  </span><span class="sgr90">12 ┄</span> %38 = <span class="sgr90">  builtin </span>Base.getfield(%3, :ref)<span class="sgr36">::MemoryRef{Any}</span>
@@ -261,16 +261,16 @@ as <code>EscapeAnalysis</code> does &quot;per-field&quot; alias analysis for obj
 ◌  <span class="sgr90">└───</span>       goto #13
 ◌  <span class="sgr90">13 ─</span> %42 = $(Expr(:boundscheck, true))<span class="sgr36">::Bool</span>
 ◌  <span class="sgr90">└───</span>       goto #18 if not %42
-◌  <span class="sgr90">14 ─</span> %44 = <span class="sgr90">intrinsic </span>Base.sub_int(1, 1)<span class="sgr36">::Int64</span>
-◌  <span class="sgr90">│   </span> %45 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %44)<span class="sgr36">::UInt64</span>
-<span class="sgr31">X  </span><span class="sgr90">│   </span> %46 = <span class="sgr90">  builtin </span>Base.getfield(%3, :size)<span class="sgr36">::Tuple{Int64}</span>
-<span class="sgr31">X  </span><span class="sgr90">│   </span> %47 = <span class="sgr90">  builtin </span>Core.getfield(%46, 1)<span class="sgr36">::Int64</span>
-◌  <span class="sgr90">│   </span> %48 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %47)<span class="sgr36">::UInt64</span>
-◌  <span class="sgr90">│   </span> %49 = <span class="sgr90">intrinsic </span>Base.ult_int(%45, %48)<span class="sgr36">::Bool</span>
-◌  <span class="sgr90">└───</span>       goto #16 if not %49
+◌  <span class="sgr90">14 ─</span> %44 = <span class="sgr90">  builtin </span>Core.tuple(1)<span class="sgr36">::Tuple{Int64}</span>
+◌  <span class="sgr90">│   </span> %45 = <span class="sgr90">intrinsic </span>Base.sub_int(1, 1)<span class="sgr36">::Int64</span>
+◌  <span class="sgr90">│   </span> %46 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %45)<span class="sgr36">::UInt64</span>
+<span class="sgr31">X  </span><span class="sgr90">│   </span> %47 = <span class="sgr90">  builtin </span>Base.getfield(%3, :size)<span class="sgr36">::Tuple{Int64}</span>
+<span class="sgr31">X  </span><span class="sgr90">│   </span> %48 = <span class="sgr90">  builtin </span>Core.getfield(%47, 1)<span class="sgr36">::Int64</span>
+◌  <span class="sgr90">│   </span> %49 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %48)<span class="sgr36">::UInt64</span>
+◌  <span class="sgr90">│   </span> %50 = <span class="sgr90">intrinsic </span>Base.ult_int(%46, %49)<span class="sgr36">::Bool</span>
+◌  <span class="sgr90">└───</span>       goto #16 if not %50
 ◌  <span class="sgr90">15 ─</span>       goto #17
-◌  <span class="sgr90">16 ─</span> %52 = <span class="sgr90">  builtin </span>Core.tuple(1)<span class="sgr36">::Tuple{Int64}</span>
-<span class="sgr32">✓  </span><span class="sgr90">│   </span>       <span class="sgr90">   invoke </span>Base.throw_boundserror(%3::Vector{Any}, %52::Tuple{Int64})<span class="sgr90">::Union{}</span>
+<span class="sgr32">✓  </span><span class="sgr90">16 ─</span>       <span class="sgr90">   invoke </span>Base.throw_boundserror(%3::Vector{Any}, %44::Tuple{Int64})<span class="sgr90">::Union{}</span>
 ◌  <span class="sgr90">└───</span>       unreachable
 ◌  <span class="sgr90">17 ─</span>       nothing<span class="sgr90">::Nothing</span>
 <span class="sgr31">X  </span><span class="sgr90">18 ┄</span> %56 = <span class="sgr90">  builtin </span>Base.getfield(%3, :ref)<span class="sgr36">::MemoryRef{Any}</span>
@@ -326,16 +326,16 @@ As a result, <code>ReturnEscape</code> ends up imposed on both <code>%23</code> 
 <span class="sgr31">X  </span><span class="sgr90">8 ──</span> %21 = %new(Main.SafeRef{String}, _2)<span class="sgr36">::Main.SafeRef{String}</span>
 ◌  <span class="sgr90">│   </span> %22 = $(Expr(:boundscheck, true))<span class="sgr36">::Bool</span>
 ◌  <span class="sgr90">└───</span>       goto #13 if not %22
-◌  <span class="sgr90">9 ──</span> %24 = <span class="sgr90">intrinsic </span>Base.sub_int(1, 1)<span class="sgr36">::Int64</span>
-◌  <span class="sgr90">│   </span> %25 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %24)<span class="sgr36">::UInt64</span>
-<span class="sgr31">X  </span><span class="sgr90">│   </span> %26 = <span class="sgr90">  builtin </span>Base.getfield(%3, :size)<span class="sgr36">::Tuple{Int64}</span>
-<span class="sgr31">X  </span><span class="sgr90">│   </span> %27 = <span class="sgr90">  builtin </span>Core.getfield(%26, 1)<span class="sgr36">::Int64</span>
-◌  <span class="sgr90">│   </span> %28 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %27)<span class="sgr36">::UInt64</span>
-◌  <span class="sgr90">│   </span> %29 = <span class="sgr90">intrinsic </span>Base.ult_int(%25, %28)<span class="sgr36">::Bool</span>
-◌  <span class="sgr90">└───</span>       goto #11 if not %29
+◌  <span class="sgr90">9 ──</span> %24 = <span class="sgr90">  builtin </span>Core.tuple(1)<span class="sgr36">::Tuple{Int64}</span>
+◌  <span class="sgr90">│   </span> %25 = <span class="sgr90">intrinsic </span>Base.sub_int(1, 1)<span class="sgr36">::Int64</span>
+◌  <span class="sgr90">│   </span> %26 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %25)<span class="sgr36">::UInt64</span>
+<span class="sgr31">X  </span><span class="sgr90">│   </span> %27 = <span class="sgr90">  builtin </span>Base.getfield(%3, :size)<span class="sgr36">::Tuple{Int64}</span>
+<span class="sgr31">X  </span><span class="sgr90">│   </span> %28 = <span class="sgr90">  builtin </span>Core.getfield(%27, 1)<span class="sgr36">::Int64</span>
+◌  <span class="sgr90">│   </span> %29 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %28)<span class="sgr36">::UInt64</span>
+◌  <span class="sgr90">│   </span> %30 = <span class="sgr90">intrinsic </span>Base.ult_int(%26, %29)<span class="sgr36">::Bool</span>
+◌  <span class="sgr90">└───</span>       goto #11 if not %30
 ◌  <span class="sgr90">10 ─</span>       goto #12
-◌  <span class="sgr90">11 ─</span> %32 = <span class="sgr90">  builtin </span>Core.tuple(1)<span class="sgr36">::Tuple{Int64}</span>
-<span class="sgr32">✓  </span><span class="sgr90">│   </span>       <span class="sgr90">   invoke </span>Base.throw_boundserror(%3::Vector{Any}, %32::Tuple{Int64})<span class="sgr90">::Union{}</span>
+<span class="sgr32">✓  </span><span class="sgr90">11 ─</span>       <span class="sgr90">   invoke </span>Base.throw_boundserror(%3::Vector{Any}, %24::Tuple{Int64})<span class="sgr90">::Union{}</span>
 ◌  <span class="sgr90">└───</span>       unreachable
 ◌  <span class="sgr90">12 ─</span>       nothing<span class="sgr90">::Nothing</span>
 <span class="sgr31">X  </span><span class="sgr90">13 ┄</span> %36 = <span class="sgr90">  builtin </span>Base.getfield(%3, :ref)<span class="sgr36">::MemoryRef{Any}</span>
@@ -345,16 +345,16 @@ As a result, <code>ReturnEscape</code> ends up imposed on both <code>%23</code> 
 <span class="sgr31">X  </span><span class="sgr90">14 ─</span> %40 = %new(Main.SafeRef{String}, _3)<span class="sgr36">::Main.SafeRef{String}</span>
 ◌  <span class="sgr90">│   </span> %41 = $(Expr(:boundscheck, true))<span class="sgr36">::Bool</span>
 ◌  <span class="sgr90">└───</span>       goto #19 if not %41
-◌  <span class="sgr90">15 ─</span> %43 = <span class="sgr90">intrinsic </span>Base.sub_int(2, 1)<span class="sgr36">::Int64</span>
-◌  <span class="sgr90">│   </span> %44 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %43)<span class="sgr36">::UInt64</span>
-<span class="sgr31">X  </span><span class="sgr90">│   </span> %45 = <span class="sgr90">  builtin </span>Base.getfield(%3, :size)<span class="sgr36">::Tuple{Int64}</span>
-<span class="sgr31">X  </span><span class="sgr90">│   </span> %46 = <span class="sgr90">  builtin </span>Core.getfield(%45, 1)<span class="sgr36">::Int64</span>
-◌  <span class="sgr90">│   </span> %47 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %46)<span class="sgr36">::UInt64</span>
-◌  <span class="sgr90">│   </span> %48 = <span class="sgr90">intrinsic </span>Base.ult_int(%44, %47)<span class="sgr36">::Bool</span>
-◌  <span class="sgr90">└───</span>       goto #17 if not %48
+◌  <span class="sgr90">15 ─</span> %43 = <span class="sgr90">  builtin </span>Core.tuple(2)<span class="sgr36">::Tuple{Int64}</span>
+◌  <span class="sgr90">│   </span> %44 = <span class="sgr90">intrinsic </span>Base.sub_int(2, 1)<span class="sgr36">::Int64</span>
+◌  <span class="sgr90">│   </span> %45 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %44)<span class="sgr36">::UInt64</span>
+<span class="sgr31">X  </span><span class="sgr90">│   </span> %46 = <span class="sgr90">  builtin </span>Base.getfield(%3, :size)<span class="sgr36">::Tuple{Int64}</span>
+<span class="sgr31">X  </span><span class="sgr90">│   </span> %47 = <span class="sgr90">  builtin </span>Core.getfield(%46, 1)<span class="sgr36">::Int64</span>
+◌  <span class="sgr90">│   </span> %48 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %47)<span class="sgr36">::UInt64</span>
+◌  <span class="sgr90">│   </span> %49 = <span class="sgr90">intrinsic </span>Base.ult_int(%45, %48)<span class="sgr36">::Bool</span>
+◌  <span class="sgr90">└───</span>       goto #17 if not %49
 ◌  <span class="sgr90">16 ─</span>       goto #18
-◌  <span class="sgr90">17 ─</span> %51 = <span class="sgr90">  builtin </span>Core.tuple(2)<span class="sgr36">::Tuple{Int64}</span>
-<span class="sgr32">✓  </span><span class="sgr90">│   </span>       <span class="sgr90">   invoke </span>Base.throw_boundserror(%3::Vector{Any}, %51::Tuple{Int64})<span class="sgr90">::Union{}</span>
+<span class="sgr32">✓  </span><span class="sgr90">17 ─</span>       <span class="sgr90">   invoke </span>Base.throw_boundserror(%3::Vector{Any}, %43::Tuple{Int64})<span class="sgr90">::Union{}</span>
 ◌  <span class="sgr90">└───</span>       unreachable
 ◌  <span class="sgr90">18 ─</span>       nothing<span class="sgr90">::Nothing</span>
 <span class="sgr31">X  </span><span class="sgr90">19 ┄</span> %55 = <span class="sgr90">  builtin </span>Base.getfield(%3, :ref)<span class="sgr36">::MemoryRef{Any}</span>
@@ -363,16 +363,16 @@ As a result, <code>ReturnEscape</code> ends up imposed on both <code>%23</code> 
 ◌  <span class="sgr90">└───</span>       goto #20
 ◌  <span class="sgr90">20 ─</span> %59 = $(Expr(:boundscheck, true))<span class="sgr36">::Bool</span>
 ◌  <span class="sgr90">└───</span>       goto #25 if not %59
-◌  <span class="sgr90">21 ─</span> %61 = <span class="sgr90">intrinsic </span>Base.sub_int(1, 1)<span class="sgr36">::Int64</span>
-◌  <span class="sgr90">│   </span> %62 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %61)<span class="sgr36">::UInt64</span>
-<span class="sgr31">X  </span><span class="sgr90">│   </span> %63 = <span class="sgr90">  builtin </span>Base.getfield(%3, :size)<span class="sgr36">::Tuple{Int64}</span>
-<span class="sgr31">X  </span><span class="sgr90">│   </span> %64 = <span class="sgr90">  builtin </span>Core.getfield(%63, 1)<span class="sgr36">::Int64</span>
-◌  <span class="sgr90">│   </span> %65 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %64)<span class="sgr36">::UInt64</span>
-◌  <span class="sgr90">│   </span> %66 = <span class="sgr90">intrinsic </span>Base.ult_int(%62, %65)<span class="sgr36">::Bool</span>
-◌  <span class="sgr90">└───</span>       goto #23 if not %66
+◌  <span class="sgr90">21 ─</span> %61 = <span class="sgr90">  builtin </span>Core.tuple(1)<span class="sgr36">::Tuple{Int64}</span>
+◌  <span class="sgr90">│   </span> %62 = <span class="sgr90">intrinsic </span>Base.sub_int(1, 1)<span class="sgr36">::Int64</span>
+◌  <span class="sgr90">│   </span> %63 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %62)<span class="sgr36">::UInt64</span>
+<span class="sgr31">X  </span><span class="sgr90">│   </span> %64 = <span class="sgr90">  builtin </span>Base.getfield(%3, :size)<span class="sgr36">::Tuple{Int64}</span>
+<span class="sgr31">X  </span><span class="sgr90">│   </span> %65 = <span class="sgr90">  builtin </span>Core.getfield(%64, 1)<span class="sgr36">::Int64</span>
+◌  <span class="sgr90">│   </span> %66 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %65)<span class="sgr36">::UInt64</span>
+◌  <span class="sgr90">│   </span> %67 = <span class="sgr90">intrinsic </span>Base.ult_int(%63, %66)<span class="sgr36">::Bool</span>
+◌  <span class="sgr90">└───</span>       goto #23 if not %67
 ◌  <span class="sgr90">22 ─</span>       goto #24
-◌  <span class="sgr90">23 ─</span> %69 = <span class="sgr90">  builtin </span>Core.tuple(1)<span class="sgr36">::Tuple{Int64}</span>
-<span class="sgr32">✓  </span><span class="sgr90">│   </span>       <span class="sgr90">   invoke </span>Base.throw_boundserror(%3::Vector{Any}, %69::Tuple{Int64})<span class="sgr90">::Union{}</span>
+<span class="sgr32">✓  </span><span class="sgr90">23 ─</span>       <span class="sgr90">   invoke </span>Base.throw_boundserror(%3::Vector{Any}, %61::Tuple{Int64})<span class="sgr90">::Union{}</span>
 ◌  <span class="sgr90">└───</span>       unreachable
 ◌  <span class="sgr90">24 ─</span>       nothing<span class="sgr90">::Nothing</span>
 <span class="sgr31">X  </span><span class="sgr90">25 ┄</span> %73 = <span class="sgr90">  builtin </span>Base.getfield(%3, :ref)<span class="sgr36">::MemoryRef{Any}</span>
@@ -442,16 +442,16 @@ and <code>%20</code> (corresponding to <code>SafeRef(t)</code>):</p><pre><code c
 ◌  <span class="sgr90">└───</span>       goto #9
 ◌  <span class="sgr90">9 ──</span> %48 = $(Expr(:boundscheck, true))<span class="sgr36">::Bool</span>
 ◌  <span class="sgr90">└───</span>       goto #14 if not %48
-◌  <span class="sgr90">10 ─</span> %50 = <span class="sgr90">intrinsic </span>Base.sub_int(1, 1)<span class="sgr36">::Int64</span>
-◌  <span class="sgr90">│   </span> %51 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %50)<span class="sgr36">::UInt64</span>
-<span class="sgr31">X  </span><span class="sgr90">│   </span> %52 = <span class="sgr90">  builtin </span>Base.getfield(%3, :size)<span class="sgr36">::Tuple{Int64}</span>
-<span class="sgr31">X  </span><span class="sgr90">│   </span> %53 = <span class="sgr90">  builtin </span>Core.getfield(%52, 1)<span class="sgr36">::Int64</span>
-◌  <span class="sgr90">│   </span> %54 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %53)<span class="sgr36">::UInt64</span>
-◌  <span class="sgr90">│   </span> %55 = <span class="sgr90">intrinsic </span>Base.ult_int(%51, %54)<span class="sgr36">::Bool</span>
-◌  <span class="sgr90">└───</span>       goto #12 if not %55
+◌  <span class="sgr90">10 ─</span> %50 = <span class="sgr90">  builtin </span>Core.tuple(1)<span class="sgr36">::Tuple{Int64}</span>
+◌  <span class="sgr90">│   </span> %51 = <span class="sgr90">intrinsic </span>Base.sub_int(1, 1)<span class="sgr36">::Int64</span>
+◌  <span class="sgr90">│   </span> %52 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %51)<span class="sgr36">::UInt64</span>
+<span class="sgr31">X  </span><span class="sgr90">│   </span> %53 = <span class="sgr90">  builtin </span>Base.getfield(%3, :size)<span class="sgr36">::Tuple{Int64}</span>
+<span class="sgr31">X  </span><span class="sgr90">│   </span> %54 = <span class="sgr90">  builtin </span>Core.getfield(%53, 1)<span class="sgr36">::Int64</span>
+◌  <span class="sgr90">│   </span> %55 = <span class="sgr90">intrinsic </span>Base.bitcast(Base.UInt, %54)<span class="sgr36">::UInt64</span>
+◌  <span class="sgr90">│   </span> %56 = <span class="sgr90">intrinsic </span>Base.ult_int(%52, %55)<span class="sgr36">::Bool</span>
+◌  <span class="sgr90">└───</span>       goto #12 if not %56
 ◌  <span class="sgr90">11 ─</span>       goto #13
-◌  <span class="sgr90">12 ─</span> %58 = <span class="sgr90">  builtin </span>Core.tuple(1)<span class="sgr36">::Tuple{Int64}</span>
-<span class="sgr32">✓  </span><span class="sgr90">│   </span>       <span class="sgr90">   invoke </span>Base.throw_boundserror(%3::Vector{Any}, %58::Tuple{Int64})<span class="sgr90">::Union{}</span>
+<span class="sgr32">✓  </span><span class="sgr90">12 ─</span>       <span class="sgr90">   invoke </span>Base.throw_boundserror(%3::Vector{Any}, %50::Tuple{Int64})<span class="sgr90">::Union{}</span>
 ◌  <span class="sgr90">└───</span>       unreachable
 ◌  <span class="sgr90">13 ─</span>       nothing<span class="sgr90">::Nothing</span>
 <span class="sgr31">X  </span><span class="sgr90">14 ┄</span> %62 = <span class="sgr90">  builtin </span>Base.getfield(%3, :ref)<span class="sgr36">::MemoryRef{Any}</span>
@@ -538,8 +538,8 @@ the escape analysis can improve analysis accuracy by utilizing cached inter-proc
 non-inlined callees that has been derived by previous <code>IPO EA</code>.
 More interestingly, it is also valid to use <code>IPO EA</code> escape information for type inference,
 e.g., inference accuracy can be improved by forming <code>Const</code>/<code>PartialStruct</code>/<code>MustAlias</code> of mutable object.</p><article><details class="docstring" open="true"><summary id="Base.Compiler.EscapeAnalysis.analyze_escapes"><a class="docstring-binding" href="#Base.Compiler.EscapeAnalysis.analyze_escapes"><code>Base.Compiler.EscapeAnalysis.analyze_escapes</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">analyze_escapes(ir::IRCode, nargs::Int, get_escape_cache) -&gt; estate::EscapeState</code></pre><p>Analyzes escape information in <code>ir</code>:</p><ul><li><code>nargs</code>: the number of actual arguments of the analyzed call</li><li><code>get_escape_cache(::MethodInstance) -&gt; Union{Bool,ArgEscapeCache}</code>:
-retrieves cached argument escape information</li></ul></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaLang/julia/blob/c4224cbb8c536f68f1f3048fd06e635af40a3d9d/base/../usr/share/julia/Compiler/src/ssair/EscapeAnalysis.jl#L552-L559">source</a></section></details></article><article><details class="docstring" open="true"><summary id="Base.Compiler.EscapeAnalysis.EscapeState"><a class="docstring-binding" href="#Base.Compiler.EscapeAnalysis.EscapeState"><code>Base.Compiler.EscapeAnalysis.EscapeState</code></a> — <span class="docstring-category">Type</span></summary><section><div><pre><code class="language-julia hljs">estate::EscapeState</code></pre><p>Extended lattice that maps arguments and SSA values to escape information represented as <a href="#Base.Compiler.EscapeAnalysis.EscapeInfo"><code>EscapeInfo</code></a>.
-Escape information imposed on SSA IR element <code>x</code> can be retrieved by <code>estate[x]</code>.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaLang/julia/blob/c4224cbb8c536f68f1f3048fd06e635af40a3d9d/base/../usr/share/julia/Compiler/src/ssair/EscapeAnalysis.jl#L386-L391">source</a></section></details></article><article><details class="docstring" open="true"><summary id="Base.Compiler.EscapeAnalysis.EscapeInfo"><a class="docstring-binding" href="#Base.Compiler.EscapeAnalysis.EscapeInfo"><code>Base.Compiler.EscapeAnalysis.EscapeInfo</code></a> — <span class="docstring-category">Type</span></summary><section><div><pre><code class="language-julia hljs">x::EscapeInfo</code></pre><p>A lattice for escape information, which holds the following properties:</p><ul><li><p><code>x.Analyzed::Bool</code>: not formally part of the lattice, only indicates whether <code>x</code> has been analyzed</p></li><li><p><code>x.ReturnEscape::Bool</code>: indicates <code>x</code> can escape to the caller via return</p></li><li><p><code>x.ThrownEscape::BitSet</code>: records SSA statement numbers where <code>x</code> can be thrown as exception:</p><ul><li><code>isempty(x.ThrownEscape)</code>: <code>x</code> will never be thrown in this call frame (the bottom)</li><li><code>pc ∈ x.ThrownEscape</code>: <code>x</code> may be thrown at the SSA statement at <code>pc</code></li><li><code>-1 ∈ x.ThrownEscape</code>: <code>x</code> may be thrown at arbitrary points of this call frame (the top)</li></ul><p>This information will be used by <code>escape_exception!</code> to propagate potential escapes via exception.</p></li><li><p><code>x.AliasInfo::Union{Bool,IndexableFields,Unindexable}</code>: maintains all possible values
+retrieves cached argument escape information</li></ul></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaLang/julia/blob/0643c3a99fb7d1f6dd02640913cd63138d5acdea/base/../usr/share/julia/Compiler/src/ssair/EscapeAnalysis.jl#L552-L559">source</a></section></details></article><article><details class="docstring" open="true"><summary id="Base.Compiler.EscapeAnalysis.EscapeState"><a class="docstring-binding" href="#Base.Compiler.EscapeAnalysis.EscapeState"><code>Base.Compiler.EscapeAnalysis.EscapeState</code></a> — <span class="docstring-category">Type</span></summary><section><div><pre><code class="language-julia hljs">estate::EscapeState</code></pre><p>Extended lattice that maps arguments and SSA values to escape information represented as <a href="#Base.Compiler.EscapeAnalysis.EscapeInfo"><code>EscapeInfo</code></a>.
+Escape information imposed on SSA IR element <code>x</code> can be retrieved by <code>estate[x]</code>.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaLang/julia/blob/0643c3a99fb7d1f6dd02640913cd63138d5acdea/base/../usr/share/julia/Compiler/src/ssair/EscapeAnalysis.jl#L386-L391">source</a></section></details></article><article><details class="docstring" open="true"><summary id="Base.Compiler.EscapeAnalysis.EscapeInfo"><a class="docstring-binding" href="#Base.Compiler.EscapeAnalysis.EscapeInfo"><code>Base.Compiler.EscapeAnalysis.EscapeInfo</code></a> — <span class="docstring-category">Type</span></summary><section><div><pre><code class="language-julia hljs">x::EscapeInfo</code></pre><p>A lattice for escape information, which holds the following properties:</p><ul><li><p><code>x.Analyzed::Bool</code>: not formally part of the lattice, only indicates whether <code>x</code> has been analyzed</p></li><li><p><code>x.ReturnEscape::Bool</code>: indicates <code>x</code> can escape to the caller via return</p></li><li><p><code>x.ThrownEscape::BitSet</code>: records SSA statement numbers where <code>x</code> can be thrown as exception:</p><ul><li><code>isempty(x.ThrownEscape)</code>: <code>x</code> will never be thrown in this call frame (the bottom)</li><li><code>pc ∈ x.ThrownEscape</code>: <code>x</code> may be thrown at the SSA statement at <code>pc</code></li><li><code>-1 ∈ x.ThrownEscape</code>: <code>x</code> may be thrown at arbitrary points of this call frame (the top)</li></ul><p>This information will be used by <code>escape_exception!</code> to propagate potential escapes via exception.</p></li><li><p><code>x.AliasInfo::Union{Bool,IndexableFields,Unindexable}</code>: maintains all possible values
 that can be aliased to fields or array elements of <code>x</code>:</p><ul><li><code>x.AliasInfo === false</code> indicates the fields/elements of <code>x</code> aren&#39;t analyzed yet</li><li><code>x.AliasInfo === true</code> indicates the fields/elements of <code>x</code> can&#39;t be analyzed,
 e.g. the type of <code>x</code> is not known or is not concrete and thus its fields/elements
 can&#39;t be known precisely</li><li><code>x.AliasInfo::IndexableFields</code> records all the possible values that can be aliased to fields of object <code>x</code> with precise index information</li><li><code>x.AliasInfo::Unindexable</code> records all the possible values that can be aliased to fields/elements of <code>x</code> without precise index information</li></ul></li><li><p><code>x.Liveness::BitSet</code>: records SSA statement numbers where <code>x</code> should be live, e.g.
@@ -549,7 +549,7 @@ in the same direction as Julia&#39;s native type inference routine.
 An abstract state will be initialized with the bottom(-like) elements:</p><ul><li>the call arguments are initialized as <code>ArgEscape()</code>, whose <code>Liveness</code> property includes <code>0</code>
 to indicate that it is passed as a call argument and visible from a caller immediately</li><li>the other states are initialized as <code>NotAnalyzed()</code>, which is a special lattice element that
 is slightly lower than <code>NoEscape</code>, but at the same time doesn&#39;t represent any meaning
-other than it&#39;s not analyzed yet (thus it&#39;s not formally part of the lattice)</li></ul></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaLang/julia/blob/c4224cbb8c536f68f1f3048fd06e635af40a3d9d/base/../usr/share/julia/Compiler/src/ssair/EscapeAnalysis.jl#L45-L84">source</a></section></details></article><hr/><section class="footnotes is-size-7"><ul><li class="footnote" id="footnote-LatticeDesign"><a class="tag is-link" href="#citeref-LatticeDesign">LatticeDesign</a>Our type inference implementation takes the alternative approach,
+other than it&#39;s not analyzed yet (thus it&#39;s not formally part of the lattice)</li></ul></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaLang/julia/blob/0643c3a99fb7d1f6dd02640913cd63138d5acdea/base/../usr/share/julia/Compiler/src/ssair/EscapeAnalysis.jl#L45-L84">source</a></section></details></article><hr/><section class="footnotes is-size-7"><ul><li class="footnote" id="footnote-LatticeDesign"><a class="tag is-link" href="#citeref-LatticeDesign">LatticeDesign</a>Our type inference implementation takes the alternative approach,
 where each lattice property is represented by a special lattice element type object.
 It turns out that it started to complicate implementations of the lattice operations
 mainly because it often requires conversion rules between each lattice element type object.
@@ -565,4 +565,4 @@ In such cases <code>AliasInfo</code> property is raised to the topmost element w
 and it causes succeeding field analysis to be conservative and escape information imposed on
 fields of an unanalyzable object to be propagated to the object itself.</li><li class="footnote" id="footnote-JVM05"><a class="tag is-link" href="#citeref-JVM05">JVM05</a><em>Escape Analysis in the Context of Dynamic Compilation and Deoptimization</em>.
       Thomas Kotzmann and Hanspeter Mössenböck, 2005, June.
-      <a href="https://dl.acm.org/doi/10.1145/1064979.1064996">https://dl.acm.org/doi/10.1145/1064979.1064996</a>.</li><li class="footnote" id="footnote-ArrayDimension"><a class="tag is-link" href="#citeref-ArrayDimension">ArrayDimension</a>Otherwise we will need yet another forward data-flow analysis on top of the escape analysis.</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../ssair/">« Julia SSA-form IR</a><a class="docs-footer-nextpage" href="../aot/">Ahead of Time Compilation »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.16.1 on <span class="colophon-date" title="Saturday 14 February 2026 05:12">Saturday 14 February 2026</span>. Using Julia version 1.14.0-DEV.1718.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+      <a href="https://dl.acm.org/doi/10.1145/1064979.1064996">https://dl.acm.org/doi/10.1145/1064979.1064996</a>.</li><li class="footnote" id="footnote-ArrayDimension"><a class="tag is-link" href="#citeref-ArrayDimension">ArrayDimension</a>Otherwise we will need yet another forward data-flow analysis on top of the escape analysis.</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../ssair/">« Julia SSA-form IR</a><a class="docs-footer-nextpage" href="../aot/">Ahead of Time Compilation »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.16.1 on <span class="colophon-date" title="Saturday 14 February 2026 13:17">Saturday 14 February 2026</span>. Using Julia version 1.14.0-DEV.1719.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
