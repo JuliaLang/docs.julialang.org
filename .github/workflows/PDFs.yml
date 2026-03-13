@@ -28,13 +28,6 @@ jobs:
         with:
           version: 1
           show-versioninfo: true
-      - name: Cache Julia artifacts
-        uses: actions/cache@v5
-        with:
-          path: ~/.julia/artifacts
-          key: ${{ runner.os }}-julia-artifacts-${{ hashFiles('**/Project.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-julia-artifacts-
       - name: Install TeX Live and Pygments
         run: |
           sudo apt-get update
