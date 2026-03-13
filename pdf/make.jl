@@ -49,11 +49,14 @@ function download_nightly()
 end
 
 function makedocs(julia_exec)
+    # Override build_datarootdir so the Makefile's stdlibdir points to the downloaded binary's stdlib.
+    stdlibdir = readchomp(`$(julia_exec) -e 'print(Sys.STDLIB)'`)
+    datarootdir = abspath(joinpath(stdlibdir, "..", "..", ".."))
     @sync begin
         builder = @async begin
             withenv("DOCUMENTER_KEY" => nothing, # skips deploydocs with the BuildBotConfig (see doc/make.jl)
                     "BUILDROOT" => nothing) do
-                run(`make -C $(JULIA_SOURCE)/doc pdf texplatform=docker JULIA_EXECUTABLE=$(julia_exec)`)
+                run(`make -C $(JULIA_SOURCE)/doc pdf texplatform=docker JULIA_EXECUTABLE=$(julia_exec) build_datarootdir=$(datarootdir)`)
             end
         end
         @async begin
