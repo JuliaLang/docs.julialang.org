@@ -56,7 +56,7 @@ function makedocs(julia_exec)
         builder = @async begin
             withenv("DOCUMENTER_KEY" => nothing, # skips deploydocs with the BuildBotConfig (see doc/make.jl)
                     "BUILDROOT" => nothing) do
-                run(`make -C $(JULIA_SOURCE)/doc pdf texplatform=docker JULIA_EXECUTABLE=$(julia_exec) build_datarootdir=$(datarootdir)`)
+                run(`make -C $(JULIA_SOURCE)/doc pdf JULIA_EXECUTABLE=$(julia_exec) build_datarootdir=$(datarootdir)`)
             end
         end
         @async begin

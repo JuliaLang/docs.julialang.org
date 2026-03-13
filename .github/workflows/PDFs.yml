@@ -28,16 +28,20 @@ jobs:
         with:
           version: 1
           show-versioninfo: true
-      - uses: actions/cache@v5
-        env:
-          cache-name: cache-artifacts
+      - name: Cache Julia artifacts
+        uses: actions/cache@v5
         with:
           path: ~/.julia/artifacts
-          key: ${{ runner.os }}-test-${{ env.cache-name }}-${{ hashFiles('**/Project.toml') }}
+          key: ${{ runner.os }}-julia-artifacts-${{ hashFiles('**/Project.toml') }}
           restore-keys: |
-            ${{ runner.os }}-test-${{ env.cache-name }}-
-            ${{ runner.os }}-test-
-            ${{ runner.os }}-
+            ${{ runner.os }}-julia-artifacts-
+      - name: Install TeX Live and Pygments
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            texlive-luatex texlive-latex-extra texlive-fonts-extra \
+            texlive-fonts-recommended texlive-plain-generic \
+            latexmk python3-pygments fonts-dejavu
       - run: |
           mkdir $BUILDROOT
           git clone https://github.com/JuliaLang/julia.git $JULIA_SOURCE
