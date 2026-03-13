@@ -32,9 +32,10 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            texlive-luatex texlive-latex-extra texlive-fonts-extra \
-            texlive-fonts-recommended texlive-plain-generic \
-            latexmk python3-pygments fonts-dejavu
+            texlive-latex-base texlive-luatex texlive-latex-recommended \
+            texlive-latex-extra texlive-fonts-extra texlive-fonts-recommended \
+            texlive-plain-generic latexmk \
+            python3-pygments fontconfig fonts-dejavu fonts-lato
       - run: |
           mkdir $BUILDROOT
           git clone https://github.com/JuliaLang/julia.git $JULIA_SOURCE
