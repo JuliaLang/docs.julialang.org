@@ -10,7 +10,7 @@ on:
 jobs:
   pdf:
     name: Julia PDF builds (${{ matrix.buildtype }})
-    timeout-minutes: 120
+    timeout-minutes: 180
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
