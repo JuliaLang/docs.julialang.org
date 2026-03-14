@@ -55,7 +55,7 @@ jobs:
     name: PDF ${{ matrix.version }}
     needs: collect-versions
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
@@ -78,6 +78,7 @@ jobs:
         with:
           name: "pdf-${{ matrix.version }}"
           path: ${{ env.BUILDROOT }}/tmp/julia-*.pdf
+          if-no-files-found: ignore
           retention-days: 7
 
   # Commit all built PDFs to the assets branch
