@@ -9,6 +9,7 @@ const JULIA_DOCS_TMP = get(ENV, "JULIA_DOCS_TMP", "$(BUILDROOT)/tmp")
 const MIN_PDF_SIZE = 1_000_000 # 1 MB minimum for a valid Julia manual PDF
 
 # download and extract binary for a given version, return path to executable
+# returns nothing if the binary is not available (e.g. tag exists but release was never published)
 function download_release(v::VersionNumber)
     x, y = v.major, v.minor
     julia_exec = cd(BUILDROOT) do
@@ -17,6 +18,11 @@ function download_release(v::VersionNumber)
         sha256 = "julia-$(v).sha256"
         url = "https://julialang-s3.julialang.org/bin/linux/x64/$(x).$(y)/$(tarball)"
         sha_url = "https://julialang-s3.julialang.org/bin/checksums/$(sha256)"
+        # check that the binary exists before downloading
+        if !success(`curl --retry 3 --retry-delay 5 -sfI -o /dev/null $(url)`)
+            @warn "Binary not available for Julia v$(v), skipping." url
+            return nothing
+        end
         @info "Downloading release tarball." url sha_url
         run(`curl --retry 5 --retry-delay 10 -fvo $(tarball) -L $(url)`)
         run(`curl --retry 5 --retry-delay 10 -fvo $(sha256) -L $(sha_url)`)
@@ -40,12 +46,12 @@ function download_nightly()
         url = "https://julialangnightlies-s3.julialang.org/bin/linux/x64/$(tarball)"
         @info "Downloading nightly tarball." url
         run(`curl --retry 5 --retry-delay 10 -fvo $(tarball) -L $url`)
-        # find the commit from the extracted folder
-        folder = first(readlines(`tar -tf $(tarball)`))
-        _, commit = split(folder, '-'); commit = chop(commit)
         mkpath(julia)
         run(`tar -xzf $(tarball) -C $(julia) --strip-components 1`)
-        return abspath(julia, "bin", "julia"), commit
+        exec = abspath(julia, "bin", "julia")
+        # get the full commit hash from the binary (tarball folder only has a short hash)
+        commit = readchomp(`$(exec) -e 'print(Base.GIT_VERSION_INFO.commit)'`)
+        return exec, commit
     end
     return julia_exec, commit
 end
@@ -111,8 +117,12 @@ function build_release_pdf(v::VersionNumber; skip_existing::Bool=true, checkout:
         return
     end
 
-    # download julia binary
+    # download julia binary (returns nothing if binary not available on S3)
     julia_exec = download_release(v)
+    if julia_exec === nothing
+        @info "No binary available for Julia v$(v), skipping PDF build."
+        return
+    end
 
     # checkout relevant tag and clean repo (skip if already at the right ref via shallow clone)
     if checkout
