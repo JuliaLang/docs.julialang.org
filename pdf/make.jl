@@ -43,15 +43,13 @@ function download_release(v::VersionNumber)
     end
     return julia_exec
 end
-# download and extract nightly binary, return path to executable and commit.
-# `branch` is a major.minor string like "1.12", or "" for the master nightly.
-function download_nightly(branch::String="")
+# download and extract nightly binary, return path to executable and commit
+function download_nightly()
     julia_exec, commit = cd(BUILDROOT) do
-        subdir = isempty(branch) ? "" : "$(branch)/"
-        julia = isempty(branch) ? "julia-nightly" : "julia-nightly-$(branch)"
+        julia = "julia-nightly"
         tarball = "julia-latest-linux64.tar.gz"
-        url = "https://julialangnightlies-s3.julialang.org/bin/linux/x64/$(subdir)$(tarball)"
-        @info "Downloading nightly tarball." url branch
+        url = "https://julialangnightlies-s3.julialang.org/bin/linux/x64/$(tarball)"
+        @info "Downloading nightly tarball." url
         run(`curl --retry 5 --retry-delay 10 -fvo $(tarball) -L $url`)
         mkpath(julia)
         run(`tar -xzf $(tarball) -C $(julia) --strip-components 1`)
@@ -144,25 +142,11 @@ function build_release_pdf(v::VersionNumber; skip_existing::Bool=true, checkout:
     copydocs(file)
 end
 
-function build_nightly_pdf(branch::String="")
-    julia_exec, commit = download_nightly(branch)
+function build_nightly_pdf()
+    julia_exec, commit = download_nightly()
     # output is "julia version 1.14.0-DEV"
     _, _, v = split(readchomp(`$(julia_exec) --version`))
-    @info "Building nightly PDF." branch commit version=v
-
-    # only build if this is actually a DEV version — some release branch
-    # nightlies just mirror the latest tagged release
-    if !contains(v, "-DEV")
-        @info "Nightly for branch $(branch) reports released version $(v), skipping."
-        return
-    end
-
-    # check if the commit has changed since last build
-    commitfile = "$(JULIA_DOCS)/julia-$(v).commit"
-    if isfile(commitfile) && strip(read(commitfile, String)) == commit
-        @info "Nightly PDF for $(v) is up to date (commit $(commit)), skipping."
-        return
-    end
+    @info "Building nightly PDF." commit version=v
 
     # fetch and checkout the nightly commit (shallow clone may not have it)
     run(`git -C $(JULIA_SOURCE) fetch --depth 1 origin $(commit)`)
@@ -172,29 +156,8 @@ function build_nightly_pdf(branch::String="")
     # invoke makedocs
     makedocs(julia_exec)
 
-    # copy the built PDF and record the commit
+    # copy the built PDF
     copydocs("julia-$(v).pdf")
-    isdir(JULIA_DOCS_TMP) || mkpath(JULIA_DOCS_TMP)
-    write("$(JULIA_DOCS_TMP)/julia-$(v).commit", commit)
-end
-
-# discover release branches with nightly builds on S3
-function collect_nightly_branches()
-    # find release-X.Y branches from the Julia repo
-    str = read(`git -C $(JULIA_SOURCE) ls-remote --heads origin`, String)
-    branches = String[]
-    for line in eachline(IOBuffer(str))
-        _, ref = split(line, '\t')
-        m = match(r"^refs/heads/release-(\d+\.\d+)$", ref)
-        m === nothing && continue
-        branch = m.captures[1]
-        # check if a nightly tarball exists for this branch
-        url = "https://julialangnightlies-s3.julialang.org/bin/linux/x64/$(branch)/julia-latest-linux64.tar.gz"
-        if success(`curl --retry 2 --retry-delay 3 -sfI -o /dev/null $(url)`)
-            push!(branches, branch)
-        end
-    end
-    return branches
 end
 
 # load versions to skip from pdf/skip-versions.txt
@@ -240,8 +203,8 @@ function commit()
         @info "skipping commit from pull requests."
         return
     end
-    if !isdir(JULIA_DOCS_TMP) || isempty(filter(f -> endswith(f, ".pdf") || endswith(f, ".commit"), readdir(JULIA_DOCS_TMP)))
-        @info "No new PDFs or commit markers found, skipping commit."
+    if !isdir(JULIA_DOCS_TMP) || isempty(filter(f -> endswith(f, ".pdf"), readdir(JULIA_DOCS_TMP)))
+        @info "No new PDFs found, skipping commit."
         return
     end
     @info "committing built PDF files."
@@ -250,26 +213,12 @@ function commit()
     run(`git fetch origin`)
     run(`git reset --hard origin/assets`)
 
-    # Copy PDFs and commit markers from JULIA_DOCS_TMP to JULIA_DOCS
+    # Copy PDFs from JULIA_DOCS_TMP to JULIA_DOCS
     for file in readdir(JULIA_DOCS_TMP)
-        (endswith(file, ".pdf") || endswith(file, ".commit")) || continue
+        endswith(file, ".pdf") || continue
         from = joinpath(JULIA_DOCS_TMP, file)
-        @debug "Copying" file from pwd()
+        @debug "Copying a PDF" file from pwd()
         cp(from, file; force = true)
-    end
-
-    # Clean up DEV PDFs that now have a corresponding release PDF.
-    # e.g. when julia-1.12.6.pdf is built, remove julia-1.12.6-DEV.pdf
-    for file in readdir(".")
-        m = match(r"^julia-(.+)-DEV\.pdf$", file)
-        m === nothing && continue
-        release_pdf = "julia-$(m.captures[1]).pdf"
-        if isfile(release_pdf)
-            @info "Removing obsolete DEV PDF" file release_pdf
-            rm(file)
-            commitfile = replace(file, ".pdf" => ".commit")
-            isfile(commitfile) && rm(commitfile)
-        end
     end
 
     mktemp() do keyfile, iokey; mktemp() do sshconfig, iossh
@@ -293,8 +242,18 @@ function commit()
         run(`git config user.email "documenter@juliadocs.github.io"`)
         run(`git remote set-url origin git@github.com:JuliaLang/docs.julialang.org.git`)
         run(`git config core.sshCommand "ssh -F $(sshconfig)"`)
-        # Stage all changes (new/updated PDFs, commit markers, deleted DEV files)
-        run(`git add -A`)
+        # Stage new/updated PDFs
+        run(`git add '*.pdf'`)
+        # Clean up DEV PDFs that now have a corresponding release PDF
+        for file in readdir(".")
+            m = match(r"^julia-(.+)-DEV\.pdf$", file)
+            m === nothing && continue
+            release_pdf = "julia-$(m.captures[1]).pdf"
+            if isfile(release_pdf)
+                @info "Removing obsolete DEV PDF" file release_pdf
+                run(`git rm -f $file`)
+            end
+        end
         # Only commit and push if there are staged changes
         if success(`git diff --cached --quiet`)
             @info "No changes to commit."
@@ -316,8 +275,6 @@ function main()
         target = ARGS[idx + 1]
         if target == "nightly"
             build_nightly_pdf()
-        elseif startswith(target, "nightly-")
-            build_nightly_pdf(target[9:end])  # e.g. "nightly-1.12" → "1.12"
         else
             build_release_pdf(VersionNumber(target); skip_existing=false, checkout=false)
         end
