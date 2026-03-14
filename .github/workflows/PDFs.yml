@@ -81,7 +81,9 @@ jobs:
       - uses: actions/upload-artifact@v7
         with:
           name: "pdf-${{ matrix.version }}"
-          path: ${{ env.BUILDROOT }}/tmp/julia-*.pdf
+          path: |
+            ${{ env.BUILDROOT }}/tmp/julia-*.pdf
+            ${{ env.BUILDROOT }}/tmp/julia-*.commit
           if-no-files-found: ignore
           retention-days: 7
 
@@ -105,8 +107,8 @@ jobs:
           path: ${{ env.BUILDROOT }}/tmp/
           merge-multiple: true
       - run: |
-          echo "Downloaded PDFs:"
-          ls -lh $BUILDROOT/tmp/*.pdf 2>/dev/null || echo "No PDFs found"
+          echo "Downloaded artifacts:"
+          ls -lh $BUILDROOT/tmp/*.pdf $BUILDROOT/tmp/*.commit 2>/dev/null || echo "No artifacts found"
       - run: julia --color=yes pdf/make.jl commit
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

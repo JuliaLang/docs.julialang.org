@@ -150,6 +150,13 @@ function build_nightly_pdf(branch::String="")
     _, _, v = split(readchomp(`$(julia_exec) --version`))
     @info "Building nightly PDF." branch commit version=v
 
+    # only build if this is actually a DEV version — some release branch
+    # nightlies just mirror the latest tagged release
+    if !contains(v, "-DEV")
+        @info "Nightly for branch $(branch) reports released version $(v), skipping."
+        return
+    end
+
     # check if the commit has changed since last build
     commitfile = "$(JULIA_DOCS)/julia-$(v).commit"
     if isfile(commitfile) && strip(read(commitfile, String)) == commit
@@ -251,6 +258,20 @@ function commit()
         cp(from, file; force = true)
     end
 
+    # Clean up DEV PDFs that now have a corresponding release PDF.
+    # e.g. when julia-1.12.6.pdf is built, remove julia-1.12.6-DEV.pdf
+    for file in readdir(".")
+        m = match(r"^julia-(.+)-DEV\.pdf$", file)
+        m === nothing && continue
+        release_pdf = "julia-$(m.captures[1]).pdf"
+        if isfile(release_pdf)
+            @info "Removing obsolete DEV PDF" file release_pdf
+            rm(file)
+            commitfile = replace(file, ".pdf" => ".commit")
+            isfile(commitfile) && rm(commitfile)
+        end
+    end
+
     mktemp() do keyfile, iokey; mktemp() do sshconfig, iossh
         # Set up keyfile
         write(iokey, base64decode(get(ENV, "DOCUMENTER_KEY_PDF", "")))
@@ -272,14 +293,15 @@ function commit()
         run(`git config user.email "documenter@juliadocs.github.io"`)
         run(`git remote set-url origin git@github.com:JuliaLang/docs.julialang.org.git`)
         run(`git config core.sshCommand "ssh -F $(sshconfig)"`)
-        # Stage all .pdf and .commit files
-        for ext in ("pdf", "commit")
-            files = filter(f -> endswith(f, ".$ext"), readdir("."))
-            isempty(files) || run(`git add $(files...)`)
+        # Stage all changes (new/updated PDFs, commit markers, deleted DEV files)
+        run(`git add -A`)
+        # Only commit and push if there are staged changes
+        if success(`git diff --cached --quiet`)
+            @info "No changes to commit."
+        else
+            run(`git commit --amend --date=now -m "PDF versions of Julia's manual."`)
+            run(`git push -f origin assets`)
         end
-        run(`git commit --amend --date=now -m "PDF versions of Julia's manual."`)
-        # Push
-        run(`git push -f origin assets`)
     end end
 end
 
