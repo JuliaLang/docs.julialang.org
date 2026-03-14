@@ -42,7 +42,11 @@ jobs:
                 push!(targets, string(v))
               end
             end
+            # add nightly builds: master + release branches
             push!(targets, "nightly")
+            for branch in collect_nightly_branches()
+              push!(targets, "nightly-$(branch)")
+            end
             print("[")
             print(join(["\"$t\"" for t in targets], ","))
             print("]")
@@ -64,7 +68,7 @@ jobs:
       - uses: actions/checkout@v6
       - uses: ./.github/actions/setup-pdf-build
         with:
-          julia-ref: ${{ matrix.version != 'nightly' && format('v{0}', matrix.version) || '' }}
+          julia-ref: ${{ !startsWith(matrix.version, 'nightly') && format('v{0}', matrix.version) || '' }}
       - run: julia --color=yes pdf/make.jl build ${{ matrix.version }}
         env:
           DOCUMENTER_LATEX_DEBUG: ${{ github.workspace }}/latex-debug-logs
