@@ -242,8 +242,9 @@ function commit()
         run(`git config user.email "documenter@juliadocs.github.io"`)
         run(`git remote set-url origin git@github.com:JuliaLang/docs.julialang.org.git`)
         run(`git config core.sshCommand "ssh -F $(sshconfig)"`)
-        # Stage new/updated PDFs
-        run(`git add '*.pdf'`)
+        # Stage only the new/updated PDFs
+        new_pdfs = filter(f -> endswith(f, ".pdf"), readdir(JULIA_DOCS_TMP))
+        isempty(new_pdfs) || run(`git add $new_pdfs`)
         # Clean up DEV PDFs that now have a corresponding release PDF
         for file in readdir(".")
             m = match(r"^julia-(.+)-DEV\.pdf$", file)
