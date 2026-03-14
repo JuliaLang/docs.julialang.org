@@ -25,12 +25,17 @@ function download_release(v::VersionNumber)
         end
         @info "Downloading release tarball." url sha_url
         run(`curl --retry 5 --retry-delay 10 -fvo $(tarball) -L $(url)`)
-        run(`curl --retry 5 --retry-delay 10 -fvo $(sha256) -L $(sha_url)`)
-        try
-            run(pipeline(`grep $(tarball) $(sha256)`, `sha256sum -c`))
-        catch e
-            @info "Contents of SHA256 file:\n$(read(sha256, String))"
-            rethrow(e)
+        # verify checksum if available (some pre-releases don't have .sha256 files)
+        if success(`curl --retry 3 --retry-delay 5 -sfI -o /dev/null $(sha_url)`)
+            run(`curl --retry 5 --retry-delay 10 -fvo $(sha256) -L $(sha_url)`)
+            try
+                run(pipeline(`grep $(tarball) $(sha256)`, `sha256sum -c`))
+            catch e
+                @info "Contents of SHA256 file:\n$(read(sha256, String))"
+                rethrow(e)
+            end
+        else
+            @warn "Checksum file not available, skipping verification." sha_url
         end
         mkpath(julia)
         run(`tar -xzf $(tarball) -C $(julia) --strip-components 1`)
@@ -168,10 +173,9 @@ function collect_versions()
             # release and pre-release versions (alpha, beta, rc) but exclude tags with
             # build information or non-standard pre-release labels.
             v = VersionNumber(tag)
-            # pdf doc only possible for 1.1.0 and above
-            v >= v"1.1.0" || continue
-            # only build pre-releases for 1.10+
-            (v.major, v.minor) < (1, 10) && !isempty(v.prerelease) && continue
+            # only build PDFs for 1.5+ (older versions have
+            # incompatibilities with current TeX Live / Documenter)
+            (v.major, v.minor) < (1, 5) && continue
             push!(versions, v)
         end
     end
