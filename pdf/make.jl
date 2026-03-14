@@ -25,12 +25,17 @@ function download_release(v::VersionNumber)
         end
         @info "Downloading release tarball." url sha_url
         run(`curl --retry 5 --retry-delay 10 -fvo $(tarball) -L $(url)`)
-        run(`curl --retry 5 --retry-delay 10 -fvo $(sha256) -L $(sha_url)`)
-        try
-            run(pipeline(`grep $(tarball) $(sha256)`, `sha256sum -c`))
-        catch e
-            @info "Contents of SHA256 file:\n$(read(sha256, String))"
-            rethrow(e)
+        # verify checksum if available (some pre-releases don't have .sha256 files)
+        if success(`curl --retry 3 --retry-delay 5 -sfI -o /dev/null $(sha_url)`)
+            run(`curl --retry 5 --retry-delay 10 -fvo $(sha256) -L $(sha_url)`)
+            try
+                run(pipeline(`grep $(tarball) $(sha256)`, `sha256sum -c`))
+            catch e
+                @info "Contents of SHA256 file:\n$(read(sha256, String))"
+                rethrow(e)
+            end
+        else
+            @warn "Checksum file not available, skipping verification." sha_url
         end
         mkpath(julia)
         run(`tar -xzf $(tarball) -C $(julia) --strip-components 1`)
