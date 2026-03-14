@@ -43,13 +43,15 @@ function download_release(v::VersionNumber)
     end
     return julia_exec
 end
-# download and extract nightly binary, return path to executable and commit
-function download_nightly()
+# download and extract nightly binary, return path to executable and commit.
+# `branch` is a major.minor string like "1.12", or "" for the master nightly.
+function download_nightly(branch::String="")
     julia_exec, commit = cd(BUILDROOT) do
-        julia = "julia-latest-linux64"
-        tarball = "$(julia).tar.gz"
-        url = "https://julialangnightlies-s3.julialang.org/bin/linux/x64/$(tarball)"
-        @info "Downloading nightly tarball." url
+        subdir = isempty(branch) ? "" : "$(branch)/"
+        julia = isempty(branch) ? "julia-nightly" : "julia-nightly-$(branch)"
+        tarball = "julia-latest-linux64.tar.gz"
+        url = "https://julialangnightlies-s3.julialang.org/bin/linux/x64/$(subdir)$(tarball)"
+        @info "Downloading nightly tarball." url branch
         run(`curl --retry 5 --retry-delay 10 -fvo $(tarball) -L $url`)
         mkpath(julia)
         run(`tar -xzf $(tarball) -C $(julia) --strip-components 1`)
@@ -142,11 +144,18 @@ function build_release_pdf(v::VersionNumber; skip_existing::Bool=true, checkout:
     copydocs(file)
 end
 
-function build_nightly_pdf()
-    julia_exec, commit = download_nightly()
-    # output is "julia version 1.1.0-DEV"
+function build_nightly_pdf(branch::String="")
+    julia_exec, commit = download_nightly(branch)
+    # output is "julia version 1.14.0-DEV"
     _, _, v = split(readchomp(`$(julia_exec) --version`))
-    @info "commit determined to $(commit) and version determined to $(v)."
+    @info "Building nightly PDF." branch commit version=v
+
+    # check if the commit has changed since last build
+    commitfile = "$(JULIA_DOCS)/julia-$(v).commit"
+    if isfile(commitfile) && strip(read(commitfile, String)) == commit
+        @info "Nightly PDF for $(v) is up to date (commit $(commit)), skipping."
+        return
+    end
 
     # fetch and checkout the nightly commit (shallow clone may not have it)
     run(`git -C $(JULIA_SOURCE) fetch --depth 1 origin $(commit)`)
@@ -156,8 +165,29 @@ function build_nightly_pdf()
     # invoke makedocs
     makedocs(julia_exec)
 
-    # copy the built PDF to JULIA_DOCS
+    # copy the built PDF and record the commit
     copydocs("julia-$(v).pdf")
+    isdir(JULIA_DOCS_TMP) || mkpath(JULIA_DOCS_TMP)
+    write("$(JULIA_DOCS_TMP)/julia-$(v).commit", commit)
+end
+
+# discover release branches with nightly builds on S3
+function collect_nightly_branches()
+    # find release-X.Y branches from the Julia repo
+    str = read(`git -C $(JULIA_SOURCE) ls-remote --heads origin`, String)
+    branches = String[]
+    for line in eachline(IOBuffer(str))
+        _, ref = split(line, '\t')
+        m = match(r"^refs/heads/release-(\d+\.\d+)$", ref)
+        m === nothing && continue
+        branch = m.captures[1]
+        # check if a nightly tarball exists for this branch
+        url = "https://julialangnightlies-s3.julialang.org/bin/linux/x64/$(branch)/julia-latest-linux64.tar.gz"
+        if success(`curl --retry 2 --retry-delay 3 -sfI -o /dev/null $(url)`)
+            push!(branches, branch)
+        end
+    end
+    return branches
 end
 
 # load versions to skip from pdf/skip-versions.txt
@@ -203,8 +233,8 @@ function commit()
         @info "skipping commit from pull requests."
         return
     end
-    if !isdir(JULIA_DOCS_TMP) || isempty(filter(f -> endswith(f, ".pdf"), readdir(JULIA_DOCS_TMP)))
-        @info "No new PDFs found, skipping commit."
+    if !isdir(JULIA_DOCS_TMP) || isempty(filter(f -> endswith(f, ".pdf") || endswith(f, ".commit"), readdir(JULIA_DOCS_TMP)))
+        @info "No new PDFs or commit markers found, skipping commit."
         return
     end
     @info "committing built PDF files."
@@ -213,11 +243,11 @@ function commit()
     run(`git fetch origin`)
     run(`git reset --hard origin/assets`)
 
-    # Copy file from JULIA_DOCS_TMP to JULIA_DOCS
+    # Copy PDFs and commit markers from JULIA_DOCS_TMP to JULIA_DOCS
     for file in readdir(JULIA_DOCS_TMP)
-        endswith(file, ".pdf") || continue
+        (endswith(file, ".pdf") || endswith(file, ".commit")) || continue
         from = joinpath(JULIA_DOCS_TMP, file)
-        @debug "Copying a PDF" file from pwd()
+        @debug "Copying" file from pwd()
         cp(from, file; force = true)
     end
 
@@ -242,8 +272,8 @@ function commit()
         run(`git config user.email "documenter@juliadocs.github.io"`)
         run(`git remote set-url origin git@github.com:JuliaLang/docs.julialang.org.git`)
         run(`git config core.sshCommand "ssh -F $(sshconfig)"`)
-        # Committing all .pdf files
-        run(`git add '*.pdf'`)
+        # Committing all .pdf and .commit files
+        run(`git add '*.pdf' '*.commit'`)
         run(`git commit --amend --date=now -m "PDF versions of Julia's manual."`)
         # Push
         run(`git push -f origin assets`)
@@ -261,6 +291,8 @@ function main()
         target = ARGS[idx + 1]
         if target == "nightly"
             build_nightly_pdf()
+        elseif startswith(target, "nightly-")
+            build_nightly_pdf(target[9:end])  # e.g. "nightly-1.12" → "1.12"
         else
             build_release_pdf(VersionNumber(target); skip_existing=false, checkout=false)
         end
