@@ -160,8 +160,22 @@ function build_nightly_pdf()
     copydocs("julia-$(v).pdf")
 end
 
+# load versions to skip from pdf/skip-versions.txt
+function load_skip_versions()
+    skipfile = joinpath(@__DIR__, "skip-versions.txt")
+    isfile(skipfile) || return Set{VersionNumber}()
+    versions = Set{VersionNumber}()
+    for line in eachline(skipfile)
+        line = strip(line)
+        (isempty(line) || startswith(line, '#')) && continue
+        push!(versions, VersionNumber(line))
+    end
+    return versions
+end
+
 # find all tags in the julia repo
 function collect_versions()
+    skip_versions = load_skip_versions()
     str = read(`git -C $(JULIA_SOURCE) ls-remote --tags origin`, String)
     versions = VersionNumber[]
     for line in eachline(IOBuffer(str))
@@ -173,9 +187,10 @@ function collect_versions()
             # release and pre-release versions (alpha, beta, rc) but exclude tags with
             # build information or non-standard pre-release labels.
             v = VersionNumber(tag)
-            # only build PDFs for 1.5+ (older versions have
-            # incompatibilities with current TeX Live / Documenter)
-            (v.major, v.minor) < (1, 5) && continue
+            # pdf doc only possible for 1.1.0 and above
+            v >= v"1.1.0" || continue
+            # skip versions with known build failures (listed in pdf/skip-versions.txt)
+            v in skip_versions && continue
             push!(versions, v)
         end
     end
