@@ -170,8 +170,6 @@ function collect_versions()
             v = VersionNumber(tag)
             # pdf doc only possible for 1.1.0 and above
             v >= v"1.1.0" || continue
-            # only build pre-releases for 1.10+
-            (v.major, v.minor) < (1, 10) && !isempty(v.prerelease) && continue
             push!(versions, v)
         end
     end
