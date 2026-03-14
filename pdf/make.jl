@@ -173,9 +173,9 @@ function collect_versions()
             # release and pre-release versions (alpha, beta, rc) but exclude tags with
             # build information or non-standard pre-release labels.
             v = VersionNumber(tag)
-            # only build PDFs for 1.5.0 and above (older versions have
+            # only build PDFs for 1.5+ (older versions have
             # incompatibilities with current TeX Live / Documenter)
-            v >= v"1.5.0" || continue
+            (v.major, v.minor) < (1, 5) && continue
             push!(versions, v)
         end
     end
