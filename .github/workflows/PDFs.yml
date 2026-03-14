@@ -7,50 +7,101 @@ on:
     - cron: '0 0 * * *' # daily
   pull_request:
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
+env:
+  BUILDROOT: ${{ github.workspace }}/pdf/build
+  JULIA_SOURCE: ${{ github.workspace }}/pdf/build/julia
+  JULIA_DOCS: ${{ github.workspace }}/pdf/build/docs.julialang.org
+
 jobs:
-  pdf:
-    name: Julia PDF builds (${{ matrix.buildtype }})
-    timeout-minutes: 180
+  # Determine which versions need PDF builds (missing releases + nightly)
+  collect-versions:
+    name: Collect versions to build
     runs-on: ubuntu-latest
+    outputs:
+      versions: ${{ steps.versions.outputs.versions }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/setup-pdf-build
+        with:
+          clone-assets: 'true'
+      - id: versions
+        run: |
+          versions=$(julia --color=yes -e '
+            include("pdf/make.jl")
+            versions = collect_versions()
+            sort!(versions)
+            targets = String[]
+            for v in versions
+              file = "julia-$(v).pdf"
+              if !isfile("$(ENV["JULIA_DOCS"])/$(file)")
+                push!(targets, string(v))
+              end
+            end
+            push!(targets, "nightly")
+            print("[")
+            print(join(["\"$t\"" for t in targets], ","))
+            print("]")
+          ')
+          echo "versions=$versions" >> "$GITHUB_OUTPUT"
+          echo "Versions to build: $versions"
+
+  # Build each version in parallel
+  build-pdf:
+    name: PDF ${{ matrix.version }}
+    needs: collect-versions
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
-        buildtype:
-          - 'releases'
-          - 'nightly'
-    env:
-      BUILDROOT: ${{ github.workspace }}/pdf/build
-      JULIA_SOURCE: ${{ github.workspace }}/pdf/build/julia
-      JULIA_DOCS: ${{ github.workspace }}/pdf/build/docs.julialang.org
+        version: ${{ fromJson(needs.collect-versions.outputs.versions) }}
     steps:
       - uses: actions/checkout@v6
-      - uses: julia-actions/setup-julia@v2
+      - uses: ./.github/actions/setup-pdf-build
         with:
-          version: 1
-          show-versioninfo: true
-      - uses: actions/cache@v5
-        env:
-          cache-name: cache-artifacts
-        with:
-          path: ~/.julia/artifacts
-          key: ${{ runner.os }}-test-${{ env.cache-name }}-${{ hashFiles('**/Project.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-test-${{ env.cache-name }}-
-            ${{ runner.os }}-test-
-            ${{ runner.os }}-
-      - run: |
-          mkdir $BUILDROOT
-          git clone https://github.com/JuliaLang/julia.git $JULIA_SOURCE
-          git clone https://github.com/JuliaLang/docs.julialang.org.git -b assets --single-branch $JULIA_DOCS
-      - run: julia --color=yes pdf/make.jl ${{ matrix.buildtype }}
+          julia-ref: ${{ matrix.version != 'nightly' && format('v{0}', matrix.version) || '' }}
+      - run: julia --color=yes pdf/make.jl build ${{ matrix.version }}
         env:
           DOCUMENTER_LATEX_DEBUG: ${{ github.workspace }}/latex-debug-logs
       - uses: actions/upload-artifact@v7
         if: ${{ always() }}
         with:
-          name: "LaTeX source and logs (${{ matrix.buildtype }})"
+          name: "LaTeX source and logs (${{ matrix.version }})"
           path: ${{ github.workspace }}/latex-debug-logs/
-          retention-days: 7 # reduced from the default 90, builds run daily anyway
+          retention-days: 7
+      - uses: actions/upload-artifact@v7
+        with:
+          name: "pdf-${{ matrix.version }}"
+          path: ${{ env.BUILDROOT }}/tmp/julia-*.pdf
+          retention-days: 7
+
+  # Commit all built PDFs to the assets branch
+  commit-pdfs:
+    name: Commit PDFs to assets branch
+    needs: [build-pdf]
+    if: ${{ always() && github.event_name != 'pull_request' && contains(fromJson('["success", "failure"]'), needs.build-pdf.result) }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: julia-actions/setup-julia@v2
+        with:
+          version: 1
+      - run: |
+          mkdir -p $BUILDROOT/tmp
+          git clone https://github.com/JuliaLang/docs.julialang.org.git -b assets --single-branch $JULIA_DOCS
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: pdf-*
+          path: ${{ env.BUILDROOT }}/tmp/
+          merge-multiple: true
+      - run: |
+          echo "Downloaded PDFs:"
+          ls -lh $BUILDROOT/tmp/*.pdf 2>/dev/null || echo "No PDFs found"
       - run: julia --color=yes pdf/make.jl commit
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

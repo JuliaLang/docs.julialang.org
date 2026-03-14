@@ -1,0 +1,48 @@
+name: Setup PDF build environment
+description: Install Julia, TeX Live, and clone Julia source
+
+inputs:
+  clone-assets:
+    description: Also clone the docs.julialang.org assets branch
+    default: 'false'
+  julia-ref:
+    description: Git ref to checkout (e.g. v1.12.5). If empty, does a shallow clone of the default branch.
+    default: ''
+runs:
+  using: composite
+  steps:
+    - uses: julia-actions/setup-julia@v2
+      with:
+        version: 1
+        show-versioninfo: true
+    - uses: TeX-Live/setup-texlive-action@v4
+      with:
+        version: latest
+        packages: |
+          scheme-basic
+          collection-luatex
+          collection-latexrecommended
+          collection-latexextra
+          collection-fontsextra
+          collection-fontsrecommended
+          collection-plaingeneric
+          latexmk
+          minted
+    - name: Install system dependencies
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y python3-pygments fontconfig fonts-dejavu fonts-lato
+    - uses: julia-actions/cache@v3
+    - name: Clone repositories
+      shell: bash
+      run: |
+        mkdir -p $BUILDROOT
+        if [ -n "${{ inputs.julia-ref }}" ]; then
+          git clone --depth 1 --branch "${{ inputs.julia-ref }}" https://github.com/JuliaLang/julia.git $JULIA_SOURCE
+        else
+          git clone --depth 1 https://github.com/JuliaLang/julia.git $JULIA_SOURCE
+        fi
+        if [ "${{ inputs.clone-assets }}" = "true" ]; then
+          git clone https://github.com/JuliaLang/docs.julialang.org.git -b assets --single-branch $JULIA_DOCS
+        fi
