@@ -272,8 +272,11 @@ function commit()
         run(`git config user.email "documenter@juliadocs.github.io"`)
         run(`git remote set-url origin git@github.com:JuliaLang/docs.julialang.org.git`)
         run(`git config core.sshCommand "ssh -F $(sshconfig)"`)
-        # Committing all .pdf and .commit files
-        run(`git add '*.pdf' '*.commit'`)
+        # Stage all .pdf and .commit files
+        for ext in ("pdf", "commit")
+            files = filter(f -> endswith(f, ".$ext"), readdir("."))
+            isempty(files) || run(`git add $(files...)`)
+        end
         run(`git commit --amend --date=now -m "PDF versions of Julia's manual."`)
         # Push
         run(`git push -f origin assets`)
