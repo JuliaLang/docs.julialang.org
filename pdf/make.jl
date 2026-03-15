@@ -245,16 +245,6 @@ function commit()
         # Stage only the new/updated PDFs
         new_pdfs = filter(f -> endswith(f, ".pdf"), readdir(JULIA_DOCS_TMP))
         isempty(new_pdfs) || run(`git add $new_pdfs`)
-        # Clean up DEV PDFs that now have a corresponding release PDF
-        for file in readdir(".")
-            m = match(r"^julia-(.+)-DEV\.pdf$", file)
-            m === nothing && continue
-            release_pdf = "julia-$(m.captures[1]).pdf"
-            if isfile(release_pdf)
-                @info "Removing obsolete DEV PDF" file release_pdf
-                run(`git rm -f $file`)
-            end
-        end
         # Only commit and push if there are staged changes
         if success(`git diff --cached --quiet`)
             @info "No changes to commit."
