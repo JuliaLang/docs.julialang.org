@@ -15,7 +15,7 @@ runs:
       with:
         version: 1
         show-versioninfo: true
-    - uses: TeX-Live/setup-texlive-action@v4
+    - uses: zauguin/install-texlive@v4
       with:
         version: latest
         packages: |
