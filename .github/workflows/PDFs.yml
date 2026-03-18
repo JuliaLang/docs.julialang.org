@@ -29,6 +29,7 @@ jobs:
       - uses: ./.github/actions/setup-pdf-build
         with:
           clone-assets: 'true'
+      - uses: julia-actions/cache@v3
       - id: versions
         run: |
           versions=$(julia --color=yes -e '
@@ -65,6 +66,7 @@ jobs:
       - uses: ./.github/actions/setup-pdf-build
         with:
           julia-ref: ${{ matrix.version != 'nightly' && format('v{0}', matrix.version) || '' }}
+      - uses: julia-actions/cache@v3
       - run: julia --color=yes pdf/make.jl build ${{ matrix.version }}
         env:
           DOCUMENTER_LATEX_DEBUG: ${{ github.workspace }}/latex-debug-logs
@@ -92,6 +94,7 @@ jobs:
       - uses: julia-actions/setup-julia@v2
         with:
           version: 1
+      - uses: julia-actions/cache@v3
       - run: |
           mkdir -p $BUILDROOT/tmp
           git clone https://github.com/JuliaLang/docs.julialang.org.git -b assets --single-branch $JULIA_DOCS
