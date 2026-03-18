@@ -259,7 +259,15 @@ function commit()
         if success(`git diff --cached --quiet`)
             @info "No changes to commit."
         else
-            run(`git commit --amend --date=now -m "PDF versions of Julia's manual."`)
+            # If only one commit exists (the base), create a new commit on top;
+            # otherwise amend the tip so the base commit stays stable and
+            # force-pushes only rewrite the small delta commit.
+            ncommits = parse(Int, readchomp(`git rev-list --count HEAD`))
+            if ncommits <= 1
+                run(`git commit -m "PDF updates"`)
+            else
+                run(`git commit --amend --date=now -m "PDF updates"`)
+            end
             run(`git push -f origin assets`)
         end
     end end
