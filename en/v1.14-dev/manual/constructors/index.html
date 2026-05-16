@@ -245,21 +245,7 @@ julia&gt; Point(1.0,1//2)
 Point{Float64}(1.0, 0.5)</code></pre><p>Thus, while the implicit type parameter constructors provided by default in Julia are fairly strict,
 it is possible to make them behave in a more relaxed but sensible manner quite easily. Moreover,
 since constructors can leverage all of the power of the type system, methods, and multiple dispatch,
-defining sophisticated behavior is typically quite simple.</p><h3 id="How-new-works-in-parametric-constructors"><a class="docs-heading-anchor" href="#How-new-works-in-parametric-constructors">How <code>new</code> works in parametric constructors</a><a id="How-new-works-in-parametric-constructors-1"></a><a class="docs-heading-anchor-permalink" href="#How-new-works-in-parametric-constructors" title="Permalink"></a></h3><p>In the inner constructor of <code>Point</code>, <code>new(x,y)</code> is shorthand for <code>new{T}(x,y)</code>.
-<strong>Inside the body of an inner constructor, the type parameters listed in the curly braces on the constructor name (e.g. the <code>T</code> parameter in <code>Point{T}(...)</code>) are implicitly forwarded to <code>new</code></strong>.
-You can also write the type parameters explicitly, which is equivalent:</p><pre><code class="language-julia-repl hljs">julia&gt; struct Point2{T&lt;:Real}
-           x::T
-           y::T
-           Point2{T}(x,y) where {T&lt;:Real} = new{T}(x,y)  # explicit, same as new(x,y)
-       end
-
-julia&gt; Point2{Float64}(1,2)
-Point2{Float64}(1.0, 2.0)</code></pre><p>The explicit form becomes necessary when the type parameters for <code>new</code>
-differ from those of the enclosing inner constructor.
-For instance, if a type has two parameters like <code>MyType{T,S}</code> but the inner constructor is
-defined as <code>MyType{T}(...)</code>, then <code>new</code> would only receive <code>{T}</code> — not enough to
-determine the concrete type. In such cases you must write <code>new{T,S}(...)</code> explicitly.
-We will see an example of this in the <a href="#Outer-only-constructors">Outer-only constructors</a> section below.</p><h2 id="Case-Study:-Rational"><a class="docs-heading-anchor" href="#Case-Study:-Rational">Case Study: Rational</a><a id="Case-Study:-Rational-1"></a><a class="docs-heading-anchor-permalink" href="#Case-Study:-Rational" title="Permalink"></a></h2><p>Perhaps the best way to tie all these pieces together is to present a real world example of a
+defining sophisticated behavior is typically quite simple.</p><h2 id="Case-Study:-Rational"><a class="docs-heading-anchor" href="#Case-Study:-Rational">Case Study: Rational</a><a id="Case-Study:-Rational-1"></a><a class="docs-heading-anchor-permalink" href="#Case-Study:-Rational" title="Permalink"></a></h2><p>Perhaps the best way to tie all these pieces together is to present a real world example of a
 parametric composite type and its constructor methods. To that end, we implement our own rational number type
 <code>OurRational</code>, similar to Julia&#39;s built-in <a href="../../base/numbers/#Base.Rational"><code>Rational</code></a> type, defined in
 <a href="https://github.com/JuliaLang/julia/blob/master/base/rational.jl"><code>rational.jl</code></a>:</p><pre><code class="language-julia-repl hljs">julia&gt; struct OurRational{T&lt;:Integer} &lt;: Real
@@ -377,12 +363,10 @@ Closest candidates are:
    @ Main none:4
 
 Stacktrace:
-[...]</code></pre><p>This is the case where explicit type parameters on <code>new</code> are essential:
-the inner constructor name is bare <code>SummedArray</code> with no curly braces,
-so <code>new</code> has no type parameters to inherit (see
-<a href="#How-new-works-in-parametric-constructors">How <code>new</code> works in parametric constructors</a> above).
-The explicit <code>new{T,S}</code> tells Julia to construct a <code>SummedArray{T,S}</code>,
-where <code>T</code> comes from the element type of the input vector and <code>S</code> is computed as <code>widen(T)</code>.</p><h2 id="Constructors-are-just-callable-objects"><a class="docs-heading-anchor" href="#Constructors-are-just-callable-objects">Constructors are just callable objects</a><a id="Constructors-are-just-callable-objects-1"></a><a class="docs-heading-anchor-permalink" href="#Constructors-are-just-callable-objects" title="Permalink"></a></h2><p>An object of any type may be <a href="../methods/#Function-like-objects">made callable</a> by defining a
+[...]</code></pre><p>This constructor will be invoked by the syntax <code>SummedArray(a)</code>. The syntax <code>new{T,S}</code> allows
+specifying parameters for the type to be constructed, i.e. this call will return a <code>SummedArray{T,S}</code>.
+<code>new{T,S}</code> can be used in any constructor definition, but for convenience the parameters
+to <code>new{}</code> are automatically derived from the type being constructed when possible.</p><h2 id="Constructors-are-just-callable-objects"><a class="docs-heading-anchor" href="#Constructors-are-just-callable-objects">Constructors are just callable objects</a><a id="Constructors-are-just-callable-objects-1"></a><a class="docs-heading-anchor-permalink" href="#Constructors-are-just-callable-objects" title="Permalink"></a></h2><p>An object of any type may be <a href="../methods/#Function-like-objects">made callable</a> by defining a
 method. This includes types, i.e., objects of type <a href="../../base/base/#Core.Type"><code>Type</code></a>; and constructors may,
 in fact, be viewed as just callable type objects. For example, there are many methods
 defined on <code>Bool</code> and various supertypes of it:</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; methods(Bool)</code><code class="nohighlight hljs ansi" style="display:block;"># 9 methods for type constructor:
@@ -395,7 +379,7 @@ defined on <code>Bool</code> and various supertypes of it:</p><pre><code class="
  [4] Bool(<span class="sgr90">x</span>::<span class="sgr1">Real</span>)
 <span class="sgr90">     @</span> <span class="sgr90"><span class="sgr4">bool.jl:165</span></span>
  [5] (dt::Type{&lt;:Integer})(<span class="sgr90">ip</span>::<span class="sgr1">IPAddr</span>)
-<span class="sgr90">     @</span> <span class="sgr90">/cache/build/builder-amdci5-6/julialang/julia-master/usr/share/julia/stdlib/v1.14/Sockets/src/<span class="sgr4">IPAddr.jl:11</span></span>
+<span class="sgr90">     @</span> <span class="sgr90">/cache/build/tester-amdci4-14/julialang/julia-master/usr/share/julia/stdlib/v1.14/Sockets/src/<span class="sgr4">IPAddr.jl:11</span></span>
  [6] (::Type{T})(<span class="sgr90">x</span>::<span class="sgr1">Enum</span>{T2}) where {T&lt;:Integer, T2&lt;:Integer}
 <span class="sgr90">     @</span> <span class="sgr90"><span class="sgr4">Enums.jl:19</span></span>
  [7] (::Type{T})(<span class="sgr90">z</span>::<span class="sgr1">Complex</span>) where T&lt;:Real
@@ -419,4 +403,4 @@ S(8)</code></pre><section class="footnotes is-size-7"><ul><li class="footnote" i
 objects of a type, it is common to abuse terminology slightly and refer to specific constructor
 methods as &quot;constructors&quot;. In such situations, it is generally clear from the context that the term
 is used to mean &quot;constructor method&quot; rather than &quot;constructor function&quot;, especially as it is often
-used in the sense of singling out a particular method of the constructor from all of the others.</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../methods/">« Methods</a><a class="docs-footer-nextpage" href="../conversion-and-promotion/">Conversion and Promotion »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Saturday 16 May 2026 00:20">Saturday 16 May 2026</span>. Using Julia version 1.14.0-DEV.2203.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+used in the sense of singling out a particular method of the constructor from all of the others.</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../methods/">« Methods</a><a class="docs-footer-nextpage" href="../conversion-and-promotion/">Conversion and Promotion »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Saturday 16 May 2026 00:14">Saturday 16 May 2026</span>. Using Julia version 1.14.0-DEV.2202.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
