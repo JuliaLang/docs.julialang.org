@@ -90,10 +90,17 @@ void example() {
   // The return value of the allocation is unrooted. This would normally
   // be an error, but is allowed because of the above annotation.
   jl_throw(jl_alloc_error());
-}</code></pre><h3 id="JL_PROPAGATES_ROOT"><a class="docs-heading-anchor" href="#JL_PROPAGATES_ROOT"><code>JL_PROPAGATES_ROOT</code></a><a id="JL_PROPAGATES_ROOT-1"></a><a class="docs-heading-anchor-permalink" href="#JL_PROPAGATES_ROOT" title="Permalink"></a></h3><p>This annotation is commonly found on accessor functions that return one rootable
+}</code></pre><h3 id="JL_PROPAGATES_ROOT/JL_PROPAGATES_ROOT_INDEXED(root,-index)"><a class="docs-heading-anchor" href="#JL_PROPAGATES_ROOT/JL_PROPAGATES_ROOT_INDEXED(root,-index)"><code>JL_PROPAGATES_ROOT</code>/<code>JL_PROPAGATES_ROOT_INDEXED(root, index)</code></a><a id="JL_PROPAGATES_ROOT/JL_PROPAGATES_ROOT_INDEXED(root,-index)-1"></a><a class="docs-heading-anchor-permalink" href="#JL_PROPAGATES_ROOT/JL_PROPAGATES_ROOT_INDEXED(root,-index)" title="Permalink"></a></h3><p>This annotation is commonly found on accessor functions that return one rootable
 object stored within another. When annotated on a function argument, it tells
 the analyzer that the root for that argument also applies to the value returned
-by the function.</p><p>Usage Example:</p><pre><code class="language-c hljs">jl_value_t *jl_svecref(jl_svec_t *t JL_PROPAGATES_ROOT, size_t i) JL_NOTSAFEPOINT;
+by the function.
+Use <code>JL_PROPAGATES_ROOT_INDEXED(root, index)</code> when the return value is loaded
+from a specific indexed child of the rooting argument, where <code>root</code> and <code>index</code>
+are zero-based argument indices. The indexed form lets the analyzer model later
+overwrites or clears of that indexed child precisely.
+Non-literal indices conservatively fall back to ordinary root propagation,
+because distinct symbolic index expressions can alias in the analyzer.</p><p>Usage Example:</p><pre><code class="language-c hljs">jl_value_t *jl_svecref(jl_svec_t *t JL_PROPAGATES_ROOT, size_t i)
+    JL_PROPAGATES_ROOT_INDEXED(0, 1) JL_NOTSAFEPOINT;
 
 size_t example(jl_svec_t *svec) {
   jl_value_t *val = jl_svecref(svec, 1)
@@ -101,16 +108,26 @@ size_t example(jl_svec_t *svec) {
   // jl_svecref propagates the rooted-ness from `svec` to `val`
   jl_gc_safepoint();
   return jl_unbox_long(val);
-}</code></pre><h3 id="JL_ROOTING_ARGUMENT/JL_ROOTED_ARGUMENT"><a class="docs-heading-anchor" href="#JL_ROOTING_ARGUMENT/JL_ROOTED_ARGUMENT"><code>JL_ROOTING_ARGUMENT</code>/<code>JL_ROOTED_ARGUMENT</code></a><a id="JL_ROOTING_ARGUMENT/JL_ROOTED_ARGUMENT-1"></a><a class="docs-heading-anchor-permalink" href="#JL_ROOTING_ARGUMENT/JL_ROOTED_ARGUMENT" title="Permalink"></a></h3><p>This is essentially the assignment counterpart to <code>JL_PROPAGATES_ROOT</code>.
+}</code></pre><h3 id="JL_ROOTED_BY_ARG(n)/JL_ROOTED_BY_ARG_INDEXED(root,-index)/JL_OUT_ROOTED_BY_ARG(n)/JL_ROOTED_BY_RETURN"><a class="docs-heading-anchor" href="#JL_ROOTED_BY_ARG(n)/JL_ROOTED_BY_ARG_INDEXED(root,-index)/JL_OUT_ROOTED_BY_ARG(n)/JL_ROOTED_BY_RETURN"><code>JL_ROOTED_BY_ARG(n)</code>/<code>JL_ROOTED_BY_ARG_INDEXED(root, index)</code>/<code>JL_OUT_ROOTED_BY_ARG(n)</code>/<code>JL_ROOTED_BY_RETURN</code></a><a id="JL_ROOTED_BY_ARG(n)/JL_ROOTED_BY_ARG_INDEXED(root,-index)/JL_OUT_ROOTED_BY_ARG(n)/JL_ROOTED_BY_RETURN-1"></a><a class="docs-heading-anchor-permalink" href="#JL_ROOTED_BY_ARG(n)/JL_ROOTED_BY_ARG_INDEXED(root,-index)/JL_OUT_ROOTED_BY_ARG(n)/JL_ROOTED_BY_RETURN" title="Permalink"></a></h3><p>These are essentially the assignment counterpart to <code>JL_PROPAGATES_ROOT</code>.
 When assigning a value to a field of another value that is already rooted,
-the assigned value will inherit the root of the value it is assigned into.</p><p>Usage Example:</p><pre><code class="language-c hljs">void jl_svecset(void *t JL_ROOTING_ARGUMENT, size_t i, void *x JL_ROOTED_ARGUMENT) JL_NOTSAFEPOINT
+the assigned value will inherit the root of the value it is assigned into.</p><p>Use <code>JL_ROOTED_BY_ARG(n)</code> on the argument that is being assigned, where <code>n</code>
+is the zero-based argument index of the rooting argument. Use
+<code>JL_ROOTED_BY_ARG_INDEXED(root, index)</code> when the assigned value is stored in a
+specific indexed child of the rooting argument, where <code>index</code> is the zero-based
+argument index of the index argument. Use <code>JL_OUT_ROOTED_BY_ARG(n)</code> on an out
+argument when the value written through the out argument is rooted by argument
+<code>n</code>. Use <code>JL_ROOTED_BY_RETURN</code> on arguments that are rooted by the returned
+value. Variadic arguments cannot be annotated individually, so functions whose
+variadic arguments are rooted by the return value use <code>JL_ROOTED_VARARGS</code> on the
+function declaration.</p><p>Usage Example:</p><pre><code class="language-c hljs">void jl_svecset(void *t, size_t i, void *x JL_ROOTED_BY_ARG_INDEXED(0, 1)) JL_NOTSAFEPOINT;
+jl_svec_t *jl_svec1(void *a JL_ROOTED_BY_RETURN);
 
 
 size_t example(jl_svec_t *svec) {
   jl_value_t *val = jl_box_long(10000);
-  jl_svecset(svec, val);
-  // This is valid, because the annotations imply that the
-  // jl_svecset propagates the rooted-ness from `svec` to `val`
+  jl_svecset(svec, 0, val);
+  // This is valid, because the annotation implies that jl_svecset
+  // propagates the rooted-ness from `svec` to `val`
   jl_gc_safepoint();
   return jl_unbox_long(val);
 }</code></pre><h3 id="JL_GC_DISABLED"><a class="docs-heading-anchor" href="#JL_GC_DISABLED"><code>JL_GC_DISABLED</code></a><a id="JL_GC_DISABLED-1"></a><a class="docs-heading-anchor-permalink" href="#JL_GC_DISABLED" title="Permalink"></a></h3><p>This annotation implies that this function is only called with the GC runtime-disabled.
@@ -166,4 +183,4 @@ above, it assumes that such memory is only modified in ways it can see, not in a
 functions (unless it happens to decide to consider them in its analysis) and not in any concurrently
 running threads. As such, it may miss a few problematic cases, though in practice such concurrent
 modification is fairly rare. Improving the analyzer to handle more such cases may be an interesting
-topic for future work.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../aot/">« Ahead of Time Compilation</a><a class="docs-footer-nextpage" href="../gc/">Julia Garbage Collector (GC) Internals »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Tuesday 2 June 2026 00:12">Tuesday 2 June 2026</span>. Using Julia version 1.14.0-DEV.2272.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+topic for future work.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../aot/">« Ahead of Time Compilation</a><a class="docs-footer-nextpage" href="../gc/">Julia Garbage Collector (GC) Internals »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Tuesday 2 June 2026 03:07">Tuesday 2 June 2026</span>. Using Julia version 1.14.0-DEV.2273.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
