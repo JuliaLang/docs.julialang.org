@@ -63,7 +63,7 @@ be used in their specific case.</p><p>It is also often useful to allow iteration
 by iterating over <a href="../../base/iterators/#Base.Iterators.reverse"><code>Iterators.reverse(iterator)</code></a>. To actually support
 reverse-order iteration, however, an iterator
 type <code>T</code> needs to implement <code>iterate</code> for <code>Iterators.Reverse{T}</code>.
-(Given <code>r::Iterators.Reverse{T}</code>, the underling iterator of type <code>T</code> is <code>r.itr</code>.)
+(Given <code>r::Iterators.Reverse{T}</code>, the underlying iterator of type <code>T</code> is <code>r.itr</code>.)
 In our <code>Squares</code> example, we would implement <code>Iterators.Reverse{Squares}</code> methods:</p><pre><code class="language-julia-repl hljs">julia&gt; Base.iterate(rS::Iterators.Reverse{Squares}, state=rS.itr.count) = state &lt; 1 ? nothing : (state*state, state-1)
 
 julia&gt; collect(Iterators.reverse(Squares(4)))
@@ -426,7 +426,7 @@ julia&gt; function Base.setproperty!(p::Point, s::Symbol, f)
                # This allow modifying fields with p.r and p.ϕ
                return setfield!(p, s, f)
            end
-       end</code></pre><p>It is important that <code>getfield</code> and <code>setfield</code> are used inside <code>getproperty</code> and <code>setproperty!</code> instead of the dot syntax,
+       end</code></pre><p>It is important that <code>getfield</code> and <code>setfield!</code> are used inside <code>getproperty</code> and <code>setproperty!</code> instead of the dot syntax,
 since the dot syntax would make the functions recursive which can lead to type inference issues. We can now
 try out the new functionality:</p><pre><code class="language-julia-repl hljs">julia&gt; propertynames(p)
 (:x, :y)
@@ -444,7 +444,7 @@ reason for doing so.</p><h2 id="man-rounding-interface"><a class="docs-heading-a
 <code>round(x::ObjType, r::RoundingMode)</code>. The passed rounding mode determines in which direction
 the value should be rounded. The most commonly used rounding modes are <code>RoundNearest</code>,
 <code>RoundToZero</code>, <code>RoundDown</code>, and <code>RoundUp</code>, as these rounding modes are used in the
-definitions of the one argument <code>round</code>, method, and <code>trunc</code>, <code>floor</code>, and <code>ceil</code>,
+definitions of the one argument <code>round</code> method, and <code>trunc</code>, <code>floor</code>, and <code>ceil</code>,
 respectively.</p><p>In some cases, it is possible to define a three-argument <code>round</code> method that is more
 accurate or performant than the two-argument method followed by conversion. In this case it
 is acceptable to define the three argument method in addition to the two argument method.
@@ -471,4 +471,4 @@ julia&gt; ceil(x)
 Interval{Float64}(2.0, 3.0)
 
 julia&gt; trunc(x)
-Interval{Float64}(1.0, 2.0)</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../conversion-and-promotion/">« Conversion and Promotion</a><a class="docs-footer-nextpage" href="../modules/">Modules »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Thursday 11 June 2026 08:24">Thursday 11 June 2026</span>. Using Julia version 1.14.0-DEV.2336.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+Interval{Float64}(1.0, 2.0)</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../conversion-and-promotion/">« Conversion and Promotion</a><a class="docs-footer-nextpage" href="../modules/">Modules »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Tuesday 23 June 2026 08:01">Tuesday 23 June 2026</span>. Using Julia version 1.14.0-DEV.2430.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
