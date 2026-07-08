@@ -563,7 +563,33 @@ to a function, not to any specific method of that function. It depends on the ty
 arguments which method is invoked. When optional arguments are defined in terms of a global variable,
 the type of the optional argument may even change at run-time.</p><p>Keyword arguments behave quite differently from ordinary positional arguments. In particular,
 they do not participate in method dispatch. Methods are dispatched based only on positional arguments,
-with keyword arguments processed after the matching method is identified.</p><h2 id="Function-like-objects"><a class="docs-heading-anchor" href="#Function-like-objects">Function-like objects</a><a id="Function-like-objects-1"></a><a class="docs-heading-anchor-permalink" href="#Function-like-objects" title="Permalink"></a></h2><p>Methods are associated with types, so it is possible to make any arbitrary Julia object &quot;callable&quot;
+with keyword arguments processed after the matching method is identified.</p><div class="admonition is-warning" id="Known-bug:-the-presence-of-keyword-arguments-affects-dispatch-d58e5fc9dc93bef6"><header class="admonition-header">Known bug: the presence of keyword arguments affects dispatch<a class="admonition-anchor" href="#Known-bug:-the-presence-of-keyword-arguments-affects-dispatch-d58e5fc9dc93bef6" title="Permalink"></a></header><div class="admonition-body"><p>Due to a long-standing bug (<a href="https://github.com/JuliaLang/julia/issues/9498">#9498</a>),
+a call that supplies keyword arguments only considers methods that accept keyword
+arguments. This can select a less specific method over a more specific one that
+accepts no keywords:</p><pre><code class="language-julia hljs">julia&gt; f(x; y=10) = &quot;generic&quot;;
+
+julia&gt; f(x::Int) = &quot;int-specific&quot;;
+
+julia&gt; f(1)
+&quot;int-specific&quot;
+
+julia&gt; f(1; y=2)  # bug: bypasses the more specific method
+&quot;generic&quot;</code></pre><p>Relatedly, redefining a method without keyword arguments does not replace the keyword
+handling of an earlier definition with the same positional signature, even though only
+one method is displayed:</p><pre><code class="language-julia hljs">julia&gt; g(x; y=1) = &quot;with keywords&quot;;
+
+julia&gt; g(x) = &quot;without keywords&quot;;
+
+julia&gt; g
+g (generic function with 1 method)
+
+julia&gt; g(1)
+&quot;without keywords&quot;
+
+julia&gt; g(1; y=2)  # bug: calls the overwritten definition
+&quot;with keywords&quot;</code></pre><p>This warning is descriptive, not prescriptive, and code should not rely on this behavior. To keep a specialized
+method applicable to calls with keyword arguments, give it its own keyword interface,
+either by repeating the keyword arguments or by collecting any keyword with <code>kwargs...</code>.</p></div></div><h2 id="Function-like-objects"><a class="docs-heading-anchor" href="#Function-like-objects">Function-like objects</a><a id="Function-like-objects-1"></a><a class="docs-heading-anchor-permalink" href="#Function-like-objects" title="Permalink"></a></h2><p>Methods are associated with types, so it is possible to make any arbitrary Julia object &quot;callable&quot;
 by adding methods to its type.</p><p>For example, you can define a type that stores the coefficients of a polynomial, but behaves like
 a function evaluating the polynomial:</p><pre><code class="language-julia-repl hljs">julia&gt; struct Polynomial{R}
            coeffs::Vector{R}
@@ -700,4 +726,4 @@ end</code></pre><section class="footnotes is-size-7"><ul><li class="footnote" id
 the method call and is implicitly passed to the method via the <code>this</code> keyword, rather than as
 an explicit method argument. When the current <code>this</code> object is the receiver of a method call,
 it can be omitted altogether, writing just <code>meth(arg1,arg2)</code>, with <code>this</code> implied as the receiving
-object.</li><li class="footnote" id="footnote-Clarke61"><a class="tag is-link" href="#citeref-Clarke61">Clarke61</a>Arthur C. Clarke, <em>Profiles of the Future</em> (1961): Clarke&#39;s Third Law.</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../types/">« Types</a><a class="docs-footer-nextpage" href="../constructors/">Constructors »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Tuesday 7 July 2026 07:15">Tuesday 7 July 2026</span>. Using Julia version 1.14.0-DEV.2612.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+object.</li><li class="footnote" id="footnote-Clarke61"><a class="tag is-link" href="#citeref-Clarke61">Clarke61</a>Arthur C. Clarke, <em>Profiles of the Future</em> (1961): Clarke&#39;s Third Law.</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../types/">« Types</a><a class="docs-footer-nextpage" href="../constructors/">Constructors »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Wednesday 8 July 2026 03:08">Wednesday 8 July 2026</span>. Using Julia version 1.14.0-DEV.2617.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
