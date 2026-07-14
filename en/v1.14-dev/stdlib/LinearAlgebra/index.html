@@ -368,7 +368,7 @@ julia&gt; axpy!(2, x, y)
   6
   9
  12</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="LinearAlgebra.axpby!"><a class="docstring-binding" href="#LinearAlgebra.axpby!"><code>LinearAlgebra.axpby!</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">axpby!(α, x::AbstractArray, β, y::AbstractArray)</code></pre><p>Overwrite <code>y</code> with <code>x * α + y * β</code> and return <code>y</code>.
-If <code>x</code> and <code>y</code> have the same axes, it&#39;s equivalent with <code>y .= x .* a .+ y .* β</code>.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; x = [1; 2; 3];
+If <code>x</code> and <code>y</code> have the same axes, it&#39;s equivalent with <code>y .= x .* α .+ y .* β</code>.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; x = [1; 2; 3];
 
 julia&gt; y = [4; 5; 6];
 
@@ -475,7 +475,27 @@ julia&gt; Bl = Bidiagonal(dv, ev, :L) # ev is on the first subdiagonal
  1  ⋅  ⋅  ⋅
  7  2  ⋅  ⋅
  ⋅  8  3  ⋅
- ⋅  ⋅  9  4</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="LinearAlgebra.SymTridiagonal"><a class="docstring-binding" href="#LinearAlgebra.SymTridiagonal"><code>LinearAlgebra.SymTridiagonal</code></a> — <span class="docstring-category">Type</span></summary><section><div><pre><code class="language-julia hljs">SymTridiagonal(dv::V, ev::V) where V &lt;: AbstractVector</code></pre><p>Construct a symmetric tridiagonal matrix from the diagonal (<code>dv</code>) and first
+ ⋅  ⋅  9  4</code></pre></div></section><section><div><pre><code class="language-julia hljs">Bidiagonal(A, uplo::Symbol)</code></pre><p>Construct a <code>Bidiagonal</code> matrix from the main diagonal of <code>A</code> and
+its first super- (if <code>uplo=:U</code>) or sub-diagonal (if <code>uplo=:L</code>).</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; A = [1 1 1 1; 2 2 2 2; 3 3 3 3; 4 4 4 4]
+4×4 Matrix{Int64}:
+ 1  1  1  1
+ 2  2  2  2
+ 3  3  3  3
+ 4  4  4  4
+
+julia&gt; Bidiagonal(A, :U) # contains the main diagonal and first superdiagonal of A
+4×4 Bidiagonal{Int64, Vector{Int64}}:
+ 1  1  ⋅  ⋅
+ ⋅  2  2  ⋅
+ ⋅  ⋅  3  3
+ ⋅  ⋅  ⋅  4
+
+julia&gt; Bidiagonal(A, :L) # contains the main diagonal and first subdiagonal of A
+4×4 Bidiagonal{Int64, Vector{Int64}}:
+ 1  ⋅  ⋅  ⋅
+ 2  2  ⋅  ⋅
+ ⋅  3  3  ⋅
+ ⋅  ⋅  4  4</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="LinearAlgebra.SymTridiagonal"><a class="docstring-binding" href="#LinearAlgebra.SymTridiagonal"><code>LinearAlgebra.SymTridiagonal</code></a> — <span class="docstring-category">Type</span></summary><section><div><pre><code class="language-julia hljs">SymTridiagonal(dv::V, ev::V) where V &lt;: AbstractVector</code></pre><p>Construct a symmetric tridiagonal matrix from the diagonal (<code>dv</code>) and first
 sub/super-diagonal (<code>ev</code>), respectively. The result is of type <code>SymTridiagonal</code>
 and provides efficient specialized eigensolvers, but may be converted into a
 regular matrix with <a href="../../base/base/#Base.convert"><code>convert(Array, _)</code></a> (or <code>Array(_)</code> for short).</p><p>For <code>SymTridiagonal</code> block matrices, the elements of <code>dv</code> are symmetrized.
@@ -515,7 +535,25 @@ julia&gt; A[1,2]
 julia&gt; A[2,1]
 2×2 Matrix{Int64}:
  1  3
- 2  4</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="LinearAlgebra.Tridiagonal"><a class="docstring-binding" href="#LinearAlgebra.Tridiagonal"><code>LinearAlgebra.Tridiagonal</code></a> — <span class="docstring-category">Type</span></summary><section><div><pre><code class="language-julia hljs">Tridiagonal(dl::V, d::V, du::V) where V &lt;: AbstractVector</code></pre><p>Construct a tridiagonal matrix from the first subdiagonal, diagonal, and first superdiagonal,
+ 2  4</code></pre></div></section><section><div><pre><code class="language-julia hljs">SymTridiagonal(A::AbstractMatrix)</code></pre><p>Construct a symmetric tridiagonal matrix from the diagonal and first superdiagonal
+of the symmetric matrix <code>A</code>.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; A = [1 2 3; 2 4 5; 3 5 6]
+3×3 Matrix{Int64}:
+ 1  2  3
+ 2  4  5
+ 3  5  6
+
+julia&gt; SymTridiagonal(A)
+3×3 SymTridiagonal{Int64, Vector{Int64}}:
+ 1  2  ⋅
+ 2  4  5
+ ⋅  5  6
+
+julia&gt; B = reshape([[1 2; 2 3], [1 2; 3 4], [1 3; 2 4], [1 2; 2 3]], 2, 2);
+
+julia&gt; SymTridiagonal(B)
+2×2 SymTridiagonal{Matrix{Int64}, Vector{Matrix{Int64}}}:
+ [1 2; 2 3]  [1 3; 2 4]
+ [1 2; 3 4]  [1 2; 2 3]</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="LinearAlgebra.Tridiagonal"><a class="docstring-binding" href="#LinearAlgebra.Tridiagonal"><code>LinearAlgebra.Tridiagonal</code></a> — <span class="docstring-category">Type</span></summary><section><div><pre><code class="language-julia hljs">Tridiagonal(dl::V, d::V, du::V) where V &lt;: AbstractVector</code></pre><p>Construct a tridiagonal matrix from the first subdiagonal, diagonal, and first superdiagonal,
 respectively. The result is of type <code>Tridiagonal</code> and provides efficient specialized linear
 solvers, but may be converted into a regular matrix with
 <a href="../../base/base/#Base.convert"><code>convert(Array, _)</code></a> (or <code>Array(_)</code> for short).
@@ -531,7 +569,20 @@ julia&gt; Tridiagonal(dl, d, du)
  7  4  ⋅  ⋅
  1  8  5  ⋅
  ⋅  2  9  6
- ⋅  ⋅  3  0</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="LinearAlgebra.Symmetric"><a class="docstring-binding" href="#LinearAlgebra.Symmetric"><code>LinearAlgebra.Symmetric</code></a> — <span class="docstring-category">Type</span></summary><section><div><pre><code class="language-julia hljs">Symmetric(A::AbstractMatrix, uplo::Symbol=:U)</code></pre><p>Construct a <code>Symmetric</code> view of the upper (if <code>uplo = :U</code>) or lower (if <code>uplo = :L</code>)
+ ⋅  ⋅  3  0</code></pre></div></section><section><div><pre><code class="language-julia hljs">Tridiagonal(A)</code></pre><p>Construct a tridiagonal matrix from the first sub-diagonal,
+diagonal and first super-diagonal of the matrix <code>A</code>.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; A = [1 2 3 4; 1 2 3 4; 1 2 3 4; 1 2 3 4]
+4×4 Matrix{Int64}:
+ 1  2  3  4
+ 1  2  3  4
+ 1  2  3  4
+ 1  2  3  4
+
+julia&gt; Tridiagonal(A)
+4×4 Tridiagonal{Int64, Vector{Int64}}:
+ 1  2  ⋅  ⋅
+ 1  2  3  ⋅
+ ⋅  2  3  4
+ ⋅  ⋅  3  4</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="LinearAlgebra.Symmetric"><a class="docstring-binding" href="#LinearAlgebra.Symmetric"><code>LinearAlgebra.Symmetric</code></a> — <span class="docstring-category">Type</span></summary><section><div><pre><code class="language-julia hljs">Symmetric(A::AbstractMatrix, uplo::Symbol=:U)</code></pre><p>Construct a <code>Symmetric</code> view of the upper (if <code>uplo = :U</code>) or lower (if <code>uplo = :L</code>)
 triangle of the matrix <code>A</code>.</p><p><code>Symmetric</code> views are mainly useful for real-symmetric matrices, for which
 specialized algorithms (e.g. for eigenproblems) are enabled for <code>Symmetric</code> types.
 More generally, see also <a href="#LinearAlgebra.Hermitian"><code>Hermitian(A)</code></a> for Hermitian matrices <code>A == A&#39;</code>, which
@@ -3887,4 +3938,4 @@ Linear Algebra and its Applications, 52-53, 1983, 127-140.
 Linear Algebra and its Applications, 88-89, 1987, 405-430.
 <a href="https://doi.org/10.1016/0024-3795(87)90118-2">doi:10.1016/0024-3795(87)90118-2</a></li><li class="footnote" id="footnote-S03"><a class="tag is-link" href="#citeref-S03">S03</a>Matthew I. Smith, &quot;A Schur Algorithm for Computing Matrix pth Roots&quot;,
 SIAM Journal on Matrix Analysis and Applications, vol. 24, 2003, pp. 971–989.
-<a href="https://doi.org/10.1137/s0895479801392697">doi:10.1137/S0895479801392697</a></li><li class="footnote" id="footnote-AH16_1"><a class="tag is-link" href="#citeref-AH16_1">AH16_1</a>Mary Aprahamian and Nicholas J. Higham, &quot;Matrix Inverse Trigonometric and Inverse Hyperbolic Functions: Theory and Algorithms&quot;, MIMS EPrint: 2016.4. <a href="https://doi.org/10.1137/16M1057577">https://doi.org/10.1137/16M1057577</a></li><li class="footnote" id="footnote-AH16_2"><a class="tag is-link" href="#citeref-AH16_2">AH16_2</a>Mary Aprahamian and Nicholas J. Higham, &quot;Matrix Inverse Trigonometric and Inverse Hyperbolic Functions: Theory and Algorithms&quot;, MIMS EPrint: 2016.4. <a href="https://doi.org/10.1137/16M1057577">https://doi.org/10.1137/16M1057577</a></li><li class="footnote" id="footnote-AH16_3"><a class="tag is-link" href="#citeref-AH16_3">AH16_3</a>Mary Aprahamian and Nicholas J. Higham, &quot;Matrix Inverse Trigonometric and Inverse Hyperbolic Functions: Theory and Algorithms&quot;, MIMS EPrint: 2016.4. <a href="https://doi.org/10.1137/16M1057577">https://doi.org/10.1137/16M1057577</a></li><li class="footnote" id="footnote-AH16_4"><a class="tag is-link" href="#citeref-AH16_4">AH16_4</a>Mary Aprahamian and Nicholas J. Higham, &quot;Matrix Inverse Trigonometric and Inverse Hyperbolic Functions: Theory and Algorithms&quot;, MIMS EPrint: 2016.4. <a href="https://doi.org/10.1137/16M1057577">https://doi.org/10.1137/16M1057577</a></li><li class="footnote" id="footnote-AH16_5"><a class="tag is-link" href="#citeref-AH16_5">AH16_5</a>Mary Aprahamian and Nicholas J. Higham, &quot;Matrix Inverse Trigonometric and Inverse Hyperbolic Functions: Theory and Algorithms&quot;, MIMS EPrint: 2016.4. <a href="https://doi.org/10.1137/16M1057577">https://doi.org/10.1137/16M1057577</a></li><li class="footnote" id="footnote-AH16_6"><a class="tag is-link" href="#citeref-AH16_6">AH16_6</a>Mary Aprahamian and Nicholas J. Higham, &quot;Matrix Inverse Trigonometric and Inverse Hyperbolic Functions: Theory and Algorithms&quot;, MIMS EPrint: 2016.4. <a href="https://doi.org/10.1137/16M1057577">https://doi.org/10.1137/16M1057577</a></li></ul></section></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../LibGit2/">« LibGit2</a><a class="docs-footer-nextpage" href="../Logging/">Logging »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Monday 13 July 2026 06:29">Monday 13 July 2026</span>. Using Julia version 1.14.0-DEV.2638.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+<a href="https://doi.org/10.1137/s0895479801392697">doi:10.1137/S0895479801392697</a></li><li class="footnote" id="footnote-AH16_1"><a class="tag is-link" href="#citeref-AH16_1">AH16_1</a>Mary Aprahamian and Nicholas J. Higham, &quot;Matrix Inverse Trigonometric and Inverse Hyperbolic Functions: Theory and Algorithms&quot;, MIMS EPrint: 2016.4. <a href="https://doi.org/10.1137/16M1057577">https://doi.org/10.1137/16M1057577</a></li><li class="footnote" id="footnote-AH16_2"><a class="tag is-link" href="#citeref-AH16_2">AH16_2</a>Mary Aprahamian and Nicholas J. Higham, &quot;Matrix Inverse Trigonometric and Inverse Hyperbolic Functions: Theory and Algorithms&quot;, MIMS EPrint: 2016.4. <a href="https://doi.org/10.1137/16M1057577">https://doi.org/10.1137/16M1057577</a></li><li class="footnote" id="footnote-AH16_3"><a class="tag is-link" href="#citeref-AH16_3">AH16_3</a>Mary Aprahamian and Nicholas J. Higham, &quot;Matrix Inverse Trigonometric and Inverse Hyperbolic Functions: Theory and Algorithms&quot;, MIMS EPrint: 2016.4. <a href="https://doi.org/10.1137/16M1057577">https://doi.org/10.1137/16M1057577</a></li><li class="footnote" id="footnote-AH16_4"><a class="tag is-link" href="#citeref-AH16_4">AH16_4</a>Mary Aprahamian and Nicholas J. Higham, &quot;Matrix Inverse Trigonometric and Inverse Hyperbolic Functions: Theory and Algorithms&quot;, MIMS EPrint: 2016.4. <a href="https://doi.org/10.1137/16M1057577">https://doi.org/10.1137/16M1057577</a></li><li class="footnote" id="footnote-AH16_5"><a class="tag is-link" href="#citeref-AH16_5">AH16_5</a>Mary Aprahamian and Nicholas J. Higham, &quot;Matrix Inverse Trigonometric and Inverse Hyperbolic Functions: Theory and Algorithms&quot;, MIMS EPrint: 2016.4. <a href="https://doi.org/10.1137/16M1057577">https://doi.org/10.1137/16M1057577</a></li><li class="footnote" id="footnote-AH16_6"><a class="tag is-link" href="#citeref-AH16_6">AH16_6</a>Mary Aprahamian and Nicholas J. Higham, &quot;Matrix Inverse Trigonometric and Inverse Hyperbolic Functions: Theory and Algorithms&quot;, MIMS EPrint: 2016.4. <a href="https://doi.org/10.1137/16M1057577">https://doi.org/10.1137/16M1057577</a></li></ul></section></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../LibGit2/">« LibGit2</a><a class="docs-footer-nextpage" href="../Logging/">Logging »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Monday 13 July 2026 20:50">Monday 13 July 2026</span>. Using Julia version 1.14.0-DEV.2645.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
