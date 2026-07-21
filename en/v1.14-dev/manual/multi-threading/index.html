@@ -183,7 +183,9 @@ julia&gt; lock(my_locked_array) do x
  2</code></pre><h3 id="man-atomic-operations"><a class="docs-heading-anchor" href="#man-atomic-operations">Atomic Operations</a><a id="man-atomic-operations-1"></a><a class="docs-heading-anchor-permalink" href="#man-atomic-operations" title="Permalink"></a></h3><p>Julia supports accessing and modifying values <em>atomically</em>, that is, in a thread-safe way to avoid
 <a href="https://en.wikipedia.org/wiki/Race_condition">race conditions</a>. A value (which must be of a primitive
 type) can be wrapped as <a href="../../base/multi-threading/#Base.Threads.Atomic"><code>Threads.Atomic</code></a> to indicate it must be accessed in this way.
-Here we can see an example:</p><pre><code class="language-julia-repl hljs">julia&gt; i = Threads.Atomic{Int}(0);
+Here we can see an example using the <a href="../../base/multi-threading/#Base.Threads.atomic_add!"><code>Threads.atomic_add!</code></a> function; the
+<a href="#man-atomic-reference"><code>@atomic</code> reference interface</a> described below is now preferred for
+new code:</p><pre><code class="language-julia-repl hljs">julia&gt; i = Threads.Atomic{Int}(0);
 
 julia&gt; ids = zeros(4);
 
@@ -234,7 +236,43 @@ julia&gt; @threads for i in 1:1000
        end
 
 julia&gt; acc[]
-1000</code></pre><h4 id="man-atomics"><a class="docs-heading-anchor" href="#man-atomics">Per-field atomics</a><a id="man-atomics-1"></a><a class="docs-heading-anchor-permalink" href="#man-atomics" title="Permalink"></a></h4><p>We can also use atomics on a more granular level using the [<code>@atomic</code>](@ref
+1000</code></pre><h4 id="man-atomic-reference"><a class="docs-heading-anchor" href="#man-atomic-reference">The <code>@atomic</code> reference interface</a><a id="man-atomic-reference-1"></a><a class="docs-heading-anchor-permalink" href="#man-atomic-reference" title="Permalink"></a></h4><p>While the <a href="../../base/multi-threading/#Base.Threads.atomic_add!"><code>Threads.atomic_add!</code></a> family of functions shown above is still supported, the
+recommended interface for a single atomic location is the reference form of the
+<a href="../../base/multi-threading/#Base.@atomic"><code>@atomic</code></a>, <a href="../../base/multi-threading/#Base.@atomicswap"><code>@atomicswap</code></a>,
+<a href="../../base/multi-threading/#Base.@atomicreplace"><code>@atomicreplace</code></a>, and <a href="../../base/multi-threading/#Base.@atomiconce"><code>@atomiconce</code></a> macros. It
+spells out each operation explicitly, makes read-modify-write updates such as <code>a[] += 1</code>
+unambiguously atomic (rather than silently racy), and lets the memory ordering be given as an
+optional first argument (defaulting to <code>:sequentially_consistent</code>):</p><pre><code class="language-julia-repl hljs">julia&gt; a = Threads.Atomic{Int}(0)
+Base.Threads.Atomic{Int64}(0)
+
+julia&gt; @atomic a[] = 10          # atomic store
+10
+
+julia&gt; @atomic a[]               # atomic load
+10
+
+julia&gt; @atomic :monotonic a[]    # atomic load with an explicit memory ordering
+10
+
+julia&gt; @atomic a[] += 1          # atomic read-modify-write, returns the new value
+11
+
+julia&gt; @atomicswap a[] = 0       # atomic exchange, returns the old value
+11
+
+julia&gt; @atomicreplace a[] 0 =&gt; 5 # atomic compare-and-swap
+(old = 0, success = true)</code></pre><p>The same macros also operate on the elements of an <a href="../../base/multi-threading/#Core.AtomicMemory"><code>AtomicMemory</code></a> and on <code>@atomic</code> struct
+fields (see <a href="#man-atomics">Per-field atomics</a> below), so the same syntax covers scalars,
+arrays, and fields.</p><p>The <a href="../../base/multi-threading/#Base.Threads.Atomic"><code>Threads.Atomic</code></a> type is a standalone, <a href="../../base/c/#Core.Ref"><code>Ref</code></a>-like atomic cell. Like <code>Ref</code>, it
+is a useful building block and is not going to be removed, but an <code>@atomic</code> field of a mutable
+struct (see <a href="#man-atomics">Per-field atomics</a> below) is usually preferable when you have the
+choice, since it avoids the extra indirection.</p><p>The <code>Threads.atomic_*</code> functions predate these macros and still work, but the macros are the
+recommended way to operate on an atomic cell because they read more clearly and let you choose the
+memory ordering. The table below shows how to translate them. Note that the <code>atomic_*</code> functions
+return the <strong>old</strong> value, whereas <code>@atomic a[] op= v</code> returns the <strong>new</strong> value and
+<code>@atomic a[] op v</code> returns an <code>old =&gt; new</code> pair (use <code>.first</code>/<code>.second</code> to recover the individual
+values):</p><table><tr><th style="text-align: left">Legacy call</th><th style="text-align: left"><code>@atomic</code> equivalent</th></tr><tr><td style="text-align: left"><code>atomic_add!(a, v)</code></td><td style="text-align: left"><code>@atomic a[] += v</code></td></tr><tr><td style="text-align: left"><code>atomic_sub!(a, v)</code></td><td style="text-align: left"><code>@atomic a[] -= v</code></td></tr><tr><td style="text-align: left"><code>atomic_and!(a, v)</code></td><td style="text-align: left"><code>@atomic a[] &amp;= v</code></td></tr><tr><td style="text-align: left"><code>atomic_or!(a, v)</code></td><td style="text-align: left"><code>@atomic a[] |= v</code></td></tr><tr><td style="text-align: left"><code>atomic_xor!(a, v)</code></td><td style="text-align: left"><code>@atomic a[] ⊻= v</code></td></tr><tr><td style="text-align: left"><code>atomic_max!(a, v)</code></td><td style="text-align: left"><code>@atomic a[] max v</code></td></tr><tr><td style="text-align: left"><code>atomic_min!(a, v)</code></td><td style="text-align: left"><code>@atomic a[] min v</code></td></tr><tr><td style="text-align: left"><code>atomic_xchg!(a, v)</code></td><td style="text-align: left"><code>@atomicswap a[] = v</code></td></tr><tr><td style="text-align: left"><code>atomic_cas!(a, cmp, new)</code></td><td style="text-align: left"><code>@atomicreplace a[] cmp =&gt; new</code></td></tr></table><p>Storing with the plain <code>a[] = v</code> form on a <code>Threads.Atomic</code> is deprecated (because uses such as
+<code>a[] += 1</code> look atomic but are not); use <code>@atomic a[] = v</code> instead.</p><div class="admonition is-compat" id="Julia-1.14-78305936a6b81ae7"><header class="admonition-header">Julia 1.14<a class="admonition-anchor" href="#Julia-1.14-78305936a6b81ae7" title="Permalink"></a></header><div class="admonition-body"><p>The reference form of the <code>@atomic</code> macros on <code>Threads.Atomic</code> requires at least Julia 1.14.</p></div></div><h4 id="man-atomics"><a class="docs-heading-anchor" href="#man-atomics">Per-field atomics</a><a id="man-atomics-1"></a><a class="docs-heading-anchor-permalink" href="#man-atomics" title="Permalink"></a></h4><p>We can also use atomics on a more granular level using the [<code>@atomic</code>](@ref
 Base.@atomic), <a href="../../base/multi-threading/#Base.@atomicswap"><code>@atomicswap</code></a>,
 <a href="../../base/multi-threading/#Base.@atomicreplace"><code>@atomicreplace</code></a> macros, and
 <a href="../../base/multi-threading/#Base.@atomiconce"><code>@atomiconce</code></a> macros.</p><p>Specific details of the memory model and other details of the design are written
@@ -320,4 +358,4 @@ defining the finalizer as <code>x -&gt; @spawn do_cleanup(x)</code> is one examp
 approach. Note however that this doesn&#39;t control which thread <code>do_cleanup</code>
 runs on, so <code>do_cleanup</code> would still need to acquire a lock. That
 doesn&#39;t need to be true if you implement your own queue, as you can explicitly
-only drain that queue from your thread.</p></li></ol></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../asynchronous-programming/">« Asynchronous Programming</a><a class="docs-footer-nextpage" href="../distributed-computing/">Multiprocessing and Distributed Computing »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Saturday 18 July 2026 20:38">Saturday 18 July 2026</span>. Using Julia version 1.14.0-DEV.2704.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+only drain that queue from your thread.</p></li></ol></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../asynchronous-programming/">« Asynchronous Programming</a><a class="docs-footer-nextpage" href="../distributed-computing/">Multiprocessing and Distributed Computing »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Tuesday 21 July 2026 05:17">Tuesday 21 July 2026</span>. Using Julia version 1.14.0-DEV.2709.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
