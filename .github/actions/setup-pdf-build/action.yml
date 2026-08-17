@@ -17,6 +17,7 @@ runs:
         show-versioninfo: true
     - uses: zauguin/install-texlive@v4
       with:
+        texlive_version: 2025
         packages: |
           scheme-basic
           collection-luatex
