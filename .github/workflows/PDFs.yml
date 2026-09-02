@@ -87,6 +87,8 @@ jobs:
     needs: [build-pdf]
     if: ${{ always() && github.event_name != 'pull_request' && contains(fromJson('["success", "failure"]'), needs.build-pdf.result) }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v6
       - uses: julia-actions/setup-julia@v3
@@ -106,4 +108,3 @@ jobs:
       - run: julia --color=yes pdf/make.jl commit
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DOCUMENTER_KEY_PDF: ${{ secrets.DOCUMENTER_KEY_PDF }}
