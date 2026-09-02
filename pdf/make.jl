@@ -1,4 +1,3 @@
-using Base64
 import Dates
 
 const BUILDROOT      = get(ENV, "BUILDROOT", pwd())
@@ -221,56 +220,41 @@ function commit()
         cp(from, file; force = true)
     end
 
-    mktemp() do keyfile, iokey; mktemp() do sshconfig, iossh
-        # Set up keyfile
-        write(iokey, base64decode(get(ENV, "DOCUMENTER_KEY_PDF", "")))
-        close(iokey)
-        chmod(keyfile, 0o600)
-        # Set up ssh config file
-        print(iossh,
-            """
-            Host github.com
-               StrictHostKeyChecking no
-               HostName github.com
-               IdentityFile $keyfile
-               BatchMode yes
-            """)
-        close(iossh)
-        chmod(sshconfig, 0o600)
-        # Configure git
-        run(`git config user.name "docs.julialang.org"`)
-        run(`git config user.email "documenter@juliadocs.github.io"`)
-        run(`git remote set-url origin git@github.com:JuliaLang/docs.julialang.org.git`)
-        run(`git config core.sshCommand "ssh -F $(sshconfig)"`)
-        # Stage only the new/updated PDFs
-        new_pdfs = filter(f -> endswith(f, ".pdf"), readdir(JULIA_DOCS_TMP))
-        isempty(new_pdfs) || run(`git add $new_pdfs`)
-        # Clean up DEV PDFs that now have a corresponding release PDF
-        for file in readdir(".")
-            m = match(r"^julia-(.+)-DEV\.pdf$", file)
-            m === nothing && continue
-            release_pdf = "julia-$(m.captures[1]).pdf"
-            if isfile(release_pdf)
-                @info "Removing obsolete DEV PDF" file release_pdf
-                run(`git rm -f $file`)
-            end
+    # Configure git; authenticate with GITHUB_TOKEN via a credential helper so the
+    # token never appears on a command line
+    run(`git config user.name "docs.julialang.org"`)
+    run(`git config user.email "documenter@juliadocs.github.io"`)
+    run(`git remote set-url origin https://github.com/JuliaLang/docs.julialang.org.git`)
+    helper = raw"""!f() { echo "username=x-access-token"; echo "password=$GITHUB_TOKEN"; }; f"""
+    run(`git config credential.helper $helper`)
+    # Stage only the new/updated PDFs
+    new_pdfs = filter(f -> endswith(f, ".pdf"), readdir(JULIA_DOCS_TMP))
+    isempty(new_pdfs) || run(`git add $new_pdfs`)
+    # Clean up DEV PDFs that now have a corresponding release PDF
+    for file in readdir(".")
+        m = match(r"^julia-(.+)-DEV\.pdf$", file)
+        m === nothing && continue
+        release_pdf = "julia-$(m.captures[1]).pdf"
+        if isfile(release_pdf)
+            @info "Removing obsolete DEV PDF" file release_pdf
+            run(`git rm -f $file`)
         end
-        # Only commit and push if there are staged changes
-        if success(`git diff --cached --quiet`)
-            @info "No changes to commit."
+    end
+    # Only commit and push if there are staged changes
+    if success(`git diff --cached --quiet`)
+        @info "No changes to commit."
+    else
+        # If only one commit exists (the base), create a new commit on top;
+        # otherwise amend the tip so the base commit stays stable and
+        # force-pushes only rewrite the small delta commit.
+        ncommits = parse(Int, readchomp(`git rev-list --count HEAD`))
+        if ncommits <= 1
+            run(`git commit -m "PDF updates"`)
         else
-            # If only one commit exists (the base), create a new commit on top;
-            # otherwise amend the tip so the base commit stays stable and
-            # force-pushes only rewrite the small delta commit.
-            ncommits = parse(Int, readchomp(`git rev-list --count HEAD`))
-            if ncommits <= 1
-                run(`git commit -m "PDF updates"`)
-            else
-                run(`git commit --amend --date=now -m "PDF updates"`)
-            end
-            run(`git push -f origin assets`)
+            run(`git commit --amend --date=now -m "PDF updates"`)
         end
-    end end
+        run(`git push -f origin assets`)
+    end
 end
 
 function main()
