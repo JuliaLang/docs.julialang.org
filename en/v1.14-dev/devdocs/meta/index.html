@@ -8,9 +8,10 @@ has special properties: you might always want to inline it, or you might want to
 compiler optimization passes. Starting with version 0.4, Julia has a convention that these instructions
 can be placed inside a <code>:meta</code> expression, which is typically (but not necessarily) the first
 expression in the body of a function.</p><p><code>:meta</code> expressions are created with macros. As an example, consider the implementation of the
-<code>@inline</code> macro:</p><pre><code class="language-julia hljs">macro inline(ex)
-    esc(isa(ex, Expr) ? pushmeta!(ex, :inline) : ex)
-end</code></pre><p>Here, <code>ex</code> is expected to be an expression defining a function. A statement like this:</p><pre><code class="language-julia hljs">@inline function myfunction(x)
+<code>@inline</code> macro:</p><pre><code class="language-julia hljs">macro inline(x)
+    return annotate_meta_def_or_block(x, :inline)
+end</code></pre><p>If <code>x</code> is an expression defining a function, <code>annotate_meta_def_or_block</code> adds <code>:inline</code> to its
+<code>:meta</code> expression using <code>Base.pushmeta!</code>. A statement like this:</p><pre><code class="language-julia hljs">@inline function myfunction(x)
     x*(x+3)
 end</code></pre><p>gets turned into an expression like this:</p><pre><code class="language-julia hljs">quote
     function myfunction(x)
@@ -18,9 +19,16 @@ end</code></pre><p>gets turned into an expression like this:</p><pre><code class
         x*(x+3)
     end
 end</code></pre><p><code>Base.pushmeta!(ex, tag::Union{Symbol,Expr})</code> appends <code>:tag</code> to the end of the <code>:meta</code> expression,
-creating a new <code>:meta</code> expression if necessary.</p><p>To use the metadata, you have to parse these <code>:meta</code> expressions. If your implementation can be
+creating a new <code>:meta</code> expression if necessary.</p><p>If <code>@inline</code> is instead applied to a call site or block, no <code>:meta</code> expression is created. The
+code is wrapped between <code>Expr(:inline, true)</code> and <code>Expr(:inline, false)</code>, so that
+<code>@inline x*(x+3)</code> gets turned into:</p><pre><code class="language-julia hljs">begin
+    Expr(:inline, true)
+    local val = x*(x+3)
+    Expr(:inline, false)
+    val
+end</code></pre><p><code>@noinline</code> works the same way, using <code>:noinline</code>.</p><p>To use the metadata, you have to parse these <code>:meta</code> expressions. If your implementation can be
 performed within Julia, <code>Base.popmeta!</code> is very handy: <code>Base.popmeta!(body, :symbol)</code> will scan
 a function <em>body</em> expression (one without the function signature) for the first <code>:meta</code> expression
 containing <code>:symbol</code>, extract any arguments, and return a tuple <code>(found::Bool, args::Array{Any})</code>.
 If the metadata did not have any arguments, or <code>:symbol</code> was not found, the <code>args</code> array will
-be empty.</p><p>Not yet provided is a convenient infrastructure for parsing <code>:meta</code> expressions from C++.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../cartesian/">« Base.Cartesian</a><a class="docs-footer-nextpage" href="../subarrays/">SubArrays »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.19.0 on <span class="colophon-date" title="Wednesday 14 October 2026 19:25">Wednesday 14 October 2026</span>. Using Julia version 1.14.0-DEV.3662.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+be empty.</p><p>Not yet provided is a convenient infrastructure for parsing <code>:meta</code> expressions from C++.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../cartesian/">« Base.Cartesian</a><a class="docs-footer-nextpage" href="../subarrays/">SubArrays »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.19.0 on <span class="colophon-date" title="Wednesday 14 October 2026 19:58">Wednesday 14 October 2026</span>. Using Julia version 1.14.0-DEV.3678.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
