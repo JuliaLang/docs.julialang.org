@@ -419,8 +419,12 @@ result are classified as either local or global. A variable is considered local 
 to (and not declared global), declared local, or used as a function argument name. Otherwise,
 it is considered global. Local variables are then renamed to be unique (using the <a href="../../base/base/#Base.gensym"><code>gensym</code></a>
 function, which generates new symbols), and global variables are resolved within the macro definition
-environment. Therefore both of the above concerns are handled; the macro&#39;s locals will not conflict
-with any user variables, and <code>time_ns</code> and <code>println</code> will refer to the Julia Base definitions.</p><p>One problem remains however. Consider the following use of this macro:</p><pre><code class="language-julia hljs">module MyModule
+environment. Therefore the macro&#39;s locals will not conflict with variables in the surrounding code,
+and <code>time_ns</code> and <code>println</code> will refer to the Julia Base definitions.</p><p>However, these rules apply to <em>all</em> variables in the macro result, including those in the user
+expression <code>ex</code>. So if <code>ex</code> assigns to <code>t0</code>, that <code>t0</code> is renamed to the same unique symbol as the
+macro&#39;s own <code>t0</code>, and the user&#39;s assignment overwrites the macro&#39;s start time. Similarly, global
+variables in <code>ex</code> are resolved in the macro definition environment. Consider the following use
+of this macro:</p><pre><code class="language-julia hljs">module MyModule
 import Base.@time
 
 time_ns() = ... # compute something
@@ -428,12 +432,14 @@ time_ns() = ... # compute something
 @time time_ns()
 end</code></pre><p>Here the user expression <code>ex</code> is a call to <code>time_ns</code>, but not the same <code>time_ns</code> function that the macro
 uses. It clearly refers to <code>MyModule.time_ns</code>. Therefore we must arrange for the code in <code>ex</code> to
-be resolved in the macro call environment. This is done by &quot;escaping&quot; the expression with <a href="../../base/base/#Base.esc"><code>esc</code></a>:</p><pre><code class="language-julia hljs">macro time(ex)
+be resolved in the macro call environment. This is done by &quot;escaping&quot; the expression with <a href="../../base/base/#Base.esc"><code>esc</code></a>,
+which also solves the problem with <code>t0</code> above:</p><pre><code class="language-julia hljs">macro time(ex)
     ...
     local val = $(esc(ex))
     ...
 end</code></pre><p>An expression wrapped in this manner is left alone by the macro expander and simply pasted into
-the output verbatim. Therefore it will be resolved in the macro call environment.</p><p>This escaping mechanism can be used to &quot;violate&quot; hygiene when necessary, in order to introduce
+the output verbatim. Therefore it will be resolved in the macro call environment, and its variables
+are not renamed, so they cannot clash with the macro&#39;s renamed locals.</p><p>This escaping mechanism can be used to &quot;violate&quot; hygiene when necessary, in order to introduce
 or manipulate user variables. For example, the following macro sets <code>x</code> to zero in the call environment:</p><pre><code class="language-julia-repl hljs">julia&gt; macro zerox()
            return esc(:(x = 0))
        end
@@ -792,4 +798,4 @@ implementation instead.
 This style is preferred, since it allows the compiler to make more decisions and compile
 programs in more ways, and since normal code is more readable than code-generating code.
 However, which implementation is used depends on compiler implementation details, so it
-is essential for the two implementations to behave identically.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../documentation/">« Documentation</a><a class="docs-footer-nextpage" href="../arrays/">Single- and multi-dimensional Arrays »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.19.0 on <span class="colophon-date" title="Thursday 15 October 2026 23:50">Thursday 15 October 2026</span>. Using Julia version 1.14.0-DEV.3725.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+is essential for the two implementations to behave identically.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../documentation/">« Documentation</a><a class="docs-footer-nextpage" href="../arrays/">Single- and multi-dimensional Arrays »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.19.0 on <span class="colophon-date" title="Friday 16 October 2026 00:03">Friday 16 October 2026</span>. Using Julia version 1.14.0-DEV.3740.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
