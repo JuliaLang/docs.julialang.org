@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Sparse Arrays · The Julia Language</title><meta name="title" content="Sparse Arrays · The Julia Language"/><meta property="og:title" content="Sparse Arrays · The Julia Language"/><meta property="twitter:title" content="Sparse Arrays · The Julia Language"/><meta name="description" content="Documentation for The Julia Language."/><meta property="og:description" content="Documentation for The Julia Language."/><meta property="twitter:description" content="Documentation for The Julia Language."/><meta property="og:url" content="https://docs.julialang.org/en/v1/stdlib/SparseArrays/"/><meta property="twitter:url" content="https://docs.julialang.org/en/v1/stdlib/SparseArrays/"/><link rel="canonical" href="https://docs.julialang.org/en/v1/stdlib/SparseArrays/"/><script async src="https://www.googletagmanager.com/gtag/js?id=UA-28835595-6"></script><script>  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-28835595-6', {'page_path': location.pathname + location.search + location.hash});
+</script><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.63.2/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="../../assets/julia-manual.css" rel="stylesheet" type="text/css"/><link href="../../assets/julia.ico" rel="icon" type="image/x-icon"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../"><img class="docs-light-only" src="../../assets/logo.svg" alt="The Julia Language logo"/><img class="docs-dark-only" src="../../assets/logo-dark.svg" alt="The Julia Language logo"/></a><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Julia Documentation</a></li><li><input class="collapse-toggle" id="menuitem-3" type="checkbox"/><label class="tocitem" for="menuitem-3"><span class="docs-label">Manual</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../manual/getting-started/">Getting Started</a></li><li><a class="tocitem" href="../../manual/installation/">Installation</a></li><li><a class="tocitem" href="../../manual/variables/">Variables</a></li><li><a class="tocitem" href="../../manual/integers-and-floating-point-numbers/">Integers and Floating-Point Numbers</a></li><li><a class="tocitem" href="../../manual/mathematical-operations/">Mathematical Operations and Elementary Functions</a></li><li><a class="tocitem" href="../../manual/complex-and-rational-numbers/">Complex and Rational Numbers</a></li><li><a class="tocitem" href="../../manual/strings/">Strings</a></li><li><a class="tocitem" href="../../manual/functions/">Functions</a></li><li><a class="tocitem" href="../../manual/control-flow/">Control Flow</a></li><li><a class="tocitem" href="../../manual/variables-and-scoping/">Scope of Variables</a></li><li><a class="tocitem" href="../../manual/types/">Types</a></li><li><a class="tocitem" href="../../manual/methods/">Methods</a></li><li><a class="tocitem" href="../../manual/constructors/">Constructors</a></li><li><a class="tocitem" href="../../manual/conversion-and-promotion/">Conversion and Promotion</a></li><li><a class="tocitem" href="../../manual/interfaces/">Interfaces</a></li><li><a class="tocitem" href="../../manual/modules/">Modules</a></li><li><a class="tocitem" href="../../manual/documentation/">Documentation</a></li><li><a class="tocitem" href="../../manual/metaprogramming/">Metaprogramming</a></li><li><a class="tocitem" href="../../manual/arrays/">Single- and multi-dimensional Arrays</a></li><li><a class="tocitem" href="../../manual/missing/">Missing Values</a></li><li><a class="tocitem" href="../../manual/networking-and-streams/">Networking and Streams</a></li><li><a class="tocitem" href="../../manual/parallel-computing/">Parallel Computing</a></li><li><a class="tocitem" href="../../manual/asynchronous-programming/">Asynchronous Programming</a></li><li><a class="tocitem" href="../../manual/multi-threading/">Multi-Threading</a></li><li><a class="tocitem" href="../../manual/distributed-computing/">Multiprocessing and Distributed Computing</a></li><li><a class="tocitem" href="../../manual/running-external-programs/">Running External Programs</a></li><li><a class="tocitem" href="../../manual/calling-c-and-fortran-code/">Calling C and Fortran Code</a></li><li><a class="tocitem" href="../../manual/handling-operating-system-variation/">Handling Operating System Variation</a></li><li><a class="tocitem" href="../../manual/environment-variables/">Environment Variables</a></li><li><a class="tocitem" href="../../manual/embedding/">Embedding Julia</a></li><li><a class="tocitem" href="../../manual/code-loading/">Code Loading</a></li><li><a class="tocitem" href="../../manual/profile/">Profiling</a></li><li><a class="tocitem" href="../../manual/stacktraces/">Stack Traces</a></li><li><a class="tocitem" href="../../manual/memory-management/">Memory Management and Garbage Collection</a></li><li><a class="tocitem" href="../../manual/performance-tips/">Performance Tips</a></li><li><a class="tocitem" href="../../manual/workflow-tips/">Workflow Tips</a></li><li><a class="tocitem" href="../../manual/style-guide/">Style Guide</a></li><li><a class="tocitem" href="../../manual/faq/">Frequently Asked Questions</a></li><li><a class="tocitem" href="../../manual/noteworthy-differences/">Noteworthy Differences from other Languages</a></li><li><a class="tocitem" href="../../manual/unicode-input/">Unicode Input</a></li><li><a class="tocitem" href="../../manual/emoji-input/">Emoji Input</a></li><li><a class="tocitem" href="../../manual/command-line-interface/">Command-line Interface</a></li><li><a class="tocitem" href="../../manual/worldage/">The World Age mechanism</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-4" type="checkbox"/><label class="tocitem" for="menuitem-4"><span class="docs-label">Base</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../base/base/">Essentials</a></li><li><a class="tocitem" href="../../base/collections/">Collections and Data Structures</a></li><li><a class="tocitem" href="../../base/math/">Mathematics</a></li><li><a class="tocitem" href="../../base/numbers/">Numbers</a></li><li><a class="tocitem" href="../../base/strings/">Strings</a></li><li><a class="tocitem" href="../../base/arrays/">Arrays</a></li><li><a class="tocitem" href="../../base/parallel/">Tasks</a></li><li><a class="tocitem" href="../../base/multi-threading/">Multi-Threading</a></li><li><a class="tocitem" href="../../base/scopedvalues/">Scoped Values</a></li><li><a class="tocitem" href="../../base/constants/">Constants</a></li><li><a class="tocitem" href="../../base/file/">Filesystem</a></li><li><a class="tocitem" href="../../base/io-network/">I/O and Network</a></li><li><a class="tocitem" href="../../base/punctuation/">Punctuation</a></li><li><a class="tocitem" href="../../base/sort/">Sorting and Related Functions</a></li><li><a class="tocitem" href="../../base/iterators/">Iteration utilities</a></li><li><a class="tocitem" href="../../base/reflection/">Reflection and introspection</a></li><li><a class="tocitem" href="../../base/c/">C Interface</a></li><li><a class="tocitem" href="../../base/libc/">C Standard Library</a></li><li><a class="tocitem" href="../../base/stacktraces/">StackTraces</a></li><li><a class="tocitem" href="../../base/simd-types/">SIMD Support</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-5" type="checkbox" checked/><label class="tocitem" for="menuitem-5"><span class="docs-label">Standard Library</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../ArgTools/">ArgTools</a></li><li><a class="tocitem" href="../Artifacts/">Artifacts</a></li><li><a class="tocitem" href="../Base64/">Base64</a></li><li><a class="tocitem" href="../CRC32c/">CRC32c</a></li><li><a class="tocitem" href="../Dates/">Dates</a></li><li><a class="tocitem" href="../DelimitedFiles/">Delimited Files</a></li><li><a class="tocitem" href="../Distributed/">Distributed Computing</a></li><li><a class="tocitem" href="../Downloads/">Downloads</a></li><li><a class="tocitem" href="../Libdl/">Libdl (Dynamic Linker)</a></li><li><a class="tocitem" href="../FileWatching/">FileWatching (File Events)</a></li><li><a class="tocitem" href="../Future/">Future</a></li><li><a class="tocitem" href="../InteractiveUtils/">InteractiveUtils</a></li><li><a class="tocitem" href="../JuliaSyntaxHighlighting/">Julia Syntax Highlighting</a></li><li><a class="tocitem" href="../LazyArtifacts/">Lazy Artifacts</a></li><li><a class="tocitem" href="../LibCURL/">LibCURL</a></li><li><a class="tocitem" href="../LibGit2/">LibGit2</a></li><li><a class="tocitem" href="../LinearAlgebra/">Linear Algebra</a></li><li><a class="tocitem" href="../Logging/">Logging</a></li><li><a class="tocitem" href="../Markdown/">Markdown</a></li><li><a class="tocitem" href="../Mmap/">Mmap (Memory-mapped I/O)</a></li><li><a class="tocitem" href="../NetworkOptions/">Network Options</a></li><li><a class="tocitem" href="../Pkg/">Pkg</a></li><li><a class="tocitem" href="../Printf/">Printf</a></li><li><a class="tocitem" href="../Profile/">Profile</a></li><li><a class="tocitem" href="../Random/">Random</a></li><li><a class="tocitem" href="../REPL/">REPL</a></li><li><a class="tocitem" href="../Serialization/">Serialization</a></li><li><a class="tocitem" href="../SHA/">SHA</a></li><li><a class="tocitem" href="../SharedArrays/">SharedArrays</a></li><li><a class="tocitem" href="../Sockets/">Sockets</a></li><li class="is-active"><a class="tocitem" href>Sparse Arrays</a><ul class="internal"><li><a class="tocitem" href="#man-sparse-vectors-matrices"><span>Sparse Vectors and Matrices</span></a></li><li><a class="tocitem" href="#man-sparse-specialized"><span>Specialized Sparse Arrays</span></a></li><li><a class="tocitem" href="#stdlib-sparse-arrays"><span>SparseArrays API</span></a></li><li><a class="tocitem" href="#Noteworthy-External-Sparse-Packages"><span>Noteworthy External Sparse Packages</span></a></li></ul></li><li><a class="tocitem" href="../SparseArrays-solvers/">Sparse Linear Solvers</a></li><li><a class="tocitem" href="../Statistics/">Statistics</a></li><li><a class="tocitem" href="../StyledStrings/">StyledStrings</a></li><li><a class="tocitem" href="../Tar/">Tar</a></li><li><a class="tocitem" href="../TOML/">TOML</a></li><li><a class="tocitem" href="../Unicode/">Unicode</a></li><li><a class="tocitem" href="../Test/">Test</a></li><li><a class="tocitem" href="../UUIDs/">UUIDs</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-6" type="checkbox"/><label class="tocitem" for="menuitem-6"><span class="docs-label">Developer Documentation</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><input class="collapse-toggle" id="menuitem-6-1" type="checkbox"/><label class="tocitem" for="menuitem-6-1"><span class="docs-label">Documentation of Julia&#39;s Internals</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../devdocs/init/">Initialization of the Julia runtime</a></li><li><a class="tocitem" href="../../devdocs/ast/">Julia ASTs</a></li><li><a class="tocitem" href="../../devdocs/types/">More about types</a></li><li><a class="tocitem" href="../../devdocs/ub/">Undefined Behavior</a></li><li><a class="tocitem" href="../../devdocs/object/">Memory layout of Julia Objects</a></li><li><a class="tocitem" href="../../devdocs/eval/">Eval of Julia code</a></li><li><a class="tocitem" href="../../devdocs/callconv/">Calling Conventions</a></li><li><a class="tocitem" href="../../devdocs/compiler/">High-level Overview of the Native-Code Generation Process</a></li><li><a class="tocitem" href="../../devdocs/functions/">Julia Functions</a></li><li><a class="tocitem" href="../../devdocs/cartesian/">Base.Cartesian</a></li><li><a class="tocitem" href="../../devdocs/meta/">Talking to the compiler (the <code>:meta</code> mechanism)</a></li><li><a class="tocitem" href="../../devdocs/subarrays/">SubArrays</a></li><li><a class="tocitem" href="../../devdocs/isbitsunionarrays/">isbits Union Optimizations</a></li><li><a class="tocitem" href="../../devdocs/sysimg/">System Image Building</a></li><li><a class="tocitem" href="../../devdocs/pkgimg/">Package Images</a></li><li><a class="tocitem" href="../../devdocs/llvm-passes/">Custom LLVM Passes</a></li><li><a class="tocitem" href="../../devdocs/llvm/">Working with LLVM</a></li><li><a class="tocitem" href="../../devdocs/stdio/">printf() and stdio in the Julia runtime</a></li><li><a class="tocitem" href="../../devdocs/boundscheck/">Bounds checking</a></li><li><a class="tocitem" href="../../devdocs/locks/">Proper maintenance and care of multi-threading locks</a></li><li><a class="tocitem" href="../../devdocs/scheduler-wakeup/">Task scheduler wakeups</a></li><li><a class="tocitem" href="../../devdocs/offset-arrays/">Arrays with custom indices</a></li><li><a class="tocitem" href="../../devdocs/require/">Module loading</a></li><li><a class="tocitem" href="../../devdocs/inference/">Inference</a></li><li><a class="tocitem" href="../../devdocs/ssair/">Julia SSA-form IR</a></li><li><a class="tocitem" href="../../devdocs/EscapeAnalysis/"><code>EscapeAnalysis</code></a></li><li><a class="tocitem" href="../../devdocs/aot/">Ahead of Time Compilation</a></li><li><a class="tocitem" href="../../devdocs/gc-sa/">Static analyzer annotations for GC correctness in C code</a></li><li><a class="tocitem" href="../../devdocs/gc/">Julia Garbage Collector (GC) Internals</a></li><li><a class="tocitem" href="../../devdocs/gc-mmtk/">Julia + MMTk</a></li><li><a class="tocitem" href="../../devdocs/jit/">JIT Design and Implementation</a></li><li><a class="tocitem" href="../../devdocs/builtins/">Core.Builtins</a></li><li><a class="tocitem" href="../../devdocs/precompile_hang/">Fixing precompilation hangs due to open tasks or IO</a></li><li><a class="tocitem" href="../../devdocs/compiler_changes/">History of changes to the compiler</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-6-2" type="checkbox"/><label class="tocitem" for="menuitem-6-2"><span class="docs-label">Developing/debugging Julia&#39;s C code</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../devdocs/backtraces/">Reporting and analyzing crashes (segfaults)</a></li><li><a class="tocitem" href="../../devdocs/debuggingtips/">gdb debugging tips</a></li><li><a class="tocitem" href="../../devdocs/valgrind/">Using Valgrind with Julia</a></li><li><a class="tocitem" href="../../devdocs/gc-debug/">GC Debug Build Tools</a></li><li><a class="tocitem" href="../../devdocs/external_profilers/">External Profiler Support</a></li><li><a class="tocitem" href="../../devdocs/sanitizers/">Sanitizer support</a></li><li><a class="tocitem" href="../../devdocs/probes/">Instrumenting Julia with DTrace, and bpftrace</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-6-3" type="checkbox"/><label class="tocitem" for="menuitem-6-3"><span class="docs-label">Building Julia</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../devdocs/build/build/">Building Julia (Detailed)</a></li><li><a class="tocitem" href="../../devdocs/build/linux/">Linux</a></li><li><a class="tocitem" href="../../devdocs/build/macos/">macOS</a></li><li><a class="tocitem" href="../../devdocs/build/windows/">Windows</a></li><li><a class="tocitem" href="../../devdocs/build/freebsd/">FreeBSD</a></li><li><a class="tocitem" href="../../devdocs/build/arm/">ARM (Linux)</a></li><li><a class="tocitem" href="../../devdocs/build/riscv/">RISC-V (Linux)</a></li><li><a class="tocitem" href="../../devdocs/build/distributing/">Binary distributions</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-6-4" type="checkbox"/><label class="tocitem" for="menuitem-6-4"><span class="docs-label">Contributor&#39;s Guide</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../devdocs/contributing/code-changes/">Code changes</a></li><li><a class="tocitem" href="../../devdocs/contributing/tests/">Writing tests</a></li><li><a class="tocitem" href="../../devdocs/contributing/documentation/">Improving documentation</a></li><li><a class="tocitem" href="../../devdocs/contributing/jldoctests/">Writing jldoctests</a></li><li><a class="tocitem" href="../../devdocs/contributing/patch-releases/">Contributing to patch releases</a></li><li><a class="tocitem" href="../../devdocs/contributing/formatting/">Code Formatting Guidelines</a></li><li><a class="tocitem" href="../../devdocs/contributing/git-workflow/">Git workflow recommendations</a></li><li><a class="tocitem" href="../../devdocs/contributing/aiagents/">Using AI agents to work on Julia</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-6-5" type="checkbox"/><label class="tocitem" for="menuitem-6-5"><span class="docs-label">Agentic Devdocs</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../devdocs/agents/README/">Index</a></li><li><input class="collapse-toggle" id="menuitem-6-5-2" type="checkbox"/><label class="tocitem" for="menuitem-6-5-2"><span class="docs-label">Agent Skills</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../devdocs/agents/skills/buildkite-logs/">Reviewing Buildkite CI logs</a></li><li><a class="tocitem" href="../../devdocs/agents/skills/c-static-analysis/">C/C++ static analysis (src/)</a></li><li><a class="tocitem" href="../../devdocs/agents/skills/ci-timing/">CI timing analysis</a></li><li><a class="tocitem" href="../../devdocs/agents/skills/compiler-jl/">Compiler.jl development</a></li><li><a class="tocitem" href="../../devdocs/agents/skills/doctests/">Julia doctests</a></li><li><a class="tocitem" href="../../devdocs/agents/skills/external-deps/">External dependencies &amp; JLLs</a></li><li><a class="tocitem" href="../../devdocs/agents/skills/julia-syntax-lowering/">JuliaSyntax &amp; JuliaLowering development</a></li><li><a class="tocitem" href="../../devdocs/agents/skills/test-changes/">Julia test changes</a></li></ul></li></ul></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Standard Library</a></li><li class="is-active"><a href>Sparse Arrays</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Sparse Arrays</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/JuliaLang/julia" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/JuliaSparse/SparseArrays.jl/blob/main/docs/src/index.md" title="View source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Sparse-Arrays"><a class="docs-heading-anchor" href="#Sparse-Arrays">Sparse Arrays</a><a id="Sparse-Arrays-1"></a><a class="docs-heading-anchor-permalink" href="#Sparse-Arrays" title="Permalink"></a></h1><p>The <code>SparseArrays</code> stdlib module provides sparse vectors and
+<a href="https://en.wikipedia.org/wiki/Sparse_matrix">sparse matrices</a>: arrays with enough zeros
+that storing only the other entries saves space and time compared to dense arrays.</p><ul><li><a href="#man-sparse-vectors-matrices">Sparse Vectors and Matrices</a></li><li class="no-marker"><ul><li><a href="#man-csc">Compressed Sparse Column (CSC) Sparse Matrix Storage</a></li><li><a href="#Sparse-Vector-Storage">Sparse Vector Storage</a></li><li><a href="#Sparse-Vector-and-Matrix-Constructors">Sparse Vector and Matrix Constructors</a></li><li><a href="#Sparse-matrix-operations">Sparse matrix operations</a></li><li class="no-marker"><ul><li><a href="#man-sparse-arithmetic">Arithmetic</a></li><li><a href="#man-sparse-indexing">Indexing and assignment</a></li><li><a href="#man-sparse-concatenation">Concatenation</a></li><li><a href="#man-sparse-reductions">Reductions</a></li><li><a href="#man-sparse-broadcast">Broadcasting and <code>map</code></a></li><li><a href="#man-sparse-products">Products</a></li><li><a href="#man-sparse-norms">Norms and condition numbers</a></li><li><a href="#man-sparse-structure">Diagonals, triangles and permutations</a></li></ul></li><li><a href="#man-sparse-performance">Performance tips</a></li><li class="no-marker"><ul><li><a href="#Iterate-over-stored-entries-by-column">Iterate over stored entries by column</a></li><li><a href="#Build-a-matrix-from-its-entries-in-one-call">Build a matrix from its entries in one call</a></li><li><a href="#Slice-columns,-not-rows">Slice columns, not rows</a></li><li><a href="#Choose-a-smaller-index-type">Choose a smaller index type</a></li><li><a href="#man-sparse-lazy-transpose">Lazy <code>transpose</code> and <code>adjoint</code></a></li><li><a href="#Keep-results-free-of-stored-zeros">Keep results free of stored zeros</a></li></ul></li></ul></li><li><a href="#man-sparse-specialized">Specialized Sparse Arrays</a></li><li class="no-marker"><ul><li><a href="#man-sparse-eltype">User-defined element types</a></li><li><a href="#man-sparse-fixed">Sparse arrays with a fixed pattern</a></li></ul></li><li><a href="#stdlib-sparse-arrays">SparseArrays API</a></li><li class="no-marker"><ul><li><a href="#Types">Types</a></li><li><a href="#Constructors">Constructors</a></li><li><a href="#Stored-entries">Stored entries</a></li><li><a href="#Removing-stored-entries">Removing stored entries</a></li><li><a href="#Permuting,-transposing-and-sorting">Permuting, transposing and sorting</a></li><li><a href="#Concatenation">Concatenation</a></li><li><a href="#Fixed-pattern-(experimental)">Fixed pattern (experimental)</a></li><li><a href="#stdlib-sparse-linalg-api">Linear algebra</a></li></ul></li><li><a href="#Noteworthy-External-Sparse-Packages">Noteworthy External Sparse Packages</a></li></ul><h2 id="man-sparse-vectors-matrices"><a class="docs-heading-anchor" href="#man-sparse-vectors-matrices">Sparse Vectors and Matrices</a><a id="man-sparse-vectors-matrices-1"></a><a class="docs-heading-anchor-permalink" href="#man-sparse-vectors-matrices" title="Permalink"></a></h2><h3 id="man-csc"><a class="docs-heading-anchor" href="#man-csc">Compressed Sparse Column (CSC) Sparse Matrix Storage</a><a id="man-csc-1"></a><a class="docs-heading-anchor-permalink" href="#man-csc" title="Permalink"></a></h3><p>In Julia, sparse matrices are stored in the <a href="https://en.wikipedia.org/wiki/Sparse_matrix#Compressed_sparse_column_.28CSC_or_CCS.29">Compressed Sparse Column (CSC) format</a>.
+Julia sparse matrices have the type <a href="#SparseArrays.SparseMatrixCSC"><code>SparseMatrixCSC{Tv,Ti}</code></a>, where <code>Tv</code> is the
+type of the stored values, and <code>Ti</code> is the integer type for storing column pointers and
+row indices. The internal representation of <code>SparseMatrixCSC</code> is as follows:</p><pre><code class="language-julia hljs">struct SparseMatrixCSC{Tv,Ti&lt;:Integer} &lt;: AbstractSparseMatrixCSC{Tv,Ti}
+    m::Int                  # Number of rows
+    n::Int                  # Number of columns
+    colptr::Vector{Ti}      # Column j is in colptr[j]:(colptr[j+1]-1)
+    rowval::Vector{Ti}      # Row indices of stored values
+    nzval::Vector{Tv}       # Stored values, typically nonzeros
+end</code></pre><p>CSC storage makes access to the entries of a column fast, and access by row considerably
+slower. Inserting previously unstored entries one at a time is slow as well, because every
+entry beyond the point of insertion has to be moved one place over. See
+<a href="#man-sparse-performance">Performance tips</a>.</p><p>A <code>SparseMatrixCSC</code> may store explicit zeros. <a href="#SparseArrays.nnz"><code>nnz</code></a> counts the stored entries,
+including stored zeros, and <a href="../../base/collections/#Base.count"><code>count(!iszero, x)</code></a> counts the numerical nonzeros.
+<a href="#SparseArrays.dropzeros"><code>dropzeros</code></a>, and the in-place <a href="#SparseArrays.dropzeros!"><code>dropzeros!</code></a>, remove stored zeros.</p><pre><code class="language-julia-repl hljs">julia&gt; A = sparse([1, 1, 2, 3], [1, 3, 2, 3], [0, 1, 2, 0])
+3×3 SparseMatrixCSC{Int64, Int64} with 4 stored entries:
+ 0  ⋅  1
+ ⋅  2  ⋅
+ ⋅  ⋅  0
+
+julia&gt; dropzeros(A)
+3×3 SparseMatrixCSC{Int64, Int64} with 2 stored entries:
+ ⋅  ⋅  1
+ ⋅  2  ⋅
+ ⋅  ⋅  ⋅</code></pre><p>Arrays in CSC format from another application or library can be wrapped, without copying,
+with <code>SparseMatrixCSC(m, n, colptr, rowval, nzval)</code>. Within each column the row indices
+must be sorted and unique, which the constructor does <em>not</em> check; the
+<a href="#SparseArrays.SparseMatrixCSC"><code>SparseMatrixCSC</code></a> docstring lists the invariants. Arrays from a 0-based source,
+such as C or SciPy, need <code>1</code> added to <code>colptr</code> and <code>rowval</code>. To sort the row indices of a
+matrix <code>A</code> wrapped this way, transpose it twice, <code>copy(transpose(copy(transpose(A))))</code>.</p><p>The arrays of an <code>m × n</code> matrix in compressed sparse row (CSR) format are the CSC arrays of
+its transpose, so build the <code>n × m</code> matrix from them and transpose it:</p><pre><code class="language-julia-repl hljs">julia&gt; rowptr = [1, 3, 4]; colval = [1, 3, 2]; nzval = [1.0, 2.0, 3.0];  # 2 × 3 CSR
+
+julia&gt; copy(transpose(SparseMatrixCSC(3, 2, rowptr, colval, nzval)))
+2×3 SparseMatrixCSC{Float64, Int64} with 3 stored entries:
+ 1.0   ⋅   2.0
+  ⋅   3.0   ⋅</code></pre><h3 id="Sparse-Vector-Storage"><a class="docs-heading-anchor" href="#Sparse-Vector-Storage">Sparse Vector Storage</a><a id="Sparse-Vector-Storage-1"></a><a class="docs-heading-anchor-permalink" href="#Sparse-Vector-Storage" title="Permalink"></a></h3><p>Sparse vectors are stored in a close analog of the CSC format. They have the type
+<a href="#SparseArrays.SparseVector"><code>SparseVector{Tv,Ti}</code></a>, where <code>Tv</code> is the type of the stored values and <code>Ti</code> the
+integer type of the indices. The internal representation is as follows:</p><pre><code class="language-julia hljs">struct SparseVector{Tv,Ti&lt;:Integer} &lt;: AbstractSparseVector{Tv,Ti}
+    n::Ti               # Length of the sparse vector
+    nzind::Vector{Ti}   # Indices of stored values
+    nzval::Vector{Tv}   # Stored values, typically nonzeros
+end</code></pre><p>Like a <code>SparseMatrixCSC</code>, a <code>SparseVector</code> can store explicit zeros. Its length is stored
+in the index type, so <code>length(x)</code> is a <code>Ti</code> rather than an <code>Int</code>.</p><h3 id="Sparse-Vector-and-Matrix-Constructors"><a class="docs-heading-anchor" href="#Sparse-Vector-and-Matrix-Constructors">Sparse Vector and Matrix Constructors</a><a id="Sparse-Vector-and-Matrix-Constructors-1"></a><a class="docs-heading-anchor-permalink" href="#Sparse-Vector-and-Matrix-Constructors" title="Permalink"></a></h3><p>The simplest way to create a sparse array is <a href="#SparseArrays.spzeros"><code>spzeros</code></a>, the equivalent of
+<a href="../../base/arrays/#Base.zeros"><code>zeros</code></a> for dense arrays:</p><pre><code class="language-julia-repl hljs">julia&gt; spzeros(3)
+3-element SparseVector{Float64, Int64} with 0 stored entries</code></pre><p><a href="#SparseArrays.sparse"><code>sparse</code></a> builds a sparse matrix from a vector <code>I</code> of row indices, a vector <code>J</code> of
+column indices and a vector <code>V</code> of stored values, known as the
+<a href="https://en.wikipedia.org/wiki/Sparse_matrix#Coordinate_list_.28COO.29">COO (coordinate) format</a>:
+<code>sparse(I,J,V)</code> returns <code>S</code> such that <code>S[I[k], J[k]] = V[k]</code>. Its vector equivalent
+<a href="#SparseArrays.sparsevec"><code>sparsevec</code></a> takes the index vector <code>I</code> and the values <code>V</code>, and returns <code>R</code> such that
+<code>R[I[k]] = V[k]</code>. Values given for the same position are added.</p><pre><code class="language-julia-repl hljs">julia&gt; I = [1, 4, 3, 5]; J = [4, 7, 18, 9]; V = [1, 2, -5, 3];
+
+julia&gt; S = sparse(I,J,V)
+5×18 SparseMatrixCSC{Int64, Int64} with 4 stored entries:
+ ⋅  ⋅  ⋅  1  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅   ⋅
+ ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅   ⋅
+ ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  -5
+ ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  2  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅   ⋅
+ ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  3  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅   ⋅
+
+julia&gt; R = sparsevec(I,V)
+5-element SparseVector{Int64, Int64} with 4 stored entries:
+  [1]  =  1
+  [3]  =  -5
+  [4]  =  2
+  [5]  =  3</code></pre><p><a href="#SparseArrays.findnz"><code>findnz</code></a> is the inverse of <a href="#SparseArrays.sparse"><code>sparse</code></a> and <a href="#SparseArrays.sparsevec"><code>sparsevec</code></a>: it returns the
+indices and values of the stored entries, including stored zeros.
+<a href="../../base/arrays/#Base.findall-Tuple{Any}"><code>findall(!iszero, x)</code></a> returns the indices of the nonzero entries of <code>x</code>, excluding
+stored zeros, and <code>sparse</code> also accepts the positions as such a vector of <code>CartesianIndex</code>es.</p><pre><code class="language-julia-repl hljs">julia&gt; findnz(S)
+([1, 4, 5, 3], [4, 7, 9, 18], [1, 2, 3, -5])
+
+julia&gt; findnz(R)
+([1, 3, 4, 5], [1, -5, 2, 3])
+
+julia&gt; sparse(findall(!iszero, S), [1, 2, 3, -5]) == S
+true</code></pre><p><a href="#SparseArrays.sparse"><code>sparse</code></a> also converts a dense array to a sparse one, the <a href="../../base/arrays/#Core.Array"><code>Array</code></a>
+constructor converts back, and <a href="#SparseArrays.issparse"><code>issparse</code></a> tells whether an array is sparse.</p><pre><code class="language-julia-repl hljs">julia&gt; sparse([1.0, 0.0, 1.0])
+3-element SparseVector{Float64, Int64} with 2 stored entries:
+  [1]  =  1.0
+  [3]  =  1.0
+
+julia&gt; issparse(spzeros(5))
+true</code></pre><p>Other constructors build common matrices directly. <code>sparse(I, n, n)</code> is the identity,
+<a href="#SparseArrays.spdiagm"><code>spdiagm</code></a> places vectors on diagonals, and <a href="#SparseArrays.blockdiag"><code>blockdiag</code></a> puts matrices along
+the diagonal of a larger one. <a href="#SparseArrays.sprand"><code>sprand</code></a> and <a href="#SparseArrays.sprandn"><code>sprandn</code></a> return a random vector
+or matrix in which each entry is stored with probability <code>d</code>, with uniformly or normally
+distributed values.</p><pre><code class="language-julia-repl hljs">julia&gt; spdiagm(0 =&gt; [1, 2, 3], 1 =&gt; [4, 5])
+3×3 SparseMatrixCSC{Int64, Int64} with 5 stored entries:
+ 1  4  ⋅
+ ⋅  2  5
+ ⋅  ⋅  3
+
+julia&gt; blockdiag(sparse(2I, 2, 2), sparse([3 4])) == [2 0 0 0; 0 2 0 0; 0 0 3 4]
+true</code></pre><h3 id="Sparse-matrix-operations"><a class="docs-heading-anchor" href="#Sparse-matrix-operations">Sparse matrix operations</a><a id="Sparse-matrix-operations-1"></a><a class="docs-heading-anchor-permalink" href="#Sparse-matrix-operations" title="Permalink"></a></h3><p>Sparse arrays support the operations of dense arrays, and a result is sparse unless it
+would store every entry. The subsections below give the rules for each kind of operation.
+<a href="#SparseArrays.indtype"><code>indtype</code></a> returns the index type <code>Ti</code> of a sparse array.</p><h4 id="man-sparse-arithmetic"><a class="docs-heading-anchor" href="#man-sparse-arithmetic">Arithmetic</a><a id="man-sparse-arithmetic-1"></a><a class="docs-heading-anchor-permalink" href="#man-sparse-arithmetic" title="Permalink"></a></h4><table><tr><th style="text-align: left">Operation</th><th style="text-align: left">Result</th></tr><tr><td style="text-align: left"><code>A + B</code>, <code>A - B</code> of sparse arrays, or with a <code>Diagonal</code> or <code>I</code></td><td style="text-align: left">sparse, without the zeros it computes</td></tr><tr><td style="text-align: left"><code>A + D</code>, <code>A - D</code> with a dense array <code>D</code></td><td style="text-align: left">dense</td></tr><tr><td style="text-align: left"><code>-A</code>, <code>2A</code>, <code>A / 2</code></td><td style="text-align: left">sparse, with the stored entries of <code>A</code></td></tr><tr><td style="text-align: left"><code>A / 0</code></td><td style="text-align: left">sparse with every entry stored, as <code>0 / 0</code> is <code>NaN</code></td></tr></table><p>Elementwise operations written with dot syntax, such as <code>A .* B</code> or <code>A .+ 1</code>, follow the
+rules of <a href="#man-sparse-broadcast">Broadcasting and <code>map</code></a>.</p><h4 id="man-sparse-indexing"><a class="docs-heading-anchor" href="#man-sparse-indexing">Indexing and assignment</a><a id="man-sparse-indexing-1"></a><a class="docs-heading-anchor-permalink" href="#man-sparse-indexing" title="Permalink"></a></h4><p>Indexing with ranges, vectors, colons or a logical mask returns a sparse array: <code>A[I, J]</code>
+is a <code>SparseMatrixCSC</code>, and <code>A[:, j]</code>, <code>A[i, :]</code>, <code>A[:]</code> and <code>A[mask]</code> are <code>SparseVector</code>s.
+A scalar index returns the element, which is zero when it is not stored.</p><p>Assigning to a stored entry overwrites its value, even with zero: the entry stays stored
+until <a href="#SparseArrays.dropzeros!"><code>dropzeros!</code></a> removes it. Assigning zero to an entry that is not stored
+changes nothing, and assigning any other value inserts the entry, which moves every stored
+entry after it. Indexing, and especially assignment, is therefore expensive one element at a
+time; see <a href="#man-sparse-performance">Performance tips</a>.</p><h4 id="man-sparse-concatenation"><a class="docs-heading-anchor" href="#man-sparse-concatenation">Concatenation</a><a id="man-sparse-concatenation-1"></a><a class="docs-heading-anchor-permalink" href="#man-sparse-concatenation" title="Permalink"></a></h4><p><code>[A B]</code>, <code>[A; B]</code> and <code>[A B; C D]</code> return a sparse array when at least one argument is
+sparse. A dense argument contributes its nonzeros, and a <code>Diagonal</code> or <code>I</code> its diagonal.
+<a href="#SparseArrays.sparse_hcat"><code>sparse_hcat</code></a>, <a href="#SparseArrays.sparse_vcat"><code>sparse_vcat</code></a> and <a href="#SparseArrays.sparse_hvcat"><code>sparse_hvcat</code></a> return a sparse
+array even when no argument is sparse.</p><h4 id="man-sparse-reductions"><a class="docs-heading-anchor" href="#man-sparse-reductions">Reductions</a><a id="man-sparse-reductions-1"></a><a class="docs-heading-anchor-permalink" href="#man-sparse-reductions" title="Permalink"></a></h4><p><code>sum(A)</code> and the other reductions over all entries visit the stored entries only. Along a
+dimension, as in <code>sum(A; dims = 2)</code>, the result is dense. With <code>sparse = true</code>, such as
+<code>sum(A; dims = 2, sparse = true)</code>, it is sparse instead: it stores an entry only for the
+rows of <code>A</code> that store one, and its cost is proportional to the number of stored entries.
+<code>prod</code>, <code>maximum</code>, <code>minimum</code>, <code>count</code>, <code>any</code>, <code>all</code> and <code>mapreduce</code> accept the keyword too.</p><h4 id="man-sparse-broadcast"><a class="docs-heading-anchor" href="#man-sparse-broadcast">Broadcasting and <code>map</code></a><a id="man-sparse-broadcast-1"></a><a class="docs-heading-anchor-permalink" href="#man-sparse-broadcast" title="Permalink"></a></h4><p><a href="../../base/arrays/#Base.Broadcast.broadcast"><code>broadcast</code></a> (including dot syntax such as <code>A .* B</code>) and <a href="../../base/collections/#Base.map"><code>map</code></a> over sparse
+arrays return a sparse result when the function maps zeros to zero. To decide, the function
+is evaluated once on the zeros of the arguments&#39; element types:</p><table><tr><th style="text-align: left">Arguments</th><th style="text-align: left"><code>f(0, 0, ...)</code> is zero</th><th style="text-align: left"><code>f(0, 0, ...)</code> is not zero</th></tr><tr><td style="text-align: left">one sparse array</td><td style="text-align: left">sparse, with the stored entries of the argument</td><td style="text-align: left"><code>Array</code></td></tr><tr><td style="text-align: left">several sparse arrays</td><td style="text-align: left">sparse, storing only the nonzero results</td><td style="text-align: left"><code>Array</code></td></tr><tr><td style="text-align: left">sparse arrays and a scalar</td><td style="text-align: left">the scalar is folded into <code>f</code>; then as above</td><td style="text-align: left">sparse with every entry stored; <code>Array</code> if <code>f</code> is made only of <code>+</code> and <code>-</code></td></tr></table><p>So <code>2 .* A</code>, <code>abs.(A)</code> and <code>Float64.(A)</code> keep the stored zeros of <code>A</code>, just as <code>2A</code>, <code>-A</code>
+and <code>float(A)</code> do, while a combination of several sparse arrays drops the zeros it computes:</p><pre><code class="language-julia-repl hljs">julia&gt; A = sparse([1, 1, 2, 3], [1, 2, 2, 3], [1, 0, -2, 3])
+3×3 SparseMatrixCSC{Int64, Int64} with 4 stored entries:
+ 1   0  ⋅
+ ⋅  -2  ⋅
+ ⋅   ⋅  3
+
+julia&gt; B = sparse([1, 1, 3], [1, 3, 3], [1, 5, -3]);
+
+julia&gt; A .+ B
+3×3 SparseMatrixCSC{Int64, Int64} with 3 stored entries:
+ 2   ⋅  5
+ ⋅  -2  ⋅
+ ⋅   ⋅  ⋅
+
+julia&gt; iszero.(A)
+3×3 BitMatrix:
+ 0  1  1
+ 1  0  1
+ 1  1  0
+
+julia&gt; A .+ 2
+3×3 Matrix{Int64}:
+ 3  2  2
+ 2  0  2
+ 2  2  5</code></pre><p>A result such as <code>2 .* A .+ 1</code> or <code>A .^ 0</code>, sparse with every entry stored, needs more
+memory than the equivalent <code>Array</code>; convert to dense first when that is what is meant.</p><p>Arguments that are not sparse arrays are handled as follows:</p><table><tr><th style="text-align: left">Argument</th><th style="text-align: left">Treatment</th></tr><tr><td style="text-align: left">a <code>Vector</code> or <code>Matrix</code>, or its adjoint or transpose</td><td style="text-align: left">converted to sparse, so <code>A .* D</code> is sparse; a broadcast made only of <code>+</code> and <code>-</code> returns an <code>Array</code>, as <code>A + D</code> does</td></tr><tr><td style="text-align: left">a <code>Diagonal</code>, <code>Bidiagonal</code>, <code>Tridiagonal</code> or <code>SymTridiagonal</code> matrix</td><td style="text-align: left">converted to sparse</td></tr><tr><td style="text-align: left">a view of whole columns of a sparse matrix, or of a range of a sparse vector</td><td style="text-align: left">treated as a sparse array</td></tr><tr><td style="text-align: left">anything else: a tuple, a range, a triangular or <code>Symmetric</code> wrapper, a view of some rows, an array of more than two dimensions</td><td style="text-align: left">the generic broadcast, which visits every element and returns an <code>Array</code></td></tr></table><pre><code class="language-julia-repl hljs">julia&gt; A .* Diagonal([1, 2, 3])
+3×3 SparseMatrixCSC{Int64, Int64} with 3 stored entries:
+ 1   ⋅  ⋅
+ ⋅  -4  ⋅
+ ⋅   ⋅  9
+
+julia&gt; typeof(A .* (1:3))
+Matrix{Int64} (alias for Array{Int64, 2})</code></pre><p>Whether a result is sparse depends on the value <code>f(0, 0, ...)</code>, so its type is inferred
+only when the compiler can evaluate <code>f</code> there, as it does for the standard number types.
+A broadcast made only of <code>+</code>, <code>-</code> and <code>*</code> is always inferable.</p><p><code>map</code> over sparse arrays always returns a sparse array, with every entry stored when
+<code>f(0, 0, ...)</code> is not zero. It requires all arguments to have the same shape, whereas
+<code>broadcast</code> expands singleton dimensions, with a sparse vector behaving as a one-column
+matrix.</p><p><a href="../../base/arrays/#Base.Broadcast.broadcast!"><code>broadcast!</code></a>, <a href="../../base/collections/#Base.map!"><code>map!</code></a> and <code>.=</code> with a sparse destination overwrite its stored
+pattern with that of the result. The destination may also be one of the arguments, as in
+<code>C .= C .+ C&#39;</code>. One exception: <code>C .= 0</code> calls <a href="../../base/arrays/#Base.fill!"><code>fill!</code></a>, which keeps the pattern of <code>C</code>
+and sets the stored values to zero.</p><p>To apply a function to the stored values only, leaving the pattern untouched whatever the
+function returns for zero, broadcast over <a href="#SparseArrays.nonzeros"><code>nonzeros</code></a> instead:</p><pre><code class="language-julia-repl hljs">julia&gt; C = A .* B;
+
+julia&gt; nonzeros(C) .= nonzeros(C) .+ 9;
+
+julia&gt; C
+3×3 SparseMatrixCSC{Int64, Int64} with 2 stored entries:
+ 10  ⋅  ⋅
+  ⋅  ⋅  ⋅
+  ⋅  ⋅  0</code></pre><h4 id="man-sparse-products"><a class="docs-heading-anchor" href="#man-sparse-products">Products</a><a id="man-sparse-products-1"></a><a class="docs-heading-anchor-permalink" href="#man-sparse-products" title="Permalink"></a></h4><p>The functions of LinearAlgebra have methods for sparse arrays. Products, <code>dot</code>, <code>kron</code> and
+the norms are implemented in this package, and the docstrings of those that behave
+differently for sparse arrays are listed under
+<a href="#stdlib-sparse-linalg-api">Linear algebra</a>. The factorizations, and the solves that use
+them, call <a href="https://github.com/DrTimothyAldenDavis/SuiteSparse">SuiteSparse</a> and are
+described on the Sparse Linear Solvers page.</p><p>The result of <a href="#Base.:*-Tuple{Union{AbstractSparseMatrixCSC{Tv, Ti}, SubArray{Tv, 2, &lt;:AbstractSparseMatrixCSC{Tv, Ti}, Tuple{Base.Slice{Base.OneTo{Int64}}, I}} where I&lt;:(AbstractUnitRange{&lt;:Integer})} where {Tv, Ti}, Union{AbstractSparseMatrixCSC{Tv, Ti}, SubArray{Tv, 2, &lt;:AbstractSparseMatrixCSC{Tv, Ti}, Tuple{Base.Slice{Base.OneTo{Int64}}, I}} where I&lt;:(AbstractUnitRange{&lt;:Integer})} where {Tv, Ti}}"><code>*</code></a>
+follows the other factor:</p><table><tr><th style="text-align: left">Product of a sparse matrix with</th><th style="text-align: left">Result</th></tr><tr><td style="text-align: left">a <code>Vector</code> or a <code>Matrix</code></td><td style="text-align: left">dense</td></tr><tr><td style="text-align: left">a sparse vector</td><td style="text-align: left"><code>SparseVector</code></td></tr><tr><td style="text-align: left">a sparse matrix</td><td style="text-align: left"><code>SparseMatrixCSC</code></td></tr><tr><td style="text-align: left">a <code>Diagonal</code>, <code>Bidiagonal</code>, <code>Tridiagonal</code> or <code>SymTridiagonal</code> matrix</td><td style="text-align: left"><code>SparseMatrixCSC</code></td></tr></table><p><code>mul!(y, A, x)</code> writes the product into <code>y</code>, and <code>mul!(y, A, x, α, β)</code> computes
+<code>A*x*α + y*β</code> in place. A sparse destination is supported only for
+<a href="#LinearAlgebra.mul!-Tuple{AbstractSparseMatrixCSC, AbstractSparseMatrixCSC, Diagonal, Number, Number}">scaling by a <code>Diagonal</code></a>
+or a number. Products with <code>A&#39;</code> and <code>transpose(A)</code> do not materialize the transpose when
+the other factor is dense or a sparse vector: see
+<a href="#man-sparse-lazy-transpose">Lazy <code>transpose</code> and <code>adjoint</code></a>.</p><ul><li><p><code>dot(x, y)</code> of sparse or dense vectors and matrices visits the stored entries only, and
+<code>dot(x, A, y)</code> computes <code>x&#39; * A * y</code> without forming <code>A * y</code>.</p></li><li><p><a href="#Base.kron-Tuple{AbstractSparseMatrixCSC, AbstractSparseMatrixCSC}"><code>kron</code></a> of two sparse arrays, or of a sparse array and a dense or <code>Diagonal</code>
+matrix, is sparse.</p></li></ul><pre><code class="language-julia-repl hljs">julia&gt; A = sparse([2.0 1 0; 0 3 1; 1 0 4]); x = [1.0, 2.0, 3.0];
+
+julia&gt; y = similar(x); mul!(y, A, x)
+3-element Vector{Float64}:
+  4.0
+  9.0
+ 13.0
+
+julia&gt; dot(x, A, x)
+61.0</code></pre><h4 id="man-sparse-norms"><a class="docs-heading-anchor" href="#man-sparse-norms">Norms and condition numbers</a><a id="man-sparse-norms-1"></a><a class="docs-heading-anchor-permalink" href="#man-sparse-norms" title="Permalink"></a></h4><ul><li><p><code>norm(A, p)</code> treats <code>A</code> as a vector of its entries, so <code>norm(A)</code> is the Frobenius norm.
+<a href="#LinearAlgebra.opnorm-Tuple{AbstractSparseMatrixCSC, Real}"><code>opnorm(A, p)</code></a>
+is the operator norm for <code>p</code> equal to <code>1</code>, <code>2</code> or <code>Inf</code>; for <code>p = 2</code> it is an iterative
+estimate.</p></li><li><p><a href="#LinearAlgebra.cond-Tuple{AbstractSparseMatrixCSC, Real}"><code>cond(A, p)</code></a>
+for <code>p</code> equal to <code>1</code> or <code>Inf</code> estimates the norm of the inverse from a factorization. The
+2-norm condition number is not available; use <code>cond(Array(A))</code> for a matrix small enough.</p></li><li><p><a href="#Base.inv-Tuple{AbstractSparseMatrixCSC}"><code>inv(A)</code></a> throws, since the inverse
+is usually dense: solve with <code>A \ B</code> instead.</p></li></ul><pre><code class="language-julia-repl hljs">julia&gt; norm(A, 1), opnorm(A, 1), opnorm(A, Inf)
+(12.0, 5.0, 5.0)</code></pre><h4 id="man-sparse-structure"><a class="docs-heading-anchor" href="#man-sparse-structure">Diagonals, triangles and permutations</a><a id="man-sparse-structure-1"></a><a class="docs-heading-anchor-permalink" href="#man-sparse-structure" title="Permalink"></a></h4><ul><li><p><code>tr(A)</code> sums the diagonal, and <a href="#LinearAlgebra.diag-Union{Tuple{Ti}, Tuple{Tv}, Tuple{Union{AbstractSparseMatrixCSC{Tv, Ti}, SubArray{Tv, 2, &lt;:AbstractSparseMatrixCSC{Tv, Ti}, Tuple{Base.Slice{Base.OneTo{Int64}}, I}} where I&lt;:(AbstractUnitRange{&lt;:Integer})}, Integer}} where {Tv, Ti}"><code>diag(A, k)</code></a>
+returns the <code>k</code>th diagonal as a <code>SparseVector</code> of the entries stored on it.</p></li><li><p><code>triu(A, k)</code> and <code>tril(A, k)</code> return a new <code>SparseMatrixCSC</code> with the stored entries of a
+triangle, stored zeros included. <a href="#LinearAlgebra.triu!-Tuple{AbstractSparseMatrixCSC, Integer}"><code>triu!</code></a>
+and <a href="#LinearAlgebra.tril!-Tuple{AbstractSparseMatrixCSC, Integer}"><code>tril!</code></a>
+remove the other entries from <code>A</code> in place, changing its sparsity pattern.</p></li><li><p><a href="#SparseArrays.permute"><code>permute</code></a> applies a row and a column permutation in one pass.</p></li></ul><h3 id="man-sparse-performance"><a class="docs-heading-anchor" href="#man-sparse-performance">Performance tips</a><a id="man-sparse-performance-1"></a><a class="docs-heading-anchor-permalink" href="#man-sparse-performance" title="Permalink"></a></h3><p>Sparse code is fast when its cost is proportional to the number of stored entries, and the
+<a href="#man-csc">CSC layout</a> determines which operations have that property.</p><h4 id="Iterate-over-stored-entries-by-column"><a class="docs-heading-anchor" href="#Iterate-over-stored-entries-by-column">Iterate over stored entries by column</a><a id="Iterate-over-stored-entries-by-column-1"></a><a class="docs-heading-anchor-permalink" href="#Iterate-over-stored-entries-by-column" title="Permalink"></a></h4><p>The stored entries of column <code>j</code> are located at the positions <a href="#SparseArrays.nzrange"><code>nzrange(A, j)</code></a> of
+<a href="#SparseArrays.rowvals"><code>rowvals(A)</code></a> and <a href="#SparseArrays.nonzeros"><code>nonzeros(A)</code></a>. Looping over the columns, and over
+that range within each column, visits every stored entry once and in memory order, without
+searching. For example, a matrix-vector product can be written as:</p><pre><code class="language-julia-repl hljs">julia&gt; A = sparse([1, 1, 2, 3], [1, 3, 2, 3], [1.0, 2.0, 3.0, 4.0]);
+
+julia&gt; function mymul(A::SparseMatrixCSC, x::Vector)
+           y = zeros(promote_type(eltype(A), eltype(x)), size(A, 1))
+           rows, vals = rowvals(A), nonzeros(A)
+           for j in axes(A, 2), k in nzrange(A, j)
+               y[rows[k]] += vals[k] * x[j]
+           end
+           return y
+       end;
+
+julia&gt; mymul(A, [1.0, 10.0, 100.0]) == A * [1.0, 10.0, 100.0]
+true</code></pre><p>The same three accessors work on a <a href="#SparseArrays.SparseVector"><code>SparseVector</code></a>, which is treated as a single
+column, and on a view of whole columns such as <code>@view A[:, j]</code> or <code>@view A[:, 2:3]</code>. They
+are not defined for a triangular, <code>Symmetric</code> or <code>Hermitian</code> wrapper; work on its <code>parent</code>.
+<a href="#SparseArrays.getcolptr"><code>getcolptr</code></a>, <a href="#SparseArrays.getrowval"><code>getrowval</code></a> and <a href="#SparseArrays.getnzval"><code>getnzval</code></a> return the three storage
+vectors of a matrix themselves.</p><p>In contrast, scalar indexing <code>A[i, j]</code> has to do a binary search of column <code>j</code> for row <code>i</code>. A
+loop over all <code>(i, j)</code> of an <code>m</code>-by-<code>n</code> matrix therefore performs <code>m * n</code> searches, however few
+entries are stored.</p><h4 id="Build-a-matrix-from-its-entries-in-one-call"><a class="docs-heading-anchor" href="#Build-a-matrix-from-its-entries-in-one-call">Build a matrix from its entries in one call</a><a id="Build-a-matrix-from-its-entries-in-one-call-1"></a><a class="docs-heading-anchor-permalink" href="#Build-a-matrix-from-its-entries-in-one-call" title="Permalink"></a></h4><p>Storing a value at a position that has no stored entry yet moves all the later entries, so
+filling <code>spzeros(m, n)</code> one element at a time takes time proportional to <code>nnz(A)</code> for each
+insertion. <code>sizehint!</code> avoids reallocating, but not moving the entries. Instead, collect the
+row indices, column indices and values in three vectors and call <a href="#SparseArrays.sparse"><code>sparse</code></a> once.
+Entries with the same position are added together, or combined with the function passed as
+the last argument, as in <code>sparse(I, J, V, m, n, max)</code>.</p><p>To change many entries of an existing matrix, convert it to that form with
+<a href="#SparseArrays.findnz"><code>findnz</code></a>, work on the three vectors, and rebuild it.</p><h4 id="Slice-columns,-not-rows"><a class="docs-heading-anchor" href="#Slice-columns,-not-rows">Slice columns, not rows</a><a id="Slice-columns,-not-rows-1"></a><a class="docs-heading-anchor-permalink" href="#Slice-columns,-not-rows" title="Permalink"></a></h4><p><code>A[:, j]</code> copies one contiguous range of the stored entries. <code>A[i, :]</code> has to search every column for
+row <code>i</code>, so its cost grows with the number of columns even when the row is empty. When an algorithm
+works row by row, transpose the matrix once and work on the columns of the result. <code>permutedims(A)</code>
+and <code>copy(transpose(A))</code> build the transposed matrix in time proportional to <code>nnz(A)</code>.</p><pre><code class="language-julia-repl hljs">julia&gt; At = permutedims(A);
+
+julia&gt; At[:, 1] == A[1, :]
+true</code></pre><h4 id="Choose-a-smaller-index-type"><a class="docs-heading-anchor" href="#Choose-a-smaller-index-type">Choose a smaller index type</a><a id="Choose-a-smaller-index-type-1"></a><a class="docs-heading-anchor-permalink" href="#Choose-a-smaller-index-type" title="Permalink"></a></h4><p>The index type <code>Ti</code> is used for the column pointers and for one row index per stored entry. With <code>Float64</code>
+values, <code>Int32</code> indices reduce the memory per stored entry from 16 to 12 bytes. <code>Ti</code> is taken from the
+index vectors given to <a href="#SparseArrays.sparse"><code>sparse</code></a>, can be given to <a href="#SparseArrays.spzeros"><code>spzeros</code></a>, and an existing matrix is
+converted with the type constructor. Both dimensions have to be at most <code>typemax(Ti)</code>, and the number of
+stored entries has to be less than <code>typemax(Ti)</code>. Operations between matrices with different
+index types promote to the wider one, so use one index type consistently.</p><pre><code class="language-julia-repl hljs">julia&gt; A32 = SparseMatrixCSC{Float64,Int32}(A)
+3×3 SparseMatrixCSC{Float64, Int32} with 4 stored entries:
+ 1.0   ⋅   2.0
+  ⋅   3.0   ⋅
+  ⋅    ⋅   4.0
+
+julia&gt; spzeros(Float64, Int8, 200, 200)
+ERROR: ArgumentError: number of rows (m = 200) does not fit in Ti = Int8
+[...]</code></pre><h4 id="man-sparse-lazy-transpose"><a class="docs-heading-anchor" href="#man-sparse-lazy-transpose">Lazy <code>transpose</code> and <code>adjoint</code></a><a id="man-sparse-lazy-transpose-1"></a><a class="docs-heading-anchor-permalink" href="#man-sparse-lazy-transpose" title="Permalink"></a></h4><p><code>transpose(A)</code> and <code>A&#39;</code> do not copy; they return <code>Transpose</code> and <code>Adjoint</code> wrappers around
+<code>A</code>. What happens to a wrapper depends on the function:</p><ul><li><p>Products with dense vectors and matrices (including <code>mul!</code>) and with sparse vectors, <code>\</code>,
+<code>==</code>, and <code>A&#39;[i, :]</code>, which is a column slice of <code>A</code>, work on the wrapper without
+materializing the transpose.</p></li><li><p>Products with another sparse matrix, broadcasting (which includes <code>+</code> and <code>-</code>), <code>map</code>,
+concatenation, <code>kron</code> and <code>findnz</code> first copy the wrapper into a new <code>SparseMatrixCSC</code>,
+in time proportional to <code>nnz(A)</code>, on every call.</p></li><li><p>Other functions, such as <code>sum</code>, <code>norm</code> and indexing other than by row, reach generic
+<code>AbstractMatrix</code> methods that visit the wrapper element by element.</p></li></ul><p>When a transposed matrix is used more than once, or is passed to code outside the first
+group, materialize it with <code>copy</code>, or with <code>sparse</code> when the argument may or may not be a
+wrapper.</p><pre><code class="language-julia-repl hljs">julia&gt; A&#39; * [1.0, 10.0, 100.0]
+3-element Vector{Float64}:
+   1.0
+  30.0
+ 402.0
+
+julia&gt; copy(A&#39;)
+3×3 SparseMatrixCSC{Float64, Int64} with 4 stored entries:
+ 1.0   ⋅    ⋅
+  ⋅   3.0   ⋅
+ 2.0   ⋅   4.0</code></pre><h4 id="Keep-results-free-of-stored-zeros"><a class="docs-heading-anchor" href="#Keep-results-free-of-stored-zeros">Keep results free of stored zeros</a><a id="Keep-results-free-of-stored-zeros-1"></a><a class="docs-heading-anchor-permalink" href="#Keep-results-free-of-stored-zeros" title="Permalink"></a></h4><p>Assigning zero to a stored entry, and cancellation in a matrix product, leave explicitly
+stored zeros behind. They are harmless for correctness but are visited by every kernel.
+<a href="#SparseArrays.dropzeros!"><code>dropzeros!</code></a> removes them, <a href="#SparseArrays.droptol!"><code>droptol!</code></a> removes entries of small magnitude,
+and <a href="#SparseArrays.fkeep!"><code>fkeep!</code></a> keeps the entries for which a predicate of <code>(i, j, v)</code> is true, all in
+place.</p><pre><code class="language-julia-repl hljs">julia&gt; B = copy(A); B[1, 1] = 0; nnz(B)
+4
+
+julia&gt; nnz(dropzeros!(B))
+3
+
+julia&gt; fkeep!((i, j, v) -&gt; i == j, B)
+3×3 SparseMatrixCSC{Float64, Int64} with 2 stored entries:
+ ⋅   ⋅    ⋅
+ ⋅  3.0   ⋅
+ ⋅   ⋅   4.0</code></pre><h2 id="man-sparse-specialized"><a class="docs-heading-anchor" href="#man-sparse-specialized">Specialized Sparse Arrays</a><a id="man-sparse-specialized-1"></a><a class="docs-heading-anchor-permalink" href="#man-sparse-specialized" title="Permalink"></a></h2><h3 id="man-sparse-eltype"><a class="docs-heading-anchor" href="#man-sparse-eltype">User-defined element types</a><a id="man-sparse-eltype-1"></a><a class="docs-heading-anchor-permalink" href="#man-sparse-eltype" title="Permalink"></a></h3><p>A sparse array can store values of any type <code>T</code>. Building one from indices and values,
+copying, slicing, concatenating and permuting it, and reading a stored entry call nothing
+on the elements. Everything else rests on three things:</p><ul><li><p><strong><code>zero(T)</code></strong> is the value of an entry that is not stored. It is called on the type, not
+on a value, by whatever has to produce such an entry: indexing, <code>setindex!</code>,
+<code>Matrix(A)</code>, a product with a dense array or a sparse vector, <code>A + B</code>, <code>map</code>,
+broadcasting and the reductions.</p></li><li><p><strong><code>iszero(x)</code></strong> decides whether a value has to be stored. <a href="#SparseArrays.sparse"><code>sparse</code></a> of a dense
+array, <a href="#SparseArrays.dropzeros!"><code>dropzeros!</code></a>, <code>A + B</code>, <code>map</code> and broadcasting call it. It falls back to
+<code>x == zero(x)</code>.</p></li><li><p><strong>The arithmetic of the operation itself</strong>: <code>+</code> and <code>*</code> for a product, <code>isless</code> for
+<code>maximum</code>, <code>minimum</code> and <code>sort</code>, and so on. <code>sum</code> adds the <code>n</code> entries that are not
+stored in one step, as <code>zero(T) * n</code>, so it also needs the product of an element with an
+integer.</p></li></ul><p>The sparse kernels skip the entries that are not stored, so they assume that <code>zero(T)</code>
+behaves as a zero: <code>x + zero(T) == x</code>, and a product with <code>zero(T)</code> is zero. A type that
+defines <code>zero</code>, <code>+</code> and <code>*</code> is enough for most of the package, and every <code>Number</code>
+qualifies. For other element types:</p><ul><li><p>Multiplying two sparse matrices needs only <code>*</code> and <code>+</code>, not <code>zero(T)</code>. So a matrix of
+elements that have no <code>zero(T)</code>, such as <code>Matrix{Float64}</code>, can be stored and multiplied
+by another, but not indexed at an entry that is not stored.</p></li><li><p><code>c * A</code>, <code>A * c</code> and <code>A / c</code> are defined for a scalar <code>c</code> that is a <code>Number</code>. For any
+other element type, use <code>map</code> or broadcasting.</p></li><li><p>The sparse factorizations work in real and complex floating
+point. A matrix of integers or rationals is converted to <code>Float64</code> first; a matrix of
+another element type, such as <code>BigFloat</code>, is rejected.</p></li></ul><h3 id="man-sparse-fixed"><a class="docs-heading-anchor" href="#man-sparse-fixed">Sparse arrays with a fixed pattern</a><a id="man-sparse-fixed-1"></a><a class="docs-heading-anchor-permalink" href="#man-sparse-fixed" title="Permalink"></a></h3><div class="admonition is-warning" id="Experimental-9c3de67fe2f7e5c9"><header class="admonition-header">Experimental<a class="admonition-anchor" href="#Experimental-9c3de67fe2f7e5c9" title="Permalink"></a></header><div class="admonition-body"><p><code>fixed</code>, <code>FixedSparseCSC</code> and <code>FixedSparseVector</code> are experimental and not exported.</p></div></div><p>Writing into a <code>SparseMatrixCSC</code> can change which entries it stores. <code>W .= M .- γ .* J</code>
+drops an entry of <code>W</code> wherever the difference is zero, and <code>W[i, j] = v</code> inserts one. Code
+that has derived something from the pattern of <code>W</code>, such as a symbolic factorization or
+the positions of its entries in <code>nonzeros(W)</code>, is then silently out of date.</p><p>A fixed sparse array rules that out. It is a <strong>destination whose sparsity pattern never
+changes</strong>: the stored values can be overwritten, and no entry can be added or removed.
+<a href="#SparseArrays.fixed"><code>SparseArrays.fixed</code></a> makes one, with the arguments of <a href="#SparseArrays.sparse"><code>sparse</code></a> or from a
+sparse array, which it copies. Three rules describe everything a fixed array does; the
+<a href="#SparseArrays.FixedSparseCSC"><code>SparseArrays.FixedSparseCSC</code></a> docstring lists the functions each one covers.</p><p><strong>A write lands inside the pattern or throws.</strong> A write, such as <code>W .= ...</code>, <code>copyto!</code>,
+<code>mul!</code> or <code>W[i, j] = v</code>, stores a value at each stored entry, a zero included, and leaves
+the pattern alone. What is written need not fill the pattern: the stored entries it leaves
+out become zero. A write that needs an entry where the pattern has none throws an
+<code>ArgumentError</code>, and the kernels of this package check for that before they change any
+value. Writing through <code>nonzeros(W)</code> is always allowed.</p><pre><code class="language-julia-repl hljs">julia&gt; J = sparse([1.0 2 0; 0 3 0; 4 0 5]); M = sparse(1.0I, 3, 3);
+
+julia&gt; nnz(M .- J)   # the entry at (1, 1) cancels and is not stored
+4
+
+julia&gt; W = SparseArrays.fixed(M + J);
+
+julia&gt; W .= M .- J
+3×3 SparseArrays.FixedSparseCSC{Float64, Int64} with 5 stored entries:
+  0.0  -2.0    ⋅
+   ⋅   -2.0    ⋅
+ -4.0    ⋅   -4.0
+
+julia&gt; W[1, 3] = 1.0
+ERROR: ArgumentError: cannot store a new entry at (1, 3) in a FixedSparseCSC, its sparsity pattern is read-only
+[...]</code></pre><p><strong>A function that exists to change the pattern throws.</strong> <a href="#SparseArrays.dropzeros!"><code>dropzeros!</code></a>,
+<a href="#SparseArrays.droptol!"><code>droptol!</code></a>, <a href="#SparseArrays.fkeep!"><code>fkeep!</code></a>, <code>tril!</code>, <code>sort!</code>, <code>permute!</code> and the like refuse a
+fixed array as the argument they change. Their out-of-place forms work, because of the next
+rule.</p><pre><code class="language-julia-repl hljs">julia&gt; dropzeros!(W)
+ERROR: ArgumentError: cannot `dropzeros!` a FixedSparseCSC: it would change the sparsity pattern, which is read-only; apply it to a writable copy, `SparseMatrixCSC(A)`
+[...]</code></pre><p><strong>Reading a fixed array gives an ordinary result.</strong> As an operand, a fixed array behaves
+as the <code>SparseMatrixCSC</code> or <code>SparseVector</code> with the same entries, and what comes back is
+what that array would give. Being fixed is a property of one array, not of its values, so
+it does not carry over to indexing, arithmetic, broadcasting, concatenation or <code>similar</code>.
+Only <code>copy(W)</code> is fixed, and shares the pattern of <code>W</code>; <code>SparseArrays.fixed(A)</code> fixes any
+other result, and <code>SparseMatrixCSC(W)</code> gives a writable copy.</p><pre><code class="language-julia-repl hljs">julia&gt; typeof(2W), typeof(similar(W))
+(SparseMatrixCSC{Float64, Int64}, SparseMatrixCSC{Float64, Int64})
+
+julia&gt; V = copy(W); rowvals(V) === rowvals(W)
+true</code></pre><p>The factorizations accept a fixed matrix, which is what makes reusing a symbolic
+factorization safe: see &quot;Reusing a factorization&quot; on the Sparse Linear Solvers page.</p><h2 id="stdlib-sparse-arrays"><a class="docs-heading-anchor" href="#stdlib-sparse-arrays">SparseArrays API</a><a id="stdlib-sparse-arrays-1"></a><a class="docs-heading-anchor-permalink" href="#stdlib-sparse-arrays" title="Permalink"></a></h2><article><details class="docstring" open="true"><summary id="SparseArrays"><a class="docstring-binding" href="#SparseArrays"><code>SparseArrays</code></a> — <span class="docstring-category">Module</span></summary><section><div><p>Sparse vectors and matrices: <a href="#SparseArrays.SparseVector"><code>SparseVector</code></a> and <a href="#SparseArrays.SparseMatrixCSC"><code>SparseMatrixCSC</code></a>, which
+store only some of their entries and treat the others as zero. Build them with
+<a href="#SparseArrays.sparse"><code>sparse</code></a>, <a href="#SparseArrays.sparsevec"><code>sparsevec</code></a> and <a href="#SparseArrays.spzeros"><code>spzeros</code></a>; the functions of Base and
+LinearAlgebra, including <code>\</code> and the factorizations, have methods for them.</p></div></section></details></article><h3 id="Types"><a class="docs-heading-anchor" href="#Types">Types</a><a id="Types-1"></a><a class="docs-heading-anchor-permalink" href="#Types" title="Permalink"></a></h3><article><details class="docstring" open="true"><summary id="SparseArrays.AbstractSparseArray"><a class="docstring-binding" href="#SparseArrays.AbstractSparseArray"><code>SparseArrays.AbstractSparseArray</code></a> — <span class="docstring-category">Type</span></summary><section><div><pre><code class="language-julia hljs">AbstractSparseArray{Tv,Ti,N}</code></pre><p>Supertype for <code>N</code>-dimensional sparse arrays (or array-like types) with elements
+of type <code>Tv</code> and index type <code>Ti</code>. <a href="#SparseArrays.SparseMatrixCSC"><code>SparseMatrixCSC</code></a>, <a href="#SparseArrays.SparseVector"><code>SparseVector</code></a>
+and <code>SparseArrays.CHOLMOD.Sparse</code> are subtypes of this.</p></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.AbstractSparseVector"><a class="docstring-binding" href="#SparseArrays.AbstractSparseVector"><code>SparseArrays.AbstractSparseVector</code></a> — <span class="docstring-category">Type</span></summary><section><div><pre><code class="language-julia hljs">AbstractSparseVector{Tv,Ti}</code></pre><p>Supertype for one-dimensional sparse arrays (or array-like types) with elements
+of type <code>Tv</code> and index type <code>Ti</code>. Alias for <code>AbstractSparseArray{Tv,Ti,1}</code>.</p></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.AbstractSparseMatrix"><a class="docstring-binding" href="#SparseArrays.AbstractSparseMatrix"><code>SparseArrays.AbstractSparseMatrix</code></a> — <span class="docstring-category">Type</span></summary><section><div><pre><code class="language-julia hljs">AbstractSparseMatrix{Tv,Ti}</code></pre><p>Supertype for two-dimensional sparse arrays (or array-like types) with elements
+of type <code>Tv</code> and index type <code>Ti</code>. Alias for <code>AbstractSparseArray{Tv,Ti,2}</code>.</p></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.AbstractSparseMatrixCSC"><a class="docstring-binding" href="#SparseArrays.AbstractSparseMatrixCSC"><code>SparseArrays.AbstractSparseMatrixCSC</code></a> — <span class="docstring-category">Type</span></summary><section><div><pre><code class="language-julia hljs">AbstractSparseMatrixCSC{Tv,Ti&lt;:Integer} &lt;: AbstractSparseMatrix{Tv,Ti}</code></pre><p>Supertype for matrices stored in compressed sparse column (CSC) format with element type
+<code>Tv</code> and index type <code>Ti</code>. <a href="#SparseArrays.SparseMatrixCSC"><code>SparseMatrixCSC</code></a> is the concrete type; packages define
+their own subtypes to reuse the CSC kernels on other storage.</p><p>A subtype must define <code>size</code> and the three storage accessors <a href="#SparseArrays.getcolptr"><code>getcolptr</code></a>,
+<a href="#SparseArrays.getrowval"><code>getrowval</code></a> and <a href="#SparseArrays.getnzval"><code>getnzval</code></a>, which are the only accessors the methods of
+this package call on it. They return vectors that alias the matrix and satisfy the
+invariants documented for the <a href="#SparseArrays.SparseMatrixCSC"><code>SparseMatrixCSC</code></a> constructor: <code>getcolptr(S)</code> has
+length <code>size(S, 2) + 1</code>, starts at <code>1</code> and is nondecreasing; <code>getrowval(S)</code> and
+<code>getnzval(S)</code> have length <code>getcolptr(S)[end] - 1</code>; and within each column the row indices
+are sorted, unique and in <code>1:size(S, 1)</code>. Everything else, such as <a href="#SparseArrays.nnz"><code>nnz</code></a>,
+<a href="#SparseArrays.nzrange"><code>nzrange</code></a>, indexing, <code>copy</code>, <code>similar</code> and the sparse linear algebra, is derived
+from these. <a href="#SparseArrays.rowvals"><code>rowvals</code></a> and <a href="#SparseArrays.nonzeros"><code>nonzeros</code></a> are not defined for such a subtype.</p><p>Subtypes written while <code>rowvals</code> and <code>nonzeros</code> were the only exported accessors implement
+those in place of <code>getrowval</code> and <code>getnzval</code>, which fall back to them. This remains
+supported, but is planned to stop being supported in SparseArrays 2.0.</p></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.SparseVector"><a class="docstring-binding" href="#SparseArrays.SparseVector"><code>SparseArrays.SparseVector</code></a> — <span class="docstring-category">Type</span></summary><section><div><pre><code class="language-julia hljs">SparseVector{Tv,Ti&lt;:Integer} &lt;: AbstractSparseVector{Tv,Ti}</code></pre><p>A sparse vector, with stored values of type <code>Tv</code> at indices of type <code>Ti</code>.
+<code>SparseVector(n, nzind, nzval)</code> wraps, without copying, a vector <code>nzind</code> of indices, which
+must be sorted and unique, and the vector <code>nzval</code> of the values at those indices, as a
+vector of length <code>n</code>. <a href="#SparseArrays.sparsevec"><code>sparsevec</code></a> builds one from unsorted indices, and
+<a href="#SparseArrays.sparse"><code>sparse</code></a> from a dense vector.</p><p>The length is stored as a <code>Ti</code>, so <code>length(x)</code> and <code>size(x)</code> return values of type <code>Ti</code>
+rather than <code>Int</code>. A vector can then be longer than <code>typemax(Int)</code> when <code>Ti</code> is <code>BigInt</code>,
+but arithmetic on the length of a vector with a small index type can overflow; convert
+it with <code>Int(length(x))</code> first.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; x = SparseVector(4, [1, 2, 4], [5, 6, 7])
+4-element SparseVector{Int64, Int64} with 3 stored entries:
+  [1]  =  5
+  [2]  =  6
+  [4]  =  7
+
+julia&gt; x == sparse([5, 6, 0, 7])
+true</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.SparseMatrixCSC"><a class="docstring-binding" href="#SparseArrays.SparseMatrixCSC"><code>SparseArrays.SparseMatrixCSC</code></a> — <span class="docstring-category">Type</span></summary><section><div><pre><code class="language-julia hljs">SparseMatrixCSC{Tv,Ti&lt;:Integer} &lt;: AbstractSparseMatrixCSC{Tv,Ti}</code></pre><p>Matrix type for storing sparse matrices in the
+<a href="#man-csc">Compressed Sparse Column</a> format. The standard way
+of constructing SparseMatrixCSC is through the <a href="#SparseArrays.sparse"><code>sparse</code></a> function.
+See also <a href="#SparseArrays.spzeros"><code>spzeros</code></a>, <a href="#SparseArrays.spdiagm"><code>spdiagm</code></a> and <a href="#SparseArrays.sprand"><code>sprand</code></a>.</p><pre><code class="language-julia hljs">SparseMatrixCSC(m::Integer, n::Integer, colptr::Vector, rowval::Vector, nzval::Vector)</code></pre><p>Wrap existing CSC arrays as an <code>m × n</code> matrix without copying them. Column <code>j</code> holds the
+entries <code>nzval[k]</code> in rows <code>rowval[k]</code> for <code>k in colptr[j]:(colptr[j+1] - 1)</code>.</p><p>Only <code>colptr</code> and the lengths of <code>rowval</code> and <code>nzval</code> are checked. The row indices are
+not inspected, and must be strictly increasing within each column and lie in <code>1:m</code>.
+The kernels in this package rely on that. A matrix with unsorted, repeated or
+out-of-range row indices is constructed silently and then gives inconsistent results.
+To construct a matrix from repeated indices, use <a href="#SparseArrays.sparse"><code>sparse</code></a>, which adds up their
+values.
+See <a href="#man-csc">the manual</a> for how to repair such arrays.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; SparseMatrixCSC(3, 2, [1, 3, 4], [1, 3, 2], [1.0, 2.0, 3.0])
+3×2 SparseMatrixCSC{Float64, Int64} with 3 stored entries:
+ 1.0   ⋅
+  ⋅   3.0
+ 2.0   ⋅</code></pre></div></section></details></article><h3 id="Constructors"><a class="docs-heading-anchor" href="#Constructors">Constructors</a><a id="Constructors-1"></a><a class="docs-heading-anchor-permalink" href="#Constructors" title="Permalink"></a></h3><article><details class="docstring" open="true"><summary id="SparseArrays.sparse"><a class="docstring-binding" href="#SparseArrays.sparse"><code>SparseArrays.sparse</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">sparse(A::Union{AbstractVector, AbstractMatrix})</code></pre><p>Convert a vector or matrix <code>A</code> into a sparse array.
+Numerical zeros in <code>A</code> are turned into structural zeros.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; A = Matrix(1.0I, 3, 3)
+3×3 Matrix{Float64}:
+ 1.0  0.0  0.0
+ 0.0  1.0  0.0
+ 0.0  0.0  1.0
+
+julia&gt; sparse(A)
+3×3 SparseMatrixCSC{Float64, Int64} with 3 stored entries:
+ 1.0   ⋅    ⋅
+  ⋅   1.0   ⋅
+  ⋅    ⋅   1.0
+
+julia&gt; [1.0, 0.0, 1.0]
+3-element Vector{Float64}:
+ 1.0
+ 0.0
+ 1.0
+
+julia&gt; sparse([1.0, 0.0, 1.0])
+3-element SparseVector{Float64, Int64} with 2 stored entries:
+  [1]  =  1.0
+  [3]  =  1.0</code></pre></div></section><section><div><pre><code class="language-julia hljs">sparse(I, J, V,[ m, n, combine])
+sparse(IJ, V,[ m, n, combine])</code></pre><p>Create a sparse matrix <code>S</code> of dimensions <code>m x n</code> such that <code>S[I[k], J[k]] = V[k]</code>. The
+<code>combine</code> function is used to combine duplicates. If <code>m</code> and <code>n</code> are not specified, they
+are set to <code>maximum(I)</code> and <code>maximum(J)</code> respectively. If the <code>combine</code> function is not
+supplied, <code>combine</code> defaults to <code>+</code> unless the elements of <code>V</code> are Booleans in which case
+<code>combine</code> defaults to <code>|</code>. All elements of <code>I</code> must satisfy <code>1 &lt;= I[k] &lt;= m</code>, and all
+elements of <code>J</code> must satisfy <code>1 &lt;= J[k] &lt;= n</code>. Numerical zeros in (<code>I</code>, <code>J</code>, <code>V</code>) are
+retained as structural nonzeros; to drop numerical zeros, use <a href="#SparseArrays.dropzeros!"><code>dropzeros!</code></a>.</p><p>The positions may also be given as one vector <code>IJ</code> of two-dimensional <code>CartesianIndex</code>es,
+such that <code>S[IJ[k]] = V[k]</code>.</p><p>For additional documentation and an expert driver, see <code>SparseArrays.sparse!</code>.</p><div class="admonition is-compat" id="Julia-1.14-7e1cb1f460e03750"><header class="admonition-header">Julia 1.14<a class="admonition-anchor" href="#Julia-1.14-7e1cb1f460e03750" title="Permalink"></a></header><div class="admonition-body"><p>Passing the positions as a vector of <code>CartesianIndex</code>es requires at least Julia 1.14.</p></div></div><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; Is = [1; 2; 3];
+
+julia&gt; Js = [1; 2; 3];
+
+julia&gt; Vs = [1; 2; 3];
+
+julia&gt; sparse(Is, Js, Vs)
+3×3 SparseMatrixCSC{Int64, Int64} with 3 stored entries:
+ 1  ⋅  ⋅
+ ⋅  2  ⋅
+ ⋅  ⋅  3
+
+julia&gt; sparse([CartesianIndex(1, 2), CartesianIndex(3, 1)], [10, 20], 3, 3)
+3×3 SparseMatrixCSC{Int64, Int64} with 2 stored entries:
+  ⋅  10  ⋅
+  ⋅   ⋅  ⋅
+ 20   ⋅  ⋅</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.sparse!"><a class="docstring-binding" href="#SparseArrays.sparse!"><code>SparseArrays.sparse!</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">sparse!(I::AbstractVector{Ti}, J::AbstractVector{Ti}, V::AbstractVector{Tv},
+        m::Integer, n::Integer, combine, klasttouch::Vector{Ti},
+        csrrowptr::Vector{Ti}, csrcolval::Vector{Ti}, csrnzval::Vector{Tv},
+        [csccolptr::Vector{Ti}], [cscrowval::Vector{Ti}, cscnzval::Vector{Tv}] ) where {Tv,Ti&lt;:Integer}</code></pre><p>Parent of and expert driver for <a href="#SparseArrays.sparse"><code>sparse</code></a>;
+see <a href="#SparseArrays.sparse"><code>sparse</code></a> for basic usage. This method
+allows the user to provide preallocated storage for <code>sparse</code>&#39;s intermediate objects and
+result as described below. This capability enables more efficient successive construction
+of <a href="#SparseArrays.SparseMatrixCSC"><code>SparseMatrixCSC</code></a>s from coordinate representations, and also enables extraction
+of an unsorted-column representation of the result&#39;s transpose at no additional cost.</p><p>This method consists of three major steps: (1) Counting-sort the provided coordinate
+representation into an unsorted-row CSR form including repeated entries. (2) Sweep through
+the CSR form, simultaneously calculating the desired CSC form&#39;s column-pointer array,
+detecting repeated entries, and repacking the CSR form with repeated entries combined;
+this stage yields an unsorted-row CSR form with no repeated entries. (3) Counting-sort the
+preceding CSR form into a fully-sorted CSC form with no repeated entries.</p><p>Input arrays <code>csrrowptr</code>, <code>csrcolval</code>, and <code>csrnzval</code> constitute storage for the
+intermediate CSR forms and require <code>length(csrrowptr) &gt;= m + 1</code>,
+<code>length(csrcolval) &gt;= length(I)</code>, and <code>length(csrnzval &gt;= length(I))</code>. Input
+array <code>klasttouch</code>, workspace for the second stage, requires <code>length(klasttouch) &gt;= n</code>.
+Optional input arrays <code>csccolptr</code>, <code>cscrowval</code>, and <code>cscnzval</code> constitute storage for the
+returned CSC form <code>S</code>. If necessary, these are resized automatically to satisfy
+<code>length(csccolptr) = n + 1</code>, <code>length(cscrowval) = nnz(S)</code> and <code>length(cscnzval) = nnz(S)</code>; hence, if <code>nnz(S)</code> is
+unknown at the outset, passing in empty vectors of the appropriate type (<code>Vector{Ti}()</code>
+and <code>Vector{Tv}()</code> respectively) suffices, or calling the <code>sparse!</code> method
+neglecting <code>cscrowval</code> and <code>cscnzval</code>.</p><p>On return, <code>csrrowptr</code>, <code>csrcolval</code>, and <code>csrnzval</code> contain an unsorted-column
+representation of the result&#39;s transpose.</p><p>You may reuse the input arrays&#39; storage (<code>I</code>, <code>J</code>, <code>V</code>) for the output arrays
+(<code>csccolptr</code>, <code>cscrowval</code>, <code>cscnzval</code>). For example, you may call
+<code>sparse!(I, J, V, csrrowptr, csrcolval, csrnzval, I, J, V)</code>.
+Note that they will be resized to satisfy the conditions above.</p><p>For the sake of efficiency, this method performs no argument checking beyond
+<code>1 &lt;= I[k] &lt;= m</code> and <code>1 &lt;= J[k] &lt;= n</code>. Use with care. Testing with <code>--check-bounds=yes</code>
+is wise.</p><p>This method runs in <code>O(m, n, length(I))</code> time. The HALFPERM algorithm described in
+F. Gustavson, &quot;Two fast algorithms for sparse matrices: multiplication and permuted
+transposition,&quot; ACM TOMS 4(3), 250-269 (1978) inspired this method&#39;s use of a pair of
+counting sorts.</p></div></section><section><div><pre><code class="language-julia hljs">SparseArrays.sparse!(I, J, V, [m, n, combine]) -&gt; SparseMatrixCSC</code></pre><p>Variant of <code>sparse!</code> that re-uses the input vectors (<code>I</code>, <code>J</code>, <code>V</code>) for the final matrix
+storage. After construction the input vectors will alias the matrix buffers; <code>S.colptr === I</code>, <code>S.rowval === J</code>, and <code>S.nzval === V</code> holds, and they will be <code>resize!</code>d as necessary.</p><p>Note that some work buffers will still be allocated. Specifically, this method is a
+convenience wrapper around <code>sparse!(I, J, V, m, n, combine, klasttouch, csrrowptr, csrcolval, csrnzval, csccolptr, cscrowval, cscnzval)</code> where this method allocates
+<code>klasttouch</code>, <code>csrrowptr</code>, <code>csrcolval</code>, and <code>csrnzval</code> of appropriate size, but reuses <code>I</code>,
+<code>J</code>, and <code>V</code> for <code>csccolptr</code>, <code>cscrowval</code>, and <code>cscnzval</code>.</p><p>Arguments <code>m</code>, <code>n</code>, and <code>combine</code> defaults to <code>maximum(I)</code>, <code>maximum(J)</code>, and <code>+</code>,
+respectively.</p><div class="admonition is-compat" id="Julia-1.10-363d978b3635cbcd"><header class="admonition-header">Julia 1.10<a class="admonition-anchor" href="#Julia-1.10-363d978b3635cbcd" title="Permalink"></a></header><div class="admonition-body"><p>This method requires Julia version 1.10 or later.</p></div></div></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.sparsevec"><a class="docstring-binding" href="#SparseArrays.sparsevec"><code>SparseArrays.sparsevec</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">sparsevec(I, V, [m, combine])</code></pre><p>Create a sparse vector <code>S</code> of length <code>m</code> such that <code>S[I[k]] = V[k]</code>.
+Duplicates are combined using the <code>combine</code> function, which defaults to
+<code>+</code> if no <code>combine</code> argument is provided, unless the elements of <code>V</code> are Booleans
+in which case <code>combine</code> defaults to <code>|</code>.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; II = [1, 3, 3, 5]; V = [0.1, 0.2, 0.3, 0.2];
+
+julia&gt; sparsevec(II, V)
+5-element SparseVector{Float64, Int64} with 3 stored entries:
+  [1]  =  0.1
+  [3]  =  0.5
+  [5]  =  0.2
+
+julia&gt; sparsevec(II, V, 8, -)
+8-element SparseVector{Float64, Int64} with 3 stored entries:
+  [1]  =  0.1
+  [3]  =  -0.1
+  [5]  =  0.2
+
+julia&gt; sparsevec([1, 3, 1, 2, 2], [true, true, false, false, false])
+3-element SparseVector{Bool, Int64} with 3 stored entries:
+  [1]  =  1
+  [2]  =  0
+  [3]  =  1</code></pre></div></section><section><div><pre><code class="language-julia hljs">sparsevec(d::Dict, [m])</code></pre><p>Create a sparse vector of length <code>m</code> where the nonzero indices are keys from
+the dictionary, and the nonzero values are the values from the dictionary.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; sparsevec(Dict(1 =&gt; 3, 2 =&gt; 2))
+2-element SparseVector{Int64, Int64} with 2 stored entries:
+  [1]  =  3
+  [2]  =  2</code></pre></div></section><section><div><pre><code class="language-julia hljs">sparsevec(A)</code></pre><p>Convert a vector <code>A</code> into a sparse vector of length <code>m</code>.
+Numerical zeros in <code>A</code> are turned into structural zeros.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; sparsevec([1.0, 2.0, 0.0, 0.0, 3.0, 0.0])
+6-element SparseVector{Float64, Int64} with 3 stored entries:
+  [1]  =  1.0
+  [2]  =  2.0
+  [5]  =  3.0</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.spzeros"><a class="docstring-binding" href="#SparseArrays.spzeros"><code>SparseArrays.spzeros</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">spzeros([type,]m[,n])</code></pre><p>Create a sparse vector of length <code>m</code> or sparse matrix of size <code>m x n</code>. This
+sparse array will not contain any nonzero values, and no storage is allocated
+for them. The type defaults to <a href="../../base/numbers/#Core.Float64"><code>Float64</code></a> if not specified.</p><p>This does not make the call allocation-free: the empty index and value buffers
+are still allocated, and a matrix additionally allocates a column pointer of
+<code>n + 1</code> entries, so an <code>m x n</code> matrix uses memory proportional to <code>n</code>.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; spzeros(3, 3)
+3×3 SparseMatrixCSC{Float64, Int64} with 0 stored entries:
+ ⋅  ⋅  ⋅
+ ⋅  ⋅  ⋅
+ ⋅  ⋅  ⋅
+
+julia&gt; spzeros(Float32, 4)
+4-element SparseVector{Float32, Int64} with 0 stored entries</code></pre></div></section><section><div><pre><code class="language-julia hljs">spzeros([type], I::AbstractVector, J::AbstractVector, [m, n])</code></pre><p>Create a sparse matrix <code>S</code> of dimensions <code>m x n</code> with structural zeros at <code>S[I[k], J[k]]</code>.</p><p>This method can be used to construct the sparsity pattern of the matrix, and is more
+efficient than using e.g. <code>sparse(I, J, zeros(length(I)))</code>.</p><p>For additional documentation and an expert driver, see <code>SparseArrays.spzeros!</code>.</p><div class="admonition is-compat" id="Julia-1.10-31edcc184108152d"><header class="admonition-header">Julia 1.10<a class="admonition-anchor" href="#Julia-1.10-31edcc184108152d" title="Permalink"></a></header><div class="admonition-body"><p>This methods requires Julia version 1.10 or later.</p></div></div></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.spzeros!"><a class="docstring-binding" href="#SparseArrays.spzeros!"><code>SparseArrays.spzeros!</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">spzeros!(::Type{Tv}, I::AbstractVector{Ti}, J::AbstractVector{Ti}, m::Integer, n::Integer,
+         klasttouch::Vector{Ti}, csrrowptr::Vector{Ti}, csrcolval::Vector{Ti},
+         [csccolptr::Vector{Ti}], [cscrowval::Vector{Ti}, cscnzval::Vector{Tv}]) where {Tv,Ti&lt;:Integer}</code></pre><p>Parent of and expert driver for <code>spzeros(I, J)</code> allowing user to provide preallocated
+storage for intermediate objects. This method is to <code>spzeros</code> what <code>SparseArrays.sparse!</code> is
+to <code>sparse</code>. See documentation for <code>SparseArrays.sparse!</code> for details and required buffer
+lengths.</p><div class="admonition is-compat" id="Julia-1.10-31edcc184108152d"><header class="admonition-header">Julia 1.10<a class="admonition-anchor" href="#Julia-1.10-31edcc184108152d" title="Permalink"></a></header><div class="admonition-body"><p>This methods requires Julia version 1.10 or later.</p></div></div></div></section><section><div><pre><code class="language-julia hljs">SparseArrays.spzeros!(::Type{Tv}, I, J, [m, n]) -&gt; SparseMatrixCSC{Tv}</code></pre><p>Variant of <code>spzeros!</code> that re-uses the input vectors <code>I</code> and <code>J</code> for the final matrix
+storage. After construction the input vectors will alias the matrix buffers; <code>S.colptr === I</code> and <code>S.rowval === J</code> holds, and they will be <code>resize!</code>d as necessary.</p><p>Note that some work buffers will still be allocated. Specifically, this method is a
+convenience wrapper around <code>spzeros!(Tv, I, J, m, n, klasttouch, csrrowptr, csrcolval, csccolptr, cscrowval)</code> where this method allocates <code>klasttouch</code>, <code>csrrowptr</code>, and
+<code>csrcolval</code> of appropriate size, but reuses <code>I</code> and <code>J</code> for <code>csccolptr</code> and <code>cscrowval</code>.</p><p>Arguments <code>m</code> and <code>n</code> defaults to <code>maximum(I)</code> and <code>maximum(J)</code>.</p><div class="admonition is-compat" id="Julia-1.10-363d978b3635cbcd"><header class="admonition-header">Julia 1.10<a class="admonition-anchor" href="#Julia-1.10-363d978b3635cbcd" title="Permalink"></a></header><div class="admonition-body"><p>This method requires Julia version 1.10 or later.</p></div></div></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.spdiagm"><a class="docstring-binding" href="#SparseArrays.spdiagm"><code>SparseArrays.spdiagm</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">spdiagm(kv::Pair{&lt;:Integer,&lt;:AbstractVector}...)
+spdiagm(m::Integer, n::Integer, kv::Pair{&lt;:Integer,&lt;:AbstractVector}...)</code></pre><p>Construct a sparse diagonal matrix from <code>Pair</code>s of vectors and diagonals.
+Each vector <code>kv.second</code> will be placed on the <code>kv.first</code> diagonal.  By
+default, the matrix is square and its size is inferred
+from <code>kv</code>, but a non-square size <code>m</code>×<code>n</code> (padded with zeros as needed)
+can be specified by passing <code>m,n</code> as the first arguments.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; spdiagm(-1 =&gt; [1,2,3,4], 1 =&gt; [4,3,2,1])
+5×5 SparseMatrixCSC{Int64, Int64} with 8 stored entries:
+ ⋅  4  ⋅  ⋅  ⋅
+ 1  ⋅  3  ⋅  ⋅
+ ⋅  2  ⋅  2  ⋅
+ ⋅  ⋅  3  ⋅  1
+ ⋅  ⋅  ⋅  4  ⋅</code></pre></div></section><section><div><pre><code class="language-julia hljs">spdiagm(v::AbstractVector)
+spdiagm(m::Integer, n::Integer, v::AbstractVector)</code></pre><p>Construct a sparse matrix with elements of the vector as diagonal elements.
+By default (no given <code>m</code> and <code>n</code>), the matrix is square and its size is given
+by <code>length(v)</code>, but a non-square size <code>m</code>×<code>n</code> can be specified by passing <code>m</code>
+and <code>n</code> as the first arguments.</p><div class="admonition is-compat" id="Julia-1.6-72daf15611621fed"><header class="admonition-header">Julia 1.6<a class="admonition-anchor" href="#Julia-1.6-72daf15611621fed" title="Permalink"></a></header><div class="admonition-body"><p>These functions require at least Julia 1.6.</p></div></div><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; spdiagm([1,2,3])
+3×3 SparseMatrixCSC{Int64, Int64} with 3 stored entries:
+ 1  ⋅  ⋅
+ ⋅  2  ⋅
+ ⋅  ⋅  3
+
+julia&gt; spdiagm(sparse([1,0,3]))
+3×3 SparseMatrixCSC{Int64, Int64} with 2 stored entries:
+ 1  ⋅  ⋅
+ ⋅  ⋅  ⋅
+ ⋅  ⋅  3</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.blockdiag"><a class="docstring-binding" href="#SparseArrays.blockdiag"><code>SparseArrays.blockdiag</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">blockdiag(A...)</code></pre><p>Concatenate matrices block-diagonally. Currently only implemented for sparse matrices.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; blockdiag(sparse(2I, 3, 3), sparse(4I, 2, 2))
+5×5 SparseMatrixCSC{Int64, Int64} with 5 stored entries:
+ 2  ⋅  ⋅  ⋅  ⋅
+ ⋅  2  ⋅  ⋅  ⋅
+ ⋅  ⋅  2  ⋅  ⋅
+ ⋅  ⋅  ⋅  4  ⋅
+ ⋅  ⋅  ⋅  ⋅  4</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.sprand"><a class="docstring-binding" href="#SparseArrays.sprand"><code>SparseArrays.sprand</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">sprand([rng],[T::Type],m,[n],p::AbstractFloat)
+sprand([rng],m,[n],p::AbstractFloat,[rfn=rand])</code></pre><p>Create a random length <code>m</code> sparse vector or <code>m</code> by <code>n</code> sparse matrix, in
+which the probability of any element being nonzero is independently given by
+<code>p</code> (and hence the mean density of nonzeros is also exactly <code>p</code>).
+The optional <code>rng</code> argument specifies a random number generator, see <a href="../Random/#Random-Numbers">Random Numbers</a>.
+The optional <code>T</code> argument specifies the element type, which defaults to <code>Float64</code>.</p><p>By default, nonzero values are sampled from a uniform distribution using
+the <a href="../Random/#Base.rand"><code>rand</code></a> function, i.e. by <code>rand(T)</code>, or <code>rand(rng, T)</code> if <code>rng</code>
+is supplied; for the default <code>T=Float64</code>, this corresponds to nonzero values
+sampled uniformly in <code>[0,1)</code>.</p><p>You can sample nonzero values from a different distribution by passing a
+custom <code>rfn</code> function instead of <code>rand</code>.   This should be a function <code>rfn(k)</code>
+that returns an array of <code>k</code> random numbers sampled from the desired distribution;
+alternatively, if <code>rng</code> is supplied, it should instead be a function <code>rfn(rng, k)</code>.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; sprand(Bool, 2, 2, 0.5)
+2×2 SparseMatrixCSC{Bool, Int64} with 2 stored entries:
+ 1  1
+ ⋅  ⋅
+
+julia&gt; sprand(Float64, 3, 0.75)
+3-element SparseVector{Float64, Int64} with 2 stored entries:
+  [1]  =  0.795547
+  [2]  =  0.49425</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.sprandn"><a class="docstring-binding" href="#SparseArrays.sprandn"><code>SparseArrays.sprandn</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">sprandn([rng][,Type],m[,n],p::AbstractFloat)</code></pre><p>Create a random sparse vector of length <code>m</code> or sparse matrix of size <code>m</code> by <code>n</code>
+with the specified (independent) probability <code>p</code> of any entry being nonzero,
+where nonzero values are sampled from the normal distribution. The optional <code>rng</code>
+argument specifies a random number generator, see <a href="../Random/#Random-Numbers">Random Numbers</a>.</p><div class="admonition is-compat" id="Julia-1.1-c7935ff80e0c2307"><header class="admonition-header">Julia 1.1<a class="admonition-anchor" href="#Julia-1.1-c7935ff80e0c2307" title="Permalink"></a></header><div class="admonition-body"><p>Specifying the output element type <code>Type</code> requires at least Julia 1.1.</p></div></div><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; sprandn(2, 2, 0.75)
+2×2 SparseMatrixCSC{Float64, Int64} with 3 stored entries:
+ -1.20577       ⋅
+  0.311817  -0.234641</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="Base.similar-Tuple{AbstractSparseMatrixCSC, Type}"><a class="docstring-binding" href="#Base.similar-Tuple{AbstractSparseMatrixCSC, Type}"><code>Base.similar</code></a> — <span class="docstring-category">Method</span></summary><section><div><pre><code class="language-julia hljs">similar(A::AbstractSparseMatrixCSC{Tv,Ti}, [::Type{TvNew}, ::Type{TiNew}, m::Integer, n::Integer]) where {Tv,Ti}</code></pre><p>Create a <code>SparseMatrixCSC</code> with the given element type, index type and size, based on <code>A</code>.
+Each of them defaults to that of <code>A</code>.</p><p>When no size is given, the result stores the same entries as <code>A</code>, with uninitialized
+values. When a size is given, the result stores no entries, and has room for as many as
+<code>A</code> stores.</p><p>The result is a writable <code>SparseMatrixCSC</code> also when <code>A</code> is a <code>FixedSparseCSC</code>; <code>copy</code>
+keeps a fixed pattern.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; A = sparse([1, 2], [1, 2], [1.5, 2.5]);
+
+julia&gt; B = similar(A, Int);
+
+julia&gt; rowvals(B) == rowvals(A), eltype(B)
+(true, Int64)
+
+julia&gt; similar(A, 3, 4)
+3×4 SparseMatrixCSC{Float64, Int64} with 0 stored entries:
+ ⋅  ⋅  ⋅  ⋅
+ ⋅  ⋅  ⋅  ⋅
+ ⋅  ⋅  ⋅  ⋅</code></pre></div></section></details></article><h3 id="Stored-entries"><a class="docs-heading-anchor" href="#Stored-entries">Stored entries</a><a id="Stored-entries-1"></a><a class="docs-heading-anchor-permalink" href="#Stored-entries" title="Permalink"></a></h3><article><details class="docstring" open="true"><summary id="SparseArrays.issparse"><a class="docstring-binding" href="#SparseArrays.issparse"><code>SparseArrays.issparse</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">issparse(S)</code></pre><p>Returns <code>true</code> if <code>S</code> is sparse or wraps a sparse array, and <code>false</code> otherwise.</p><p><code>issparse</code> is a classification predicate. A <code>true</code> result does not guarantee
+support for a particular <code>SparseArrays</code> operation (such as <code>nnz</code>, <code>nonzeros</code>,
+or <code>findnz</code>), a particular sparse storage format, or that <code>sparse(S)</code> is an
+identity or efficient operation. Likewise, <code>false</code> means that <code>S</code> is not recognized
+as sparse by <code>SparseArrays</code>, not that it is dense: an array type that does not
+subtype <code>AbstractSparseArray</code> or wrap one yields <code>false</code> regardless of its storage.
+Code requiring a particular sparse interface should dispatch on the relevant
+abstract type or operation instead of branching on <code>issparse</code>.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; sv = sparsevec([1, 4], [2.3, 2.2], 10)
+10-element SparseVector{Float64, Int64} with 2 stored entries:
+  [1]  =  2.3
+  [4]  =  2.2
+
+julia&gt; issparse(sv)
+true
+
+julia&gt; issparse(Array(sv))
+false</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.nnz"><a class="docstring-binding" href="#SparseArrays.nnz"><code>SparseArrays.nnz</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">nnz(A)</code></pre><p>Returns the number of stored (filled) elements in a sparse array. For a column view
+or a triangular, <code>Symmetric</code> or <code>Hermitian</code> wrapper of a sparse matrix, it is the number
+of the parent&#39;s stored entries that belong to the view or wrapper (for a symmetric or
+Hermitian wrapper, those of the stored triangle).</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; A = sparse(2I, 3, 3)
+3×3 SparseMatrixCSC{Int64, Int64} with 3 stored entries:
+ 2  ⋅  ⋅
+ ⋅  2  ⋅
+ ⋅  ⋅  2
+
+julia&gt; nnz(A)
+3</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.findnz"><a class="docstring-binding" href="#SparseArrays.findnz"><code>SparseArrays.findnz</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">findnz(A::SparseMatrixCSC)</code></pre><p>Return a tuple <code>(I, J, V)</code> where <code>I</code> and <code>J</code> are the row and column indices of the stored
+(&quot;structurally non-zero&quot;) values in sparse matrix <code>A</code>, and <code>V</code> is a vector of the values.
+<code>A</code> may also be the adjoint or transpose of a sparse matrix or vector, in which case the
+values in <code>V</code> are correspondingly adjointed or transposed.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; A = sparse([1 2 0; 0 0 3; 0 4 0])
+3×3 SparseMatrixCSC{Int64, Int64} with 4 stored entries:
+ 1  2  ⋅
+ ⋅  ⋅  3
+ ⋅  4  ⋅
+
+julia&gt; findnz(A)
+([1, 1, 3, 2], [1, 2, 2, 3], [1, 2, 4, 3])</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.nonzeros"><a class="docstring-binding" href="#SparseArrays.nonzeros"><code>SparseArrays.nonzeros</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">nonzeros(A)</code></pre><p>Return a vector of the structural nonzero values in sparse array <code>A</code>. This
+includes zeros that are explicitly stored in the sparse array. The returned
+vector points directly to the internal nonzero storage of <code>A</code>, and any
+modifications to the returned vector will mutate <code>A</code> as well. See
+<a href="#SparseArrays.rowvals"><code>rowvals</code></a> and <a href="#SparseArrays.nzrange"><code>nzrange</code></a>.</p><p>For a view of all rows and some columns of a sparse matrix, <code>nonzeros</code> returns a view
+of the parent&#39;s storage holding the entries of <code>A</code> only, so <code>length(nonzeros(A))</code> is
+<code>nnz(A)</code> and writes to it mutate the parent. For a view of a range of columns the view is
+contiguous; for another column subset it gathers the positions of the stored entries,
+which takes time proportional to <code>nnz(A)</code>.</p><p><code>nonzeros</code>, <a href="#SparseArrays.rowvals"><code>rowvals</code></a> and <a href="#SparseArrays.nzrange"><code>nzrange</code></a> are not defined for a triangular,
+<code>Symmetric</code> or <code>Hermitian</code> wrapper of a sparse matrix, whose entries are not a compressed
+column structure of their own. Convert the wrapper with <code>sparse</code>, or work on <code>parent(A)</code>.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; A = sparse(2I, 3, 3)
+3×3 SparseMatrixCSC{Int64, Int64} with 3 stored entries:
+ 2  ⋅  ⋅
+ ⋅  2  ⋅
+ ⋅  ⋅  2
+
+julia&gt; nonzeros(A)
+3-element Vector{Int64}:
+ 2
+ 2
+ 2
+
+julia&gt; nonzeros(view(A, :, 2:3))
+2-element view(::Vector{Int64}, 2:3) with eltype Int64:
+ 2
+ 2</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.rowvals"><a class="docstring-binding" href="#SparseArrays.rowvals"><code>SparseArrays.rowvals</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">rowvals(A)</code></pre><p>Return a vector of the row indices of sparse array <code>A</code>. Any modifications to the returned
+vector will mutate <code>A</code> as well. Providing access to how the row indices are
+stored internally can be useful in conjunction with iterating over structural
+nonzero values. See also <a href="#SparseArrays.nonzeros"><code>nonzeros</code></a> and <a href="#SparseArrays.nzrange"><code>nzrange</code></a>.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; A = sparse(2I, 3, 3)
+3×3 SparseMatrixCSC{Int64, Int64} with 3 stored entries:
+ 2  ⋅  ⋅
+ ⋅  2  ⋅
+ ⋅  ⋅  2
+
+julia&gt; rowvals(A)
+3-element Vector{Int64}:
+ 1
+ 2
+ 3</code></pre><p>For a view of all rows and some columns of a sparse matrix, <code>rowvals</code> returns a view of
+the parent&#39;s vector holding the row indices of the entries of <code>A</code> only, matching
+<a href="#SparseArrays.nonzeros"><code>nonzeros</code></a>. For a sparse vector or a column view of a sparse matrix, <code>rowvals</code>
+returns the indices of the stored entries:</p><pre><code class="language-julia-repl hljs">julia&gt; rowvals(sparsevec([2, 5], [1.5, 2.5], 6))
+2-element Vector{Int64}:
+ 2
+ 5</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.nzrange"><a class="docstring-binding" href="#SparseArrays.nzrange"><code>SparseArrays.nzrange</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">nzrange(A, col::Integer)</code></pre><p>Return the range of positions of the stored entries of column <code>col</code> of the sparse matrix
+<code>A</code> in <a href="#SparseArrays.rowvals"><code>rowvals(A)</code></a> and <a href="#SparseArrays.nonzeros"><code>nonzeros(A)</code></a>. Looping over the
+columns and over this range visits every stored entry once, in storage order.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; A = sparse([1, 3, 2], [1, 1, 3], [10, 30, 20]);
+
+julia&gt; rows, vals = rowvals(A), nonzeros(A);
+
+julia&gt; [(rows[k], j, vals[k]) for j in axes(A, 2) for k in nzrange(A, j)]
+3-element Vector{Tuple{Int64, Int64, Int64}}:
+ (1, 1, 10)
+ (3, 1, 30)
+ (2, 3, 20)</code></pre><p>The same loop works on a view of all rows and some columns of <code>A</code>, whose <code>nzrange</code>
+indexes the <code>rowvals</code> and <code>nonzeros</code> of the view. For a view of a range of columns each
+call is O(1); for another column subset <code>nzrange(A, col)</code> sums the lengths of the
+preceding columns, so it is O(<code>col</code>).</p><div class="admonition is-warning" id="Warning-27cad6eeba69e376"><header class="admonition-header">Warning<a class="admonition-anchor" href="#Warning-27cad6eeba69e376" title="Permalink"></a></header><div class="admonition-body"><p>Adding or removing a stored entry invalidates the range, so do not change the
+pattern of the matrix while iterating.</p></div></div></div></section><section><div><pre><code class="language-julia hljs">nzrange(x::SparseVectorOrView, col)</code></pre><p>Return the range of positions of the stored entries of the sparse vector <code>x</code> in
+<a href="#SparseArrays.rowvals"><code>rowvals(x)</code></a> and <a href="#SparseArrays.nonzeros"><code>nonzeros(x)</code></a>. A vector is treated as a
+single column, and <code>col</code> is ignored.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; x = sparsevec([2, 5], [1.5, 2.5], 6);
+
+julia&gt; [(rowvals(x)[k], nonzeros(x)[k]) for k in nzrange(x, 1)]
+2-element Vector{Tuple{Int64, Float64}}:
+ (2, 1.5)
+ (5, 2.5)</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.getcolptr"><a class="docstring-binding" href="#SparseArrays.getcolptr"><code>SparseArrays.getcolptr</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">getcolptr(S)</code></pre><p>Return the vector of column start indices of an <a href="#SparseArrays.AbstractSparseMatrixCSC"><code>AbstractSparseMatrixCSC</code></a>
+pointing into <a href="#SparseArrays.rowvals"><code>rowvals</code></a> and <a href="#SparseArrays.nonzeros"><code>nonzeros</code></a>: column <code>j</code> is stored at
+positions <code>getcolptr(S)[j]:(getcolptr(S)[j+1] - 1)</code>. The returned vector aliases <code>S</code>,
+but implementations with fixed sparsity may make it read-only. When it is writable,
+modifications to it mutate <code>S</code>. See also <a href="#SparseArrays.getrowval"><code>getrowval</code></a>, <a href="#SparseArrays.getnzval"><code>getnzval</code></a>
+and <a href="#SparseArrays.nzrange"><code>nzrange</code></a>.</p><p><code>getcolptr</code> is not defined for a <a href="#SparseArrays.SparseVector"><code>SparseVector</code></a>, which has no column pointers;
+use <code>nzrange(x, 1)</code> instead.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; A = sparse(2I, 3, 3)
+3×3 SparseMatrixCSC{Int64, Int64} with 3 stored entries:
+ 2  ⋅  ⋅
+ ⋅  2  ⋅
+ ⋅  ⋅  2
+
+julia&gt; getcolptr(A)
+4-element Vector{Int64}:
+ 1
+ 2
+ 3
+ 4</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.getrowval"><a class="docstring-binding" href="#SparseArrays.getrowval"><code>SparseArrays.getrowval</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">getrowval(A)</code></pre><p>Return the vector of row indices of the structural nonzeros of sparse array <code>A</code>.
+For a <a href="#SparseArrays.SparseMatrixCSC"><code>SparseMatrixCSC</code></a> this is the <code>rowval</code> field; for a
+<a href="#SparseArrays.SparseVector"><code>SparseVector</code></a> it is the <code>nzind</code> field. Any modifications to the returned
+vector will mutate <code>A</code> as well. Providing access to how the row indices are
+stored internally can be useful in conjunction with iterating over structural
+nonzero values. See also <a href="#SparseArrays.getnzval"><code>getnzval</code></a> and <a href="#SparseArrays.nzrange"><code>nzrange</code></a>.</p><p>For a <code>SparseMatrixCSC</code> or a <code>SparseVector</code>, <code>getrowval</code> is equivalent to
+<a href="#SparseArrays.rowvals"><code>rowvals</code></a>. For a view of all rows and some columns of a sparse matrix it returns
+the parent&#39;s vector, of which <code>rowvals(A)</code> is the part belonging to <code>A</code>. It is not
+defined for a triangular, <code>Symmetric</code> or <code>Hermitian</code> wrapper of a sparse matrix; use
+<code>getrowval(parent(A))</code>, which also holds the entries outside the wrapper&#39;s triangle.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; A = sparse(2I, 3, 3)
+3×3 SparseMatrixCSC{Int64, Int64} with 3 stored entries:
+ 2  ⋅  ⋅
+ ⋅  2  ⋅
+ ⋅  ⋅  2
+
+julia&gt; getrowval(A)
+3-element Vector{Int64}:
+ 1
+ 2
+ 3
+
+julia&gt; getrowval(sparsevec([2, 5], [3.0, 4.0]))
+2-element Vector{Int64}:
+ 2
+ 5</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.getnzval"><a class="docstring-binding" href="#SparseArrays.getnzval"><code>SparseArrays.getnzval</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">getnzval(A)</code></pre><p>Return the vector of structural nonzero values of sparse array <code>A</code>, i.e. the <code>nzval</code>
+field of a <a href="#SparseArrays.SparseMatrixCSC"><code>SparseMatrixCSC</code></a> or <a href="#SparseArrays.SparseVector"><code>SparseVector</code></a>. This includes zeros
+that are explicitly stored in the sparse array. The returned vector points directly
+to the internal nonzero storage of <code>A</code>, and any modifications to the returned vector
+will mutate <code>A</code> as well. See also <a href="#SparseArrays.getrowval"><code>getrowval</code></a> and <a href="#SparseArrays.nzrange"><code>nzrange</code></a>.</p><p>For a <code>SparseMatrixCSC</code> or a <code>SparseVector</code>, <code>getnzval</code> is equivalent to
+<a href="#SparseArrays.nonzeros"><code>nonzeros</code></a>. For a view of all rows and some columns of a sparse matrix it returns
+the parent&#39;s vector, of which <code>nonzeros(A)</code> is the part belonging to <code>A</code>. It is not
+defined for a triangular, <code>Symmetric</code> or <code>Hermitian</code> wrapper of a sparse matrix; use
+<code>getnzval(parent(A))</code>, which also holds the entries outside the wrapper&#39;s triangle.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; A = sparse(2I, 3, 3)
+3×3 SparseMatrixCSC{Int64, Int64} with 3 stored entries:
+ 2  ⋅  ⋅
+ ⋅  2  ⋅
+ ⋅  ⋅  2
+
+julia&gt; getnzval(A)
+3-element Vector{Int64}:
+ 2
+ 2
+ 2
+
+julia&gt; getnzval(sparsevec([2, 5], [3.0, 4.0]))
+2-element Vector{Float64}:
+ 3.0
+ 4.0</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.indtype"><a class="docstring-binding" href="#SparseArrays.indtype"><code>SparseArrays.indtype</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">indtype(S)</code></pre><p>Return the integer type in which sparse array <code>S</code> stores its indices: the <code>Ti</code> in
+<code>SparseMatrixCSC{Tv,Ti}</code> and <code>SparseVector{Tv,Ti}</code>. It is the index-type counterpart
+of <code>eltype</code>.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; indtype(sparse(Int32[1, 2], Int32[1, 2], [1.0, 2.0]))
+Int32
+
+julia&gt; indtype(sparsevec(Int8[2, 5], [3.0, 4.0]))
+Int8
+
+julia&gt; indtype(sparse([1, 2], [1, 2], [1.0, 2.0])&#39;)
+Int64</code></pre></div></section></details></article><h3 id="Removing-stored-entries"><a class="docs-heading-anchor" href="#Removing-stored-entries">Removing stored entries</a><a id="Removing-stored-entries-1"></a><a class="docs-heading-anchor-permalink" href="#Removing-stored-entries" title="Permalink"></a></h3><article><details class="docstring" open="true"><summary id="SparseArrays.dropzeros"><a class="docstring-binding" href="#SparseArrays.dropzeros"><code>SparseArrays.dropzeros</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">dropzeros(A::AbstractSparseMatrixCSC;)</code></pre><p>Generates a copy of <code>A</code> and removes stored numerical zeros from that copy.</p><p>For an in-place version and algorithmic information, see <a href="#SparseArrays.dropzeros!"><code>dropzeros!</code></a>.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; A = sparse([1, 2, 3], [1, 2, 3], [1.0, 0.0, 1.0])
+3×3 SparseMatrixCSC{Float64, Int64} with 3 stored entries:
+ 1.0   ⋅    ⋅
+  ⋅   0.0   ⋅
+  ⋅    ⋅   1.0
+
+julia&gt; dropzeros(A)
+3×3 SparseMatrixCSC{Float64, Int64} with 2 stored entries:
+ 1.0  ⋅   ⋅
+  ⋅   ⋅   ⋅
+  ⋅   ⋅  1.0</code></pre></div></section><section><div><pre><code class="language-julia hljs">dropzeros(x::AbstractCompressedVector)</code></pre><p>Generates a copy of <code>x</code> and removes numerical zeros from that copy.</p><p>For an in-place version and algorithmic information, see <a href="#SparseArrays.dropzeros!"><code>dropzeros!</code></a>.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; A = sparsevec([1, 2, 3], [1.0, 0.0, 1.0])
+3-element SparseVector{Float64, Int64} with 3 stored entries:
+  [1]  =  1.0
+  [2]  =  0.0
+  [3]  =  1.0
+
+julia&gt; dropzeros(A)
+3-element SparseVector{Float64, Int64} with 2 stored entries:
+  [1]  =  1.0
+  [3]  =  1.0</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.dropzeros!"><a class="docstring-binding" href="#SparseArrays.dropzeros!"><code>SparseArrays.dropzeros!</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">dropzeros!(A::AbstractSparseMatrixCSC)</code></pre><p>Remove the stored zeros from <code>A</code>, in place, and return <code>A</code>.</p><p>See also <a href="#SparseArrays.dropzeros"><code>dropzeros</code></a>, which returns a copy, and <a href="#SparseArrays.droptol!"><code>droptol!</code></a>.</p></div></section><section><div><pre><code class="language-julia hljs">dropzeros!(x::AbstractCompressedVector)</code></pre><p>Remove the stored zeros from <code>x</code>, in place, and return <code>x</code>.</p><p>See also <a href="#SparseArrays.dropzeros"><code>dropzeros</code></a>, which returns a copy, and <a href="#SparseArrays.droptol!"><code>droptol!</code></a>.</p></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.droptol!"><a class="docstring-binding" href="#SparseArrays.droptol!"><code>SparseArrays.droptol!</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">droptol!(A::AbstractSparseMatrixCSC, tol)</code></pre><p>Remove from <code>A</code>, in place, the stored values whose absolute value is less than or equal
+to <code>tol</code>, and return <code>A</code>.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; A = sparse([1, 2, 3], [1, 2, 3], [1.0, 1e-9, -2.0]);
+
+julia&gt; droptol!(A, 1e-6)
+3×3 SparseMatrixCSC{Float64, Int64} with 2 stored entries:
+ 1.0  ⋅    ⋅
+  ⋅   ⋅    ⋅
+  ⋅   ⋅  -2.0</code></pre></div></section><section><div><pre><code class="language-julia hljs">droptol!(x::AbstractCompressedVector, tol)</code></pre><p>Remove from <code>x</code>, in place, the stored values whose absolute value is less than or equal
+to <code>tol</code>, and return <code>x</code>.</p></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.fkeep!"><a class="docstring-binding" href="#SparseArrays.fkeep!"><code>SparseArrays.fkeep!</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">fkeep!(f, A::AbstractSparseArray)</code></pre><p>Keep elements of <code>A</code> for which test <code>f</code> returns <code>true</code>. <code>f</code>&#39;s signature should be</p><pre><code class="language-julia hljs">f(i::Integer, [j::Integer,] x) -&gt; Bool</code></pre><p>where <code>i</code> and <code>j</code> are an element&#39;s row and column indices and <code>x</code> is the element&#39;s
+value. This method makes a single sweep
+through <code>A</code>, requiring <code>O(size(A, 2), nnz(A))</code>-time for matrices and <code>O(nnz(A))</code>-time for vectors
+and no space beyond that passed in.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; A = sparse(Diagonal([1, 2, 3, 4]))
+4×4 SparseMatrixCSC{Int64, Int64} with 4 stored entries:
+ 1  ⋅  ⋅  ⋅
+ ⋅  2  ⋅  ⋅
+ ⋅  ⋅  3  ⋅
+ ⋅  ⋅  ⋅  4
+
+julia&gt; SparseArrays.fkeep!((i, j, v) -&gt; isodd(v), A)
+4×4 SparseMatrixCSC{Int64, Int64} with 2 stored entries:
+ 1  ⋅  ⋅  ⋅
+ ⋅  ⋅  ⋅  ⋅
+ ⋅  ⋅  3  ⋅
+ ⋅  ⋅  ⋅  ⋅</code></pre></div></section></details></article><h3 id="Permuting,-transposing-and-sorting"><a class="docs-heading-anchor" href="#Permuting,-transposing-and-sorting">Permuting, transposing and sorting</a><a id="Permuting,-transposing-and-sorting-1"></a><a class="docs-heading-anchor-permalink" href="#Permuting,-transposing-and-sorting" title="Permalink"></a></h3><article><details class="docstring" open="true"><summary id="SparseArrays.permute"><a class="docstring-binding" href="#SparseArrays.permute"><code>SparseArrays.permute</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">permute(A::AbstractSparseMatrixCSC{Tv,Ti}, p::AbstractVector{&lt;:Integer},
+        q::AbstractVector{&lt;:Integer}) where {Tv,Ti}</code></pre><p>Bilaterally permute <code>A</code>, returning <code>PAQ</code> (<code>A[p,q]</code>). Column-permutation <code>q</code>&#39;s length must
+match <code>A</code>&#39;s column count (<code>length(q) == size(A, 2)</code>). Row-permutation <code>p</code>&#39;s length must match <code>A</code>&#39;s
+row count (<code>length(p) == size(A, 1)</code>).</p><p>For expert drivers and additional information, see <a href="../../base/arrays/#Base.permute!-Tuple{Any, AbstractVector}"><code>permute!</code></a>.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; A = spdiagm(0 =&gt; [1, 2, 3, 4], 1 =&gt; [5, 6, 7])
+4×4 SparseMatrixCSC{Int64, Int64} with 7 stored entries:
+ 1  5  ⋅  ⋅
+ ⋅  2  6  ⋅
+ ⋅  ⋅  3  7
+ ⋅  ⋅  ⋅  4
+
+julia&gt; permute(A, [4, 3, 2, 1], [1, 2, 3, 4])
+4×4 SparseMatrixCSC{Int64, Int64} with 7 stored entries:
+ ⋅  ⋅  ⋅  4
+ ⋅  ⋅  3  7
+ ⋅  2  6  ⋅
+ 1  5  ⋅  ⋅
+
+julia&gt; permute(A, [1, 2, 3, 4], [4, 3, 2, 1])
+4×4 SparseMatrixCSC{Int64, Int64} with 7 stored entries:
+ ⋅  ⋅  5  1
+ ⋅  6  2  ⋅
+ 7  3  ⋅  ⋅
+ 4  ⋅  ⋅  ⋅</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="Base.permute!-Union{Tuple{Ti}, Tuple{Tv}, Tuple{AbstractSparseMatrixCSC{Tv, Ti}, AbstractSparseMatrixCSC{Tv, Ti}, AbstractVector{&lt;:Integer}, AbstractVector{&lt;:Integer}}} where {Tv, Ti}"><a class="docstring-binding" href="#Base.permute!-Union{Tuple{Ti}, Tuple{Tv}, Tuple{AbstractSparseMatrixCSC{Tv, Ti}, AbstractSparseMatrixCSC{Tv, Ti}, AbstractVector{&lt;:Integer}, AbstractVector{&lt;:Integer}}} where {Tv, Ti}"><code>Base.permute!</code></a> — <span class="docstring-category">Method</span></summary><section><div><pre><code class="language-julia hljs">permute!(X::AbstractSparseMatrixCSC{Tv,Ti}, A::AbstractSparseMatrixCSC{Tv,Ti},
+         p::AbstractVector{&lt;:Integer}, q::AbstractVector{&lt;:Integer},
+         [C::AbstractSparseMatrixCSC{Tv,Ti}]) where {Tv,Ti}</code></pre><p>Bilaterally permute <code>A</code>, storing result <code>PAQ</code> (<code>A[p,q]</code>) in <code>X</code>. Stores intermediate result
+<code>(AQ)^T</code> (<code>transpose(A[:,q])</code>) in optional argument <code>C</code> if present. Requires that none of
+<code>X</code>, <code>A</code>, and, if present, <code>C</code> alias each other; to store result <code>PAQ</code> back into <code>A</code>, use
+the following method lacking <code>X</code>:</p><pre><code class="language-julia hljs">permute!(A::AbstractSparseMatrixCSC{Tv,Ti}, p::AbstractVector{&lt;:Integer},
+         q::AbstractVector{&lt;:Integer}[, C::AbstractSparseMatrixCSC{Tv,Ti},
+         [workcolptr::Vector{Ti}]]) where {Tv,Ti}</code></pre><p><code>X</code>&#39;s dimensions must match those of <code>A</code> (<code>size(X, 1) == size(A, 1)</code> and <code>size(X, 2) == size(A, 2)</code>), and <code>X</code> must
+have enough storage to accommodate all allocated entries in <code>A</code> (<code>length(rowvals(X)) &gt;= nnz(A)</code>
+and <code>length(nonzeros(X)) &gt;= nnz(A)</code>). Column-permutation <code>q</code>&#39;s length must match <code>A</code>&#39;s column
+count (<code>length(q) == size(A, 2)</code>). Row-permutation <code>p</code>&#39;s length must match <code>A</code>&#39;s row count
+(<code>length(p) == size(A, 1)</code>).</p><p><code>C</code>&#39;s dimensions must match those of <code>transpose(A)</code> (<code>size(C, 1) == size(A, 2)</code> and <code>size(C, 2) == size(A, 1)</code>), and <code>C</code>
+must have enough storage to accommodate all allocated entries in <code>A</code> (<code>length(rowvals(C)) &gt;= nnz(A)</code>
+and <code>length(nonzeros(C)) &gt;= nnz(A)</code>).</p><p>See also <a href="#SparseArrays.permute"><code>permute</code></a>.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; A = sparse([1, 2, 3], [1, 2, 3], [1.0, 2.0, 3.0]); X = similar(A);
+
+julia&gt; permute!(X, A, [3, 1, 2], [2, 3, 1])
+3×3 SparseMatrixCSC{Float64, Int64} with 3 stored entries:
+  ⋅   3.0   ⋅
+  ⋅    ⋅   1.0
+ 2.0   ⋅    ⋅</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.ftranspose!"><a class="docstring-binding" href="#SparseArrays.ftranspose!"><code>SparseArrays.ftranspose!</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">ftranspose!(X::AbstractSparseMatrixCSC{Tv,Ti}, A::AbstractSparseMatrixCSC{Tv,Ti}, f::Function) where {Tv,Ti}</code></pre><p>Store the transpose of <code>A</code> in <code>X</code>, applying the function <code>f</code> to each stored value, and
+return <code>X</code>. A zero that <code>f</code> returns stays stored. <code>size(X)</code> must equal
+<code>size(transpose(A))</code>, and <code>X</code> must not share memory with <code>A</code>. Nothing is allocated beyond
+growing the row indices and values of <code>X</code> when they are too short.</p><p>See also <a href="../LinearAlgebra/#LinearAlgebra.transpose!"><code>transpose!</code></a> and <a href="../LinearAlgebra/#LinearAlgebra.adjoint!"><code>adjoint!</code></a>, which are <code>ftranspose!</code> with
+<code>identity</code> and <code>conj</code>.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; A = sparse([1, 1, 2], [1, 2, 2], [1.0, 2.0, 3.0]);
+
+julia&gt; ftranspose!(similar(A), A, x -&gt; 10x)
+2×2 SparseMatrixCSC{Float64, Int64} with 3 stored entries:
+ 10.0    ⋅
+ 20.0  30.0</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="LinearAlgebra.transpose!-Union{Tuple{Ti}, Tuple{Tv}, Tuple{AbstractSparseMatrixCSC{Tv, Ti}, AbstractSparseMatrixCSC{Tv, Ti}}} where {Tv, Ti}"><a class="docstring-binding" href="#LinearAlgebra.transpose!-Union{Tuple{Ti}, Tuple{Tv}, Tuple{AbstractSparseMatrixCSC{Tv, Ti}, AbstractSparseMatrixCSC{Tv, Ti}}} where {Tv, Ti}"><code>LinearAlgebra.transpose!</code></a> — <span class="docstring-category">Method</span></summary><section><div><pre><code class="language-julia hljs">transpose!(X::AbstractSparseMatrixCSC{Tv,Ti}, A::AbstractSparseMatrixCSC{Tv,Ti}) where {Tv,Ti}</code></pre><p>Store the transpose of <code>A</code> in <code>X</code> and return <code>X</code>. <code>size(X)</code> must equal
+<code>size(transpose(A))</code>, and <code>X</code> must not share memory with <code>A</code>. Nothing is allocated beyond
+growing the row indices and values of <code>X</code> when they are too short.</p><p>See also <a href="#SparseArrays.ftranspose!"><code>ftranspose!</code></a>.</p></div></section></details></article><article><details class="docstring" open="true"><summary id="LinearAlgebra.adjoint!-Union{Tuple{Ti}, Tuple{Tv}, Tuple{AbstractSparseMatrixCSC{Tv, Ti}, AbstractSparseMatrixCSC{Tv, Ti}}} where {Tv, Ti}"><a class="docstring-binding" href="#LinearAlgebra.adjoint!-Union{Tuple{Ti}, Tuple{Tv}, Tuple{AbstractSparseMatrixCSC{Tv, Ti}, AbstractSparseMatrixCSC{Tv, Ti}}} where {Tv, Ti}"><code>LinearAlgebra.adjoint!</code></a> — <span class="docstring-category">Method</span></summary><section><div><pre><code class="language-julia hljs">adjoint!(X::AbstractSparseMatrixCSC{Tv,Ti}, A::AbstractSparseMatrixCSC{Tv,Ti}) where {Tv,Ti}</code></pre><p>Store the adjoint of <code>A</code> in <code>X</code> and return <code>X</code>. <code>size(X)</code> must equal
+<code>size(transpose(A))</code>, and <code>X</code> must not share memory with <code>A</code>. Nothing is allocated beyond
+growing the row indices and values of <code>X</code> when they are too short.</p><p>See also <a href="#SparseArrays.ftranspose!"><code>ftranspose!</code></a>.</p></div></section></details></article><article><details class="docstring" open="true"><summary id="Base.sort!-Tuple{AbstractSparseMatrixCSC}"><a class="docstring-binding" href="#Base.sort!-Tuple{AbstractSparseMatrixCSC}"><code>Base.sort!</code></a> — <span class="docstring-category">Method</span></summary><section><div><pre><code class="language-julia hljs">sort!(A::AbstractSparseMatrixCSC; dims::Integer, kws...)</code></pre><p>Sort <code>A</code> in place along dimension <code>dims</code>, moving its stored entries to their sorted
+positions without adding new stored entries, so that <code>nnz(A)</code> is unchanged. Within each
+column (or row), stored values that compare equal to zero under the ordering are grouped
+after the structural zeros, so the result may differ from the dense <code>sort!</code> for orderings
+that do not distinguish stored values from zero (such as <code>by = iszero</code>).</p><p><code>A</code> may not be a <code>FixedSparseCSC</code>, since its row indices are read-only; use
+<a href="../../base/sort/#Base.sort"><code>sort</code></a> instead.</p><p>The remaining keyword arguments are those of <code>sort!</code> for a <code>Vector</code>.</p></div></section></details></article><article><details class="docstring" open="true"><summary id="Base.sort-Tuple{AbstractSparseMatrixCSC}"><a class="docstring-binding" href="#Base.sort-Tuple{AbstractSparseMatrixCSC}"><code>Base.sort</code></a> — <span class="docstring-category">Method</span></summary><section><div><pre><code class="language-julia hljs">sort(A::AbstractSparseMatrixCSC; dims::Integer, kws...)</code></pre><p>Return a sorted copy of <code>A</code> along dimension <code>dims</code> as a <code>SparseMatrixCSC</code>, keeping only the
+stored entries of <code>A</code>. See <a href="../../base/sort/#Base.sort!"><code>sort!</code></a> for the treatment of stored values that compare
+equal to zero.</p></div></section></details></article><article><details class="docstring" open="true"><summary id="Base.sort!-Tuple{Union{SubArray{Tv, 1, &lt;:AbstractSparseMatrixCSC{Tv, Ti}, Tuple{Base.Slice{Base.OneTo{Int64}}, Int64}, false} where {Tv, Ti}, SparseArrays.AbstractCompressedVector}}"><a class="docstring-binding" href="#Base.sort!-Tuple{Union{SubArray{Tv, 1, &lt;:AbstractSparseMatrixCSC{Tv, Ti}, Tuple{Base.Slice{Base.OneTo{Int64}}, Int64}, false} where {Tv, Ti}, SparseArrays.AbstractCompressedVector}}"><code>Base.sort!</code></a> — <span class="docstring-category">Method</span></summary><section><div><pre><code class="language-julia hljs">sort!(x::AbstractCompressedVector; kws...)
+sort!(x::SparseColumnView; kws...)</code></pre><p>Sort the stored entries of <code>x</code> in place and rewrite the stored indices so that the values
+sorting before <code>zero(eltype(x))</code> end up at the start of <code>x</code> and the remaining values at the
+end, with the structural zeros in between. Stored values that compare equal to zero under
+the ordering are placed after the structural zeros. <code>nnz(x)</code> is left untouched.</p><p>A column view <code>view(A, :, j)</code> of a sparse matrix is sorted through the same method, which is
+how <a href="../../base/sort/#Base.sort!"><code>sort!</code></a> of a sparse matrix sorts each column.</p><p><code>x</code> may not be a fixed sparse vector, nor a column view of a fixed sparse matrix, since its
+stored indices are read-only.</p></div></section></details></article><h3 id="Concatenation"><a class="docs-heading-anchor" href="#Concatenation">Concatenation</a><a id="Concatenation-1"></a><a class="docs-heading-anchor-permalink" href="#Concatenation" title="Permalink"></a></h3><article><details class="docstring" open="true"><summary id="SparseArrays.sparse_hcat"><a class="docstring-binding" href="#SparseArrays.sparse_hcat"><code>SparseArrays.sparse_hcat</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">sparse_hcat(A...)</code></pre><p>Concatenate along dimension 2. Return a SparseMatrixCSC object.</p><div class="admonition is-compat" id="Julia-1.8-e166d6c1f320e09c"><header class="admonition-header">Julia 1.8<a class="admonition-anchor" href="#Julia-1.8-e166d6c1f320e09c" title="Permalink"></a></header><div class="admonition-body"><p>This method was added in Julia 1.8. It mimics previous concatenation behavior, where
+the concatenation with specialized &quot;sparse&quot; matrix types from LinearAlgebra.jl
+automatically yielded sparse output even in the absence of any SparseArray argument.</p></div></div></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.sparse_vcat"><a class="docstring-binding" href="#SparseArrays.sparse_vcat"><code>SparseArrays.sparse_vcat</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">sparse_vcat(A...)</code></pre><p>Concatenate along dimension 1. Return a SparseMatrixCSC object.</p><div class="admonition is-compat" id="Julia-1.8-e166d6c1f320e09c"><header class="admonition-header">Julia 1.8<a class="admonition-anchor" href="#Julia-1.8-e166d6c1f320e09c" title="Permalink"></a></header><div class="admonition-body"><p>This method was added in Julia 1.8. It mimics previous concatenation behavior, where
+the concatenation with specialized &quot;sparse&quot; matrix types from LinearAlgebra.jl
+automatically yielded sparse output even in the absence of any SparseArray argument.</p></div></div></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.sparse_hvcat"><a class="docstring-binding" href="#SparseArrays.sparse_hvcat"><code>SparseArrays.sparse_hvcat</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">sparse_hvcat(rows::Tuple{Vararg{Int}}, values...)</code></pre><p>Sparse horizontal and vertical concatenation in one call. This function is called
+for block matrix syntax. The first argument specifies the number of
+arguments to concatenate in each block row.</p><div class="admonition is-compat" id="Julia-1.8-e166d6c1f320e09c"><header class="admonition-header">Julia 1.8<a class="admonition-anchor" href="#Julia-1.8-e166d6c1f320e09c" title="Permalink"></a></header><div class="admonition-body"><p>This method was added in Julia 1.8. It mimics previous concatenation behavior, where
+the concatenation with specialized &quot;sparse&quot; matrix types from LinearAlgebra.jl
+automatically yielded sparse output even in the absence of any SparseArray argument.</p></div></div></div></section></details></article><h3 id="Fixed-pattern-(experimental)"><a class="docs-heading-anchor" href="#Fixed-pattern-(experimental)">Fixed pattern (experimental)</a><a id="Fixed-pattern-(experimental)-1"></a><a class="docs-heading-anchor-permalink" href="#Fixed-pattern-(experimental)" title="Permalink"></a></h3><article><details class="docstring" open="true"><summary id="SparseArrays.fixed"><a class="docstring-binding" href="#SparseArrays.fixed"><code>SparseArrays.fixed</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">fixed(x...)</code></pre><p>Experimental. Like <code>sparse</code> but returns a sparse array whose sparsity pattern is read-only:
+stored entries can change value, but none can be added or removed.</p><p><code>fixed(A)</code> of a writable sparse array <code>A</code> copies it, so the result shares no memory with
+<code>A</code>. Use <code>SparseArrays.move_fixed</code> to reuse the buffers of <code>A</code> instead.
+<code>fixed(F)</code> of a fixed array is <code>copy(F)</code>: it copies the values and shares the pattern.</p><p>A write into the result keeps every stored entry and throws an <code>ArgumentError</code>, before
+changing anything, when it needs an entry outside the pattern. A function whose purpose is
+to change the pattern, such as <code>dropzeros!</code> or <code>tril!</code>, throws. Operations that read the
+result return ordinary arrays: of the out-of-place functions only <code>copy</code> returns a fixed
+array, sharing the pattern. See <a href="#man-sparse-fixed">Sparse arrays with a fixed pattern</a>.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; W = SparseArrays.fixed(sparse([1.0 2; 0 3]));
+
+julia&gt; W .= 0 .* W
+2×2 SparseArrays.FixedSparseCSC{Float64, Int64} with 3 stored entries:
+ 0.0  0.0
+  ⋅   0.0
+
+julia&gt; W[2, 1] = 1.0
+ERROR: ArgumentError: cannot store a new entry at (2, 1) in a FixedSparseCSC, its sparsity pattern is read-only
+[...]
+
+julia&gt; typeof(W + W)
+SparseMatrixCSC{Float64, Int64}</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.FixedSparseCSC"><a class="docstring-binding" href="#SparseArrays.FixedSparseCSC"><code>SparseArrays.FixedSparseCSC</code></a> — <span class="docstring-category">Type</span></summary><section><div><pre><code class="language-julia hljs">FixedSparseCSC{Tv,Ti&lt;:Integer} &lt;: AbstractSparseMatrixCSC{Tv,Ti}</code></pre><p>Experimental. A sparse matrix in CSC format whose sparsity pattern is read-only: stored
+values can be overwritten, but no entry can be added or removed.</p><p>A <code>FixedSparseCSC</code> is a destination for in-place writes. As an operand it behaves as the
+<a href="#SparseArrays.SparseMatrixCSC"><code>SparseMatrixCSC</code></a> with the same entries, and results are not fixed; only <code>copy</code>
+returns a <code>FixedSparseCSC</code>, which shares the pattern. See
+<a href="#man-sparse-fixed">Sparse arrays with a fixed pattern</a>.</p><p>A write stores a value at each stored entry, a zero included, and throws an
+<code>ArgumentError</code> when it needs an entry that the pattern does not have. That holds for
+<code>W .= ...</code>, <code>map!</code>, <code>copyto!</code>, <code>mul!</code>, <code>fill!</code>, <code>rmul!</code>, <code>lmul!</code>, <code>rdiv!</code>, scalar and block
+<code>setindex!</code>, assignment through a column view, and for a result written into a fixed
+destination by <code>transpose!</code>, <code>permute!</code> or <code>circshift!</code>. The kernels of this package check
+before they change any value. Where the package has no method for a sparse destination,
+Julia&#39;s generic one writes one entry at a time: a broadcast into a <code>view</code>, a dense source
+as in <code>W .= D</code> or <code>copyto!(W, D)</code>, <code>axpy!(a, A, W)</code>, or <code>mul!</code> with a dense factor. Such a
+write stops at the first entry outside the pattern, with the entries before it already
+written. Writing through <code>nonzeros(W)</code> is always allowed.</p><p>A function whose purpose is to change the pattern throws for a fixed argument:
+<code>dropzeros!</code>, <code>droptol!</code>, <code>fkeep!</code>, <code>tril!</code>, <code>triu!</code>, <code>dropstored!</code>, <code>sort!</code>, <code>permute!</code>,
+<code>invpermute!</code>, <code>reverse!</code>, <code>circshift!</code>, <code>swaprows!</code> and <code>swapcols!</code>. Their out-of-place
+forms work, and return an ordinary array.</p></div></section></details></article><article><details class="docstring" open="true"><summary id="SparseArrays.FixedSparseVector"><a class="docstring-binding" href="#SparseArrays.FixedSparseVector"><code>SparseArrays.FixedSparseVector</code></a> — <span class="docstring-category">Type</span></summary><section><div><pre><code class="language-julia hljs">FixedSparseVector{Tv,Ti&lt;:Integer} &lt;: AbstractCompressedVector{Tv,Ti}</code></pre><p>Experimental. A sparse vector whose sparsity pattern is read-only: stored values can be
+overwritten, but no entry can be added or removed.</p><p>It follows the rules of <a href="#SparseArrays.FixedSparseCSC"><code>SparseArrays.FixedSparseCSC</code></a>: a destination for in-place
+writes, an ordinary <a href="#SparseArrays.SparseVector"><code>SparseVector</code></a> as an operand.</p></div></section></details></article><h3 id="stdlib-sparse-linalg-api"><a class="docs-heading-anchor" href="#stdlib-sparse-linalg-api">Linear algebra</a><a id="stdlib-sparse-linalg-api-1"></a><a class="docs-heading-anchor-permalink" href="#stdlib-sparse-linalg-api" title="Permalink"></a></h3><article><details class="docstring" open="true"><summary id="Base.:*-Tuple{Union{AbstractSparseMatrixCSC{Tv, Ti}, SubArray{Tv, 2, &lt;:AbstractSparseMatrixCSC{Tv, Ti}, Tuple{Base.Slice{Base.OneTo{Int64}}, I}} where I&lt;:(AbstractUnitRange{&lt;:Integer})} where {Tv, Ti}, Union{AbstractSparseMatrixCSC{Tv, Ti}, SubArray{Tv, 2, &lt;:AbstractSparseMatrixCSC{Tv, Ti}, Tuple{Base.Slice{Base.OneTo{Int64}}, I}} where I&lt;:(AbstractUnitRange{&lt;:Integer})} where {Tv, Ti}}"><a class="docstring-binding" href="#Base.:*-Tuple{Union{AbstractSparseMatrixCSC{Tv, Ti}, SubArray{Tv, 2, &lt;:AbstractSparseMatrixCSC{Tv, Ti}, Tuple{Base.Slice{Base.OneTo{Int64}}, I}} where I&lt;:(AbstractUnitRange{&lt;:Integer})} where {Tv, Ti}, Union{AbstractSparseMatrixCSC{Tv, Ti}, SubArray{Tv, 2, &lt;:AbstractSparseMatrixCSC{Tv, Ti}, Tuple{Base.Slice{Base.OneTo{Int64}}, I}} where I&lt;:(AbstractUnitRange{&lt;:Integer})} where {Tv, Ti}}"><code>Base.:*</code></a> — <span class="docstring-category">Method</span></summary><section><div><pre><code class="language-julia hljs">*(A::AbstractSparseMatrixCSC, B::AbstractSparseMatrixCSC)</code></pre><p>Product of two sparse matrices, a <code>SparseMatrixCSC</code> whose index type is the promotion of
+those of <code>A</code> and <code>B</code>.</p><p>The cost is proportional to the number of products of stored entries, not to the size of
+the result. An entry is stored wherever such a product contributes, even when the
+contributions cancel or a factor holds a stored zero; <a href="#SparseArrays.dropzeros!"><code>dropzeros!</code></a> removes them.</p><p>The kind of array returned follows the other factor: a sparse matrix times a dense
+<code>Vector</code> or <code>Matrix</code> is dense, and times a sparse vector or a <code>Diagonal</code>, <code>Bidiagonal</code>,
+<code>Tridiagonal</code> or <code>SymTridiagonal</code> matrix it is sparse. The adjoint or transpose of a sparse
+factor is read in place when the other factor is dense, and materialized, at a cost
+proportional to its number of stored entries, when the other factor is sparse too.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; A = sparse([1.0 1.0; 0.0 1.0]); B = sparse([1.0 0.0; -1.0 1.0]);
+
+julia&gt; A * B
+2×2 SparseMatrixCSC{Float64, Int64} with 4 stored entries:
+  0.0  1.0
+ -1.0  1.0</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="LinearAlgebra.mul!-Tuple{AbstractSparseMatrixCSC, AbstractSparseMatrixCSC, Diagonal, Number, Number}"><a class="docstring-binding" href="#LinearAlgebra.mul!-Tuple{AbstractSparseMatrixCSC, AbstractSparseMatrixCSC, Diagonal, Number, Number}"><code>LinearAlgebra.mul!</code></a> — <span class="docstring-category">Method</span></summary><section><div><pre><code class="language-julia hljs">mul!(C::AbstractSparseMatrixCSC, A::AbstractSparseMatrixCSC, D::Diagonal, α, β)
+mul!(C::AbstractSparseMatrixCSC, D::Diagonal, A::AbstractSparseMatrixCSC, α, β)</code></pre><p>Store <code>A*D*α + C*β</code>, or <code>D*A*α + C*β</code>, in the sparse matrix <code>C</code>, and return <code>C</code>: the
+columns, or the rows, of <code>A</code> scaled by the diagonal of <code>D</code>.</p><p>Unlike a dense destination, <code>C</code> takes a new sparsity pattern: that of <code>A</code> when <code>β</code> is zero,
+and otherwise the union of the patterns of <code>A</code> and <code>C</code>. A fixed-pattern <code>C</code> keeps its
+pattern instead, and <code>mul!</code> throws, with <code>C</code> unchanged, if a nonzero of the result falls
+outside it.</p><p>A sparse destination is supported for scaling only, by a <code>Diagonal</code> here or by a number
+with <code>mul!(C, A, b)</code>. Form other products of sparse matrices with <code>*</code>. With a dense
+destination, <code>mul!(C, A, B, α, β)</code> takes a sparse <code>A</code> and a dense <code>B</code>, or the other way
+round, and reads the adjoint or transpose of a sparse factor in place.</p></div></section></details></article><article><details class="docstring" open="true"><summary id="Base.kron-Tuple{AbstractSparseMatrixCSC, AbstractSparseMatrixCSC}"><a class="docstring-binding" href="#Base.kron-Tuple{AbstractSparseMatrixCSC, AbstractSparseMatrixCSC}"><code>Base.kron</code></a> — <span class="docstring-category">Method</span></summary><section><div><pre><code class="language-julia hljs">kron(A::AbstractSparseMatrixCSC, B::AbstractSparseMatrixCSC)</code></pre><p>Kronecker product of two sparse matrices, a <code>SparseMatrixCSC</code> with <code>nnz(A) * nnz(B)</code>
+stored entries, stored zeros included.</p><p>With a dense or <code>Diagonal</code> matrix, a dense vector or a number as the other factor, the
+result is sparse too; a dense factor is first converted with <code>sparse</code>, which stores only its
+nonzeros. The Kronecker product of two sparse vectors
+is a <code>SparseVector</code>, and that of a sparse vector with the adjoint or transpose of one is a
+<code>SparseMatrixCSC</code>.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; kron(sparse([1 0; 0 2]), [1 2; 0 3])
+4×4 SparseMatrixCSC{Int64, Int64} with 6 stored entries:
+ 1  2  ⋅  ⋅
+ ⋅  3  ⋅  ⋅
+ ⋅  ⋅  2  4
+ ⋅  ⋅  ⋅  6</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="Base.kron!-Tuple{SparseMatrixCSC, AbstractSparseMatrixCSC, AbstractSparseMatrixCSC}"><a class="docstring-binding" href="#Base.kron!-Tuple{SparseMatrixCSC, AbstractSparseMatrixCSC, AbstractSparseMatrixCSC}"><code>Base.kron!</code></a> — <span class="docstring-category">Method</span></summary><section><div><pre><code class="language-julia hljs">kron!(C::SparseMatrixCSC, A::AbstractSparseMatrixCSC, B::AbstractSparseMatrixCSC)</code></pre><p>Store the Kronecker product of <code>A</code> and <code>B</code> in <code>C</code>, replacing its sparsity pattern, and
+return <code>C</code>. <code>C</code> must have size <code>(size(A, 1) * size(B, 1), size(A, 2) * size(B, 2))</code>, and
+its buffers are resized to hold <code>nnz(A) * nnz(B)</code> entries, so a <code>C</code> from an earlier call
+with operands of the same number of stored entries is reused without growing.</p><p><code>C</code> must be a <code>SparseMatrixCSC</code>, and a <code>SparseVector</code> for two sparse vectors. A
+fixed-pattern destination is not accepted, since the pattern of <code>C</code> is replaced. The other
+factors accepted by <a href="#Base.kron-Tuple{AbstractSparseMatrixCSC, AbstractSparseMatrixCSC}"><code>kron</code></a>
+are accepted here too.</p></div></section></details></article><article><details class="docstring" open="true"><summary id="LinearAlgebra.diag-Union{Tuple{Ti}, Tuple{Tv}, Tuple{Union{AbstractSparseMatrixCSC{Tv, Ti}, SubArray{Tv, 2, &lt;:AbstractSparseMatrixCSC{Tv, Ti}, Tuple{Base.Slice{Base.OneTo{Int64}}, I}} where I&lt;:(AbstractUnitRange{&lt;:Integer})}, Integer}} where {Tv, Ti}"><a class="docstring-binding" href="#LinearAlgebra.diag-Union{Tuple{Ti}, Tuple{Tv}, Tuple{Union{AbstractSparseMatrixCSC{Tv, Ti}, SubArray{Tv, 2, &lt;:AbstractSparseMatrixCSC{Tv, Ti}, Tuple{Base.Slice{Base.OneTo{Int64}}, I}} where I&lt;:(AbstractUnitRange{&lt;:Integer})}, Integer}} where {Tv, Ti}"><code>LinearAlgebra.diag</code></a> — <span class="docstring-category">Method</span></summary><section><div><pre><code class="language-julia hljs">diag(A::AbstractSparseMatrixCSC, k::Integer=0)</code></pre><p>The <code>k</code>th diagonal of the sparse matrix <code>A</code>, as a <code>SparseVector</code> with the index type of
+<code>A</code> that holds the entries stored on that diagonal, stored zeros included. A dense matrix
+gives a <code>Vector</code> instead.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; diag(sparse([1, 3], [1, 3], [5.0, 0.0]))
+3-element SparseVector{Float64, Int64} with 2 stored entries:
+  [1]  =  5.0
+  [3]  =  0.0</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="LinearAlgebra.tril!-Tuple{AbstractSparseMatrixCSC, Integer}"><a class="docstring-binding" href="#LinearAlgebra.tril!-Tuple{AbstractSparseMatrixCSC, Integer}"><code>LinearAlgebra.tril!</code></a> — <span class="docstring-category">Method</span></summary><section><div><pre><code class="language-julia hljs">tril!(M, k::Integer)</code></pre><p>Return the lower triangle of <code>M</code> starting from the <code>k</code>th superdiagonal, overwriting <code>M</code> in
+the process.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; M = [1 2 3 4 5; 1 2 3 4 5; 1 2 3 4 5; 1 2 3 4 5; 1 2 3 4 5]
+5×5 Matrix{Int64}:
+ 1  2  3  4  5
+ 1  2  3  4  5
+ 1  2  3  4  5
+ 1  2  3  4  5
+ 1  2  3  4  5
+
+julia&gt; tril!(M, 2)
+5×5 Matrix{Int64}:
+ 1  2  3  0  0
+ 1  2  3  4  0
+ 1  2  3  4  5
+ 1  2  3  4  5
+ 1  2  3  4  5</code></pre></div></section><section><div><pre><code class="language-julia hljs">tril!(A::AbstractSparseMatrixCSC, k::Integer=0)</code></pre><p>Remove from <code>A</code>, in place, the stored entries above its <code>k</code>th diagonal, and return <code>A</code>.
+Stored zeros on and below that diagonal are kept.</p><p>A dense matrix has those entries set to zero; a sparse one drops them, which changes its
+sparsity pattern, so a fixed-pattern matrix throws an <code>ArgumentError</code>. <code>tril(A, k)</code> returns a
+new <code>SparseMatrixCSC</code> instead.</p></div></section></details></article><article><details class="docstring" open="true"><summary id="LinearAlgebra.triu!-Tuple{AbstractSparseMatrixCSC, Integer}"><a class="docstring-binding" href="#LinearAlgebra.triu!-Tuple{AbstractSparseMatrixCSC, Integer}"><code>LinearAlgebra.triu!</code></a> — <span class="docstring-category">Method</span></summary><section><div><pre><code class="language-julia hljs">triu!(M, k::Integer)</code></pre><p>Return the upper triangle of <code>M</code> starting from the <code>k</code>th superdiagonal,
+overwriting <code>M</code> in the process.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; M = [1 2 3 4 5; 1 2 3 4 5; 1 2 3 4 5; 1 2 3 4 5; 1 2 3 4 5]
+5×5 Matrix{Int64}:
+ 1  2  3  4  5
+ 1  2  3  4  5
+ 1  2  3  4  5
+ 1  2  3  4  5
+ 1  2  3  4  5
+
+julia&gt; triu!(M, 1)
+5×5 Matrix{Int64}:
+ 0  2  3  4  5
+ 0  0  3  4  5
+ 0  0  0  4  5
+ 0  0  0  0  5
+ 0  0  0  0  0</code></pre></div></section><section><div><pre><code class="language-julia hljs">triu!(A::AbstractSparseMatrixCSC, k::Integer=0)</code></pre><p>Remove from <code>A</code>, in place, the stored entries below its <code>k</code>th diagonal, and return <code>A</code>.
+Stored zeros on and above that diagonal are kept.</p><p>A dense matrix has those entries set to zero; a sparse one drops them, which changes its
+sparsity pattern, so a fixed-pattern matrix throws an <code>ArgumentError</code>. <code>triu(A, k)</code> returns a
+new <code>SparseMatrixCSC</code> instead.</p></div></section></details></article><article><details class="docstring" open="true"><summary id="LinearAlgebra.opnorm-Tuple{AbstractSparseMatrixCSC, Real}"><a class="docstring-binding" href="#LinearAlgebra.opnorm-Tuple{AbstractSparseMatrixCSC, Real}"><code>LinearAlgebra.opnorm</code></a> — <span class="docstring-category">Method</span></summary><section><div><pre><code class="language-julia hljs">opnorm(A::AbstractMatrix, p::Real=2)</code></pre><p>Compute the operator norm (or matrix norm) induced by the vector <code>p</code>-norm,
+where valid values of <code>p</code> are <code>1</code>, <code>2</code>, or <code>Inf</code>. (Note that for sparse matrices,
+<code>p=2</code> is currently not implemented.) Use <a href="../LinearAlgebra/#LinearAlgebra.norm"><code>norm</code></a> to compute the Frobenius
+norm.</p><p>When <code>p=1</code>, the operator norm is the maximum absolute column sum of <code>A</code>:</p><p class="math-container">\[\|A\|_1 = \max_{1 ≤ j ≤ n} \sum_{i=1}^m | a_{ij} |\]</p><p>with <span>$a_{ij}$</span> the entries of <span>$A$</span>, and <span>$m$</span> and <span>$n$</span> its dimensions.</p><p>When <code>p=2</code>, the operator norm is the spectral norm, equal to the largest
+singular value of <code>A</code>.</p><p>When <code>p=Inf</code>, the operator norm is the maximum absolute row sum of <code>A</code>:</p><p class="math-container">\[\|A\|_\infty = \max_{1 ≤ i ≤ m} \sum _{j=1}^n | a_{ij} |\]</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; A = [1 -2 -3; 2 3 -1]
+2×3 Matrix{Int64}:
+ 1  -2  -3
+ 2   3  -1
+
+julia&gt; opnorm(A, Inf)
+6.0
+
+julia&gt; opnorm(A, 1)
+5.0</code></pre></div></section><section><div><pre><code class="language-julia hljs">opnorm(A::AbstractSparseMatrixCSC, p::Real=2)</code></pre><p>Operator <code>p</code>-norm of the sparse matrix <code>A</code>, for <code>p</code> equal to <code>1</code>, <code>2</code> or <code>Inf</code>.</p><p>For <code>p = 2</code> the norm is an iterative estimate from Lanczos bidiagonalization rather than a
+full singular value decomposition. It approaches the norm from below, to a relative accuracy
+of about <code>1e-10</code>, and is computed in <code>Float64</code> arithmetic even when the element type is
+wider. Each iteration costs a product with <code>A</code> and one with <code>A&#39;</code>. Matrices whose largest
+singular values are tightly clustered may need a number of iterations comparable to their
+size; use <code>opnorm(Array(A))</code> when such a matrix is small enough.</p></div></section></details></article><article><details class="docstring" open="true"><summary id="LinearAlgebra.cond-Tuple{AbstractSparseMatrixCSC, Real}"><a class="docstring-binding" href="#LinearAlgebra.cond-Tuple{AbstractSparseMatrixCSC, Real}"><code>LinearAlgebra.cond</code></a> — <span class="docstring-category">Method</span></summary><section><div><pre><code class="language-julia hljs">cond(M, p::Real=2)</code></pre><p>Condition number of the matrix <code>M</code>, computed using the operator <code>p</code>-norm. Valid values for
+<code>p</code> are <code>1</code>, <code>2</code> (default), or <code>Inf</code>.</p></div></section><section><div><pre><code class="language-julia hljs">cond(A::AbstractSparseMatrixCSC, p::Real=2)</code></pre><p>Condition number of the sparse matrix <code>A</code> in the operator <code>p</code>-norm, for <code>p</code> equal to <code>1</code> or
+<code>Inf</code>.</p><p>The norm of <code>A</code> is exact, and that of its inverse is estimated with the block 1-norm
+estimator of Higham and Tisseur, from a factorization of <code>A</code> by <code>factorize</code> and without
+forming the inverse, so the result can fall below the exact condition number. <code>p = 2</code>, the
+default, throws an <code>ArgumentError</code>, so <code>cond(A)</code> does too: use <code>cond(Array(A))</code> for a matrix
+small enough to store dense.</p></div></section></details></article><article><details class="docstring" open="true"><summary id="Base.inv-Tuple{AbstractSparseMatrixCSC}"><a class="docstring-binding" href="#Base.inv-Tuple{AbstractSparseMatrixCSC}"><code>Base.inv</code></a> — <span class="docstring-category">Method</span></summary><section><div><pre><code class="language-julia hljs">inv(A::AbstractSparseMatrixCSC)</code></pre><p>Throw an error rather than invert a sparse matrix: the inverse is usually dense, even when
+<code>A</code> has few stored entries, and can exhaust memory. Solve with <code>A \ B</code> instead, which
+factorizes <code>A</code> without forming its inverse, or use <code>inv(Matrix(A))</code> for a matrix small
+enough to store dense.</p></div></section></details></article><h2 id="Noteworthy-External-Sparse-Packages"><a class="docs-heading-anchor" href="#Noteworthy-External-Sparse-Packages">Noteworthy External Sparse Packages</a><a id="Noteworthy-External-Sparse-Packages-1"></a><a class="docs-heading-anchor-permalink" href="#Noteworthy-External-Sparse-Packages" title="Permalink"></a></h2><p>Other Julia packages provide further sparse formats and operations:</p><ol><li><p><a href="https://github.com/JuliaSparse/SuiteSparseGraphBLAS.jl">SuiteSparseGraphBLAS.jl</a> is a wrapper over the fast, multithreaded SuiteSparse:GraphBLAS C library.</p></li><li><p><a href="https://github.com/JuliaGPU/CUDA.jl">CUDA.jl</a> exposes the <a href="https://docs.nvidia.com/cuda/cusparse/index.html">CUSPARSE</a> library for GPU sparse matrix operations.</p></li><li><p><a href="https://github.com/gridap/SparseMatricesCSR.jl">SparseMatricesCSR.jl</a> provides a Julia native implementation of the Compressed Sparse Rows (CSR) format.</p></li><li><p><a href="https://github.com/JuliaSparse/MKLSparse.jl">MKLSparse.jl</a> accelerates SparseArrays sparse-dense matrix operations using Intel&#39;s MKL library.</p></li><li><p><a href="https://github.com/Jutho/SparseArrayKit.jl">SparseArrayKit.jl</a> provides multidimensional sparse arrays.</p></li><li><p><a href="https://github.com/QuantumBFS/LuxurySparse.jl">LuxurySparse.jl</a> provides static sparse array formats, as well as a coordinate format.</p></li><li><p><a href="https://github.com/j-fu/ExtendableSparse.jl">ExtendableSparse.jl</a> enables fast insertion into sparse matrices using a lazy approach to new stored indices.</p></li><li><p><a href="https://github.com/willow-ahrens/Finch.jl">Finch.jl</a> supports extensive multidimensional sparse array formats and operations through a mini tensor language and compiler, all in native Julia. Support for COO, CSF, CSR, CSC and more, as well as operations like broadcast, reduce, etc. and custom operations.</p></li></ol><p>External packages providing sparse direct solvers:</p><ol><li><p><a href="https://github.com/JuliaSparse/KLU.jl">KLU.jl</a></p></li><li><p><a href="https://github.com/JuliaSparse/Pardiso.jl/">Pardiso.jl</a></p></li></ol><p>External packages providing solvers for iterative solution of eigensystems and singular value decompositions:</p><ol><li><p><a href="https://github.com/JuliaLinearAlgebra/ArnoldiMethod.jl">ArnoldiMethod.jl</a></p></li><li><p><a href="https://github.com/Jutho/KrylovKit.jl">KrylovKit</a></p></li><li><p><a href="https://github.com/JuliaLinearAlgebra/Arpack.jl">Arpack.jl</a></p></li></ol><p>External packages for working with graphs:</p><ol><li><a href="https://github.com/JuliaGraphs/Graphs.jl">Graphs.jl</a></li></ol></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../Sockets/">« Sockets</a><a class="docs-footer-nextpage" href="../SparseArrays-solvers/">Sparse Linear Solvers »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.19.0 on <span class="colophon-date" title="Monday 26 October 2026 06:42">Monday 26 October 2026</span>. Using Julia version 1.14.0-alpha2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
