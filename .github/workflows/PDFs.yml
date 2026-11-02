@@ -25,7 +25,7 @@ jobs:
     outputs:
       versions: ${{ steps.versions.outputs.versions }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/setup-pdf-build
         with:
           clone-assets: 'true'
@@ -61,7 +61,7 @@ jobs:
       matrix:
         version: ${{ fromJson(needs.collect-versions.outputs.versions) }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/setup-pdf-build
         with:
           julia-ref: ${{ matrix.version != 'nightly' && format('v{0}', matrix.version) || '' }}
@@ -90,7 +90,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: julia-actions/setup-julia@v3
         with:
           version: 1
