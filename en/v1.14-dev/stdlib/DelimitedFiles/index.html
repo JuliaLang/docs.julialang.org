@@ -14,24 +14,24 @@ elements separated by the given delimiter. The source can be a text file, stream
 array. Memory mapped files can be used by passing the byte array representation of the
 mapped segment as source.</p><p>If <code>T</code> is a numeric type, the result is an array of that type, with any non-numeric elements
 as <code>NaN</code> for floating-point types, or zero. Other useful values of <code>T</code> include
-<code>String</code>, <code>AbstractString</code>, and <code>Any</code>.</p><p>Keyword options:</p><ul><li><p><code>header::Bool=false</code>:
+<code>String</code>, <code>AbstractString</code>, and <code>Any</code>.</p><p>Keyword options:</p><ul><li><code>header::Bool=false</code>:
   if <code>true</code>, the first row of data will be read as header and the tuple
-  <code>(data_cells, header_cells)</code> is returned instead of only <code>data_cells</code>.</p></li><li><p><code>skipstart::Integer=0</code>:
-  if <code>skipstart &gt; 0</code>, ignore the corresponding number of initial lines from the input.</p></li><li><p><code>skipblanks::Bool=true</code>:
-  if <code>true</code>, blank lines in the input will be ignored.</p></li><li><p><code>use_mmap::Bool=false</code>:
+  <code>(data_cells, header_cells)</code> is returned instead of only <code>data_cells</code>.</li><li><code>skipstart::Integer=0</code>:
+  if <code>skipstart &gt; 0</code>, ignore the corresponding number of initial lines from the input.</li><li><code>skipblanks::Bool=true</code>:
+  if <code>true</code>, blank lines in the input will be ignored.</li><li><code>use_mmap::Bool=false</code>:
   if <code>true</code>, the file specified by <code>source</code> is memory mapped for potential
   speedups if the file is large. 
   On a Windows filesystem, <code>use_mmap</code> should not be set
   to <code>true</code> unless the file is only read once and is also not written to.
-  Some edge cases exist where an OS is Unix-like but the filesystem is Windows-like.</p></li><li><p><code>quotes::Bool=true</code>:
+  Some edge cases exist where an OS is Unix-like but the filesystem is Windows-like.</li><li><code>quotes::Bool=true</code>:
   if <code>true</code>, columns enclosed within double-quote (&quot;) characters are allowed to
   contain new lines and column delimiters. Double-quote characters within a quoted field must
-  be escaped with another double-quote.</p></li><li><p><code>dims::NTuple{2,Integer}</code>:
+  be escaped with another double-quote.</li><li><code>dims::NTuple{2,Integer}</code>:
   a tuple of the expected rows and columns (including header, if any) may speed up
-  reading of large files.</p></li><li><p><code>comments::Bool=false</code>:
+  reading of large files.</li><li><code>comments::Bool=false</code>:
   if <code>true</code>, lines beginning with <code>comment_char</code> and text following <code>comment_char</code> in any line
-  are ignored.</p></li><li><p><code>comment_char::Char=&#39;#&#39;</code>:
-  the character that marks the beginning of a comment.</p></li></ul><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; using DelimitedFiles
+  are ignored.</li><li><code>comment_char::Char=&#39;#&#39;</code>:
+  the character that marks the beginning of a comment.</li></ul><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; using DelimitedFiles
 
 julia&gt; x = [1; 2; 3; 4];
 
@@ -146,10 +146,10 @@ julia&gt; readdlm(&quot;delim_file.txt&quot;)
 julia&gt; rm(&quot;delim_file.txt&quot;)</code></pre></div></section></details></article><article><details class="docstring" open="true"><summary id="DelimitedFiles.writedlm"><a class="docstring-binding" href="#DelimitedFiles.writedlm"><code>DelimitedFiles.writedlm</code></a> — <span class="docstring-category">Function</span></summary><section><div><pre><code class="language-julia hljs">writedlm(f, A, delim=&#39;\t&#39;; options...)</code></pre><p>Write <code>A</code> (a vector, matrix, or an iterable collection of iterable rows) as text to <code>f</code>
 (either a filename string or an <code>IO</code> stream) using the given delimiter
 <code>delim</code> (which defaults to tab, but can be any printable Julia object, typically a <code>Char</code> or
-<code>AbstractString</code>).</p><p>Keyword <code>options</code>:</p><ul><li><p><code>quotes::Bool=true</code>:
+<code>AbstractString</code>).</p><p>Keyword <code>options</code>:</p><ul><li><code>quotes::Bool=true</code>:
   if <code>true</code>, columns enclosed within double-quote (&quot;) characters are allowed to
   contain new lines and column delimiters. Double-quote characters within a quoted field must
-  be escaped with another double-quote.</p></li></ul><p>For example, two vectors <code>x</code> and <code>y</code> of the same length can be written as two columns of
+  be escaped with another double-quote.</li></ul><p>For example, two vectors <code>x</code> and <code>y</code> of the same length can be written as two columns of
 tab-delimited text to <code>f</code> by either <code>writedlm(f, [x y])</code> or by <code>writedlm(f, zip(x, y))</code>.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl hljs">julia&gt; using DelimitedFiles
 
 julia&gt; x = [1; 2; 3; 4];
@@ -167,4 +167,4 @@ julia&gt; readdlm(&quot;delim_file.txt&quot;, &#39;\t&#39;, Int, &#39;\n&#39;)
  3  7
  4  8
 
-julia&gt; rm(&quot;delim_file.txt&quot;)</code></pre></div></section></details></article></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../Dates/">« Dates</a><a class="docs-footer-nextpage" href="../Distributed/">Distributed Computing »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.19.0 on <span class="colophon-date" title="Saturday 31 October 2026 06:51">Saturday 31 October 2026</span>. Using Julia version 1.14.0-alpha2.122.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+julia&gt; rm(&quot;delim_file.txt&quot;)</code></pre></div></section></details></article></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../Dates/">« Dates</a><a class="docs-footer-nextpage" href="../Distributed/">Distributed Computing »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.19.0 on <span class="colophon-date" title="Wednesday 4 November 2026 20:42">Wednesday 4 November 2026</span>. Using Julia version 1.14.0-alpha2.217.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
