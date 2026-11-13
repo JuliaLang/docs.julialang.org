@@ -55,7 +55,8 @@ jobs:
   build-pdf:
     name: PDF ${{ matrix.version }}
     needs: collect-versions
-    runs-on: ubuntu-latest
+    # TeX Live 2025's `latexminted` 0.6.0 fails on Python 3.14 (ubuntu-26.04)
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     strategy:
       fail-fast: false
